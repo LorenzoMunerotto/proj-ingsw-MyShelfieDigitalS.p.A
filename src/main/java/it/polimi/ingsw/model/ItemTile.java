@@ -17,7 +17,7 @@ public class ItemTile {
      *
      * @param itemTileType the type of the item tile
      */
-    public ItemTile (ItemTileType itemTileType){
+    public ItemTile(ItemTileType itemTileType) {
         this.itemTileType = itemTileType;
     }
 
@@ -35,7 +35,7 @@ public class ItemTile {
      *
      * @return the color of the item tile
      */
-    public String getItemTileColor(){
+    public String getItemTileColor() {
         return this.itemTileType.getColor();
     }
 }

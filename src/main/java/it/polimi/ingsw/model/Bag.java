@@ -26,14 +26,14 @@ public class Bag {
     /**
      * Constructor for bag, initializing the bag with 22 item tile of each type, except for the empty type.
      */
-    public Bag(){
+    public Bag() {
         this.itemTiles = new ArrayList<>();
         this.random = new Random();
-        for(ItemTileType type : ItemTileType.values()){
-            if(type == ItemTileType.EMPTY){
+        for (ItemTileType type : ItemTileType.values()) {
+            if (type == ItemTileType.EMPTY) {
                 continue;
             }
-            for(int i = 0; i < 22; i++){
+            for (int i = 0; i < 22; i++) {
                 itemTiles.add(new ItemTile(type));
             }
         }
@@ -56,8 +56,8 @@ public class Bag {
      * @param number is the amount of item tiles to get and remove
      * @return list of item tile randomly picked
      */
-    public List<ItemTile> getRandomItemTiles(int number){
-        if(number > this.itemTiles.size()) {
+    public List<ItemTile> getRandomItemTiles(int number) {
+        if (number > this.itemTiles.size()) {
             throw new IllegalArgumentException("The parameter is greater than number of tiles in the bag");
         }
         return IntStream.range(0, number)

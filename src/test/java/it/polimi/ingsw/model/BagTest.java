@@ -23,19 +23,19 @@ class BagTest {
 
     @Test
     @DisplayName("Test that the constructor of the class creates 22 elements of each type except the empty type")
-    void bagConstructor(){
+    void bagConstructor() {
         List<ItemTile> itemTileList = bag.getItemTiles();
         assertEquals(132, itemTileList.size());
         Map<ItemTileType, Integer> counts = new HashMap<>();
 
-        for(ItemTile tile: itemTileList){
+        for (ItemTile tile : itemTileList) {
             ItemTileType type = tile.getItemTileType();
             counts.put(type, counts.getOrDefault(type, 0) + 1);
             assertNotEquals(ItemTileType.EMPTY, tile.getItemTileType());
         }
 
-        for (ItemTileType type : ItemTileType.values()){
-            if(type != ItemTileType.EMPTY){
+        for (ItemTileType type : ItemTileType.values()) {
+            if (type != ItemTileType.EMPTY) {
                 assertEquals(22, counts.getOrDefault(type, 0).intValue());
             }
         }
@@ -46,11 +46,11 @@ class BagTest {
     void getRandomItemTiles_correctNumber() {
         Random random = new Random();
         int originalNumber = bag.getItemTiles().size();
-        int randomNumber = random.nextInt(originalNumber)+1;
+        int randomNumber = random.nextInt(originalNumber) + 1;
         List<ItemTile> randomItems = bag.getRandomItemTiles(randomNumber);
         assertAll(
                 () -> assertEquals(randomNumber, randomItems.size()),
-                () -> assertEquals(originalNumber-randomNumber, bag.getItemTiles().size()),
+                () -> assertEquals(originalNumber - randomNumber, bag.getItemTiles().size()),
                 () -> assertFalse(bag.getItemTiles().containsAll(randomItems))
         );
     }
@@ -61,8 +61,6 @@ class BagTest {
         Random random = new Random();
         int maxSize = bag.getItemTiles().size();
         int randomNumber = random.nextInt(Integer.MIN_VALUE - maxSize) + maxSize;
-        assertThrows(IllegalArgumentException.class, () -> {
-            bag.getRandomItemTiles(randomNumber);
-        });
+        assertThrows(IllegalArgumentException.class, () -> bag.getRandomItemTiles(randomNumber));
     }
 }

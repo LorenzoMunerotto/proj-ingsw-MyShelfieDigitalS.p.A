@@ -25,7 +25,7 @@ public enum ItemTileType {
      *
      * @param color color associated to each type
      */
-    ItemTileType(String color){
+    ItemTileType(String color) {
         this.color = color;
     }
 
@@ -34,7 +34,7 @@ public enum ItemTileType {
      *
      * @return color of the item tile type
      */
-    public String getColor(){
+    public String getColor() {
         return this.color;
     }
 }
