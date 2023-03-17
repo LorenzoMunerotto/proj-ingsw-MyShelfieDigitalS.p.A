@@ -23,7 +23,7 @@ class BagTest {
 
     @Test
     @DisplayName("Test that the constructor of the class creates 22 elements of each type except the empty type")
-    void bagConstructor() {
+    void testBagConstructor() {
         List<ItemTile> itemTileList = bag.getItemTiles();
         assertEquals(132, itemTileList.size());
         Map<ItemTileType, Integer> counts = new HashMap<>();
@@ -43,7 +43,7 @@ class BagTest {
 
     @Test
     @DisplayName("Test getRandomItemTiles for a correct number as parameter")
-    void getRandomItemTiles_correctNumber() {
+    void testGetRandomItemTiles_correctNumber() {
         Random random = new Random();
         int originalNumber = bag.getItemTiles().size();
         int randomNumber = random.nextInt(originalNumber) + 1;
@@ -57,7 +57,7 @@ class BagTest {
 
     @Test
     @DisplayName("Test getRandomItemTiles for a wrong number as parameter")
-    void getRandomItemTiles_wrongNumber() {
+    void testGetRandomItemTiles_wrongNumber() {
         Random random = new Random();
         int maxSize = bag.getItemTiles().size();
         int randomNumber = random.nextInt(Integer.MIN_VALUE - maxSize) + maxSize;
