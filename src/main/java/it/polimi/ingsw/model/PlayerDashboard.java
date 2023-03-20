@@ -10,6 +10,4 @@ public class PlayerDashboard {
     private int pointsPersonalGoals;
     private int pointsFirstFinish;
     private int pointsAdjacent;
-
-
 }

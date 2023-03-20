@@ -25,6 +25,8 @@ public class CommonCardFactory {
      * @param numOfPlayers is the number of players in the game
      * @return the list of the common cards created
      */
+
+
     public static List<CommonGoalCard> createCards(int numOfPlayers){
         List<CommonGoalCard> commonCards = new ArrayList<>(numOfPlayers);
         List<Integer> alreadyCreatedCards = new ArrayList<>(numOfPlayers);

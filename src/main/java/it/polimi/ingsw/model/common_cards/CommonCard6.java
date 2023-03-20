@@ -26,6 +26,7 @@ public class CommonCard6 implements CommonGoalCard {
      */
     @Override
     public boolean checkRules(GameData gameData, String name) {
+        /*
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
         Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
         for(ItemTileType itemTileType: ItemTileType.values()){
@@ -42,7 +43,7 @@ public class CommonCard6 implements CommonGoalCard {
                     }
                 }
             }
-        }
+        } */
         return false;
     }
 }
