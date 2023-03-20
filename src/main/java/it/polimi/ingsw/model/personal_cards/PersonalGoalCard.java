@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PersonalGoalCard {
     private ArrayList<SingleGoal> goals;
 
+
     public PersonalGoalCard(ArrayList<SingleGoal> goals) {
         this.goals = goals;
     }
@@ -20,6 +21,8 @@ public class PersonalGoalCard {
     public void setGoals(ArrayList<SingleGoal> goals) {
         this.goals = goals;
     }
+
+
 
     /*
     private void toJavaObject() throws JsonProcessingException {
