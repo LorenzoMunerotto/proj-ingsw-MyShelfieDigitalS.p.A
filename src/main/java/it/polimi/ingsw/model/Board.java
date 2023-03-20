@@ -63,6 +63,7 @@ public class Board {
         };
     }
 
+
     /**
      * Get the grid of the board.
      *
