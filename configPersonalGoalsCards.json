@@ -2,384 +2,384 @@
   [
     {
      "row": 0,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "GAMES"
     },
     {
       "row": 2,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 2,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "FRAMES"
     },
     {
       "row": 3,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "PLANTS"
     },
     {
       "row": 4,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "BOOKS"
     },
     {
       "row": 4,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "CATS"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "CATS"
     },
     {
       "row": 1,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "FRAMES"
     },
     {
       "row": 2,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "PLANTS"
     },
     {
       "row": 3,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 4,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "GAMES"
     },
     {
       "row": 5,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "BOOKS"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "PLANTS"
     },
     {
       "row": 0,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "FRAMES"
     },
     {
       "row": 1,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "CATS"
     },
     {
       "row": 2,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "BOOKS"
     },
     {
       "row": 3,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "GAMES"
     },
     {
       "row": 5,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "TROPHIES"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "PLANTS"
     },
     {
       "row": 1,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "BOOKS"
     },
     {
       "row": 2,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "GAMES"
     },
     {
       "row": 3,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "FRAMES"
     },
     {
       "row": 4,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "CATS"
     },
     {
       "row": 5,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "TROPHIES"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 1,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "GAMES"
     },
     {
       "row": 2,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "BOOKS"
     },
     {
       "row": 3,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "CATS"
     },
     {
       "row": 4,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "FRAMES"
     },
     {
       "row": 5,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "PLANTS"
     }
   ],
   [
     {
       "row": 1,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "FRAMES"
     },
     {
       "row": 1,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "GAMES"
     },
     {
       "row": 2,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "PLANTS"
     },
     {
       "row": 3,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "CATS"
     },
     {
       "row": 3,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 5,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "BOOKS"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "FRAMES"
     },
     {
       "row": 1,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "CATS"
     },
     {
       "row": 2,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 3,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "PLANTS"
     },
     {
       "row": 4,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "BOOKS"
     },
     {
       "row": 5,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "GAMES"
     }
   ],
   [
     {
       "row": 1,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 3,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "FRAMES"
     },
     {
       "row": 3,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "BOOKS"
     },
     {
       "row": 4,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "PLANTS"
     },
     {
       "row": 5,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "GAMES"
     },
     {
       "row": 5,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "CATS"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "BOOKS"
     },
     {
       "row": 1,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "PLANTS"
     },
     {
       "row": 2,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "FRAMES"
     },
     {
       "row": 3,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "TROPHIS"
     },
     {
       "row": 4,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "GAMES"
     },
     {
       "row": 5,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "CATS"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 0,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "CATS"
     },
     {
       "row": 2,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "BOOKS"
     },
     {
       "row": 4,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "GAMES"
     },
     {
       "row": 4,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "FRAMES"
     },
     {
       "row": 5,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "PLANTS"
     }
   ],
   [
     {
       "row": 0,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "GAMES"
     },
     {
       "row": 2,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "CATS"
     },
     {
       "row": 3,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "BOOKS"
     },
     {
       "row": 4,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 4,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "PLANTS"
     },
     {
       "row": 5,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "FRAMES"
     }
   ],
   [
     {
       "row": 1,
-      "collumn": 1,
+      "column": 1,
       "itemTileType": "PLANTS"
     },
     {
       "row": 2,
-      "collumn": 0,
+      "column": 0,
       "itemTileType": "CATS"
     },
     {
       "row": 2,
-      "collumn": 2,
+      "column": 2,
       "itemTileType": "GAMES"
     },
     {
       "row": 3,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "BOOKS"
     },
     {
       "row": 4,
-      "collumn": 3,
+      "column": 3,
       "itemTileType": "TROPHIES"
     },
     {
       "row": 5,
-      "collumn": 4,
+      "column": 4,
       "itemTileType": "FRAMES"
     }
   ]
