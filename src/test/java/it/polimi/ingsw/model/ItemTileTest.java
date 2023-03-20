@@ -11,23 +11,23 @@ class ItemTileTest {
     @Test
     @DisplayName("Test that all types are assigned correctly")
     public void testGetItemTileType() {
-        ItemTile itemTile = new ItemTile(ItemTileType.CATS);
-        assertEquals(ItemTileType.CATS, itemTile.getItemTileType());
+        ItemTile itemTile = new ItemTile(ItemTileType.CAT);
+        assertEquals(ItemTileType.CAT, itemTile.getItemTileType());
 
-        itemTile = new ItemTile(ItemTileType.BOOKS);
-        assertEquals(ItemTileType.BOOKS, itemTile.getItemTileType());
+        itemTile = new ItemTile(ItemTileType.BOOK);
+        assertEquals(ItemTileType.BOOK, itemTile.getItemTileType());
 
-        itemTile = new ItemTile(ItemTileType.GAMES);
-        assertEquals(ItemTileType.GAMES, itemTile.getItemTileType());
+        itemTile = new ItemTile(ItemTileType.GAME);
+        assertEquals(ItemTileType.GAME, itemTile.getItemTileType());
 
-        itemTile = new ItemTile(ItemTileType.FRAMES);
-        assertEquals(ItemTileType.FRAMES, itemTile.getItemTileType());
+        itemTile = new ItemTile(ItemTileType.FRAME);
+        assertEquals(ItemTileType.FRAME, itemTile.getItemTileType());
 
-        itemTile = new ItemTile(ItemTileType.TROPHIES);
-        assertEquals(ItemTileType.TROPHIES, itemTile.getItemTileType());
+        itemTile = new ItemTile(ItemTileType.TROPHY);
+        assertEquals(ItemTileType.TROPHY, itemTile.getItemTileType());
 
-        itemTile = new ItemTile(ItemTileType.PLANTS);
-        assertEquals(ItemTileType.PLANTS, itemTile.getItemTileType());
+        itemTile = new ItemTile(ItemTileType.PLANT);
+        assertEquals(ItemTileType.PLANT, itemTile.getItemTileType());
 
         itemTile = new ItemTile(ItemTileType.EMPTY);
         assertEquals(ItemTileType.EMPTY, itemTile.getItemTileType());
@@ -36,22 +36,22 @@ class ItemTileTest {
     @Test
     @DisplayName("Test that all colors are assigned correctly")
     public void testGetItemTileColor() {
-        ItemTile itemTile = new ItemTile(ItemTileType.CATS);
+        ItemTile itemTile = new ItemTile(ItemTileType.CAT);
         assertEquals("GREEN", itemTile.getItemTileColor());
 
-        itemTile = new ItemTile(ItemTileType.BOOKS);
+        itemTile = new ItemTile(ItemTileType.BOOK);
         assertEquals("WHITE", itemTile.getItemTileColor());
 
-        itemTile = new ItemTile(ItemTileType.GAMES);
+        itemTile = new ItemTile(ItemTileType.GAME);
         assertEquals("YELLOW", itemTile.getItemTileColor());
 
-        itemTile = new ItemTile(ItemTileType.FRAMES);
+        itemTile = new ItemTile(ItemTileType.FRAME);
         assertEquals("BLUE", itemTile.getItemTileColor());
 
-        itemTile = new ItemTile(ItemTileType.TROPHIES);
+        itemTile = new ItemTile(ItemTileType.TROPHY);
         assertEquals("LIGHT_BLUE", itemTile.getItemTileColor());
 
-        itemTile = new ItemTile(ItemTileType.PLANTS);
+        itemTile = new ItemTile(ItemTileType.PLANT);
         assertEquals("PINK", itemTile.getItemTileColor());
 
         itemTile = new ItemTile(ItemTileType.EMPTY);

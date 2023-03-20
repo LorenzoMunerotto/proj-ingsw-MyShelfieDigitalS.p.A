@@ -38,7 +38,7 @@ class LibraryTest {
     @Test
     @DisplayName("Test setItemTile for right and wrong parameters")
     void setItemTile() {
-        ItemTile itemTile = new ItemTile(ItemTileType.CATS);
+        ItemTile itemTile = new ItemTile(ItemTileType.CAT);
         library.setItemTile(0, 0, itemTile);
 
         assertAll(

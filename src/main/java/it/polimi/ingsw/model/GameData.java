@@ -28,6 +28,7 @@ public class GameData {
      * List of the random common cards of the match.
      */
     private final List<CommonGoalCard> commonGoalCard;
+
     /**
      * Constructor for GameData, initializes board, bag and playerDashboard.
      *

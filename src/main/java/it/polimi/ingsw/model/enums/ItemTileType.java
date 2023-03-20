@@ -4,12 +4,12 @@ package it.polimi.ingsw.model.enums;
  * Enumeration of the different types of the item tiles.
  */
 public enum ItemTileType {
-    CATS("GREEN"),
-    BOOKS("WHITE"),
-    GAMES("YELLOW"),
-    FRAMES("BLUE"),
-    TROPHIES("LIGHT_BLUE"),
-    PLANTS("PINK"),
+    CAT("GREEN"),
+    BOOK("WHITE"),
+    GAME("YELLOW"),
+    FRAME("BLUE"),
+    TROPHY("LIGHT_BLUE"),
+    PLANT("PINK"),
     /**
      * No item tile.
      */

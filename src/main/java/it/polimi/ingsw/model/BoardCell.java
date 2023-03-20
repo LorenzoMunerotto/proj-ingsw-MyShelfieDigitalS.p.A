@@ -11,22 +11,18 @@ public class BoardCell {
      * The item tile located on the board cell.
      */
     private ItemTile itemTile;
-
     /**
      * The row number of the board cell.
      */
     private final int row;
-
     /**
      * The column number of the board cell.
      */
     private final int column;
-
     /**
      * An attribute indicating whether the cell is selectable.
      */
     private boolean grey;
-
     /**
      * An attribute indicating whether the cell has no other adjacent cells.
      */
