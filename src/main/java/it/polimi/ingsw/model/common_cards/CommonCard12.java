@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
+import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.enums.ItemTileType;
 
 import java.util.List;
 
@@ -58,6 +60,22 @@ public class CommonCard12 implements CommonGoalCard {
      */
     @Override
     public boolean checkRules(GameData gameData, String name) {
-        return false;
+        ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+        for (int c = 0; c < libraryGrid[0].length; c++) {
+            if (libraryGrid[c][c].getItemTileType() != ItemTileType.EMPTY || libraryGrid[c + 1][c].getItemTileType() == ItemTileType.EMPTY) {
+                break;
+            }
+            if (c == 4) {
+                return true;
+            }
+        }
+
+        for (int c = 0; c < libraryGrid[0].length; c++) {
+            int r = 5 - c;
+            if (libraryGrid[r][c].getItemTileType() != ItemTileType.EMPTY || libraryGrid[r - 1][c].getItemTileType() == ItemTileType.EMPTY) {
+                return false;
+            }
+        }
+        return true;
     }
 }
