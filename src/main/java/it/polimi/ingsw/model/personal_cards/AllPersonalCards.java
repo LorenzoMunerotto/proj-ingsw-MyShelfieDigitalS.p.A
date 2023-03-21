@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AllPersonalCards {
+    private List<PersonalGoalCard> allpersonalCards= new ArrayList<PersonalGoalCard>();
     public void setAllpersonalCards(List<PersonalGoalCard> allpersonalCards) {
         this.allpersonalCards = allpersonalCards;
     }
@@ -18,13 +19,7 @@ public class AllPersonalCards {
         this.allpersonalCards = allpersonalCards;
     }
 
-    private List<PersonalGoalCard> allpersonalCards= new ArrayList<PersonalGoalCard>();
-    private final static String pathFile = "configPersonalGoalsCards.json";
 
-    public AllPersonalCards() throws JsonProcessingException {
-        final ObjectMapper objectMapper = new ObjectMapper();
-        allpersonalCards = List.of(objectMapper.readValue(pathFile, PersonalGoalCard[].class));
-    }
 
 
 

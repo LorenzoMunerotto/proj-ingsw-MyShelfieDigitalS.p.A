@@ -21,14 +21,5 @@ public class PersonalGoalCard {
         this.goals = goals;
     }
 
-    /*
-    private void toJavaObject() throws JsonProcessingException {
-
-
-    }
-    */
-    /*
-    final ObjectMapper objectMapper = new ObjectMapper();
-    Language[] langs = objectMapper.readValue(json, Language[].class);*/
 
 }
