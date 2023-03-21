@@ -13,12 +13,22 @@ public class Library {
     private final ItemTile[][] grid;
 
     /**
+     * Index of the cell of the library [row][column].
+     * [0,0] [0,1] [0,2] [0,3] [0,4]
+     * [1,0] [1,1] [1,2] [1,3] [1,4]
+     * [2,0] [2,1] [2,2] [2,3] [2,4]
+     * [3,0] [3,1] [3,2] [3,3] [3,4]
+     * [4,0] [4,1] [4,2] [4,3] [4,4]
+     * [5,0] [5,1] [5,2] [5,3] [5,4]
+     */
+
+    /**
      * Constructor for library, initializing the library gird with empty item tiles.
      */
     public Library() {
-        this.grid = new ItemTile[5][5];
+        this.grid = new ItemTile[6][5];
         for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid.length; j++) {
+            for (int j = 0; j < grid[0].length; j++) {
                 grid[i][j] = new ItemTile(ItemTileType.EMPTY);
             }
         }

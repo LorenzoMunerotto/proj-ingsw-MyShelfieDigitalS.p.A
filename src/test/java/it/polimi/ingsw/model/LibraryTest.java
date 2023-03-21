@@ -23,7 +23,7 @@ class LibraryTest {
 
         assertAll(
                 () -> assertNotNull(grid),
-                () -> assertEquals(5, grid.length),
+                () -> assertEquals(6, grid.length),
                 () -> assertEquals(5, grid[0].length)
         );
 

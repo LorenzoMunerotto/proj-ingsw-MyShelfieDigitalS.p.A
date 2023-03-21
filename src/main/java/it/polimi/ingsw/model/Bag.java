@@ -17,7 +17,6 @@ public class Bag {
      * List of the item tiles im the bag.
      */
     private final List<ItemTile> itemTiles;
-
     /**
      * Generator of a random number.
      */
