@@ -8,6 +8,14 @@ import it.polimi.ingsw.model.enums.ItemTileType;
 public class Library {
 
     /**
+     * Number of rows of the library.
+     */
+    private static final int ROWS = 6;
+    /**
+     * Number of columns of the library.
+     */
+    private static final int COLUMNS = 5;
+    /**
      * The data structure for the library.
      */
     private final ItemTile[][] grid;
@@ -26,9 +34,9 @@ public class Library {
      * Constructor for library, initializing the library gird with empty item tiles.
      */
     public Library() {
-        this.grid = new ItemTile[6][5];
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
+        this.grid = new ItemTile[ROWS][COLUMNS];
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 grid[i][j] = new ItemTile(ItemTileType.EMPTY);
             }
         }

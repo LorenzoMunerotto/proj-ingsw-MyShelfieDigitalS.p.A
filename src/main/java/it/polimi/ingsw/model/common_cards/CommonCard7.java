@@ -4,9 +4,7 @@ import it.polimi.ingsw.model.GameData;
 import it.polimi.ingsw.model.ItemTile;
 import it.polimi.ingsw.model.enums.ItemTileType;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class representing the common goal card 7.
@@ -25,10 +23,10 @@ public class CommonCard7 implements CommonGoalCard {
     /**
      * Constructor for common card 7, initializes index and points.
      *
-     * @param index is the index of the card
+     * @param index  is the index of the card
      * @param points is the list of the points on the card
      */
-    public CommonCard7(int index, List<Integer> points){
+    public CommonCard7(int index, List<Integer> points) {
         this.index = index;
         this.points = points;
     }
@@ -39,7 +37,7 @@ public class CommonCard7 implements CommonGoalCard {
      * @return the index of the card
      */
     @Override
-    public int getIndex(){
+    public int getIndex() {
         return this.index;
     }
 
@@ -57,27 +55,55 @@ public class CommonCard7 implements CommonGoalCard {
      * Check if the rules of the card are respected.
      *
      * @param gameData is the game data
-     * @param name is the name of the player
+     * @param name     is the name of the player
      * @return true if the rules are respected, false otherwise
      */
     @Override
     public boolean checkRules(GameData gameData, String name) {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
-        Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
-        for (ItemTileType itemTileType : ItemTileType.values()) {
-            if (itemTileType != ItemTileType.EMPTY) {
-                itemTileTypeCounter.put(itemTileType, 0);
+
+        // Check from top left to bottom right
+        for (int i = 0; i < 2; i++) {
+            int j = 0;
+            ItemTile tile = libraryGrid[i][j];
+            if (tile.getItemTileType() == ItemTileType.EMPTY) {
+                continue;
             }
+            if (tile.getItemTileType() != libraryGrid[i + 1][j + 1].getItemTileType()) {
+                continue;
+            }
+            if (tile.getItemTileType() != libraryGrid[i + 2][j + 2].getItemTileType()) {
+                continue;
+            }
+            if (tile.getItemTileType() != libraryGrid[i + 3][j + 3].getItemTileType()) {
+                continue;
+            }
+            if (tile.getItemTileType() != libraryGrid[i + 4][j + 4].getItemTileType()) {
+                continue;
+            }
+            return true;
         }
-        for(int i = 0; i < libraryGrid.length; i++){
-            for(int j = 0; j < libraryGrid[0].length; j++){
-                ItemTileType currentItemTileType = libraryGrid[i][j].getItemTileType();
-                ItemTileType nextItemTile = libraryGrid[i+1][j+1].getItemTileType();
-                if(currentItemTileType == nextItemTile && currentItemTileType != ItemTileType.EMPTY){
-                    itemTileTypeCounter.put(currentItemTileType, itemTileTypeCounter.get(currentItemTileType) + 1);
-                    return true;
-                }
+
+        // Check from top right to bottom left
+        for (int i = 0; i <= 1; i++) {
+            int j = 4;
+            ItemTile tile = libraryGrid[i][j];
+            if (tile.getItemTileType() == ItemTileType.EMPTY) {
+                continue;
             }
+            if (tile.getItemTileType() != libraryGrid[i + 1][j - 1].getItemTileType()) {
+                continue;
+            }
+            if (tile.getItemTileType() != libraryGrid[i + 2][j - 2].getItemTileType()) {
+                continue;
+            }
+            if (tile.getItemTileType() != libraryGrid[i + 3][j - 3].getItemTileType()) {
+                continue;
+            }
+            if (tile.getItemTileType() != libraryGrid[i + 4][j - 4].getItemTileType()) {
+                continue;
+            }
+            return true;
         }
         return false;
     }
