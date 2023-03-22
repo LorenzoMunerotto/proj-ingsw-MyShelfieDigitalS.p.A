@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CommonCard11Test {
 
@@ -39,16 +40,21 @@ class CommonCard11Test {
     }
 
     @Test
-    @DisplayName("Test checkRules method")
+    @DisplayName("Test check rules for card 11")
     void checkRules() {
-        libraryP1.setItemTile(0, 0, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(0, 2, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(1, 1, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(2, 2, new ItemTile(ItemTileType.CAT));
+        assertFalse(card11.checkRules(gameData, players.get(0)));
+
+        int row = random.nextInt(gridP1.length - 2);
+        int col = random.nextInt(gridP1[0].length - 2);
+        libraryP1.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+        libraryP1.setItemTile(row, col + 2, new ItemTile(ItemTileType.CAT));
+        libraryP1.setItemTile(row + 1, col + 1, new ItemTile(ItemTileType.CAT));
+        libraryP1.setItemTile(row + 2, col, new ItemTile(ItemTileType.CAT));
+        libraryP1.setItemTile(row + 2, col + 2, new ItemTile(ItemTileType.CAT));
         assertTrue(card11.checkRules(gameData, players.get(0)));
 
-        libraryP1.setItemTile(1, 1, new ItemTile(ItemTileType.PLANT));
+        ItemTileType newType = ItemTileType.PLANT;
+        libraryP1.setItemTile(row, col, new ItemTile(newType));
         assertFalse(card11.checkRules(gameData, players.get(0)));
     }
 }

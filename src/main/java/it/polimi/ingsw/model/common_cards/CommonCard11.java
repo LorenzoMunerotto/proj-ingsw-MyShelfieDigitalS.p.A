@@ -61,6 +61,7 @@ public class CommonCard11 implements CommonGoalCard {
     @Override
     public boolean checkRules(GameData gameData, String name) {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+
         for (int row = 0; row < libraryGrid.length - 2; row++) {
             for (int col = 0; col < libraryGrid[0].length - 2; col++) {
                 ItemTileType currentType = libraryGrid[row][col].getItemTileType();

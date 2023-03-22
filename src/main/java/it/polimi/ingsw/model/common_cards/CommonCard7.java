@@ -62,45 +62,42 @@ public class CommonCard7 implements CommonGoalCard {
     public boolean checkRules(GameData gameData, String name) {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
 
-        // Check from top left to bottom right
-        for (int i = 0; i < 2; i++) {
-            int j = 0;
-            ItemTile tile = libraryGrid[i][j];
-            if (tile.getItemTileType() == ItemTileType.EMPTY) {
+        for (int row = 0; row < 2; row++) {
+            int col = 0;
+            ItemTile currentItemTile = libraryGrid[row][col];
+            if (currentItemTile.getItemTileType() == ItemTileType.EMPTY) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 1][j + 1].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 1][col + 1].getItemTileType()) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 2][j + 2].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 2][col + 2].getItemTileType()) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 3][j + 3].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 3][col + 3].getItemTileType()) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 4][j + 4].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 4][col + 4].getItemTileType()) {
                 continue;
             }
             return true;
         }
-
-        // Check from top right to bottom left
-        for (int i = 0; i <= 1; i++) {
-            int j = 4;
-            ItemTile tile = libraryGrid[i][j];
-            if (tile.getItemTileType() == ItemTileType.EMPTY) {
+        for (int row = 0; row <= 1; row++) {
+            int col = 4;
+            ItemTile currentItemTile = libraryGrid[row][col];
+            if (currentItemTile.getItemTileType() == ItemTileType.EMPTY) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 1][j - 1].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 1][col - 1].getItemTileType()) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 2][j - 2].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 2][col - 2].getItemTileType()) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 3][j - 3].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 3][col - 3].getItemTileType()) {
                 continue;
             }
-            if (tile.getItemTileType() != libraryGrid[i + 4][j - 4].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != libraryGrid[row + 4][col - 4].getItemTileType()) {
                 continue;
             }
             return true;

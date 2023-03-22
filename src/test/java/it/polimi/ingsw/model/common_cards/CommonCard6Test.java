@@ -41,11 +41,11 @@ class CommonCard6Test {
     @Test
     @DisplayName("Test check rules for card 6")
     void checkRules() {
-        ItemTile catItemTile;
+        assertFalse(card6.checkRules(gameData, players.get(0)));
         for (int i = 0; i < 8; i++) {
             int row = random.nextInt(6);
             int column = random.nextInt(5);
-            catItemTile = new ItemTile(ItemTileType.CAT);
+            ItemTile catItemTile = new ItemTile(ItemTileType.CAT);
             while (gridP1[row][column].getItemTileType() == ItemTileType.CAT || gridP1[row][column].getItemTileType() != ItemTileType.EMPTY) {
                 row = random.nextInt(6);
                 column = random.nextInt(5);
@@ -55,12 +55,12 @@ class CommonCard6Test {
         for (int i = 0; i < 6; i++) {
             int row = random.nextInt(6);
             int column = random.nextInt(5);
-            catItemTile = new ItemTile(ItemTileType.PLANT);
+            ItemTile plantItemTile = new ItemTile(ItemTileType.PLANT);
             while (gridP1[row][column].getItemTileType() == ItemTileType.PLANT || gridP1[row][column].getItemTileType() != ItemTileType.EMPTY) {
                 row = random.nextInt(6);
                 column = random.nextInt(5);
             }
-            libraryP1.setItemTile(row, column, catItemTile);
+            libraryP1.setItemTile(row, column, plantItemTile);
         }
         assertTrue(card6.checkRules(gameData, players.get(0)));
     }

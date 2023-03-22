@@ -61,6 +61,7 @@ public class CommonCard12 implements CommonGoalCard {
     @Override
     public boolean checkRules(GameData gameData, String name) {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+
         for (int c = 0; c < libraryGrid[0].length; c++) {
             if (libraryGrid[c][c].getItemTileType() != ItemTileType.EMPTY || libraryGrid[c + 1][c].getItemTileType() == ItemTileType.EMPTY) {
                 break;

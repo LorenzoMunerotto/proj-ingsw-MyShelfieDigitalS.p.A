@@ -62,20 +62,20 @@ public class CommonCard6 implements CommonGoalCard {
      */
     @Override
     public boolean checkRules(GameData gameData, String name) {
-
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
         Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
+
         for (ItemTileType itemTileType : ItemTileType.values()) {
             if (itemTileType != ItemTileType.EMPTY) {
                 itemTileTypeCounter.put(itemTileType, 0);
             }
         }
         for (ItemTile[] itemTiles : libraryGrid) {
-            for (int j = 0; j < libraryGrid[0].length; j++) {
-                ItemTile tile = itemTiles[j];
-                if (tile.getItemTileType() != ItemTileType.EMPTY) {
-                    itemTileTypeCounter.put(tile.getItemTileType(), itemTileTypeCounter.get(tile.getItemTileType()) + 1);
-                    if (itemTileTypeCounter.get(tile.getItemTileType()) >= 8) {
+            for (int col = 0; col < libraryGrid[0].length; col++) {
+                ItemTile currentItemTile = itemTiles[col];
+                if (currentItemTile.getItemTileType() != ItemTileType.EMPTY) {
+                    itemTileTypeCounter.put(currentItemTile.getItemTileType(), itemTileTypeCounter.get(currentItemTile.getItemTileType()) + 1);
+                    if (itemTileTypeCounter.get(currentItemTile.getItemTileType()) >= 8) {
                         return true;
                     }
                 }

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,8 +19,6 @@ class CommonCard2Test {
     GameData gameData;
     List<String> players;
     Library libraryP1;
-    ItemTile[][] gridP1;
-    Random random;
 
     @BeforeEach
     void setUp() {
@@ -34,8 +31,6 @@ class CommonCard2Test {
         players.add("Pluto");
         gameData = new GameData(players, 2);
         libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary().getGrid();
-        random = new Random();
     }
 
     @Test
