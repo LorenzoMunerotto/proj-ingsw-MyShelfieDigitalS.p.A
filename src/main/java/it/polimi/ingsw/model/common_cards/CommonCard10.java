@@ -68,7 +68,6 @@ public class CommonCard10 implements CommonGoalCard {
         firstLoop:
         for (ItemTile[] itemTiles : libraryGrid) {
             Set<ItemTileType> distinctTypes = new HashSet<>();
-
             for (int col = 0; col < libraryGrid[0].length; col++) {
                 ItemTileType currentType = itemTiles[col].getItemTileType();
                 if (currentType == ItemTileType.EMPTY) {

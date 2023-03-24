@@ -55,6 +55,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.14.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
         <!-- Packaging Dependencies -->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>

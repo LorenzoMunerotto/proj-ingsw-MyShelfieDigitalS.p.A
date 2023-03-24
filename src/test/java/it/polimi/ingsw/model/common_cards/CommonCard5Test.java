@@ -70,4 +70,15 @@ class CommonCard5Test {
         }
         assertFalse(card5.checkRules(gameData, players.get(0)));
     }
+
+    @Test
+    @DisplayName("Test check rules for card 5 with less than 6 tiles")
+    void testCheckRulesLessThan6Tiles(){
+        for(int col = 0; col < 3; col++){
+            for(int row = 0; row < gridP1.length - 1; row++) {
+                libraryP1.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+            }
+        }
+        assertFalse(card5.checkRules(gameData, players.get(0)));
+    }
 }

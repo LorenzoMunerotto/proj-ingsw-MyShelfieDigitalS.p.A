@@ -1,8 +1,12 @@
 package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
+import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.enums.ItemTileType;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class representing the common goal card 8.
@@ -58,6 +62,26 @@ public class CommonCard8 implements CommonGoalCard {
      */
     @Override
     public boolean checkRules(GameData gameData, String name) {
+        ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+        int counter = 0;
+
+        for (ItemTile[] itemTiles : libraryGrid) {
+            Set<ItemTileType> uniqueItemTileTypes = new HashSet<>();
+            int validItemTiles = 0;
+            for (ItemTile itemTile : itemTiles) {
+                ItemTileType currentItemTileType = itemTile.getItemTileType();
+                if (currentItemTileType != ItemTileType.EMPTY) {
+                    uniqueItemTileTypes.add(currentItemTileType);
+                    validItemTiles++;
+                }
+            }
+            if (validItemTiles == 5 && uniqueItemTileTypes.size() >= 1 && uniqueItemTileTypes.size() <= 3) {
+                counter++;
+                if (counter == 4) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

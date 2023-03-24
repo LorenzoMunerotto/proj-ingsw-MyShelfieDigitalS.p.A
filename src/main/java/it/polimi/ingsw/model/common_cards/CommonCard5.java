@@ -67,13 +67,15 @@ public class CommonCard5 implements CommonGoalCard {
 
         for (int col = 0; col < libraryGrid[0].length; col++) {
             Set<ItemTileType> uniqueItemTileTypes = new HashSet<>();
+            int validItemTiles = 0;
             for (ItemTile[] itemTiles : libraryGrid) {
                 ItemTileType currentItemTileType = itemTiles[col].getItemTileType();
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     uniqueItemTileTypes.add(currentItemTileType);
+                    validItemTiles++;
                 }
             }
-            if (uniqueItemTileTypes.size() >= 1 && uniqueItemTileTypes.size() <= 3) {
+            if (validItemTiles == 6 && uniqueItemTileTypes.size() >= 1 && uniqueItemTileTypes.size() <= 3) {
                 counter++;
                 if (counter == 3) {
                     return true;

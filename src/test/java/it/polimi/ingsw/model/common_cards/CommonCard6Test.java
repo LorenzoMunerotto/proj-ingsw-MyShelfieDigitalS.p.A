@@ -34,7 +34,7 @@ class CommonCard6Test {
         players.add("Pluto");
         gameData = new GameData(players, 2);
         libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary().getGrid();
+        gridP1 = libraryP1.getGrid();
         random = new Random();
     }
 
@@ -63,5 +63,15 @@ class CommonCard6Test {
             libraryP1.setItemTile(row, column, plantItemTile);
         }
         assertTrue(card6.checkRules(gameData, players.get(0)));
+
+        for(int i = 0; i < gridP1.length; i++){
+            for(int j = 0; j < gridP1[0].length; j++){
+                if(gridP1[i][j].getItemTileType() == ItemTileType.CAT){
+                    libraryP1.setItemTile(i, j, new ItemTile(ItemTileType.EMPTY));
+                    break;
+                }
+            }
+        }
+        assertFalse(card6.checkRules(gameData, players.get(0)));
     }
 }

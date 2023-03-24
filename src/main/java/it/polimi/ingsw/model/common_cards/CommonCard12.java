@@ -61,22 +61,27 @@ public class CommonCard12 implements CommonGoalCard {
     @Override
     public boolean checkRules(GameData gameData, String name) {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+        int counter = 0;
 
-        for (int c = 0; c < libraryGrid[0].length; c++) {
-            if (libraryGrid[c][c].getItemTileType() != ItemTileType.EMPTY || libraryGrid[c + 1][c].getItemTileType() == ItemTileType.EMPTY) {
+        for (int row = 1; row < libraryGrid.length; row++) {
+            if (libraryGrid[row - 1][row - 1].getItemTileType() != ItemTileType.EMPTY || libraryGrid[row][row - 1].getItemTileType() == ItemTileType.EMPTY) {
                 break;
             }
-            if (c == 4) {
+            counter++;
+            if (counter == 5) {
                 return true;
             }
         }
-
-        for (int c = 0; c < libraryGrid[0].length; c++) {
-            int r = 5 - c;
-            if (libraryGrid[r][c].getItemTileType() != ItemTileType.EMPTY || libraryGrid[r - 1][c].getItemTileType() == ItemTileType.EMPTY) {
-                return false;
+        counter  = 0;
+        for (int row = 1; row < libraryGrid.length; row++) {
+            if (libraryGrid[row - 1][5 - row].getItemTileType() != ItemTileType.EMPTY || libraryGrid[row][5 - row].getItemTileType() == ItemTileType.EMPTY) {
+                break;
+            }
+            counter++;
+            if (counter == 5) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }
