@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -33,9 +34,20 @@ public class CommonCardFactory {
         List<CommonGoalCard> commonCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
         List<Integer> alreadyCreatedCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
         List<Integer> points = new ArrayList<>();
-        for(int i = 0; i < numberOfPlayers; i++){
-            points.add(8 - 2 * i);
+
+        //nel caso di 2 giocatori si creavano i punti 8-6 invece che 8-4
+        switch (numberOfPlayers){
+            case 2:
+                points = Arrays.asList(8,4);
+                break;
+            case 3:
+                points = Arrays.asList(8,6,4);
+                break;
+            case 4:
+                points = Arrays.asList(8,6,4,2);
+                break;
         }
+
         for(int i = 0; i < CARDS_NUMBER_FOR_GAME; i++){
             int cardNumber = getRandomCardNumber(alreadyCreatedCards);
             alreadyCreatedCards.add(cardNumber);
