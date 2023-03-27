@@ -1,4 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.data;
+
+import it.polimi.ingsw.model.data.Library;
 
 /**
  * This class represents the player's dashboard.

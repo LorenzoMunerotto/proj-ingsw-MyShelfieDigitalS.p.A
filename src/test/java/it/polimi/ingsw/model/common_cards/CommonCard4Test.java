@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.Library;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.common_cards.CommonCard4;
+import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard4Test {
 
     CommonGoalCard card4;
-    GameData gameData;
-    List<String> players;
-    Library libraryP1;
-    ItemTile[][] gridP1;
+    Library library;
+    ItemTile[][] libraryGrid;
 
     @BeforeEach
     void setUp() {
@@ -27,35 +26,31 @@ class CommonCard4Test {
         points.add(8);
         points.add(6);
         card4 = new CommonCard4(4, points);
-        players = new ArrayList<>();
-        players.add("Pippo");
-        players.add("Pluto");
-        gameData = new GameData(players, 2);
-        libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = libraryP1.getGrid();
+        library = new Library();
+        libraryGrid = library.getGrid();
     }
 
     @Test
     @DisplayName("Test check rules for common card 4")
     void checkRules() {
-        assertFalse(card4.checkRules(gameData, players.get(0)));
-        libraryP1.setItemTile(5, 0, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(5, 1, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(4, 0, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(4, 1, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(3, 0, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(3, 1, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(2, 1, new ItemTile(ItemTileType.values()[1]));
-        assertFalse(card4.checkRules(gameData, players.get(0)));
+        assertFalse(card4.checkRules(libraryGrid));
+        library.setItemTile(5, 0, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(5, 1, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(4, 0, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(4, 1, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(3, 0, new ItemTile(ItemTileType.values()[1]));
+        library.setItemTile(3, 1, new ItemTile(ItemTileType.values()[1]));
+        library.setItemTile(2, 0, new ItemTile(ItemTileType.values()[1]));
+        library.setItemTile(2, 1, new ItemTile(ItemTileType.values()[1]));
+        assertFalse(card4.checkRules(libraryGrid));
 
-        libraryP1.setItemTile(5, 2, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(5, 3, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(4, 2, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(4, 3, new ItemTile(ItemTileType.values()[0]));
-        assertTrue(card4.checkRules(gameData, players.get(0)));
+        library.setItemTile(5, 2, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(5, 3, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(4, 2, new ItemTile(ItemTileType.values()[0]));
+        library.setItemTile(4, 3, new ItemTile(ItemTileType.values()[0]));
+        assertTrue(card4.checkRules(libraryGrid));
 
-        libraryP1.setItemTile(5, 2, new ItemTile(ItemTileType.values()[1]));
-        assertFalse(card4.checkRules(gameData, players.get(0)));
+        library.setItemTile(5, 2, new ItemTile(ItemTileType.values()[1]));
+        assertFalse(card4.checkRules(libraryGrid));
     }
 }

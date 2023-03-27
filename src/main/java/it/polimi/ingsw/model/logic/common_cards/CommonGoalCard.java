@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.logic.common_cards;
 
-import it.polimi.ingsw.model.GameData;
+import it.polimi.ingsw.model.data.ItemTile;
 
 import java.util.List;
 
@@ -26,9 +26,8 @@ public interface CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param gameData is the game data
-     * @param name     is the name of the player
+     * @param libraryGrid is the library grid
      * @return true if the rules are respected, false otherwise
      */
-    boolean checkRules(GameData gameData, String name);
+    boolean checkRules(ItemTile[][] libraryGrid);
 }

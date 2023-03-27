@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.data;
 
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 /**
  * Class representing a single cell on the game board.
@@ -22,11 +22,7 @@ public class BoardCell {
     /**
      * An attribute indicating whether the cell is selectable.
      */
-    private boolean grey;
-    /**
-     * An attribute indicating whether the cell has no other adjacent cells.
-     */
-    private boolean alone;
+    private boolean valid;
 
     /**
      * Constructor for the BoardCell class.
@@ -38,8 +34,7 @@ public class BoardCell {
         this.itemTile = new ItemTile(ItemTileType.EMPTY);
         this.row = row;
         this.column = column;
-        this.grey = false;
-        this.alone = false;
+        this.valid = false;
     }
 
     /**
@@ -61,17 +56,6 @@ public class BoardCell {
     }
 
     /**
-     * Remove the item tile from the cell and replace it with an empty one.
-     *
-     * @return the item tile removed
-     */
-    public ItemTile removeItemTile() {
-        ItemTile removedTile = getItemTile();
-        setItemTile(new ItemTile(ItemTileType.EMPTY));
-        return removedTile;
-    }
-
-    /**
      * Get the row number of the board cell.
      *
      * @return the row number
@@ -90,38 +74,20 @@ public class BoardCell {
     }
 
     /**
-     * Check whether the cell is grey-colored.
+     * Get the attribute indicating whether the cell is selectable.
      *
-     * @return true if the cell is grey-colored, false otherwise
+     * @return true if the cell is selectable, false otherwise
      */
-    public boolean getGrey() {
-        return this.grey;
+    public boolean isValid() {
+        return this.valid;
     }
 
     /**
-     * Set the flag indicating whether the cell is grey-colored.
+     * Set the attribute indicating whether the cell is selectable.
      *
-     * @param grey the new value of the flag
+     * @param valid true if the cell is selectable, false otherwise
      */
-    public void setGrey(boolean grey) {
-        this.grey = grey;
-    }
-
-    /**
-     * Check whether the cell is alone.
-     *
-     * @return true if the cell is alone, false otherwise
-     */
-    public boolean getAlone() {
-        return this.alone;
-    }
-
-    /**
-     * Set the flag indicating whether the cell is alone.
-     *
-     * @param alone the new value of the flag
-     */
-    public void setAlone(boolean alone) {
-        this.alone = alone;
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 }

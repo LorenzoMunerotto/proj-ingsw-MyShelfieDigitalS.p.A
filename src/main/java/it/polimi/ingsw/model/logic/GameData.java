@@ -1,7 +1,9 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.logic;
 
-import it.polimi.ingsw.model.common_cards.CommonCardFactory;
-import it.polimi.ingsw.model.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.data.Bag;
+import it.polimi.ingsw.model.data.Board;
+import it.polimi.ingsw.model.data.PlayerDashboard;
+import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,21 +29,21 @@ public class GameData {
     /**
      * List of the random common cards of the match.
      */
-    private final List<CommonGoalCard> commonGoalCard;
+    private final List<CommonGoalCard> commonGoalCards;
 
     /**
      * Constructor for GameData, initializes board, bag and playerDashboard.
      *
      * @param players list of the players in the game
      */
-    public GameData(List<String> players /*, List<PersonalGoalCard> personalCards*/, int numOfPlayers){
+    public GameData(List<String> players, int numOfPlayers, List<CommonGoalCard> commonGoalCards){
         this.board = new Board(numOfPlayers);
         this.bag = new Bag();
         this.playerDashboards = new HashMap<>();
         for(int i = 0; i < numOfPlayers; i++){
             this.playerDashboards.put(players.get(i), new PlayerDashboard(/*personalCards.get(i)*/));
         }
-        this.commonGoalCard = CommonCardFactory.createCards(numOfPlayers);
+        this.commonGoalCards = commonGoalCards;
     }
 
     /**
@@ -76,7 +78,7 @@ public class GameData {
      *
      * @return list of common card
      */
-    public List<CommonGoalCard> getCommonGoalCard(){
-        return this.commonGoalCard;
+    public List<CommonGoalCard> getCommonGoalCards(){
+        return this.commonGoalCards;
     }
 }

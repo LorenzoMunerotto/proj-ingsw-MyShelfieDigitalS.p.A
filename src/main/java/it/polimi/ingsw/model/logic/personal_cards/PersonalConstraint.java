@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.personal_card;
+package it.polimi.ingsw.model.logic.personal_cards;
 
 public class PersonalConstraint {
 

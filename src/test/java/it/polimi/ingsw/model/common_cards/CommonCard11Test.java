@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.Library;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.common_cards.CommonCard11;
+import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CommonCard11Test {
 
     CommonGoalCard card11;
-    GameData gameData;
-    List<String> players;
-    Library libraryP1;
-    ItemTile[][] gridP1;
+    Library library;
+    ItemTile[][] libraryGrid;
     Random random;
 
     @BeforeEach
@@ -30,31 +29,27 @@ class CommonCard11Test {
         points.add(8);
         points.add(6);
         card11 = new CommonCard11(11, points);
-        players = new ArrayList<>();
-        players.add("Pippo");
-        players.add("Pluto");
-        gameData = new GameData(players, 2);
-        libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary().getGrid();
+        library = new Library();
+        libraryGrid = library.getGrid();
         random = new Random();
     }
 
     @Test
     @DisplayName("Test check rules for card 11")
     void checkRules() {
-        assertFalse(card11.checkRules(gameData, players.get(0)));
+        assertFalse(card11.checkRules(libraryGrid));
 
-        int row = random.nextInt(gridP1.length - 2);
-        int col = random.nextInt(gridP1[0].length - 2);
-        libraryP1.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(row, col + 2, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(row + 1, col + 1, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(row + 2, col, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(row + 2, col + 2, new ItemTile(ItemTileType.CAT));
-        assertTrue(card11.checkRules(gameData, players.get(0)));
+        int row = random.nextInt(libraryGrid.length - 2);
+        int col = random.nextInt(libraryGrid[0].length - 2);
+        library.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(row, col + 2, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(row + 1, col + 1, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(row + 2, col, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(row + 2, col + 2, new ItemTile(ItemTileType.CAT));
+        assertTrue(card11.checkRules(libraryGrid));
 
         ItemTileType newType = ItemTileType.PLANT;
-        libraryP1.setItemTile(row, col, new ItemTile(newType));
-        assertFalse(card11.checkRules(gameData, players.get(0)));
+        library.setItemTile(row, col, new ItemTile(newType));
+        assertFalse(card11.checkRules(libraryGrid));
     }
 }

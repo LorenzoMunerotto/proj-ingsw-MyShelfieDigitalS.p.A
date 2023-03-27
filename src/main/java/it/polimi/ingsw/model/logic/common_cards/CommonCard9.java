@@ -1,8 +1,7 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.logic.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.HashSet;
 import java.util.List;
@@ -56,17 +55,15 @@ public class CommonCard9 implements CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param gameData is the game data
-     * @param name     is the name of the player
+     * @param libraryGrid is the library grid
      * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(GameData gameData, String name) {
-        ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+    public boolean checkRules(ItemTile[][] libraryGrid) {
         int counter = 0;
 
         firstLoop:
-        for(int col = 0; col < libraryGrid[0].length; col++){
+        for (int col = 0; col < libraryGrid[0].length; col++) {
             Set<ItemTileType> distinctTypes = new HashSet<>();
 
             for (ItemTile[] itemTiles : libraryGrid) {
@@ -76,10 +73,10 @@ public class CommonCard9 implements CommonGoalCard {
                 }
                 distinctTypes.add(currentType);
             }
-            if(distinctTypes.size() == libraryGrid.length){
+            if (distinctTypes.size() == libraryGrid.length) {
                 counter++;
             }
-            if(counter == 2){
+            if (counter == 2) {
                 return true;
             }
         }

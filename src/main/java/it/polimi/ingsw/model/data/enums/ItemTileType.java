@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.enums;
+package it.polimi.ingsw.model.data.enums;
 
 /**
  * Enumeration of the different types of the item tiles.

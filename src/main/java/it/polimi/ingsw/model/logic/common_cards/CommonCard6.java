@@ -1,8 +1,7 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.logic.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -56,13 +55,11 @@ public class CommonCard6 implements CommonGoalCard {
     /**
      * Checks if the rules of the card are respected.
      *
-     * @param gameData contains the data of the game
-     * @param name     is the name of the player
-     * @return true if the rules are respected
+     * @param libraryGrid is the library grid
+     * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(GameData gameData, String name) {
-        ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
+    public boolean checkRules(ItemTile[][] libraryGrid) {
         Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
 
         for (ItemTile[] itemTiles : libraryGrid) {

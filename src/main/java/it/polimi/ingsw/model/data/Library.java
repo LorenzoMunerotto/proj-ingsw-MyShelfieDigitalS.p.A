@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.data;
 
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 /**
  * Class representing the Library owned by each player.
@@ -53,6 +53,7 @@ public class Library {
 
     /**
      * Set the item tile in the given row and column.
+     * Used only for testing purposes.
      *
      * @param row the row of the grid
      * @param column the column of the grid
@@ -64,19 +65,4 @@ public class Library {
         }
         this.grid[row][column] = itemTile;
     }
-
-    /* Prob not there
-    public void insertItemTile(int column, ItemTile itemTile) {
-        if(column < 0 || column >= grid.length){
-            throw new IllegalArgumentException("Invalid column number");
-        }
-        for(int row = grid.length - 1; row >= 0; row--){
-            if(grid[row][column].getItemTileType() == ItemTileType.EMPTY){
-                grid[row][column] = itemTile;
-                return;
-            }
-        }
-        throw new IllegalStateException("Column " + column + " is already full");
-    }*/
-
 }

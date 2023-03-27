@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.Library;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.common_cards.CommonCard2;
+import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard2Test {
 
     CommonGoalCard card2;
-    GameData gameData;
-    List<String> players;
-    Library libraryP1;
+    Library library;
+    ItemTile[][] libraryGrid;
 
     @BeforeEach
     void setUp() {
@@ -26,22 +26,19 @@ class CommonCard2Test {
         points.add(8);
         points.add(6);
         card2 = new CommonCard2(2, points);
-        players = new ArrayList<>();
-        players.add("Pippo");
-        players.add("Pluto");
-        gameData = new GameData(players, 2);
-        libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
+        library = new Library();
+        libraryGrid = library.getGrid();
     }
 
     @Test
     @DisplayName("Test check rules for card 2")
     void checkRulesTrue() {
-        libraryP1.setItemTile(0,0, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(0,4, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(5,0, new ItemTile(ItemTileType.CAT));
-        libraryP1.setItemTile(5,4, new ItemTile(ItemTileType.CAT));
-        assertTrue(card2.checkRules(gameData, players.get(0)));
-        libraryP1.setItemTile(5,4,new ItemTile(ItemTileType.EMPTY));
-        assertFalse(card2.checkRules(gameData, players.get(0)));
+        library.setItemTile(0,0, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(0,4, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(5,0, new ItemTile(ItemTileType.CAT));
+        library.setItemTile(5,4, new ItemTile(ItemTileType.CAT));
+        assertTrue(card2.checkRules(libraryGrid));
+        library.setItemTile(5,4,new ItemTile(ItemTileType.EMPTY));
+        assertFalse(card2.checkRules(libraryGrid));
     }
 }

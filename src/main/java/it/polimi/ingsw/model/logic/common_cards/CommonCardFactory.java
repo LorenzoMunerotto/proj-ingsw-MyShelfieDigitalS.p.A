@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.logic.common_cards;
 
 import java.util.ArrayList;
 import java.util.List;
