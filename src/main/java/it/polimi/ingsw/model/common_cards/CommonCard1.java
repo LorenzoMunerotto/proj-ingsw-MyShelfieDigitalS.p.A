@@ -63,63 +63,22 @@ public class CommonCard1 implements CommonGoalCard{
      */
     @Override
     public boolean checkRules(GameData gameData, String name) {
-        ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
-        List<Pair<Integer, Integer>> usedItemTiles = new ArrayList<>();
-        int counter = 0;
 
-        for (int row = libraryGrid.length - 1; row >= 0; row--) {
-            for (int col = 0; col < libraryGrid[row].length; col++) {
-                ItemTileType currentItemTileType = libraryGrid[row][col].getItemTileType();
-                Pair<Integer, Integer> currentItemTile = new Pair<>(row, col);
-                if (currentItemTileType == ItemTileType.EMPTY || usedItemTiles.contains(currentItemTile)) {
-                    continue;
-                }
-                if (col + 1 < libraryGrid[row].length && libraryGrid[row][col + 1].getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row, col + 1));
-                    col++;
-                } else if (row - 1 >= 0 && libraryGrid[row - 1][col].getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row - 1, col));
-                }
-                if (counter >= 6) {
-                    return true;
-                }
-            }
-        }
         return false;
     }
 
 
     public boolean checkRules(Library library) {
 
-        List<Pair<Integer, Integer>> usedItemTiles = new ArrayList<>();
-        int counter = 0;
-
-        for (int row = library.getRows()-1; row >= 0; row--) {
-            for (int col = 0; col < library.getColumns(); col++) {
-                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
-                Pair<Integer, Integer> currentItemTile = new Pair<>(row, col);
-                if (currentItemTileType == ItemTileType.EMPTY || usedItemTiles.contains(currentItemTile)) {
-                    continue;
-                }
-                if (col + 1 < library.getColumns() && library.getItemTile(row, col+1).getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row, col + 1));
-                    col++;
-                } else if (row - 1 >= 0 && library.getItemTile(row-1, col).getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row - 1, col));
-                }
-                if (counter >= 6) {
-                    return true;
-                }
+        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = library.getListGroupsAdjacentTiles();
+        int counter =0;
+        for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles){
+            if(group.getValue0()!=ItemTileType.EMPTY && group.getValue1()==2){
+                counter++;
             }
         }
-        return false;
-    }
+        return counter>=6;
+
+        }
+
 }

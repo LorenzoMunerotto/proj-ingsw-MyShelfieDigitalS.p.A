@@ -118,10 +118,26 @@ class CommonCard3Test {
 
         library.setLibrary(gridOfItemTileType);
         assertTrue(card3.checkRules(library));
-
-
+        library.setItemTile(1, 0, new ItemTile(ItemTileType.FRAME));
+        assertFalse(card3.checkRules(library));
     }
 
+    @Test
+    @DisplayName("Test check rules for T-scheme")
+    void checkRulesTscheme(){
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.GAME,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.EMPTY},
+                {ItemTileType.GAME,ItemTileType.GAME,ItemTileType.PLANT,ItemTileType.TROPHY,ItemTileType.EMPTY},
+                {ItemTileType.GAME,ItemTileType.CAT,ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.CAT,ItemTileType.TROPHY,ItemTileType.EMPTY}};
+
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card3.checkRules(library));
+        library.setItemTile(1, 2, new ItemTile(ItemTileType.PLANT));
+        assertFalse(card3.checkRules(library));
+    }
 
 
 }

@@ -193,7 +193,7 @@ public class Library {
 
     /**
      * <p>This method find groups of Adjacent item tiles of the same type on the library <br>
-     * This method can be used for calculate points from the groups of Adjacent tiles and for check CommonCards3 (and 2?) <br>
+     * This method can be used for calculate points from the groups of Adjacent tiles and for check CommonCards3 and CC1 <br>
      * <i>Da valutare in che classe mettere questo metodo</i>
      * </p>
      *
