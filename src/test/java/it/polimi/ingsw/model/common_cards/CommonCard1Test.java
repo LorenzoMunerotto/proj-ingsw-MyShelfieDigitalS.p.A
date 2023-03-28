@@ -16,10 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard1Test {
 
     CommonGoalCard card1;
-    GameData gameData;
-    List<String> players;
-    Library libraryP1;
-    ItemTile[][] gridP1;
+
+    Library library;
+
 
     @BeforeEach
     void setUp() {
@@ -27,32 +26,58 @@ class CommonCard1Test {
         points.add(8);
         points.add(6);
         card1 = new CommonCard1(1, points);
-        players = new ArrayList<>();
-        players.add("Pippo");
-        players.add("Pluto");
-        gameData = new GameData(players, 2);
-        libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = libraryP1.getGrid();
+        library = new Library();
     }
 
     @Test
     @DisplayName("Test check rules for card 1")
     void checkRules() {
-        assertFalse(card1.checkRules(gameData, players.get(0)));
-        for(int i = gridP1.length - 1; i >= 3; i--){
-            libraryP1.setItemTile(i, 0, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 1, new ItemTile(ItemTileType.values()[i]));
-        }
-        for(int i = gridP1.length - 1; i >= 3; i--){
-            libraryP1.setItemTile(i, gridP1[i].length - 2, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, gridP1[i].length - 1, new ItemTile(ItemTileType.values()[i]));
-        }
-        assertTrue(card1.checkRules(gameData, players.get(0)));
+        assertFalse(card1.checkRules(library));
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.FRAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.FRAME,ItemTileType.TROPHY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.BOOK,ItemTileType.BOOK,ItemTileType.TROPHY}};
 
-        libraryP1.setItemTile(3, 4, new ItemTile(ItemTileType.values()[1]));
-        assertFalse(card1.checkRules(gameData, players.get(0)));
-
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[2]));
-        assertFalse(card1.checkRules(gameData, players.get(0)));
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card1.checkRules(library));
     }
+
+
+    @Test
+    @DisplayName("Invalid group - 3 cat")
+    void checkRules1() {
+        assertFalse(card1.checkRules(library));
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.FRAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.FRAME,ItemTileType.TROPHY},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.BOOK,ItemTileType.BOOK,ItemTileType.TROPHY}};
+
+        library.setLibrary(gridOfItemTileType);
+        assertFalse(card1.checkRules(library));
+    }
+
+    @Test
+    @DisplayName("Only 5 groups")
+    void checkRules2() {
+        assertFalse(card1.checkRules(library));
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.FRAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.FRAME,ItemTileType.CAT},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.BOOK,ItemTileType.BOOK,ItemTileType.TROPHY}};
+
+        library.setLibrary(gridOfItemTileType);
+        assertFalse(card1.checkRules(library));
+    }
+
+
+
 }

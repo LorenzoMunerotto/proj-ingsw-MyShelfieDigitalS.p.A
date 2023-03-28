@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
 import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.Library;
 import it.polimi.ingsw.model.enums.ItemTileType;
 
 import java.util.List;
@@ -102,6 +103,11 @@ public class CommonCard7 implements CommonGoalCard {
             }
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean checkRules(Library library) {
         return false;
     }
 }

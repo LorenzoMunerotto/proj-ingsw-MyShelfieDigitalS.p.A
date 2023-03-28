@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
+import it.polimi.ingsw.model.Library;
 
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface CommonGoalCard {
      * @return true if the rules are respected, false otherwise
      */
     boolean checkRules(GameData gameData, String name);
+
+    boolean checkRules(Library library);
 }

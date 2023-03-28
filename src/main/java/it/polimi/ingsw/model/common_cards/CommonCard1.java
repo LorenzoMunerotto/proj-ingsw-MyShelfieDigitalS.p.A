@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
 import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.Library;
 import it.polimi.ingsw.model.enums.ItemTileType;
 import org.javatuples.Pair;
 
@@ -79,6 +80,37 @@ public class CommonCard1 implements CommonGoalCard{
                     usedItemTiles.add(new Pair<>(row, col + 1));
                     col++;
                 } else if (row - 1 >= 0 && libraryGrid[row - 1][col].getItemTileType() == currentItemTileType) {
+                    counter++;
+                    usedItemTiles.add(currentItemTile);
+                    usedItemTiles.add(new Pair<>(row - 1, col));
+                }
+                if (counter >= 6) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean checkRules(Library library) {
+
+        List<Pair<Integer, Integer>> usedItemTiles = new ArrayList<>();
+        int counter = 0;
+
+        for (int row = library.getRows()-1; row >= 0; row--) {
+            for (int col = 0; col < library.getColumns(); col++) {
+                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
+                Pair<Integer, Integer> currentItemTile = new Pair<>(row, col);
+                if (currentItemTileType == ItemTileType.EMPTY || usedItemTiles.contains(currentItemTile)) {
+                    continue;
+                }
+                if (col + 1 < library.getColumns() && library.getItemTile(row, col+1).getItemTileType() == currentItemTileType) {
+                    counter++;
+                    usedItemTiles.add(currentItemTile);
+                    usedItemTiles.add(new Pair<>(row, col + 1));
+                    col++;
+                } else if (row - 1 >= 0 && library.getItemTile(row-1, col).getItemTileType() == currentItemTileType) {
                     counter++;
                     usedItemTiles.add(currentItemTile);
                     usedItemTiles.add(new Pair<>(row - 1, col));

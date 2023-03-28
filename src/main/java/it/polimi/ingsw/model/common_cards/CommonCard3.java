@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
 import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.Library;
 import it.polimi.ingsw.model.enums.ItemTileType;
 import org.javatuples.Pair;
 
@@ -96,6 +97,57 @@ public class CommonCard3 implements CommonGoalCard {
                         && libraryGrid[row - 1][col].getItemTileType() == currentItemTileType
                         && libraryGrid[row - 1][col + 1].getItemTileType() == currentItemTileType
                         && libraryGrid[row][col + 1].getItemTileType() == currentItemTileType) {
+                    counter++;
+                    usedItemTiles.add(currentItemTile);
+                    usedItemTiles.add(new Pair<>(row - 1, col));
+                    usedItemTiles.add(new Pair<>(row - 1, col + 1));
+                    usedItemTiles.add(new Pair<>(row, col + 1));
+                    col++;
+                }
+                if (counter >= 4) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkRules(Library library) {
+
+        List<Pair<Integer, Integer>> usedItemTiles = new ArrayList<>();
+        int counter = 0;
+
+        for (int row = library.getRows() - 1; row >= 0; row--) {
+            for (int col = 0; col < library.getColumns(); col++) {
+                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
+                Pair<Integer, Integer> currentItemTile = new Pair<>(row, col);
+                if (currentItemTileType == ItemTileType.EMPTY || usedItemTiles.contains(currentItemTile)) {
+                    continue;
+                }
+                if (col + 3 < library.getColumns()
+                        && library.getItemTile(row,col+1).getItemTileType() == currentItemTileType
+                        && library.getItemTile(row,col+2).getItemTileType() == currentItemTileType
+                        && library.getItemTile(row,col+3).getItemTileType() == currentItemTileType) {
+                    counter++;
+                    usedItemTiles.add(currentItemTile);
+                    usedItemTiles.add(new Pair<>(row, col + 1));
+                    usedItemTiles.add(new Pair<>(row, col + 2));
+                    usedItemTiles.add(new Pair<>(row, col + 3));
+                    col += 3;
+                } else if (row - 3 >= 0
+                        && library.getItemTile(row-1,col).getItemTileType() == currentItemTileType
+                        && library.getItemTile(row-2,col).getItemTileType() == currentItemTileType
+                        && library.getItemTile(row-3,col).getItemTileType() == currentItemTileType) {
+                    counter++;
+                    usedItemTiles.add(currentItemTile);
+                    usedItemTiles.add(new Pair<>(row - 1, col));
+                    usedItemTiles.add(new Pair<>(row - 2, col));
+                    usedItemTiles.add(new Pair<>(row - 3, col));
+                } else if (col + 1 < library.getColumns() && row - 1 >= 0
+                        && library.getItemTile(row-1,col).getItemTileType() == currentItemTileType
+                        && library.getItemTile(row-1,col+1).getItemTileType() == currentItemTileType
+                        && library.getItemTile(row,col+1).getItemTileType() == currentItemTileType) {
                     counter++;
                     usedItemTiles.add(currentItemTile);
                     usedItemTiles.add(new Pair<>(row - 1, col));

@@ -16,10 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard3Test {
 
     CommonGoalCard card3;
-    GameData gameData;
-    List<String> players;
-    Library libraryP1;
-    ItemTile[][] gridP1;
+    Library library;
+
 
     @BeforeEach
     void setUp() {
@@ -27,91 +25,103 @@ class CommonCard3Test {
         points.add(8);
         points.add(6);
         card3 = new CommonCard3(3, points);
-        players = new ArrayList<>();
-        players.add("Pippo");
-        players.add("Pluto");
-        gameData = new GameData(players, 2);
-        libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = libraryP1.getGrid();
+        library = new Library();
     }
     @Test
     @DisplayName("Test check rules for card 3 in horizontal case")
     void checkRulesHorizontal() {
-        assertFalse(card3.checkRules(gameData, players.get(0)));
-        for(int i = gridP1.length - 1; i >= 2; i--){
-            libraryP1.setItemTile(i, 0, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 1, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 2, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 3, new ItemTile(ItemTileType.values()[i]));
-        }
-        assertTrue(card3.checkRules(gameData, players.get(0)));
+        assertFalse(card3.checkRules(library));
 
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[1]));
-        assertFalse(card3.checkRules(gameData, players.get(0)));
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.GAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.EMPTY},
+                {ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.EMPTY},
+                {ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.CAT,ItemTileType.CAT,ItemTileType.EMPTY}};
+
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card3.checkRules(library));
+
+        library.setItemTile(5, 0, new ItemTile(ItemTileType.TROPHY));
+        assertFalse(card3.checkRules(library));
     }
 
     @Test
     @DisplayName("Test check rules for card 3 in vertical case")
     void checkRulesVertical() {
-        assertFalse(card3.checkRules(gameData, players.get(0)));
-        for(int i = 0; i < 4; i++){
-            libraryP1.setItemTile(5, i, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(4, i, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(3, i, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(2, i, new ItemTile(ItemTileType.values()[i]));
-        }
-        assertTrue(card3.checkRules(gameData, players.get(0)));
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.PLANT,ItemTileType.GAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.PLANT,ItemTileType.GAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.PLANT,ItemTileType.GAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.PLANT,ItemTileType.GAME,ItemTileType.EMPTY}};
 
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[3]));
-        assertFalse(card3.checkRules(gameData, players.get(0)));
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card3.checkRules(library));
+
+        library.setItemTile(5, 0, new ItemTile(ItemTileType.TROPHY));
+        assertFalse(card3.checkRules(library));
+
     }
+
+
 
     @Test
     @DisplayName("Test check rules for card 3 in square case")
     void checkRulesSquare() {
-        assertFalse(card3.checkRules(gameData, players.get(0)));
-        libraryP1.setItemTile(5, 0, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(5, 1, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(4, 0, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(4, 1, new ItemTile(ItemTileType.values()[0]));
-        libraryP1.setItemTile(3, 0, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(3, 1, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(2, 1, new ItemTile(ItemTileType.values()[1]));
-        libraryP1.setItemTile(5, 2, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(5, 3, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(4, 2, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(4, 3, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(3, 2, new ItemTile(ItemTileType.values()[3]));
-        libraryP1.setItemTile(3, 3, new ItemTile(ItemTileType.values()[3]));
-        libraryP1.setItemTile(2, 2, new ItemTile(ItemTileType.values()[3]));
-        libraryP1.setItemTile(2, 3, new ItemTile(ItemTileType.values()[3]));
-        assertTrue(card3.checkRules(gameData, players.get(0)));
+          ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.EMPTY},
+                {ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.EMPTY}};
 
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[2]));
-        assertFalse(card3.checkRules(gameData, players.get(0)));
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card3.checkRules(library));
+
+        library.setItemTile(5, 0, new ItemTile(ItemTileType.TROPHY));
+        assertFalse(card3.checkRules(library));
     }
 
     @Test
     @DisplayName("Test check rules for card 3 in mixed case")
     void checkRulesMixed(){
-        assertFalse(card3.checkRules(gameData, players.get(0)));
-        for(int i = gridP1.length - 1; i >= 4; i--){
-            libraryP1.setItemTile(i, 0, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 1, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 2, new ItemTile(ItemTileType.values()[i]));
-            libraryP1.setItemTile(i, 3, new ItemTile(ItemTileType.values()[i]));
-        }
-        for (int i = gridP1.length - 1; i >= 2; i--) {
-            libraryP1.setItemTile(i, 4, new ItemTile(ItemTileType.values()[3]));
-        }
-        libraryP1.setItemTile(3, 0, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(3, 1, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[2]));
-        libraryP1.setItemTile(2, 1, new ItemTile(ItemTileType.values()[2]));
-        assertTrue(card3.checkRules(gameData, players.get(0)));
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.GAME},
+                {ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.GAME},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.GAME},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.GAME}};
 
-        libraryP1.setItemTile(2, 0, new ItemTile(ItemTileType.values()[3]));
-        assertFalse(card3.checkRules(gameData, players.get(0)));
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card3.checkRules(library));
+
+        library.setItemTile(5, 0, new ItemTile(ItemTileType.TROPHY));
+        assertFalse(card3.checkRules(library));
+
     }
+
+    @Test
+    @DisplayName("Test check rules for L-scheme")
+    void checkRulesLscheme(){
+        ItemTileType[][] gridOfItemTileType = {
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.GAME},
+                {ItemTileType.CAT,ItemTileType.FRAME,ItemTileType.PLANT,ItemTileType.TROPHY,ItemTileType.GAME},
+                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT}};
+
+        library.setLibrary(gridOfItemTileType);
+        assertTrue(card3.checkRules(library));
+
+
+    }
+
+
+
 }

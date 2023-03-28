@@ -44,4 +44,6 @@ class CommonCard2Test {
         libraryP1.setItemTile(5,4,new ItemTile(ItemTileType.EMPTY));
         assertFalse(card2.checkRules(gameData, players.get(0)));
     }
+
+
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.common_cards;
 
 import it.polimi.ingsw.model.GameData;
 import it.polimi.ingsw.model.ItemTile;
+import it.polimi.ingsw.model.Library;
 import it.polimi.ingsw.model.enums.ItemTileType;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class CommonCard2 implements CommonGoalCard{
      * The index of the card.
      */
     private final int index;
-/**
+    /**
      * The list of the points on the card.
      */
     private final List<Integer> points;
@@ -67,5 +68,10 @@ public class CommonCard2 implements CommonGoalCard{
         ItemTileType itemTile3 = libraryGrid[5][0].getItemTileType();
         ItemTileType itemTile4 = libraryGrid[5][4].getItemTileType();
         return itemTile1 == itemTile2 && itemTile2 == itemTile3 && itemTile3 == itemTile4;
+    }
+
+    @Override
+    public boolean checkRules(Library library) {
+        return false;
     }
 }
