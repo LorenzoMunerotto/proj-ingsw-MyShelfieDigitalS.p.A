@@ -31,7 +31,7 @@ public class Library {
      */
 
     /**
-     * Constructor for library, initializing the library gird with empty item tiles.
+     * Constructor for library, initializes the library gird with empty item tiles.
      */
     public Library() {
         this.grid = new ItemTile[ROWS][COLUMNS];
@@ -52,17 +52,20 @@ public class Library {
     }
 
     /**
-     * Set the item tile in the given row and column.
-     * Used only for testing purposes.
+     * Get the number of rows of the library.
      *
-     * @param row the row of the grid
-     * @param column the column of the grid
-     * @param itemTile the new item tile
+     * @return the number of rows of the library
      */
-    public void setItemTile(int row, int column, ItemTile itemTile) {
-        if (row < 0 || row >= grid.length || column < 0 || column >= grid[row].length) {
-            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
-        }
-        this.grid[row][column] = itemTile;
+    public static int getROWS() {
+        return ROWS;
+    }
+
+    /**
+     * Get the number of columns of the library.
+     *
+     * @return the number of columns of the library
+     */
+    public static int getCOLUMNS() {
+        return COLUMNS;
     }
 }

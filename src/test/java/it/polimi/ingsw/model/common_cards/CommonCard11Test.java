@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import it.polimi.ingsw.model.logic.common_cards.CommonCard11;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CommonCard11Test {
 
     CommonGoalCard card11;
-    Library library;
+    LibraryTestHelper libraryTestHelper;
     ItemTile[][] libraryGrid;
     Random random;
 
@@ -29,8 +29,8 @@ class CommonCard11Test {
         points.add(8);
         points.add(6);
         card11 = new CommonCard11(11, points);
-        library = new Library();
-        libraryGrid = library.getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
         random = new Random();
     }
 
@@ -41,15 +41,15 @@ class CommonCard11Test {
 
         int row = random.nextInt(libraryGrid.length - 2);
         int col = random.nextInt(libraryGrid[0].length - 2);
-        library.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
-        library.setItemTile(row, col + 2, new ItemTile(ItemTileType.CAT));
-        library.setItemTile(row + 1, col + 1, new ItemTile(ItemTileType.CAT));
-        library.setItemTile(row + 2, col, new ItemTile(ItemTileType.CAT));
-        library.setItemTile(row + 2, col + 2, new ItemTile(ItemTileType.CAT));
+        libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+        libraryTestHelper.setItemTile(row, col + 2, new ItemTile(ItemTileType.CAT));
+        libraryTestHelper.setItemTile(row + 1, col + 1, new ItemTile(ItemTileType.CAT));
+        libraryTestHelper.setItemTile(row + 2, col, new ItemTile(ItemTileType.CAT));
+        libraryTestHelper.setItemTile(row + 2, col + 2, new ItemTile(ItemTileType.CAT));
         assertTrue(card11.checkRules(libraryGrid));
 
         ItemTileType newType = ItemTileType.PLANT;
-        library.setItemTile(row, col, new ItemTile(newType));
+        libraryTestHelper.setItemTile(row, col, new ItemTile(newType));
         assertFalse(card11.checkRules(libraryGrid));
     }
 }

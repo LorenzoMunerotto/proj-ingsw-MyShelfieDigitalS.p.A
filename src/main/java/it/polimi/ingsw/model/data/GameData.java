@@ -1,9 +1,4 @@
-package it.polimi.ingsw.model.logic;
-
-import it.polimi.ingsw.model.data.Bag;
-import it.polimi.ingsw.model.data.Board;
-import it.polimi.ingsw.model.data.PlayerDashboard;
-import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
+package it.polimi.ingsw.model.data;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,21 +24,19 @@ public class GameData {
     /**
      * List of the random common cards of the match.
      */
-    private final List<CommonGoalCard> commonGoalCards;
 
     /**
      * Constructor for GameData, initializes board, bag and playerDashboard.
      *
      * @param players list of the players in the game
      */
-    public GameData(List<String> players, int numOfPlayers, List<CommonGoalCard> commonGoalCards){
+    public GameData(List<String> players, int numOfPlayers){
         this.board = new Board(numOfPlayers);
         this.bag = new Bag();
         this.playerDashboards = new HashMap<>();
         for(int i = 0; i < numOfPlayers; i++){
-            this.playerDashboards.put(players.get(i), new PlayerDashboard(/*personalCards.get(i)*/));
+            this.playerDashboards.put(players.get(i), new PlayerDashboard());
         }
-        this.commonGoalCards = commonGoalCards;
     }
 
     /**
@@ -71,14 +64,5 @@ public class GameData {
      */
     public Map<String, PlayerDashboard> getPlayerDashboards() {
         return this.playerDashboards;
-    }
-
-    /**
-     * Get the list of the common card of the match.
-     *
-     * @return list of common card
-     */
-    public List<CommonGoalCard> getCommonGoalCards(){
-        return this.commonGoalCards;
     }
 }

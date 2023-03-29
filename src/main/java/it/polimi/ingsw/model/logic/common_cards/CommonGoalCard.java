@@ -24,6 +24,14 @@ public interface CommonGoalCard {
     List<Integer> getPoints();
 
     /**
+     * Get the first point on the card.
+     * Also removes the point from the list of points.
+     *
+     * @return the first point on the card
+     */
+    int getHighestPoint();
+
+    /**
      * Check if the rules of the card are respected.
      *
      * @param libraryGrid is the library grid

@@ -43,7 +43,7 @@ public class Board {
      */
 
     /**
-     * Constructor Board, initializing the cells in the grid, based on the number of players.
+     * Constructor Board, initializes the cells in the grid, based on the number of players.
      *
      * @param numPlayers number of player in the game
      */

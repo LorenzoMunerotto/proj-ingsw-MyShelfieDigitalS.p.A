@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import it.polimi.ingsw.model.logic.common_cards.CommonCard6;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard6Test {
 
     CommonGoalCard card6;
-    Library library;
+    LibraryTestHelper libraryTestHelper;
     ItemTile[][] libraryGrid;
     Random random;
 
@@ -28,8 +28,8 @@ class CommonCard6Test {
         points.add(8);
         points.add(6);
         card6 = new CommonCard6(6, points);
-        library = new Library();
-        libraryGrid = library.getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
         random = new Random();
     }
 
@@ -45,7 +45,7 @@ class CommonCard6Test {
                 row = random.nextInt(6);
                 column = random.nextInt(5);
             }
-            library.setItemTile(row, column, catItemTile);
+            libraryTestHelper.setItemTile(row, column, catItemTile);
         }
         for (int i = 0; i < 6; i++) {
             int row = random.nextInt(6);
@@ -55,14 +55,14 @@ class CommonCard6Test {
                 row = random.nextInt(6);
                 column = random.nextInt(5);
             }
-            library.setItemTile(row, column, plantItemTile);
+            libraryTestHelper.setItemTile(row, column, plantItemTile);
         }
         assertTrue(card6.checkRules(libraryGrid));
 
         for(int i = 0; i < libraryGrid.length; i++){
             for(int j = 0; j < libraryGrid[0].length; j++){
                 if(libraryGrid[i][j].getItemTileType() == ItemTileType.CAT){
-                    library.setItemTile(i, j, new ItemTile(ItemTileType.EMPTY));
+                    libraryTestHelper.setItemTile(i, j, new ItemTile(ItemTileType.EMPTY));
                     break;
                 }
             }

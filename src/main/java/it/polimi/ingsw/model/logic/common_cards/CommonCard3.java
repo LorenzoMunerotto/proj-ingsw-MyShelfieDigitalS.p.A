@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.enums.ItemTileType;
-import org.javatuples.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +50,17 @@ public class CommonCard3 implements CommonGoalCard {
     }
 
     /**
+     * Get the first point on the card.
+     * Also removes the point from the list of points.
+     *
+     * @return the first point on the card
+     */
+    @Override
+    public int getHighestPoint(){
+        return this.points.remove(0);
+    }
+
+    /**
      * Check if the rules of the card are respected.
      *
      * @param libraryGrid is the library grid
@@ -60,51 +68,6 @@ public class CommonCard3 implements CommonGoalCard {
      */
     @Override
     public boolean checkRules(ItemTile[][] libraryGrid) {
-        List<Pair<Integer, Integer>> usedItemTiles = new ArrayList<>();
-        int counter = 0;
-
-        for (int row = libraryGrid.length - 1; row >= 0; row--) {
-            for (int col = 0; col < libraryGrid[row].length; col++) {
-                ItemTileType currentItemTileType = libraryGrid[row][col].getItemTileType();
-                Pair<Integer, Integer> currentItemTile = new Pair<>(row, col);
-                if (currentItemTileType == ItemTileType.EMPTY || usedItemTiles.contains(currentItemTile)) {
-                    continue;
-                }
-                if (col + 3 < libraryGrid[row].length
-                        && libraryGrid[row][col + 1].getItemTileType() == currentItemTileType
-                        && libraryGrid[row][col + 2].getItemTileType() == currentItemTileType
-                        && libraryGrid[row][col + 3].getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row, col + 1));
-                    usedItemTiles.add(new Pair<>(row, col + 2));
-                    usedItemTiles.add(new Pair<>(row, col + 3));
-                    col += 3;
-                } else if (row - 3 >= 0
-                        && libraryGrid[row - 1][col].getItemTileType() == currentItemTileType
-                        && libraryGrid[row - 2][col].getItemTileType() == currentItemTileType
-                        && libraryGrid[row - 3][col].getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row - 1, col));
-                    usedItemTiles.add(new Pair<>(row - 2, col));
-                    usedItemTiles.add(new Pair<>(row - 3, col));
-                } else if (col + 1 < libraryGrid[row].length && row - 1 >= 0
-                        && libraryGrid[row - 1][col].getItemTileType() == currentItemTileType
-                        && libraryGrid[row - 1][col + 1].getItemTileType() == currentItemTileType
-                        && libraryGrid[row][col + 1].getItemTileType() == currentItemTileType) {
-                    counter++;
-                    usedItemTiles.add(currentItemTile);
-                    usedItemTiles.add(new Pair<>(row - 1, col));
-                    usedItemTiles.add(new Pair<>(row - 1, col + 1));
-                    usedItemTiles.add(new Pair<>(row, col + 1));
-                    col++;
-                }
-                if (counter >= 4) {
-                    return true;
-                }
-            }
-        }
         return false;
     }
 }

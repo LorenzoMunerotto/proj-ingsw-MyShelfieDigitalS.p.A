@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import it.polimi.ingsw.model.logic.common_cards.CommonCard7;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard7Test {
 
     CommonGoalCard card7;
-    Library library;
+    LibraryTestHelper libraryTestHelper;
     ItemTile[][] libraryGrid;
 
     @BeforeEach
@@ -26,8 +26,8 @@ class CommonCard7Test {
         points.add(8);
         points.add(6);
         card7 = new CommonCard7(7, points);
-        library = new Library();
-        libraryGrid = library.getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
     }
 
     @Test
@@ -36,19 +36,19 @@ class CommonCard7Test {
         assertFalse(card7.checkRules(libraryGrid));
 
         for (int i = 0; i < 5; i++) {
-            library.setItemTile(i, i, new ItemTile(ItemTileType.CAT));
+            libraryTestHelper.setItemTile(i, i, new ItemTile(ItemTileType.CAT));
         }
         assertTrue(card7.checkRules(libraryGrid));
 
-        library.setItemTile(4, 4, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(4, 4, new ItemTile(ItemTileType.PLANT));
         assertFalse(card7.checkRules(libraryGrid));
 
         for (int i = 1; i < 6; i++) {
-            library.setItemTile(i, i - 1, new ItemTile(ItemTileType.TROPHY));
+            libraryTestHelper.setItemTile(i, i - 1, new ItemTile(ItemTileType.TROPHY));
         }
         assertTrue(card7.checkRules(libraryGrid));
 
-        library.setItemTile(5, 4, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(5, 4, new ItemTile(ItemTileType.PLANT));
         assertFalse(card7.checkRules(libraryGrid));
     }
 
@@ -57,19 +57,19 @@ class CommonCard7Test {
     void checkRulesFromRight() {
         assertFalse(card7.checkRules(libraryGrid));
         for(int i = 0; i < 5; i++) {
-            library.setItemTile(i, 4 - i, new ItemTile(ItemTileType.CAT));
+            libraryTestHelper.setItemTile(i, 4 - i, new ItemTile(ItemTileType.CAT));
         }
         assertTrue(card7.checkRules(libraryGrid));
 
-        library.setItemTile(4, 0, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(4, 0, new ItemTile(ItemTileType.PLANT));
         assertFalse(card7.checkRules(libraryGrid));
 
         for (int i = 1; i < 6; i++) {
-            library.setItemTile(i, 5 - i, new ItemTile(ItemTileType.TROPHY));
+            libraryTestHelper.setItemTile(i, 5 - i, new ItemTile(ItemTileType.TROPHY));
         }
         assertTrue(card7.checkRules(libraryGrid));
 
-        library.setItemTile(5, 0, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(5, 0, new ItemTile(ItemTileType.PLANT));
         assertFalse(card7.checkRules(libraryGrid));
     }
 }

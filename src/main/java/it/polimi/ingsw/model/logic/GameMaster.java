@@ -11,7 +11,7 @@ public class GameMaster {
     private final List<Player> players;
     private final int numberOfPlayers;
     private int currentPlayerIndex;
-    public boolean started;
+    public final boolean started;
 
     public GameMaster(String firstPlayerName, int numberOfPlayers){
         players = new ArrayList<>();

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import it.polimi.ingsw.model.logic.common_cards.CommonCard10;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard10Test {
 
     CommonGoalCard card10;
-    Library library;
+    LibraryTestHelper libraryTestHelper;
     ItemTile[][] libraryGrid;
     Random random;
 
@@ -28,8 +28,8 @@ class CommonCard10Test {
         points.add(8);
         points.add(6);
         card10 = new CommonCard10(10, points);
-        library = new Library();
-        libraryGrid = library.getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
         random = new Random();
     }
 
@@ -44,13 +44,13 @@ class CommonCard10Test {
             secondRow = random.nextInt(libraryGrid.length);
         } while (secondRow == firstRow);
         for (int col = 0; col < libraryGrid[0].length; col++) {
-            library.setItemTile(firstRow, col, new ItemTile(ItemTileType.values()[col]));
-            library.setItemTile(secondRow, col, new ItemTile(ItemTileType.values()[col]));
+            libraryTestHelper.setItemTile(firstRow, col, new ItemTile(ItemTileType.values()[col]));
+            libraryTestHelper.setItemTile(secondRow, col, new ItemTile(ItemTileType.values()[col]));
         }
         assertTrue(card10.checkRules(libraryGrid));
 
         int columnToChange = random.nextInt(libraryGrid[0].length);
-        library.setItemTile(firstRow, columnToChange, new ItemTile(ItemTileType.EMPTY));
+        libraryTestHelper.setItemTile(firstRow, columnToChange, new ItemTile(ItemTileType.EMPTY));
         assertFalse(card10.checkRules(libraryGrid));
     }
 }

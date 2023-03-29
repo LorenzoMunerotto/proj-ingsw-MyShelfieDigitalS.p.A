@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import it.polimi.ingsw.model.logic.common_cards.CommonCard9;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard9Test {
 
     CommonGoalCard card9;
-    Library library;
+    LibraryTestHelper libraryTestHelper;
     ItemTile[][] libraryGrid;
     Random random;
 
@@ -28,8 +28,8 @@ class CommonCard9Test {
         points.add(8);
         points.add(6);
         card9 = new CommonCard9(9, points);
-        library = new Library();
-        libraryGrid = library.getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
         random = new Random();
     }
 
@@ -45,14 +45,14 @@ class CommonCard9Test {
         } while (secondColumn == firstColumn);
 
         for (int row = 0; row < libraryGrid.length; row++) {
-            library.setItemTile(row, firstColumn, new ItemTile(ItemTileType.values()[row]));
-            library.setItemTile(row, secondColumn, new ItemTile(ItemTileType.values()[row]));
+            libraryTestHelper.setItemTile(row, firstColumn, new ItemTile(ItemTileType.values()[row]));
+            libraryTestHelper.setItemTile(row, secondColumn, new ItemTile(ItemTileType.values()[row]));
         }
         assertTrue(card9.checkRules(libraryGrid));
 
         int rowToChange = random.nextInt(libraryGrid.length);
         ItemTileType newType = libraryGrid[rowToChange][firstColumn].getItemTileType() == ItemTileType.CAT ? ItemTileType.PLANT : ItemTileType.CAT;
-        library.setItemTile(rowToChange, firstColumn, new ItemTile(newType));
+        libraryTestHelper.setItemTile(rowToChange, firstColumn, new ItemTile(newType));
         assertFalse(card9.checkRules(libraryGrid));
     }
 }

@@ -25,7 +25,7 @@ public class BoardCell {
     private boolean valid;
 
     /**
-     * Constructor for the BoardCell class.
+     * Constructor for the BoardCell class, initializes the board cell with the given row and column numbers.
      *
      * @param row      the row number of the board cell
      * @param column   the column number of the board cell

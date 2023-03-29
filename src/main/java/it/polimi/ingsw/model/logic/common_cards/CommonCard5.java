@@ -53,6 +53,17 @@ public class CommonCard5 implements CommonGoalCard {
     }
 
     /**
+     * Get the first point on the card.
+     * Also removes the point from the list of points.
+     *
+     * @return the first point on the card
+     */
+    @Override
+    public int getHighestPoint(){
+        return this.points.remove(0);
+    }
+
+    /**
      * Check if the rules of the card are respected.
      *
      * @param libraryGrid is the library grid

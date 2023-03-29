@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.logic;
 
-import it.polimi.ingsw.model.data.Bag;
-import it.polimi.ingsw.model.data.Board;
-import it.polimi.ingsw.model.data.BoardCell;
-import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.*;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import org.javatuples.Pair;
 
@@ -15,9 +12,20 @@ import java.util.List;
  */
 public class BoardManager {
 
-    Board board;
-    Bag bag;
+    /**
+     * The board of the game.
+     */
+    final Board board;
+    /**
+     * The bag of the game.
+     */
+    final Bag bag;
 
+    /**
+     * Constructor for the board manager, initializes the board and the bag.
+     *
+     * @param gameData the game data
+     */
     public BoardManager(GameData gameData) {
         this.board = gameData.getBoard();
         this.bag = gameData.getBag();
@@ -28,19 +36,23 @@ public class BoardManager {
      * if there are no more valid cells on the board.
      */
     public void refillBoard() {
-        if (board.getValidCells().size() == 0) {
-            int emptyCells = board.getEmptyCells();
-            List<ItemTile> itemTileList = bag.getRandomItemTiles(emptyCells);
-            for (int row = 0; row < board.getBoardGrid().length; row++) {
-                for (int column = 0; column < board.getBoardGrid()[row].length; column++) {
-                    BoardCell currentCell = board.getBoardGrid()[row][column];
-                    if (currentCell != null) {
+        if(this.board.getValidCells().size() != 0) throw new IllegalArgumentException("There are still valid cells on the board!");
+        int emptyCells = board.getEmptyCells();
+        List<ItemTile> itemTileList = bag.getRandomItemTiles(emptyCells);
+
+        for (int row = 0; row < board.getBoardGrid().length; row++) {
+            for (int column = 0; column < board.getBoardGrid()[row].length; column++) {
+
+                BoardCell currentCell = board.getBoardGrid()[row][column];
+                
+                if (currentCell != null) {
+                    if(currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY){
                         currentCell.setItemTile(itemTileList.remove(0));
                         board.setEmptyCells(board.getEmptyCells() - 1);
                     }
                 }
             }
-        } else throw new IllegalArgumentException("There are still valid cells on the board");
+        }
     }
 
     /**
@@ -49,12 +61,14 @@ public class BoardManager {
     public void updateBoard() {
         BoardCell[][] boardGrid = this.board.getBoardGrid();
         List<BoardCell> validCells = new ArrayList<>();
+        int emptyCells = 0;
+
         for (int row = 0; row < boardGrid.length; row++) {
             for (int column = 0; column < boardGrid[row].length; column++) {
                 BoardCell currentCell = boardGrid[row][column];
                 if (currentCell != null) {
                     if (currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                        board.setEmptyCells(board.getEmptyCells() + 1);
+                        emptyCells++;
                     } else {
                         int freeSides = 0;
                         // top
@@ -84,6 +98,7 @@ public class BoardManager {
 
             }
         }
+        board.setEmptyCells(emptyCells);
         board.setValidCells(validCells);
     }
 
@@ -136,5 +151,18 @@ public class BoardManager {
             }
         }
         return true;
+    }
+
+    public void getEmptyCells() {
+        int emptyCells = 0;
+        for (int row = 0; row < board.getBoardGrid().length; row++) {
+            for (int column = 0; column < board.getBoardGrid()[row].length; column++) {
+                BoardCell currentCell = board.getBoardGrid()[row][column];
+                if (currentCell != null && currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY) {
+                    emptyCells++;
+                }
+            }
+        }
+        board.setEmptyCells(emptyCells);
     }
 }

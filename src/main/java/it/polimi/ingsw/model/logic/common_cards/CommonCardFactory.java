@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -33,48 +34,58 @@ public class CommonCardFactory {
         List<CommonGoalCard> commonCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
         List<Integer> alreadyCreatedCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
         List<Integer> points = new ArrayList<>();
-        for(int i = 0; i < numberOfPlayers; i++){
-            points.add(8 - 2 * i);
+
+        switch (numberOfPlayers){
+            case 2:
+                points.addAll(Arrays.asList(8, 4));
+                break;
+            case 3:
+                points.addAll(Arrays.asList(8, 6, 4));
+                break;
+            case 4:
+                points.addAll(Arrays.asList(8, 6, 4, 2));
+                break;
         }
         for(int i = 0; i < CARDS_NUMBER_FOR_GAME; i++){
             int cardNumber = getRandomCardNumber(alreadyCreatedCards);
             alreadyCreatedCards.add(cardNumber);
+            List<Integer> cardPoints = new ArrayList<>(points);
             switch (cardNumber){
                 case 1:
-                    commonCards.add(new CommonCard1(cardNumber, points));
+                    commonCards.add(new CommonCard1(cardNumber, cardPoints));
                     break;
                 case 2:
-                    commonCards.add(new CommonCard2(cardNumber, points));
+                    commonCards.add(new CommonCard2(cardNumber, cardPoints));
                     break;
                 case 3:
-                    commonCards.add(new CommonCard3(cardNumber, points));
+                    commonCards.add(new CommonCard3(cardNumber, cardPoints));
                     break;
                 case 4:
-                    commonCards.add(new CommonCard4(cardNumber, points));
+                    commonCards.add(new CommonCard4(cardNumber, cardPoints));
                     break;
                 case 5:
-                    commonCards.add(new CommonCard5(cardNumber, points));
+                    commonCards.add(new CommonCard5(cardNumber, cardPoints));
                     break;
                 case 6:
-                    commonCards.add(new CommonCard6(cardNumber, points));
+                    commonCards.add(new CommonCard6(cardNumber, cardPoints));
                     break;
                 case 7:
-                    commonCards.add(new CommonCard7(cardNumber, points));
+                    commonCards.add(new CommonCard7(cardNumber, cardPoints));
                     break;
                 case 8:
-                    commonCards.add(new CommonCard8(cardNumber, points));
+                    commonCards.add(new CommonCard8(cardNumber, cardPoints));
                     break;
                 case 9:
-                    commonCards.add(new CommonCard9(cardNumber, points));
+                    commonCards.add(new CommonCard9(cardNumber, cardPoints));
                     break;
                 case 10:
-                    commonCards.add(new CommonCard10(cardNumber, points));
+                    commonCards.add(new CommonCard10(cardNumber, cardPoints));
                     break;
                 case 11:
-                    commonCards.add(new CommonCard11(cardNumber,points));
+                    commonCards.add(new CommonCard11(cardNumber, cardPoints));
                     break;
                 case 12:
-                    commonCards.add(new CommonCard12(cardNumber, points));
+                    commonCards.add(new CommonCard12(cardNumber, cardPoints));
                     break;
             }
         }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import it.polimi.ingsw.model.logic.common_cards.CommonCard5;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard5Test {
 
     CommonGoalCard card5;
-    Library library;
+    LibraryTestHelper libraryTestHelper;
     ItemTile[][] libraryGrid;
 
     @BeforeEach
@@ -26,8 +26,8 @@ class CommonCard5Test {
         points.add(8);
         points.add(6);
         card5 = new CommonCard5(5, points);
-        library = new Library();
-        libraryGrid = library.getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
     }
 
     @Test
@@ -37,30 +37,30 @@ class CommonCard5Test {
 
         for(int col = 0; col < 3; col++){
             for(int row = 0; row < libraryGrid.length; row++) {
-                library.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+                libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
         assertTrue(card5.checkRules(libraryGrid));
 
         for (int col = 0; col < 3; col++) {
-            library.setItemTile(3, col, new ItemTile(ItemTileType.PLANT));
+            libraryTestHelper.setItemTile(3, col, new ItemTile(ItemTileType.PLANT));
         }
         assertTrue(card5.checkRules(libraryGrid));
 
         for (int col = 0; col < 3; col++) {
-            library.setItemTile(4, col, new ItemTile(ItemTileType.TROPHY));
+            libraryTestHelper.setItemTile(4, col, new ItemTile(ItemTileType.TROPHY));
         }
         assertTrue(card5.checkRules(libraryGrid));
 
         for (int col = 0; col < 3; col++) {
-            library.setItemTile(2, col, new ItemTile(ItemTileType.GAME));
+            libraryTestHelper.setItemTile(2, col, new ItemTile(ItemTileType.GAME));
         }
         assertFalse(card5.checkRules(libraryGrid));
 
-        library.setItemTile(2, 2, new ItemTile(ItemTileType.CAT));
+        libraryTestHelper.setItemTile(2, 2, new ItemTile(ItemTileType.CAT));
         for (int col = 0; col < 2; col++) {
             for (int row = 0; row < libraryGrid.length; row++) {
-                library.setItemTile(row, col, new ItemTile(ItemTileType.EMPTY));
+                libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.EMPTY));
             }
         }
         assertFalse(card5.checkRules(libraryGrid));
@@ -71,7 +71,7 @@ class CommonCard5Test {
     void testCheckRulesLessThan6Tiles(){
         for(int col = 0; col < 3; col++){
             for(int row = 0; row < libraryGrid.length - 1; row++) {
-                library.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+                libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
         assertFalse(card5.checkRules(libraryGrid));
