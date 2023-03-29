@@ -1,16 +1,18 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.data.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.Library;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.GameData;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Class representing the common goal card 12.
+ * Class representing the common goal card 9.
  */
-public class CommonCard12 implements CommonGoalCard {
+public class CommonCard9 implements CommonGoalCard {
 
     /**
      * The index of the card.
@@ -22,12 +24,12 @@ public class CommonCard12 implements CommonGoalCard {
     private final List<Integer> points;
 
     /**
-     * Constructor for common card 12, initializes index and points.
+     * Constructor for common card 9, initializes index and points.
      *
      * @param index  is the index of the card
      * @param points is the list of the points on the card
      */
-    public CommonCard12(int index, List<Integer> points) {
+    public CommonCard9(int index, List<Integer> points) {
         this.index = index;
         this.points = points;
     }
@@ -64,22 +66,21 @@ public class CommonCard12 implements CommonGoalCard {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
         int counter = 0;
 
-        for (int row = 1; row < libraryGrid.length; row++) {
-            if (libraryGrid[row - 1][row - 1].getItemTileType() != ItemTileType.EMPTY || libraryGrid[row][row - 1].getItemTileType() == ItemTileType.EMPTY) {
-                break;
+        firstLoop:
+        for(int col = 0; col < libraryGrid[0].length; col++){
+            Set<ItemTileType> distinctTypes = new HashSet<>();
+
+            for (ItemTile[] itemTiles : libraryGrid) {
+                ItemTileType currentType = itemTiles[col].getItemTileType();
+                if (currentType == ItemTileType.EMPTY) {
+                    continue firstLoop;
+                }
+                distinctTypes.add(currentType);
             }
-            counter++;
-            if (counter == 5) {
-                return true;
+            if(distinctTypes.size() == libraryGrid.length){
+                counter++;
             }
-        }
-        counter  = 0;
-        for (int row = 1; row < libraryGrid.length; row++) {
-            if (libraryGrid[row - 1][5 - row].getItemTileType() != ItemTileType.EMPTY || libraryGrid[row][5 - row].getItemTileType() == ItemTileType.EMPTY) {
-                break;
-            }
-            counter++;
-            if (counter == 5) {
+            if(counter == 2){
                 return true;
             }
         }

@@ -1,7 +1,7 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.data.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.Library;
+import it.polimi.ingsw.model.logic.GameData;
+import it.polimi.ingsw.model.data.Library;
 
 import java.util.List;
 

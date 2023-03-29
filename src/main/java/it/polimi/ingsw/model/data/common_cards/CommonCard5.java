@@ -1,35 +1,35 @@
-package it.polimi.ingsw.model.common_cards;
+package it.polimi.ingsw.model.data.common_cards;
 
-import it.polimi.ingsw.model.GameData;
-import it.polimi.ingsw.model.ItemTile;
-import it.polimi.ingsw.model.Library;
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.GameData;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Class representing the common goal card 8.
+ * Class representing the common goal card 5.
  */
-public class CommonCard8 implements CommonGoalCard {
+public class CommonCard5 implements CommonGoalCard {
 
     /**
      * The index of the card.
      */
     private final int index;
-    /**
+     /**
      * The list of the points on the card.
      */
     private final List<Integer> points;
 
     /**
-     * Constructor for common card 8, initializes index and points.
+     * Constructor for common card 5, initializes index and points.
      *
-     * @param index  is the index of the card
+     * @param index is the index of the card
      * @param points is the list of the points on the card
      */
-    public CommonCard8(int index, List<Integer> points) {
+    public CommonCard5(int index, List<Integer> points){
         this.index = index;
         this.points = points;
     }
@@ -40,7 +40,7 @@ public class CommonCard8 implements CommonGoalCard {
      * @return the index of the card
      */
     @Override
-    public int getIndex() {
+    public int getIndex(){
         return this.index;
     }
 
@@ -51,14 +51,14 @@ public class CommonCard8 implements CommonGoalCard {
      */
     @Override
     public List<Integer> getPoints() {
-        return this.points;
+        return points;
     }
 
     /**
      * Check if the rules of the card are respected.
      *
      * @param gameData is the game data
-     * @param name     is the name of the player
+     * @param name is the name of the player
      * @return true if the rules are respected, false otherwise
      */
     @Override
@@ -66,19 +66,19 @@ public class CommonCard8 implements CommonGoalCard {
         ItemTile[][] libraryGrid = gameData.getPlayerDashboards().get(name).getLibrary().getGrid();
         int counter = 0;
 
-        for (ItemTile[] itemTiles : libraryGrid) {
+        for (int col = 0; col < libraryGrid[0].length; col++) {
             Set<ItemTileType> uniqueItemTileTypes = new HashSet<>();
             int validItemTiles = 0;
-            for (ItemTile itemTile : itemTiles) {
-                ItemTileType currentItemTileType = itemTile.getItemTileType();
+            for (ItemTile[] itemTiles : libraryGrid) {
+                ItemTileType currentItemTileType = itemTiles[col].getItemTileType();
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     uniqueItemTileTypes.add(currentItemTileType);
                     validItemTiles++;
                 }
             }
-            if (validItemTiles == 5 && uniqueItemTileTypes.size() >= 1 && uniqueItemTileTypes.size() <= 3) {
+            if (validItemTiles == 6 && uniqueItemTileTypes.size() >= 1 && uniqueItemTileTypes.size() <= 3) {
                 counter++;
-                if (counter == 4) {
+                if (counter == 3) {
                     return true;
                 }
             }

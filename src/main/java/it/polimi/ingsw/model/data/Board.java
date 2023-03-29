@@ -1,6 +1,6 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.data;
 
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.List;
 

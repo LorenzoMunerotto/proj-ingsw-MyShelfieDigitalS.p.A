@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model.common_cards;
 
+import it.polimi.ingsw.model.data.common_cards.CommonCardFactory;
+import it.polimi.ingsw.model.data.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

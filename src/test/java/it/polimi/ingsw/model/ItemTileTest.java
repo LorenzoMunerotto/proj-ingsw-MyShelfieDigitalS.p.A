@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.enums.ItemTileType;
+import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

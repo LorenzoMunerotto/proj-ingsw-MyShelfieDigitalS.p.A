@@ -1,7 +1,10 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.logic;
 
-import it.polimi.ingsw.model.common_cards.CommonCardFactory;
-import it.polimi.ingsw.model.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.data.Bag;
+import it.polimi.ingsw.model.data.Board;
+import it.polimi.ingsw.model.data.PlayerDashboard;
+import it.polimi.ingsw.model.data.common_cards.CommonCardFactory;
+import it.polimi.ingsw.model.data.common_cards.CommonGoalCard;
 
 import java.util.HashMap;
 import java.util.List;

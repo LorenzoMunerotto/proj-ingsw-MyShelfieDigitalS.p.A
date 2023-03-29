@@ -1,12 +1,9 @@
-package it.polimi.ingsw.model.personal_card;
+package it.polimi.ingsw.model.logic.personal_card;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.polimi.ingsw.model.personal_card.PersonalConstraint;
+import it.polimi.ingsw.model.logic.personal_card.PersonalConstraint;
 
 import java.io.File;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
