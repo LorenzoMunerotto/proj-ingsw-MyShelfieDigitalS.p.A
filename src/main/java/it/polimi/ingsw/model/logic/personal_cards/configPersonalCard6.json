@@ -1,0 +1,11 @@
+{
+  "goals":
+  [
+    {"row": 1, "column": 0, "itemTileType": "FRAMES"},
+    {"row": 1, "column": 3, "itemTileType": "GAMES"},
+    {"row": 2, "column": 2, "itemTileType": "PLANTS"},
+    {"row": 3, "column": 1, "itemTileType": "CATS"},
+    {"row": 3, "column": 4, "itemTileType": "TROPHIES"},
+    {"row": 5, "column": 0, "itemTileType": "BOOKS"}
+  ]
+}
