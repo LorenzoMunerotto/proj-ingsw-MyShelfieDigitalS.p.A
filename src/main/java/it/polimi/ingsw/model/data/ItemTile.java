@@ -13,7 +13,7 @@ public class ItemTile {
     private final ItemTileType itemTileType;
 
     /**
-     * Constructor for item tile, initializing item tile type.
+     * Constructor for item tile, initializes item tile type.
      *
      * @param itemTileType the type of the item tile
      */

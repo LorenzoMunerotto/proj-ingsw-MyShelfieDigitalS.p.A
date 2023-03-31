@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.data;
 
-import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.logic.personal_cards.PersonalGoalCard;
 
 /**
  * This class represents the player's dashboard.
@@ -14,7 +14,10 @@ public class PlayerDashboard {
      * This attribute represents the player's points.
      */
     private final int points;
-    //private PersonalGoalCard personalGoalCard;
+    /**
+     * This attribute represents the player's personal goal card.
+     */
+    private PersonalGoalCard personalGoalCard;
 
     /**
      * PlayerDashboard constructor, initializes the player's library and points.
@@ -40,5 +43,23 @@ public class PlayerDashboard {
      */
     public Library getLibrary() {
         return this.library;
+    }
+
+    /**
+     * Get the player's personal goal card.
+     *
+     * @return the player's personal goal card
+     */
+    public PersonalGoalCard getPersonalGoalCard() {
+        return this.personalGoalCard;
+    }
+
+    /**
+     * Set the player's personal goal card.
+     *
+     * @param personalGoalCard the player's personal goal card
+     */
+    public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
+        this.personalGoalCard = personalGoalCard;
     }
 }

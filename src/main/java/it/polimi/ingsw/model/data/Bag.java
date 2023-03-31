@@ -23,7 +23,7 @@ public class Bag {
     private final Random random;
 
     /**
-     * Constructor for bag, initializing the bag with 22 item tile of each type, except for the empty type.
+     * Constructor for bag, initializes the bag with 22 item tile of each type, except for the empty type.
      */
     public Bag() {
         this.itemTiles = new ArrayList<>();

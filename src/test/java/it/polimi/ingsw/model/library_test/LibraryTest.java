@@ -1,9 +1,13 @@
-package it.polimi.ingsw.model;
+package it.polimi.ingsw.model.library_test;
 
 import it.polimi.ingsw.model.data.ItemTile;
+<<<<<<< HEAD:src/test/java/it/polimi/ingsw/model/LibraryTest.java
 import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import org.javatuples.Pair;
+=======
+import it.polimi.ingsw.model.data.enums.ItemTileType;
+>>>>>>> gameLogic:src/test/java/it/polimi/ingsw/model/library_test/LibraryTest.java
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,17 +18,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class LibraryTest {
 
-    Library library;
+    LibraryTestHelper libraryTestHelper;
 
     @BeforeEach
     void setUp() {
-        library = new Library();
+        libraryTestHelper = new LibraryTestHelper();
     }
 
     @Test
     @DisplayName("Test that the constructor initializes the grid with empty item tiles")
     void testConstructor() {
-        ItemTile[][] grid = library.getGrid();
+        ItemTile[][] grid = libraryTestHelper.getGrid();
 
         assertAll(
                 () -> assertNotNull(grid),
@@ -44,13 +48,14 @@ class LibraryTest {
     @DisplayName("Test setItemTile for right and wrong parameters")
     void setItemTile() {
         ItemTile itemTile = new ItemTile(ItemTileType.CAT);
-        library.setItemTile(0, 0, itemTile);
+        libraryTestHelper.setItemTile(0, 0, itemTile);
 
         assertAll(
-                () -> assertEquals(itemTile, library.getGrid()[0][0]),
-                () -> assertThrows(IllegalArgumentException.class, () -> library.setItemTile(library.getGrid().length + 1, library.getGrid()[0].length + 1, itemTile))
+                () -> assertEquals(itemTile, libraryTestHelper.getGrid()[0][0]),
+                () -> assertThrows(IllegalArgumentException.class, () -> libraryTestHelper.setItemTile(libraryTestHelper.getGrid().length + 1, libraryTestHelper.getGrid()[0].length + 1, itemTile))
         );
     }
+<<<<<<< HEAD:src/test/java/it/polimi/ingsw/model/LibraryTest.java
 
     @Test
     @DisplayName("Adjacent Groups with Empty Library")
@@ -143,3 +148,6 @@ class LibraryTest {
 
 
 }
+=======
+}
+>>>>>>> gameLogic:src/test/java/it/polimi/ingsw/model/library_test/LibraryTest.java

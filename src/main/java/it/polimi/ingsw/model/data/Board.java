@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.data;
 
-import it.polimi.ingsw.model.data.enums.ItemTileType;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +12,8 @@ public class Board {
      * Data structure to represent the board.
      */
     private final BoardCell[][] boardGrid;
+    private int emptyCells;
+    private List<BoardCell> validCells;
 
     /**
      * Index of the cell of the board [row][column].
@@ -42,7 +43,7 @@ public class Board {
      */
 
     /**
-     * Constructor Board, initializing the cells in the grid, based on the number of players.
+     * Constructor Board, initializes the cells in the grid, based on the number of players.
      *
      * @param numPlayers number of player in the game
      */
@@ -61,8 +62,13 @@ public class Board {
                 { null, null, null, (createCell4 ? new BoardCell(7, 3) : null), new BoardCell(7, 4), new BoardCell(7, 5), null, null, null },
                 { null, null, null, null, (createCell4 ? new BoardCell(8, 4) : null), (createCell3 ? new BoardCell(8, 5) : null), null, null, null },
         };
+        switch (numPlayers){
+            case 2: this.emptyCells = 29; break;
+            case 3: this.emptyCells = 37; break;
+            case 4: this.emptyCells = 45; break;
+        }
+        this.validCells = new ArrayList<>();
     }
-
 
     /**
      * Get the grid of the board.
@@ -74,36 +80,38 @@ public class Board {
     }
 
     /**
-     * Set the empty and not null cells with the item tiles provided.
-     * Checks if itemTileList size is bigger than the available cells.
+     * Get the number of empty cells in the board.
      *
-     * @param itemTileList list of item tile to put in the board
+     * @return number of empty cells
      */
-    public void setItemTiles(List<ItemTile> itemTileList) {
-        int emptyCells = 0;
-        for (BoardCell[] boardCells : boardGrid) {
-            for (BoardCell boardCell : boardCells) {
-                if (boardCell != null && boardCell.getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                    emptyCells++;
-                }
-            }
-        }
+    public int getEmptyCells() {
+        return this.emptyCells;
+    }
 
-        if (itemTileList.size() > emptyCells) {
-            throw new IllegalArgumentException("Not enough empty cells on the board to place all item tiles.");
-        }
+    /**
+     * Set the number of empty cells in the board.
+     *
+     * @param emptyCells number of empty cells
+     */
+    public void setEmptyCells(int emptyCells) {
+        this.emptyCells = emptyCells;
+    }
 
-        for (BoardCell[] boardCells : boardGrid) {
-            for (BoardCell boardCell : boardCells) {
-                if (boardCell != null && boardCell.getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                    if (!itemTileList.isEmpty()) {
-                        ItemTile itemTile = itemTileList.remove(0);
-                        boardCell.setItemTile(itemTile);
-                    } else {
-                        return;
-                    }
-                }
-            }
-        }
+    /**
+     * Get the list of valid cells in the board.
+     *
+     * @return list of valid cells
+     */
+    public List<BoardCell> getValidCells() {
+        return this.validCells;
+    }
+
+    /**
+     * Set the list of valid cells in the board.
+     *
+     * @param validCells list of valid cells
+     */
+    public void setValidCells(List<BoardCell> validCells) {
+        this.validCells = validCells;
     }
 }

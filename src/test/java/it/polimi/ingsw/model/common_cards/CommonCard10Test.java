@@ -1,11 +1,10 @@
 package it.polimi.ingsw.model.common_cards;
 
-import it.polimi.ingsw.model.logic.GameData;
+import it.polimi.ingsw.model.library_test.LibraryTestHelper;
 import it.polimi.ingsw.model.data.ItemTile;
-import it.polimi.ingsw.model.data.Library;
-import it.polimi.ingsw.model.data.common_cards.CommonCard10;
-import it.polimi.ingsw.model.data.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.common_cards.CommonCard10;
+import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CommonCard10Test {
 
     CommonGoalCard card10;
-    GameData gameData;
-    List<String> players;
-    Library libraryP1;
-    ItemTile[][] gridP1;
+    LibraryTestHelper libraryTestHelper;
+    ItemTile[][] libraryGrid;
     Random random;
 
     @BeforeEach
@@ -31,33 +28,29 @@ class CommonCard10Test {
         points.add(8);
         points.add(6);
         card10 = new CommonCard10(10, points);
-        players = new ArrayList<>();
-        players.add("Pippo");
-        players.add("Pluto");
-        gameData = new GameData(players, 2);
-        libraryP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary();
-        gridP1 = gameData.getPlayerDashboards().get(players.get(0)).getLibrary().getGrid();
+        libraryTestHelper = new LibraryTestHelper();
+        libraryGrid = libraryTestHelper.getGrid();
         random = new Random();
     }
 
     @Test
     @DisplayName("Test check rules for card 10")
     void checkRules() {
-        assertFalse(card10.checkRules(gameData, players.get(0)));
+        assertFalse(card10.checkRules(libraryGrid));
 
-        int firstRow = random.nextInt(gridP1.length);
+        int firstRow = random.nextInt(libraryGrid.length);
         int secondRow;
         do {
-            secondRow = random.nextInt(gridP1.length);
+            secondRow = random.nextInt(libraryGrid.length);
         } while (secondRow == firstRow);
-        for (int col = 0; col < gridP1[0].length; col++) {
-            libraryP1.setItemTile(firstRow, col, new ItemTile(ItemTileType.values()[col]));
-            libraryP1.setItemTile(secondRow, col, new ItemTile(ItemTileType.values()[col]));
+        for (int col = 0; col < libraryGrid[0].length; col++) {
+            libraryTestHelper.setItemTile(firstRow, col, new ItemTile(ItemTileType.values()[col]));
+            libraryTestHelper.setItemTile(secondRow, col, new ItemTile(ItemTileType.values()[col]));
         }
-        assertTrue(card10.checkRules(gameData, players.get(0)));
+        assertTrue(card10.checkRules(libraryGrid));
 
-        int columnToChange = random.nextInt(gridP1[0].length);
-        libraryP1.setItemTile(firstRow, columnToChange, new ItemTile(ItemTileType.EMPTY));
-        assertFalse(card10.checkRules(gameData, players.get(0)));
+        int columnToChange = random.nextInt(libraryGrid[0].length);
+        libraryTestHelper.setItemTile(firstRow, columnToChange, new ItemTile(ItemTileType.EMPTY));
+        assertFalse(card10.checkRules(libraryGrid));
     }
 }

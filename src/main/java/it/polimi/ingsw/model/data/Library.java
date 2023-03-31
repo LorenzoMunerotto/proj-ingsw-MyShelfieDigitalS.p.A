@@ -92,18 +92,6 @@ public class Library {
     }
 
 
-    /**
-     * Set library from a matrix of ItemTileType <br>
-     * helps in creating and visualizing test cases
-     * @param gridOfItemTileType
-     */
-    public void setLibrary(ItemTileType[][] gridOfItemTileType){
-        for (int row =0; row<ROWS; row++){
-            for (int col = 0; col<COLUMNS; col++){
-                this.setItemTile(row, col, new ItemTile(gridOfItemTileType[row][col]));
-            }
-        }
-    }
 
 
 

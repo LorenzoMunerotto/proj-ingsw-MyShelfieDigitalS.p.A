@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.logic.GameData;
+import it.polimi.ingsw.model.data.GameData;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 class GameDataTest {
@@ -12,11 +12,11 @@ class GameDataTest {
     List<String> players;
     @Test
     public void testConstructor(){
-        players = new ArrayList<>();
-        players.add("Pluto");
-        players.add("Pippo");
-        players.add("Paperino");
+        players = Arrays.asList("Pluto", "Pippo", "Paperino");
         gameData = new GameData(players, 3);
+        assertNotNull(gameData);
+
+        assertNotEquals(gameData.getPlayerDashboards().get(players.get(0)), gameData.getPlayerDashboards().get(players.get(1)));
     }
 
 }
