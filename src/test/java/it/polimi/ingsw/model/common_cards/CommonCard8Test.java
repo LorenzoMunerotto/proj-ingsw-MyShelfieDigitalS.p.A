@@ -18,7 +18,7 @@ class CommonCard8Test {
 
     CommonGoalCard card8;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
 
     @BeforeEach
     void setUp() {
@@ -27,35 +27,35 @@ class CommonCard8Test {
         points.add(6);
         card8 = new CommonCard8(8, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
+
     }
 
     @Test
     @DisplayName("Test check rules for card 8")
     void checkRules() {
-        assertFalse(card8.checkRules(libraryGrid));
+        assertFalse(card8.checkRules( libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 5; col++) {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
-        assertTrue(card8.checkRules(libraryGrid));
+        assertTrue(card8.checkRules(libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
             libraryTestHelper.setItemTile(row, 1, new ItemTile(ItemTileType.PLANT));
         }
-        assertTrue(card8.checkRules(libraryGrid));
+        assertTrue(card8.checkRules(libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
             libraryTestHelper.setItemTile(row, 2, new ItemTile(ItemTileType.TROPHY));
         }
-        assertTrue(card8.checkRules(libraryGrid));
+        assertTrue(card8.checkRules(libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
             libraryTestHelper.setItemTile(row, 3, new ItemTile(ItemTileType.GAME));
         }
-        assertFalse(card8.checkRules(libraryGrid));
+        assertFalse(card8.checkRules(libraryTestHelper));
     }
 
     @Test
@@ -66,6 +66,6 @@ class CommonCard8Test {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
-        assertFalse(card8.checkRules(libraryGrid));
+        assertFalse(card8.checkRules(libraryTestHelper));
     }
 }

@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
+import it.polimi.ingsw.model.data.enums.ItemTileType;
+import it.polimi.ingsw.model.logic.LibraryManager;
+import org.javatuples.Pair;
 
 import java.util.List;
 
@@ -63,11 +67,20 @@ public class CommonCard3 implements CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param libraryGrid is the library grid
+     * @param library is the Library
      * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(ItemTile[][] libraryGrid) {
-        return false;
+    public boolean checkRules(Library library) {
+        LibraryManager libraryManager = new LibraryManager(library);
+        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
+        int counter =0;
+        for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles){
+            if(group.getValue0()!=ItemTileType.EMPTY && group.getValue1()==4){
+                counter++;
+            }
+        }
+        return counter>=4;
+
     }
 }

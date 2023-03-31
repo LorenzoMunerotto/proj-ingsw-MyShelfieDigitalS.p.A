@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
 
 import java.util.List;
 
@@ -34,8 +35,8 @@ public interface CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param libraryGrid is the library grid
+     * @param library is the library grid
      * @return true if the rules are respected, false otherwise
      */
-    boolean checkRules(ItemTile[][] libraryGrid);
+    boolean checkRules(Library library);
 }

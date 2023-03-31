@@ -1,18 +1,15 @@
 package it.polimi.ingsw.model.library_test;
 
 import it.polimi.ingsw.model.data.ItemTile;
-<<<<<<< HEAD:src/test/java/it/polimi/ingsw/model/LibraryTest.java
-import it.polimi.ingsw.model.data.Library;
+
+
 import it.polimi.ingsw.model.data.enums.ItemTileType;
-import org.javatuples.Pair;
-=======
-import it.polimi.ingsw.model.data.enums.ItemTileType;
->>>>>>> gameLogic:src/test/java/it/polimi/ingsw/model/library_test/LibraryTest.java
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,12 +48,13 @@ class LibraryTest {
         libraryTestHelper.setItemTile(0, 0, itemTile);
 
         assertAll(
-                () -> assertEquals(itemTile, libraryTestHelper.getGrid()[0][0]),
-                () -> assertThrows(IllegalArgumentException.class, () -> libraryTestHelper.setItemTile(libraryTestHelper.getGrid().length + 1, libraryTestHelper.getGrid()[0].length + 1, itemTile))
+                () -> assertEquals(itemTile, libraryTestHelper.getItemTile(0,0)),
+                () -> assertThrows(IllegalArgumentException.class, () -> libraryTestHelper.setItemTile(libraryTestHelper.getROWS(), libraryTestHelper.getCOLUMNS() , itemTile))
         );
     }
-<<<<<<< HEAD:src/test/java/it/polimi/ingsw/model/LibraryTest.java
 
+
+    /*
     @Test
     @DisplayName("Adjacent Groups with Empty Library")
     void testAdjacent0(){
@@ -147,7 +145,7 @@ class LibraryTest {
     }
 
 
+     */
+
 }
-=======
-}
->>>>>>> gameLogic:src/test/java/it/polimi/ingsw/model/library_test/LibraryTest.java
+

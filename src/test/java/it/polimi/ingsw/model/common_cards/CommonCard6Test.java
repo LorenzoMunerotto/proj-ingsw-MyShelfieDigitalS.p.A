@@ -19,7 +19,7 @@ class CommonCard6Test {
 
     CommonGoalCard card6;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
     Random random;
 
     @BeforeEach
@@ -29,44 +29,43 @@ class CommonCard6Test {
         points.add(6);
         card6 = new CommonCard6(6, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
         random = new Random();
     }
 
     @Test
     @DisplayName("Test check rules for card 6")
     void checkRules() {
-        assertFalse(card6.checkRules(libraryGrid));
+        assertFalse(card6.checkRules(libraryTestHelper));
         for (int i = 0; i < 8; i++) {
             int row = random.nextInt(6);
-            int column = random.nextInt(5);
+            int col = random.nextInt(5);
             ItemTile catItemTile = new ItemTile(ItemTileType.CAT);
-            while (libraryGrid[row][column].getItemTileType() == ItemTileType.CAT || libraryGrid[row][column].getItemTileType() != ItemTileType.EMPTY) {
+            while (libraryTestHelper.getItemTile(row,col).getItemTileType() == ItemTileType.CAT || libraryTestHelper.getItemTile(row,col).getItemTileType() != ItemTileType.EMPTY) {
                 row = random.nextInt(6);
-                column = random.nextInt(5);
+                col = random.nextInt(5);
             }
-            libraryTestHelper.setItemTile(row, column, catItemTile);
+            libraryTestHelper.setItemTile(row, col, catItemTile);
         }
         for (int i = 0; i < 6; i++) {
             int row = random.nextInt(6);
-            int column = random.nextInt(5);
+            int col = random.nextInt(5);
             ItemTile plantItemTile = new ItemTile(ItemTileType.PLANT);
-            while (libraryGrid[row][column].getItemTileType() == ItemTileType.PLANT || libraryGrid[row][column].getItemTileType() != ItemTileType.EMPTY) {
+            while (libraryTestHelper.getItemTile(row,col).getItemTileType() == ItemTileType.PLANT || libraryTestHelper.getItemTile(row,col).getItemTileType() != ItemTileType.EMPTY) {
                 row = random.nextInt(6);
-                column = random.nextInt(5);
+                col = random.nextInt(5);
             }
-            libraryTestHelper.setItemTile(row, column, plantItemTile);
+            libraryTestHelper.setItemTile(row, col, plantItemTile);
         }
-        assertTrue(card6.checkRules(libraryGrid));
+        assertTrue(card6.checkRules(libraryTestHelper));
 
-        for(int i = 0; i < libraryGrid.length; i++){
-            for(int j = 0; j < libraryGrid[0].length; j++){
-                if(libraryGrid[i][j].getItemTileType() == ItemTileType.CAT){
-                    libraryTestHelper.setItemTile(i, j, new ItemTile(ItemTileType.EMPTY));
+        for(int row = 0; row < libraryTestHelper.getROWS(); row++){
+            for(int col = 0; col < libraryTestHelper.getCOLUMNS(); col++){
+                if(libraryTestHelper.getItemTile(row,col).getItemTileType() == ItemTileType.CAT){
+                    libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.EMPTY));
                     break;
                 }
             }
         }
-        assertFalse(card6.checkRules(libraryGrid));
+        assertFalse(card6.checkRules(libraryTestHelper));
     }
 }

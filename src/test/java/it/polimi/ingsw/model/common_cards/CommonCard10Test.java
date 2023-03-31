@@ -19,7 +19,7 @@ class CommonCard10Test {
 
     CommonGoalCard card10;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
     Random random;
 
     @BeforeEach
@@ -29,28 +29,28 @@ class CommonCard10Test {
         points.add(6);
         card10 = new CommonCard10(10, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
+
         random = new Random();
     }
 
     @Test
     @DisplayName("Test check rules for card 10")
     void checkRules() {
-        assertFalse(card10.checkRules(libraryGrid));
+        assertFalse(card10.checkRules(libraryTestHelper));
 
-        int firstRow = random.nextInt(libraryGrid.length);
+        int firstRow = random.nextInt(libraryTestHelper.getROWS());
         int secondRow;
         do {
-            secondRow = random.nextInt(libraryGrid.length);
+            secondRow = random.nextInt(libraryTestHelper.getROWS());
         } while (secondRow == firstRow);
-        for (int col = 0; col < libraryGrid[0].length; col++) {
+        for (int col = 0; col < libraryTestHelper.getCOLUMNS(); col++) {
             libraryTestHelper.setItemTile(firstRow, col, new ItemTile(ItemTileType.values()[col]));
             libraryTestHelper.setItemTile(secondRow, col, new ItemTile(ItemTileType.values()[col]));
         }
-        assertTrue(card10.checkRules(libraryGrid));
+        assertTrue(card10.checkRules(libraryTestHelper));
 
-        int columnToChange = random.nextInt(libraryGrid[0].length);
+        int columnToChange = random.nextInt(libraryTestHelper.getCOLUMNS());
         libraryTestHelper.setItemTile(firstRow, columnToChange, new ItemTile(ItemTileType.EMPTY));
-        assertFalse(card10.checkRules(libraryGrid));
+        assertFalse(card10.checkRules(libraryTestHelper));
     }
 }

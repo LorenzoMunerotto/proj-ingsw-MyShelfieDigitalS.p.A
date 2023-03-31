@@ -21,9 +21,9 @@ class LibraryTestHelperTest {
     @DisplayName("Test set item tile")
     void setItemTile() {
         ItemTile itemTile = new ItemTile(ItemTileType.CAT);
-        assertNotEquals(itemTile, libraryTestHelper.getGrid()[3][2]);
+        assertNotEquals(itemTile, libraryTestHelper.getItemTile(3,2));
         libraryTestHelper.setItemTile(3, 2, itemTile);
-        assertEquals(itemTile, libraryTestHelper.getGrid()[3][2]);
+        assertEquals(itemTile, libraryTestHelper.getItemTile(3,2));
     }
 
     @Test
@@ -38,9 +38,9 @@ class LibraryTestHelperTest {
                 {ItemTileType.GAME, ItemTileType.EMPTY, ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY},
         };
         libraryTestHelper.setLibrary(libraryGrid);
-        for(int i = 0; i < libraryGrid.length; i++){
-            for(int j = 0; j < libraryGrid[i].length; j++){
-                assertEquals(libraryGrid[i][j], libraryTestHelper.getGrid()[i][j].getItemTileType());
+        for(int row = 0; row < libraryTestHelper.getROWS(); row++){
+            for(int col = 0; col < libraryTestHelper.getCOLUMNS(); col++){
+                assertEquals(libraryGrid[row][col], libraryTestHelper.getItemTile(row,col).getItemTileType());
             }
         }
     }

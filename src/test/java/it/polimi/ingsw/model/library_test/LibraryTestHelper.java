@@ -5,20 +5,7 @@ import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 public class LibraryTestHelper extends it.polimi.ingsw.model.data.Library {
 
-    /**
-     * Set the item tile in the given row and column.
-     * Used only for testing purposes.
-     *
-     * @param row the row of the grid
-     * @param column the column of the grid
-     * @param itemTile the new item tile
-     */
-    public void setItemTile(int row, int column, ItemTile itemTile) {
-        if (row < 0 || row >= getROWS() || column < 0 || column >= getCOLUMNS()) {
-            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
-        }
-        this.getGrid()[row][column] = itemTile;
-    }
+
 
     /**
      * Set the library with the given grid of item tile types.

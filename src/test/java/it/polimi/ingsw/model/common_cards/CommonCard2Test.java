@@ -18,7 +18,7 @@ class CommonCard2Test {
 
     CommonGoalCard card2;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
 
     @BeforeEach
     void setUp() {
@@ -27,7 +27,7 @@ class CommonCard2Test {
         points.add(6);
         card2 = new CommonCard2(2, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
+
     }
 
     @Test
@@ -37,9 +37,9 @@ class CommonCard2Test {
         libraryTestHelper.setItemTile(0,4, new ItemTile(ItemTileType.CAT));
         libraryTestHelper.setItemTile(5,0, new ItemTile(ItemTileType.CAT));
         libraryTestHelper.setItemTile(5,4, new ItemTile(ItemTileType.CAT));
-        assertTrue(card2.checkRules(libraryGrid));
+        assertTrue(card2.checkRules(libraryTestHelper));
         libraryTestHelper.setItemTile(5,4,new ItemTile(ItemTileType.EMPTY));
-        assertFalse(card2.checkRules(libraryGrid));
+        assertFalse(card2.checkRules(libraryTestHelper));
     }
 
 
