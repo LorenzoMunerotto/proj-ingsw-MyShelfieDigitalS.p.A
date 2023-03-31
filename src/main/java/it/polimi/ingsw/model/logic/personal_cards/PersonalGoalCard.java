@@ -1,23 +1,21 @@
 package it.polimi.ingsw.model.logic.personal_cards;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
+import java.util.ArrayList;
 
 public class PersonalGoalCard {
-
-    private String name;
-    private List<PersonalConstraint> constraints;
-    public PersonalGoalCard(){
-        try {
-            // create object mapper instance
-            ObjectMapper mapper = new ObjectMapper();
-            constraints = Collections.singletonList(mapper.readValue(new File("personal_goal_card.json"), PersonalConstraint.class));
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    private int numberCard;
+    private String pathFile ="configPersonalCard";
+    public ArrayList<Goal> getGoals() {
+        return goals;
     }
+
+    public void createPath(int randomNumber){
+        pathFile = pathFile + String.valueOf(randomNumber) + ".json";
+        File nomeFileJson =new File(pathFile);
+    }
+
+
+
+    public ArrayList<Goal> goals;
 }
