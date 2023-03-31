@@ -19,7 +19,7 @@ class CommonCard9Test {
 
     CommonGoalCard card9;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
     Random random;
 
     @BeforeEach
@@ -29,30 +29,30 @@ class CommonCard9Test {
         points.add(6);
         card9 = new CommonCard9(9, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
+
         random = new Random();
     }
 
     @Test
     @DisplayName("Test check rules for card 9")
     void checkRules() {
-        assertFalse(card9.checkRules(libraryGrid));
+        assertFalse(card9.checkRules(libraryTestHelper));
 
-        int firstColumn = random.nextInt(libraryGrid[0].length);
+        int firstColumn = random.nextInt(libraryTestHelper.getCOLUMNS());
         int secondColumn;
         do {
-            secondColumn = random.nextInt(libraryGrid[0].length);
+            secondColumn = random.nextInt(libraryTestHelper.getCOLUMNS());
         } while (secondColumn == firstColumn);
 
-        for (int row = 0; row < libraryGrid.length; row++) {
+        for (int row = 0; row < libraryTestHelper.getROWS(); row++) {
             libraryTestHelper.setItemTile(row, firstColumn, new ItemTile(ItemTileType.values()[row]));
             libraryTestHelper.setItemTile(row, secondColumn, new ItemTile(ItemTileType.values()[row]));
         }
-        assertTrue(card9.checkRules(libraryGrid));
+        assertTrue(card9.checkRules(libraryTestHelper));
 
-        int rowToChange = random.nextInt(libraryGrid.length);
-        ItemTileType newType = libraryGrid[rowToChange][firstColumn].getItemTileType() == ItemTileType.CAT ? ItemTileType.PLANT : ItemTileType.CAT;
+        int rowToChange = random.nextInt(libraryTestHelper.getROWS());
+        ItemTileType newType = libraryTestHelper.getItemTile(rowToChange,firstColumn).getItemTileType() == ItemTileType.CAT ? ItemTileType.PLANT : ItemTileType.CAT;
         libraryTestHelper.setItemTile(rowToChange, firstColumn, new ItemTile(newType));
-        assertFalse(card9.checkRules(libraryGrid));
+        assertFalse(card9.checkRules(libraryTestHelper));
     }
 }

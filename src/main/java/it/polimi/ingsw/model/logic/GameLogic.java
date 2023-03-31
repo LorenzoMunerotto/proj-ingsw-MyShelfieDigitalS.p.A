@@ -30,7 +30,7 @@ public class GameLogic {
     /**
      * The library manager of the game.
      */
-    private final LibraryManager libraryManager;
+
     /**
      * The personal goal cards of the players.
      */
@@ -51,7 +51,7 @@ public class GameLogic {
         this.numberOfPlayers = numberOfPlayers;
         this.gameData = new GameData(this.playersUsernames, numberOfPlayers);
         this.boardManager = new BoardManager(this.gameData);
-        this.libraryManager = new LibraryManager(this.gameData);
+
     }
 
     /**
@@ -86,9 +86,7 @@ public class GameLogic {
      *
      * @return the library manager.
      */
-    public LibraryManager getLibraryManager() {
-        return this.libraryManager;
-    }
+
 
     /**
      * Get the common goal cards of the game.

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.List;
@@ -64,15 +65,15 @@ public class CommonCard12 implements CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param libraryGrid is the library grid
+     * @param library is the Library
      * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(ItemTile[][] libraryGrid) {
+    public boolean checkRules(Library library) {
         int counter = 0;
 
-        for (int row = 1; row < libraryGrid.length; row++) {
-            if (libraryGrid[row - 1][row - 1].getItemTileType() != ItemTileType.EMPTY || libraryGrid[row][row - 1].getItemTileType() == ItemTileType.EMPTY) {
+        for (int row=1; row< library.getROWS(); row++) {
+            if (library.getItemTile(row-1,row-1).getItemTileType() != ItemTileType.EMPTY || library.getItemTile(row,row-1).getItemTileType() == ItemTileType.EMPTY) {
                 break;
             }
             counter++;
@@ -81,8 +82,8 @@ public class CommonCard12 implements CommonGoalCard {
             }
         }
         counter  = 0;
-        for (int row = 1; row < libraryGrid.length; row++) {
-            if (libraryGrid[row - 1][5 - row].getItemTileType() != ItemTileType.EMPTY || libraryGrid[row][5 - row].getItemTileType() == ItemTileType.EMPTY) {
+        for (int row = 1; row < library.getROWS(); row++) {
+            if (library.getItemTile(row-1,5-row).getItemTileType() != ItemTileType.EMPTY || library.getItemTile(row,5-row).getItemTileType() == ItemTileType.EMPTY) {
                 break;
             }
             counter++;

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.HashMap;
@@ -66,16 +67,16 @@ public class CommonCard6 implements CommonGoalCard {
     /**
      * Checks if the rules of the card are respected.
      *
-     * @param libraryGrid is the library grid
+     * @param library is the Library
      * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(ItemTile[][] libraryGrid) {
+    public boolean checkRules(Library library) {
         Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
 
-        for (ItemTile[] itemTiles : libraryGrid) {
-            for (int col = 0; col < libraryGrid[0].length; col++) {
-                ItemTileType currentItemTileType = itemTiles[col].getItemTileType();
+        for (int row=0; row< library.getROWS(); row++) {
+            for (int col = 0; col < library.getCOLUMNS(); col++) {
+                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     itemTileTypeCounter.put(currentItemTileType, itemTileTypeCounter.getOrDefault(currentItemTileType, 0) + 1);
                     if (itemTileTypeCounter.get(currentItemTileType) >= 8) {

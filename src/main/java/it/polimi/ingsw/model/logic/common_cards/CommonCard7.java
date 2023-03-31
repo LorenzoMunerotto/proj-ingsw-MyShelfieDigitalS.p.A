@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 
 import java.util.List;
@@ -64,48 +65,48 @@ public class CommonCard7 implements CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param libraryGrid is the library grid
+     * @param library is the Library
      * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(ItemTile[][] libraryGrid) {
+    public boolean checkRules(Library library) {
 
-        for (int row = 0; row < 2; row++) {
+        for (int row = 0; row <=1; row++) {
             int col = 0;
-            ItemTile currentItemTile = libraryGrid[row][col];
+            ItemTile currentItemTile = library.getItemTile(row,col);
             if (currentItemTile.getItemTileType() == ItemTileType.EMPTY) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 1][col + 1].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+1,col+1).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 2][col + 2].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+2,col+2).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 3][col + 3].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+3,col+3).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 4][col + 4].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+4,col+4).getItemTileType()) {
                 continue;
             }
             return true;
         }
         for (int row = 0; row <= 1; row++) {
             int col = 4;
-            ItemTile currentItemTile = libraryGrid[row][col];
+            ItemTile currentItemTile = library.getItemTile(row,col);
             if (currentItemTile.getItemTileType() == ItemTileType.EMPTY) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 1][col - 1].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+1,col-1).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 2][col - 2].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+2,col-2).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 3][col - 3].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+3,col-3).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != libraryGrid[row + 4][col - 4].getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+4,col-4).getItemTileType()) {
                 continue;
             }
             return true;

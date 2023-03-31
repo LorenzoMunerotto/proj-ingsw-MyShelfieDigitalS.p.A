@@ -18,7 +18,7 @@ class CommonCard5Test {
 
     CommonGoalCard card5;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
 
     @BeforeEach
     void setUp() {
@@ -27,53 +27,53 @@ class CommonCard5Test {
         points.add(6);
         card5 = new CommonCard5(5, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
+
     }
 
     @Test
     @DisplayName("Test check rules for card 5")
     void checkRules() {
-        assertFalse(card5.checkRules(libraryGrid));
+        assertFalse(card5.checkRules(libraryTestHelper));
 
         for(int col = 0; col < 3; col++){
-            for(int row = 0; row < libraryGrid.length; row++) {
+            for(int row = 0; row < libraryTestHelper.getROWS(); row++) {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
-        assertTrue(card5.checkRules(libraryGrid));
+        assertTrue(card5.checkRules(libraryTestHelper));
 
         for (int col = 0; col < 3; col++) {
             libraryTestHelper.setItemTile(3, col, new ItemTile(ItemTileType.PLANT));
         }
-        assertTrue(card5.checkRules(libraryGrid));
+        assertTrue(card5.checkRules(libraryTestHelper));
 
         for (int col = 0; col < 3; col++) {
             libraryTestHelper.setItemTile(4, col, new ItemTile(ItemTileType.TROPHY));
         }
-        assertTrue(card5.checkRules(libraryGrid));
+        assertTrue(card5.checkRules(libraryTestHelper));
 
         for (int col = 0; col < 3; col++) {
             libraryTestHelper.setItemTile(2, col, new ItemTile(ItemTileType.GAME));
         }
-        assertFalse(card5.checkRules(libraryGrid));
+        assertFalse(card5.checkRules(libraryTestHelper));
 
         libraryTestHelper.setItemTile(2, 2, new ItemTile(ItemTileType.CAT));
         for (int col = 0; col < 2; col++) {
-            for (int row = 0; row < libraryGrid.length; row++) {
+            for (int row = 0; row < libraryTestHelper.getROWS(); row++) {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.EMPTY));
             }
         }
-        assertFalse(card5.checkRules(libraryGrid));
+        assertFalse(card5.checkRules(libraryTestHelper));
     }
 
     @Test
     @DisplayName("Test check rules for card 5 with less than 6 tiles")
     void testCheckRulesLessThan6Tiles(){
         for(int col = 0; col < 3; col++){
-            for(int row = 0; row < libraryGrid.length - 1; row++) {
+            for(int row = 0; row < libraryTestHelper.getROWS() - 1; row++) {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
-        assertFalse(card5.checkRules(libraryGrid));
+        assertFalse(card5.checkRules(libraryTestHelper));
     }
 }

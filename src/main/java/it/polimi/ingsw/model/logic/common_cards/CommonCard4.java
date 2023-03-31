@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.logic.common_cards;
 
 import it.polimi.ingsw.model.data.ItemTile;
+import it.polimi.ingsw.model.data.Library;
 import it.polimi.ingsw.model.data.enums.ItemTileType;
 import org.javatuples.Pair;
 
@@ -68,24 +69,25 @@ public class CommonCard4 implements CommonGoalCard {
     /**
      * Check if the rules of the card are respected.
      *
-     * @param libraryGrid is the library grid
+     * @param library is the Library grid
      * @return true if the rules are respected, false otherwise
      */
     @Override
-    public boolean checkRules(ItemTile[][] libraryGrid) {
+    public boolean checkRules(Library library) {
         Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
         List<Pair<Integer, Integer>> usedTiles = new ArrayList<>();
 
-        for (int row = libraryGrid.length - 2; row >= 0; row--) {
-            for (int col = 0; col < libraryGrid[row].length - 1; col++) {
-                ItemTileType currentItemTileType = libraryGrid[row][col].getItemTileType();
+        for (int row = library.getROWS()- 2; row >= 0; row--) {
+            for (int col = 0; col < library.getCOLUMNS() - 1; col++) {
+                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
                 Pair<Integer, Integer> currentItemTile = new Pair<>(row, col);
                 if(currentItemTileType == ItemTileType.EMPTY || usedTiles.contains(currentItemTile)){
                     continue;
                 }
-                if(libraryGrid[row +1][col].getItemTileType() == currentItemTileType
-                        && libraryGrid[row][col + 1].getItemTileType() == currentItemTileType
-                        && libraryGrid[row + 1][col + 1].getItemTileType() == currentItemTileType){
+
+                    if(library.getItemTile(row+1,col).getItemTileType() == currentItemTileType
+                            && library.getItemTile(row,col+1).getItemTileType() == currentItemTileType
+                            && library.getItemTile(row+1,col+1).getItemTileType() == currentItemTileType) {
                     itemTileTypeCounter.put(currentItemTileType, itemTileTypeCounter.getOrDefault(currentItemTileType, 0) + 1);
                     if(itemTileTypeCounter.get(currentItemTileType) >= 2){
                         return true;

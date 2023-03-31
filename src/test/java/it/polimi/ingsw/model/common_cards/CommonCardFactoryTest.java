@@ -16,8 +16,8 @@ class CommonCardFactoryTest {
     public void testCreateCardsFor2Players() {
         int numOfPlayers = 2;
         List<CommonGoalCard> commonGoalCardList = CommonCardFactory.createCards(numOfPlayers);
-        assertEquals(numOfPlayers, commonGoalCardList.size());
-
+        assertEquals(2, commonGoalCardList.size());
+        // il numero delle carte comuni è sempre 2 a prescindere dal numero di giocatori
         CommonGoalCard card1 = commonGoalCardList.get(0);
         CommonGoalCard card2 = commonGoalCardList.get(1);
         assertNotEquals(card1, card2);

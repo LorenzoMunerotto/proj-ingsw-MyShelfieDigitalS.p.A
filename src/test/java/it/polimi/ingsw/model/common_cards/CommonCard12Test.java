@@ -18,7 +18,7 @@ class CommonCard12Test {
 
     CommonGoalCard card12;
     LibraryTestHelper libraryTestHelper;
-    ItemTile[][] libraryGrid;
+
 
     @BeforeEach
     void setUp() {
@@ -27,12 +27,12 @@ class CommonCard12Test {
         points.add(6);
         card12 = new CommonCard12(12, points);
         libraryTestHelper = new LibraryTestHelper();
-        libraryGrid = libraryTestHelper.getGrid();
+
     }
     @Test
     @DisplayName("Test check rules for card 12 in descending order")
     void checkRulesDescending() {
-        assertFalse(card12.checkRules(libraryGrid));
+        assertFalse(card12.checkRules(libraryTestHelper));
         for (int row = 5; row >= 1; row--) {
             libraryTestHelper.setItemTile(row, 0, new ItemTile(ItemTileType.CAT));
         }
@@ -41,32 +41,32 @@ class CommonCard12Test {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
-        assertTrue(card12.checkRules(libraryGrid));
+        assertTrue(card12.checkRules(libraryTestHelper));
 
         libraryTestHelper.setItemTile(0, 0, new ItemTile(ItemTileType.CAT));
-        assertFalse(card12.checkRules(libraryGrid));
+        assertFalse(card12.checkRules(libraryTestHelper));
 
         libraryTestHelper.setItemTile(0, 0, new ItemTile(ItemTileType.EMPTY));
         libraryTestHelper.setItemTile(1, 0, new ItemTile(ItemTileType.EMPTY));
-        assertFalse(card12.checkRules(libraryGrid));
+        assertFalse(card12.checkRules(libraryTestHelper));
     }
 
     @Test
     @DisplayName("Test check rules for card 12 in ascending order")
     void checkRulesAscending() {
-        assertFalse(card12.checkRules(libraryGrid));
+        assertFalse(card12.checkRules(libraryTestHelper));
         for (int col = 0; col < 5; col++) {
             for (int row = 5 - col; row < 6; row++) {
                 libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
             }
         }
-        assertTrue(card12.checkRules(libraryGrid));
+        assertTrue(card12.checkRules(libraryTestHelper));
 
         libraryTestHelper.setItemTile(0, 4, new ItemTile(ItemTileType.CAT));
-        assertFalse(card12.checkRules(libraryGrid));
+        assertFalse(card12.checkRules(libraryTestHelper));
 
         libraryTestHelper.setItemTile(0, 4, new ItemTile(ItemTileType.EMPTY));
         libraryTestHelper.setItemTile(1, 4, new ItemTile(ItemTileType.EMPTY));
-        assertFalse(card12.checkRules(libraryGrid));
+        assertFalse(card12.checkRules(libraryTestHelper));
     }
 }
