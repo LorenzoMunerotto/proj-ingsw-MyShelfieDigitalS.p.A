@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.logic.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.logic.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.logic.personal_cards.PersonalGoalCard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,8 @@ public class GameLogic {
      * The number of players in the game.
      */
     private final int numberOfPlayers;
+
+    private int numberCardP;
     /**
      * The usernames of the players.
      */
@@ -111,13 +114,13 @@ public class GameLogic {
      * It refills the board and updates it, it generates 2 random common goal cards,
      * and a personal goal cards for each player.
      */
-    public void initGame() {
+    public void initGame() throws IOException {
         this.boardManager.refillBoard();
         this.boardManager.updateBoard();
         this.commonGoalCards = CommonCardFactory.createCards(numberOfPlayers);
         for(String username : playersUsernames){
             //fix this when personal goal cards are implemented
-            this.gameData.getPlayerDashboards().get(username).setPersonalGoalCard(new PersonalGoalCard());
+            this.gameData.getPlayerDashboards().get(username).setPersonalGoalCard(new PersonalGoalCard(numberCardP));
         }
     }
 
