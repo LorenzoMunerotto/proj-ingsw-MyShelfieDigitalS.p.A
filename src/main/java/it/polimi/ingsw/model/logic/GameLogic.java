@@ -118,10 +118,11 @@ public class GameLogic {
         this.boardManager.refillBoard();
         this.boardManager.updateBoard();
         this.commonGoalCards = CommonCardFactory.createCards(numberOfPlayers);
-        for(String username : playersUsernames){
+        /* for(String username : playersUsernames){
             //fix this when personal goal cards are implemented
             this.gameData.getPlayerDashboards().get(username).setPersonalGoalCard(new PersonalGoalCard(numberCardP));
-        }
+        } */
+
     }
 
     public void phase1(){
