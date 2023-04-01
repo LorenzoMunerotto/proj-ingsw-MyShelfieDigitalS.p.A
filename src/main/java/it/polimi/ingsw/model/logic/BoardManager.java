@@ -56,7 +56,7 @@ public class BoardManager {
     }
 
     /**
-     * Updates the status of the board and of the board cells.
+     * Updates the status of the board and of the board cells and it update setValid value.
      */
     public void updateBoard() {
         BoardCell[][] boardGrid = this.board.getBoardGrid();

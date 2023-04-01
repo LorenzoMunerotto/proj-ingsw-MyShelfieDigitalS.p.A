@@ -12,6 +12,7 @@ public class GameData {
     /**
      * Board of the game.
      */
+    private int currentPlayerIndex;
     private final Board board;
     /**
      * Bag of the game.

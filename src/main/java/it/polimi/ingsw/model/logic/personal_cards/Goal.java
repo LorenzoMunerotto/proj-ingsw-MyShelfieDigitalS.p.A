@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model.logic.personal_cards;
 
-public class PersonalConstraint {
+public class Goal {
 
     private final int row;
     private final int column;
     private final String color;
 
-    public PersonalConstraint(int row, int column, String color){
+    public Goal(int row, int column, String color){
         this.row = row;
         this.column = column;
         this.color = color;

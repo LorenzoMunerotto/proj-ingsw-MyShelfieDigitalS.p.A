@@ -43,7 +43,6 @@ class BoardManagerTest {
         int bagSize = bag.getItemTiles().size();
         assertEquals(29, emptyCells);
         assertEquals(132, bagSize);
-
         boardManager.refillBoard();
         assertEquals(0, board.getEmptyCells());
         assertEquals(bagSize - emptyCells, bag.getItemTiles().size());
