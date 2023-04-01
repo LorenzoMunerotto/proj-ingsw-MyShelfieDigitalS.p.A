@@ -7,12 +7,15 @@ import java.util.List;
 import java.util.Random;
 
 public class GameMaster {
+    /**
+     * GameMaster it's the game's engine starter
+     */
 
     private GameLogic gameLogic;
     /**
      * listOfPersonalCard Array with PersonalCard's numbers already in use
      */
-    private int[] listOfPersonalCard= {0,0,0,0,0};
+    private int[] listOfPersonalCard= {0,0,0,0};
     private final List<Player> players;
     private final int numberOfPlayers;
     private int currentPlayerIndex;
@@ -21,7 +24,8 @@ public class GameMaster {
     public GameMaster(String firstPlayerName, int numberOfPlayers) throws IOException {
         players = new ArrayList<>();
         this.numberOfPlayers = numberOfPlayers;
-        this.players.add(new Player(firstPlayerName, generateRandomNumber()));
+        //        this.players.add(new Player(firstPlayerName, generateRandomNumber()));
+        this.players.add(new Player(firstPlayerName));
         this.started = false;
     }
     public int generateRandomNumber(){
@@ -85,7 +89,8 @@ public class GameMaster {
                 throw new IllegalArgumentException("The player name is already taken. Please choose another one");
             }
         }
-        this.players.add(new Player(playerName, generateRandomNumber()));
+        this.players.add(new Player(playerName));
+        //this.players.add(new Player(playerName, generateRandomNumber()));
         if(this.players.size() == this.numberOfPlayers){
             try {
                 this.gameLogic = new GameLogic(this.players, this.numberOfPlayers);
@@ -93,6 +98,7 @@ public class GameMaster {
                 System.err.println("Error while creating an instance of the game data" + e.getMessage());
                 e.printStackTrace();
             }
+            //re-order array list
             Collections.shuffle(this.players, new Random());
             players.get(0).setChair(true);
             this.currentPlayerIndex = 0;

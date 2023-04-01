@@ -17,6 +17,11 @@ public class LibraryManager {
         this.library = library;
     }
 
+    /**
+     * insert on the library the tiles chosen form the 
+     * @param column  number of the column chosen by the player
+     * @param itemTileList The orderly list of the tiles chosen by the player
+     */
     public void insertItemTiles(int column, List<ItemTile> itemTileList){
 
         int counter = 0;
