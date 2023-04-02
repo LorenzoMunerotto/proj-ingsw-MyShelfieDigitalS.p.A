@@ -8,6 +8,9 @@ import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class LibraryManager {
 
@@ -156,4 +159,35 @@ public class LibraryManager {
 
         return listGroupsAdjacentTiles;
     }
+
+
+
+    public int adjacentPoints(){
+
+        Predicate<Pair<ItemTileType,Integer>> filterGroup =
+                (group) -> (group.getValue0()!=ItemTileType.EMPTY && group.getValue1()>2);
+
+
+        Function<Pair<ItemTileType,Integer>,Integer> calculateCommonPoints =
+                (group)->{
+                    Integer numberOfTile = group.getValue1();
+
+                    if (numberOfTile==3) return 2;
+                    else if (numberOfTile==4) return 3;
+                    else if (numberOfTile==5) return 5;
+                    else return 8;
+
+                };
+
+        /* In caso di errori nei test per facilitare il debug
+        System.out.println(getListGroupsAdjacentTiles().stream().filter(filterGroup).collect(Collectors.toList()));
+        System.out.println(getListGroupsAdjacentTiles().stream().filter(filterGroup).map(calculateCommonPoints).collect(Collectors.toList()));
+         */
+
+        int totAdjacentPoint = getListGroupsAdjacentTiles().stream().filter(filterGroup).map(calculateCommonPoints).reduce(0, Integer::sum);
+        return totAdjacentPoint;
+
+    }
+
+
 }

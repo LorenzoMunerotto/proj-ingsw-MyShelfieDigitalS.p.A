@@ -21,4 +21,29 @@ public class LibraryTestHelper extends it.polimi.ingsw.model.gameEntity.Library 
             }
         }
     }
+
+    public void setLibraryFromString(String str){
+        String newstr;
+        newstr = str.replaceAll("\n","");
+        newstr = newstr.replaceAll(" ","");
+        newstr = newstr.replaceAll("\"","");
+        String[] rows = newstr.split("\\|");
+
+
+        ItemTileType[][]  gridType = new ItemTileType[getROWS()][getCOLUMNS()];
+
+
+
+        for (int row =0; row<getROWS(); row++){
+            String[] singleRow = rows[row].split(",");
+            for (int col = 0; col<getCOLUMNS(); col++){
+                ItemTileType tileType = ItemTileType.valueOf(singleRow[col]);
+                gridType[row][col]  =  tileType;
+            }
+        }
+        setLibrary(gridType);
+
+
+
+    }
 }
