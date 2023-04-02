@@ -1,35 +1,25 @@
 package it.polimi.ingsw.model.gameMechanics;
 
+import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
+import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameEntity.Player;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
+import it.polimi.ingsw.model.gameState.GameData;
 
 public class GameMaster {
     /**
      * GameMaster it's the game's engine starter
      */
 
-    private GameLogic gameLogic;
-    /**
-     * listOfPersonalCard Array with PersonalCard's numbers already in use
-     */
-    private int[] listOfPersonalCard= {0,0,0,0};
-    private final List<Player> players;
-    private final int numberOfPlayers;
-    private int currentPlayerIndex;
-    public final boolean started;
+    private GameData gameData;
 
-    public GameMaster(String firstPlayerName, int numberOfPlayers) throws IOException {
-        players = new ArrayList<>();
-        this.numberOfPlayers = numberOfPlayers;
-        //        this.players.add(new Player(firstPlayerName, generateRandomNumber()));
-        this.players.add(new Player(firstPlayerName));
-        this.started = false;
+
+    public GameMaster(GameData gameData)  {
+       this.gameData=gameData;
     }
+
+
+    /*
     public int generateRandomNumber(){
         while (true){
             int random= (int) (Math.random()*(12)+1);
@@ -56,54 +46,43 @@ public class GameMaster {
             }
         }
 
-    }
+    } */
 
 
-    public GameLogic getGameLogic() {
-        return this.gameLogic;
-    }
+    /*
+     questo metodo si occupa di gestire la stringa che l'utente immette come nickname a prescindere che sia
+     il primo giocatore collegato o pure uno dei successivi
+     l'username scelto dall'utente può sollevare due tipi di eccezioni diverse, ma in ogni caso all'utente
+     verrà fatto riscegliere l'username spiegando perchè quello precedente non era ammissibile
+     se il metodo termina senza sollevare eccezioni il risultatato è aver creato un Player
+     con un username corretto e averlo aggiunto alla lista dei player in gameData
+     dopo aver aggiunto il player alla lista di player si controlla se si è arrivati al numOfPlayerstabilito
+     e in tal caso si setta started in gameState a true
 
-    public List<Player> getPlayers(){
-        return this.players;
-    }
+      */
+    public void acceptUser(String username)  {
 
-    public int getCurrentPlayerIndex() {
-        return this.currentPlayerIndex;
-    }
-
-    public int getNumberOfPlayers() {
-        return this.numberOfPlayers;
-    }
-
-    public boolean isStarted() {
-        return this.started;
-    }
-
-    public void addPlayer(String playerName) throws IOException {
-        if(this.players.size() == this.numberOfPlayers){
-            throw new IllegalArgumentException("The game is already full");
+        Player newPlayer = null;
+        try {
+            newPlayer = new Player(username);
+        }catch(IllegalUsernameException e){
+            //l'utente ha scelto un username illegale (ad esempio "")
         }
-        if(playerName == null || playerName.trim().isEmpty()){
-            throw new IllegalArgumentException("The player name cannot be empty or null. Please choose another one");
+
+        try{
+            gameData.addPlayer(newPlayer);
         }
-        for(Player player : this.players){
-            if(player.getUsername().equalsIgnoreCase(playerName)){
-                throw new IllegalArgumentException("The player name is already taken. Please choose another one");
-            }
+        catch(UsernameAlreadyExistsException e){
+            //l'utente ha scelto un username già esistente
         }
-        this.players.add(new Player(playerName));
-        //this.players.add(new Player(playerName, generateRandomNumber()));
-        if(this.players.size() == this.numberOfPlayers){
-            try {
-                this.gameLogic = new GameLogic(this.players, this.numberOfPlayers);
-            } catch (Exception e) {
-                System.err.println("Error while creating an instance of the game data" + e.getMessage());
-                e.printStackTrace();
-            }
-            //re-order array list
-            Collections.shuffle(this.players, new Random());
-            players.get(0).setChair(true);
-            this.currentPlayerIndex = 0;
+        catch (GameStartedException e) {
+           // l'utente ha provato ad accedere ma precedentemente si era già raggiunto il numero di giocatori richiesti e
+            // la partita è iniziata
         }
+
+
     }
+
+
 }
+

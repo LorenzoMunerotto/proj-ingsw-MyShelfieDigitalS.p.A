@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.gameEntity;
 
+import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameMechanics.personal_cards.PersonalGoalCard;
-
-import java.io.IOException;
 
 public class Player {
     //int numberPersonalCard;
@@ -10,18 +9,28 @@ public class Player {
     private boolean chair;
     private PersonalGoalCard personalGoalCard;
 
+
+
+    private final Library library;
+
     private int totPoints;
 
     /**
-     * create a Player object
+     * create a Player object, ClientId soon
      * @param username is Player name
-     * @param numberPersonalCard is a random number for extraction of the Personal Card
+
      */
-    public Player(String username) throws IOException {
-    //public Player(String username, int numberPersonalCard) throws IOException {
+    public Player(String username) throws IllegalUsernameException {
+
+        if(username == null || username.trim().isEmpty()){
+            throw new IllegalUsernameException();
+        }
+
+        //public Player(String username, int numberPersonalCard) throws IOException {
         this.username = username;
         this.chair = false;
-        this.totPoints =totPoints;
+        this.totPoints =0;
+        this.library = new Library();
         //this.numberPersonalCard = numberPersonalCard;
         //this.personalGoalCard = new PersonalGoalCard(numberPersonalCard);
     }
@@ -53,4 +62,9 @@ public class Player {
     public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
         this.personalGoalCard = personalGoalCard;
     }
+
+    public Library getLibrary() {
+        return library;
+    }
+
 }

@@ -18,14 +18,14 @@ class BoardManagerTest {
 
     BoardManager boardManager;
     GameData gameData;
-    List<String> playersUsernames;
+
     Board board;
     Bag bag;
 
     @BeforeEach
     void setUp() {
-        playersUsernames = Arrays.asList("player1", "player2");
-        gameData = new GameData(playersUsernames, 2);
+
+        gameData = new GameData(2);
         boardManager = new BoardManager(gameData);
         board = gameData.getBoard();
         bag = gameData.getBag();

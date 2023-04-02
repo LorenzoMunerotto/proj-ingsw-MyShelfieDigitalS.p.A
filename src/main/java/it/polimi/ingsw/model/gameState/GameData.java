@@ -2,46 +2,44 @@ package it.polimi.ingsw.model.gameState;
 
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
-import it.polimi.ingsw.model.gameEntity.PlayerDashboard;
+import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
+import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
+import it.polimi.ingsw.model.gameEntity.Player;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class representing the objects of the game.
  */
 public class GameData {
 
-    /**
-     * Board of the game.
-     */
-    private int currentPlayerIndex;
-    private final Board board;
-    /**
-     * Bag of the game.
-     */
-    private final Bag bag;
-    /**
-     * Map that as associates each player with his dashboard.
-     */
-    private final Map<String, PlayerDashboard> playerDashboards;
-    /**
-     * List of the random common cards of the match.
-     */
+    /** It's the number of players chosen by the first player who connected to the server. read-only. Immutable */
+    private final int numOfPlayers;
 
-    /**
-     * Constructor for GameData, initializes board, bag and playerDashboard.
-     *
-     * @param players list of the players in the game
-     */
-    public GameData(List<String> players, int numOfPlayers){
+    private Integer currentPlayerIndex;
+
+    /** Board of the game. */
+    private final Board board;
+
+    /** Bag of the game */
+    private final Bag bag;
+
+
+    private List<Player> players;
+
+
+    private int currentNumOfPlayers;
+    private boolean started;
+
+
+    public GameData( int numOfPlayers){
+        this.numOfPlayers = numOfPlayers;
         this.board = new Board(numOfPlayers);
         this.bag = new Bag();
-        this.playerDashboards = new HashMap<>();
-        for(int i = 0; i < numOfPlayers; i++){
-            this.playerDashboards.put(players.get(i), new PlayerDashboard());
-        }
+        this.currentPlayerIndex = null;
+        this.started= false;
+        this.currentNumOfPlayers=0;
+        this.players= new ArrayList<>();
     }
 
     /**
@@ -62,12 +60,41 @@ public class GameData {
         return this.bag;
     }
 
-    /**
-     * Get the map of players and their dashboard.
-     *
-     * @return the map playerDashboards
-     */
-    public Map<String, PlayerDashboard> getPlayerDashboards() {
-        return this.playerDashboards;
+
+    public int getNumOfPlayers(){
+        return numOfPlayers;
     }
+
+    public void addPlayer(Player newPlayer) throws UsernameAlreadyExistsException, GameStartedException {
+
+        if (started){
+            throw new GameStartedException();
+        }
+
+        for(Player player: players) {
+            if (newPlayer.getUsername().equalsIgnoreCase(player.getUsername())) {
+                throw new UsernameAlreadyExistsException();
+            }
+        }
+        players.add(newPlayer);
+        currentNumOfPlayers++;
+        if (currentNumOfPlayers==numOfPlayers){
+            this.started=true;
+            Collections.shuffle(this.players, new Random());
+            players.get(0).setChair(true);
+            this.currentPlayerIndex = 0;
+        }
+
+    }
+
+    public Player getCurrentPlayer(){
+        return players.get(currentPlayerIndex);
+    }
+
+    public int getCurrentNumOfPlayers(){
+        return currentNumOfPlayers;
+    }
+
+
+
 }
