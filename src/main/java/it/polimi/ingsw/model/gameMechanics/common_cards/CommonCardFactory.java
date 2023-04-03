@@ -30,62 +30,50 @@ public class CommonCardFactory {
      * @param numberOfPlayers is the number of players in the game
      * @return a list of 2 random cards
      */
-    public static List<CommonGoalCard> createCards(int numberOfPlayers){
+    public static List<CommonGoalCard> createCards(){
         List<CommonGoalCard> commonCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
         List<Integer> alreadyCreatedCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
-        List<Integer> points = new ArrayList<>();
 
-        switch (numberOfPlayers){
-            case 2:
-                points.addAll(Arrays.asList(8, 4));
-                break;
-            case 3:
-                points.addAll(Arrays.asList(8, 6, 4));
-                break;
-            case 4:
-                points.addAll(Arrays.asList(8, 6, 4, 2));
-                break;
-        }
         for(int i = 0; i < CARDS_NUMBER_FOR_GAME; i++){
             int cardNumber = getRandomCardNumber(alreadyCreatedCards);
             alreadyCreatedCards.add(cardNumber);
-            List<Integer> cardPoints = new ArrayList<>(points);
+
             switch (cardNumber){
                 case 1:
-                    commonCards.add(new CommonCard1(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard1());
                     break;
                 case 2:
-                    commonCards.add(new CommonCard2(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard2());
                     break;
                 case 3:
-                    commonCards.add(new CommonCard3(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard3());
                     break;
                 case 4:
-                    commonCards.add(new CommonCard4(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard4());
                     break;
                 case 5:
-                    commonCards.add(new CommonCard5(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard5());
                     break;
                 case 6:
-                    commonCards.add(new CommonCard6(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard6());
                     break;
                 case 7:
-                    commonCards.add(new CommonCard7(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard7());
                     break;
                 case 8:
-                    commonCards.add(new CommonCard8(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard8());
                     break;
                 case 9:
-                    commonCards.add(new CommonCard9(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard9());
                     break;
                 case 10:
-                    commonCards.add(new CommonCard10(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard10());
                     break;
                 case 11:
-                    commonCards.add(new CommonCard11(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard11());
                     break;
                 case 12:
-                    commonCards.add(new CommonCard12(cardNumber, cardPoints));
+                    commonCards.add(new CommonCard12());
                     break;
             }
         }

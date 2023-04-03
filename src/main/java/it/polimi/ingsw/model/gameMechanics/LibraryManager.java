@@ -4,6 +4,7 @@ package it.polimi.ingsw.model.gameMechanics;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameMechanics.common_cards.CommonGoalCard;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -188,6 +189,8 @@ public class LibraryManager {
         return totAdjacentPoint;
 
     }
+
+
 
 
 }

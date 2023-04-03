@@ -11,7 +11,8 @@ public class Player {
 
 
 
-    private final Library library;
+
+    private Library library;
 
     private int totPoints;
 
@@ -66,5 +67,11 @@ public class Player {
     public Library getLibrary() {
         return library;
     }
+
+    public void setLibrary(Library library) {
+        this.library = library;
+    }
+
+
 
 }

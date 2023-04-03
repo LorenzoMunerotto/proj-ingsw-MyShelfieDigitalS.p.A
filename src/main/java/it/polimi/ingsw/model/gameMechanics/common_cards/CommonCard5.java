@@ -10,58 +10,13 @@ import java.util.Set;
 /**
  * Class representing the common goal card 5.
  */
-public class CommonCard5 implements CommonGoalCard {
+public class CommonCard5 extends CommonGoalCard {
 
-    /**
-     * The index of the card.
-     */
-    private final int index;
-     /**
-     * The list of the points on the card.
-     */
-    private final List<Integer> points;
 
-    /**
-     * Constructor for common card 5, initializes index and points.
-     *
-     * @param index is the index of the card
-     * @param points is the list of the points on the card
-     */
-    public CommonCard5(int index, List<Integer> points){
-        this.index = index;
-        this.points = points;
+    public CommonCard5(){
+        super(5);
     }
 
-    /**
-     * Get the index of the card.
-     *
-     * @return the index of the card
-     */
-    @Override
-    public int getIndex(){
-        return this.index;
-    }
-
-    /**
-     * Get the points on the card.
-     *
-     * @return the points on the card
-     */
-    @Override
-    public List<Integer> getPoints() {
-        return points;
-    }
-
-    /**
-     * Get the first point on the card.
-     * Also removes the point from the list of points.
-     *
-     * @return the first point on the card
-     */
-    @Override
-    public int getHighestPoint(){
-        return this.points.remove(0);
-    }
 
     /**
      * Check if the rules of the card are respected.

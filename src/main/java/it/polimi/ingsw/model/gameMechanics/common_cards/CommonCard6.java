@@ -10,57 +10,11 @@ import java.util.Map;
 /**
  * A specific type of card that has a unique rule.
  */
-public class CommonCard6 implements CommonGoalCard {
+public class CommonCard6 extends CommonGoalCard {
 
-    /**
-     * The index of the card in the deck.
-     */
-    private final int index;
-    /**
-     * List of point tiles.
-     */
-    private final List<Integer> points;
 
-    /**
-     * Constructor for card6, initializing the index and the points according to the number of players.
-     *
-     * @param index is the index of the card in the deck
-     * @param points list of points tile
-     */
-    public CommonCard6(int index, List<Integer> points) {
-        this.index = index;
-        this.points = points;
-    }
-
-    /**
-     * Get the index of the card.
-     *
-     * @return index of the card
-     */
-    @Override
-    public int getIndex() {
-        return this.index;
-    }
-
-    /**
-     * Get the list of point tiles.
-     *
-     * @return points tile
-     */
-    @Override
-    public List<Integer> getPoints() {
-        return this.points;
-    }
-
-    /**
-     * Get the first point on the card.
-     * Also removes the point from the list of points.
-     *
-     * @return the first point on the card
-     */
-    @Override
-    public int getHighestPoint(){
-        return this.points.remove(0);
+    public CommonCard6() {
+       super(6);
     }
 
     /**

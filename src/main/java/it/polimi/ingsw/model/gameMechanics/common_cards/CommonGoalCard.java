@@ -2,40 +2,37 @@ package it.polimi.ingsw.model.gameMechanics.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.Library;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Interface representing the common goal cards.
- */
-public interface CommonGoalCard {
 
-    /**
-     * Get the index of the card.
-     *
-     * @return the index of the card
-     */
-    int getIndex();
+public abstract class CommonGoalCard {
 
-    /**
-     * Get the points on the card.
-     *
-     * @return the points on the card
-     */
-    List<Integer> getPoints();
+    private Integer index;
+    //private String description;
+    private List<String> smartPlayerTail;
 
-    /**
-     * Get the first point on the card.
-     * Also removes the point from the list of points.
-     *
-     * @return the first point on the card
-     */
-    int getHighestPoint();
+    public CommonGoalCard(Integer index) {
+        this.index = index;
+        this.smartPlayerTail =  new ArrayList<>();
+    }
 
-    /**
-     * Check if the rules of the card are respected.
-     *
-     * @param library is the library grid
-     * @return true if the rules are respected, false otherwise
-     */
-    boolean checkRules(Library library);
+    public void addSmartPlayer(String username){
+        if(!isSmartPlayer(username)) {
+            smartPlayerTail.add(username);
+        }
+    }
+
+    public boolean isSmartPlayer(String username){
+        return smartPlayerTail.indexOf(username)!=-1;
+    }
+
+    public int getPoint(List<Integer> pointsSource, String username){
+        int point = pointsSource.get(smartPlayerTail.indexOf(username));
+        return point;
+    }
+
+    public Integer getIndex()  {return index;}
+
+    public abstract boolean checkRules(Library library);
 }

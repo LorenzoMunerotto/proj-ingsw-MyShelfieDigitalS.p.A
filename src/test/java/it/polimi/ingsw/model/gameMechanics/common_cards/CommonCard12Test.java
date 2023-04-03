@@ -22,10 +22,8 @@ class CommonCard12Test {
 
     @BeforeEach
     void setUp() {
-        List<Integer> points = new ArrayList<>();
-        points.add(8);
-        points.add(6);
-        card12 = new CommonCard12(12, points);
+
+        card12 = new CommonCard12();
         libraryTestHelper = new LibraryTestHelper();
 
     }
