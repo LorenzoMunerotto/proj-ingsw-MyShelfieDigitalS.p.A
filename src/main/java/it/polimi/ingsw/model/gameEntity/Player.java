@@ -31,7 +31,7 @@ public class Player {
         this.chair = false;
         this.totPoints =0;
         this.library = new Library();
-        //this.numberPersonalCard = numberPersonalCard;
+        //this.numberPersonalCard = null;
         //this.personalGoalCard = new PersonalGoalCard(numberPersonalCard);
     }
 

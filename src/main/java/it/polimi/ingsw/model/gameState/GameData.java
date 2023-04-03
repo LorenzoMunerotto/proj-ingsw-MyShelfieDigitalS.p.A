@@ -87,6 +87,14 @@ public class GameData {
 
     }
 
+    public Player getPlayer(int i){
+        return players.get(i);
+    }
+
+    public void setPersonalCards(){
+
+    }
+
     public Player getCurrentPlayer(){
         return players.get(currentPlayerIndex);
     }

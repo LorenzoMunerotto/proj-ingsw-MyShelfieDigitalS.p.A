@@ -1,22 +1,28 @@
 package it.polimi.ingsw.model.gameMechanics;
 
+import it.polimi.ingsw.model.gameMechanics.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
 import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameState.GameData;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 public class GameMaster {
     /**
      * GameMaster it's the game's engine starter
      */
-
     private GameData gameData;
 
+    private Set<Integer> numberOfPersonalCards = new HashSet<>();
 
     public GameMaster(GameData gameData)  {
        this.gameData=gameData;
     }
+
 
 
     /*
@@ -81,6 +87,20 @@ public class GameMaster {
         }
 
 
+    }
+
+    public void assignAllPersonalCard() throws IOException {
+        for(int i=0; i<gameData.getNumOfPlayers();i++){
+            while (true){
+                int random= (int) (Math.random()*(12)+1);
+                if(!numberOfPersonalCards.contains(random)){
+                    PersonalGoalCard randomPersonalGoalCard = new PersonalGoalCard(random);
+                    gameData.getPlayer(i).setPersonalGoalCard(randomPersonalGoalCard);
+                    numberOfPersonalCards.add(random);
+                    break;
+                }
+            }
+        }
     }
 
 
