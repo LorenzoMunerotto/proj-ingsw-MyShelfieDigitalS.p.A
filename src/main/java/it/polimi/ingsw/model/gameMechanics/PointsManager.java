@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.gameMechanics;
 
 import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.model.gameMechanics.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -54,7 +54,10 @@ public class PointsManager {
 
 
     public int personalPoints(){
-        return 0;
+
+
+    return 0;
+
     }
 
     public int adjacentPoints(){

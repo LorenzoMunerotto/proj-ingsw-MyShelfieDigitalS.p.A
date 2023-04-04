@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.gameMechanics;
 
-import it.polimi.ingsw.model.gameEntity.*;
+import it.polimi.ingsw.model.gameEntity.Board;
+import it.polimi.ingsw.model.gameEntity.Bag;
+import it.polimi.ingsw.model.gameEntity.BoardCell;
+import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.model.gameState.GameData;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
@@ -25,11 +27,11 @@ public class BoardManager {
     /**
      * Constructor for the board manager, initializes the board and the bag.
      *
-     * @param gameData the game data
+     *
      */
-    public BoardManager(GameData gameData) {
-        this.board = gameData.getBoard();
-        this.bag = gameData.getBag();
+    public BoardManager( Board board, Bag bag) {
+        this.board = board;
+        this.bag = bag;
     }
 
     /**

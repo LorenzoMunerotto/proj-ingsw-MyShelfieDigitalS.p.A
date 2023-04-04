@@ -1,6 +1,10 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import org.javatuples.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing the Library owned by each player.
@@ -171,4 +175,130 @@ public class Library {
      */
 
 
+
+
+    public List<Pair<ItemTileType, Integer>> getListGroupsAdjacentTiles(){
+        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = new ArrayList<>();
+
+        Character[][] helpgrid = new Character[getROWS()][getCOLUMNS()];
+        for (int i = 0; i < getROWS(); i++) {
+            for (int j = 0; j < getCOLUMNS(); j++) {
+                helpgrid[i][j] = Character.valueOf('W');
+            }
+        }
+        List<Pair<Integer, Integer>> sameTileList = new ArrayList<>();
+        List<Pair<Integer, Integer>> differentTileTypeTail = new ArrayList<>();
+        List<Pair<Integer, Integer>> sameTileTypeTail = new ArrayList<>();
+        differentTileTypeTail.add(new Pair<>(0,0));
+
+        while(differentTileTypeTail.size()!=0) {
+
+            Integer row1;
+            Integer col1;
+            Pair start1;
+            do {
+                start1 = differentTileTypeTail.remove(0);
+                row1 = (Integer) start1.getValue0();
+                col1 = (Integer) start1.getValue1();
+            }while(helpgrid[row1][col1]=='B' && differentTileTypeTail.size()>0);
+
+            ItemTileType currentItemTileType = getItemTile(row1, col1).getItemTileType();
+            Integer counter = 1;
+            Boolean ok = true;
+            if (differentTileTypeTail.size()==0 && helpgrid[row1][col1]=='B'){
+                ok=false;
+            }
+            if(helpgrid[row1][col1]!='B') {
+
+                sameTileTypeTail.add(start1);
+
+            }
+
+            while (sameTileTypeTail.size() != 0) {
+
+
+                Pair start = sameTileTypeTail.remove(0);
+                Integer row = (Integer) start.getValue0();
+                Integer col = (Integer) start.getValue1();
+                sameTileList.add(start);
+
+                helpgrid[row][col]='G';
+
+                if (hasLowerItemTile(row, col) && helpgrid[row + 1][col] != 'B'&& helpgrid[row + 1][col] != 'P') {
+
+                    if (getLowerItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row + 1, col));
+                        counter++;
+                        helpgrid[row + 1][col] = 'P';
+
+                    } else {
+                        if (helpgrid[row + 1][col] == 'W') {
+                            helpgrid[row + 1][col] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row + 1, col));
+                        }
+
+                    }
+                }
+                if (hasUpperItemTile(row, col) && helpgrid[row - 1][col] != 'B' && helpgrid[row - 1][col] != 'P') {
+
+                    if (getUpperItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row - 1, col));
+                        counter++;
+                        helpgrid[row - 1][col] = 'P';
+
+                    } else {
+                        if (helpgrid[row - 1][col] == 'W') {
+                            helpgrid[row - 1][col] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row - 1, col));
+                        }
+                    }
+                }
+                if (hasRightItemTile(row, col) && helpgrid[row][col + 1] != 'B' && helpgrid[row][col + 1] != 'P') {
+
+                    if (getRightItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row, col + 1));
+                        counter++;
+                        helpgrid[row][col + 1] = 'P';
+
+                    } else {
+                        if (helpgrid[row][col + 1] == 'W') {
+                            helpgrid[row][col + 1] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row, col + 1));
+                        }
+
+                    }
+                }
+                if (hasLeftItemTile(row, col) && helpgrid[row][col - 1] != 'B' && helpgrid[row][col - 1] != 'P') {
+
+                    if (getLeftItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row, col - 1));
+                        counter++;
+                        helpgrid[row][col - 1] = 'P';
+                    } else {
+                        if (helpgrid[row][col - 1] == 'W') {
+                            helpgrid[row][col - 1] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row, col - 1));
+                        }
+
+                    }
+                }
+                helpgrid[row][col] = 'B';
+
+
+            }
+            if(ok) {
+
+                listGroupsAdjacentTiles.add(new Pair<>(currentItemTileType, counter));
+
+            }
+
+        }
+
+
+        return listGroupsAdjacentTiles;
+    }
 }

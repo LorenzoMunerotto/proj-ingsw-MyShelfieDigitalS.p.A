@@ -2,8 +2,7 @@ package it.polimi.ingsw.model.gameState;
 
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
-import it.polimi.ingsw.model.gameMechanics.common_cards.CommonCardFactory;
-import it.polimi.ingsw.model.gameMechanics.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameEntity.Player;
@@ -46,7 +45,7 @@ public class GameData {
         this.started= false;
         this.currentNumOfPlayers=0;
         this.players= new ArrayList<>();
-        this.commonGoalCardsList = CommonCardFactory.createCards();
+        //this.commonGoalCardsList = CommonCardFactory.createCards();
         this.firstFullLibraryUsername = Optional.empty();
     }
 

@@ -26,7 +26,7 @@ class BoardManagerTest {
     void setUp() {
 
         gameData = new GameData(2);
-        boardManager = new BoardManager(gameData);
+        boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
         board = gameData.getBoard();
         bag = gameData.getBag();
     }

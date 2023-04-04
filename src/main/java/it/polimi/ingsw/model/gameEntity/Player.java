@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
-import it.polimi.ingsw.model.gameMechanics.personal_cards.PersonalGoalCard;
+import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 
 public class Player {
     //int numberPersonalCard;

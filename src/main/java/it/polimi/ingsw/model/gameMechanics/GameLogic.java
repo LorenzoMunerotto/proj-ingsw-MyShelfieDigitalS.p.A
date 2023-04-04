@@ -1,16 +1,10 @@
 
  package it.polimi.ingsw.model.gameMechanics;
 
-import it.polimi.ingsw.model.gameState.GameData;
-import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.model.gameMechanics.common_cards.CommonCardFactory;
-import it.polimi.ingsw.model.gameMechanics.common_cards.CommonGoalCard;
-import it.polimi.ingsw.model.gameMechanics.personal_cards.PersonalGoalCard;
+
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class GameLogic{
 
