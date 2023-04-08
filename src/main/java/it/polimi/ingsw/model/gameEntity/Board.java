@@ -2,21 +2,19 @@ package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
-import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 /**
  * Class representing the board of the game.
  */
 public class Board {
 
+    /**
+     * Number of rows of the board.
+     */
     private static final int ROWS = 9;
+    /**
+     * Number of columns of the board.
+     */
     private static final int COLUMNS = 9;
-
     /**
      * Data structure to represent the board.
      */
@@ -60,7 +58,6 @@ public class Board {
         boolean createCell3 = (numPlayers == 3 || numPlayers == 4);
         boolean createCell4 = (numPlayers == 4);
 
-
         this.boardGrid = new BoardCell[][] {
                 { new BoardCell(false), new BoardCell(false), new BoardCell(false), (createCell3 ? new BoardCell(true) : new BoardCell(false)), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false), new BoardCell(false), new BoardCell(false) },
                 { new BoardCell(false), new BoardCell(false), new BoardCell(false), new BoardCell(true), new BoardCell(true), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false), new BoardCell(false) },
@@ -82,8 +79,7 @@ public class Board {
         if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS) {
             throw new IllegalArgumentException("Row or column parameter is out of bounds.");
         }
-        BoardCell boardCell = boardGrid[row][column];
-        return boardCell;
+        return boardGrid[row][column];
     }
 
     public void putItemTile(int row, int col, ItemTile itemTile){

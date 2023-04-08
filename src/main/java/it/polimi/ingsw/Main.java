@@ -1,18 +1,12 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.gameEntity.ItemTile;
-import it.polimi.ingsw.model.gameMechanics.BoardManager;
-import it.polimi.ingsw.model.gameMechanics.LibraryManager;
-import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.terminal.Controller;
 import it.polimi.ingsw.terminal.Drawer;
 import org.javatuples.Pair;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * java says hello
@@ -21,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        System.out.println("My Shelfy!");
+        System.out.println("My Shelfie!");
 
 
         Game game = new Game();
@@ -40,7 +34,7 @@ public class Main {
 
             Integer currentPlayer = game.getGameData().getCurrentPlayerIndex();
 
-            while (game.getGameData().getCurrentPlayerIndex()==currentPlayer) {
+            while (Objects.equals(game.getGameData().getCurrentPlayerIndex(), currentPlayer)) {
                 try {
                     Pair<List<Pair<Integer, Integer>>, Integer> input = controller.takePlayerInput();
                     game.play(input.getValue0(), input.getValue1());

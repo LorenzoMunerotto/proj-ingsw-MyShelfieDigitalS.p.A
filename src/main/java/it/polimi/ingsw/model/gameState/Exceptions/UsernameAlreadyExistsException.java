@@ -8,6 +8,6 @@ public class UsernameAlreadyExistsException extends Exception {
 
     @Override
     public String getMessage() {
-        return "c'è già un giocatore con questo nome";
+        return "Username Already Exists";
     }
 }

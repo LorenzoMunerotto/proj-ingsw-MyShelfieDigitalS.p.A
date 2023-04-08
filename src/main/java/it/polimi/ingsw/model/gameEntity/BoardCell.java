@@ -42,8 +42,21 @@ public class BoardCell {
         this.itemTile = itemTile;
     }
 
-
+    /**
+     * Get if the board cell is playable.
+     *
+     * @return true if the board cell is playable, false otherwise
+     */
     public boolean isPlayable() {
         return playable;
+    }
+
+    /**
+     * Set the board cell as playable or not.
+     *
+     * @param playable true if the board cell is playable, false otherwise
+     */
+    public void setPlayable(boolean playable) {
+        this.playable = playable;
     }
 }

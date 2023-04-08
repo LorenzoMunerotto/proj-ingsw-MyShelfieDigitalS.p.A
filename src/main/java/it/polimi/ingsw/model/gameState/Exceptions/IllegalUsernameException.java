@@ -4,6 +4,6 @@ public class IllegalUsernameException extends Exception {
 
     @Override
     public String getMessage() {
-        return "l'username inserito non è accettabile";
+        return "The username is not valid";
     }
 }

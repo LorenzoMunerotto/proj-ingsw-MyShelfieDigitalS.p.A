@@ -4,6 +4,6 @@ public class InvalidNumOfPlayers extends Exception {
 
     @Override
     public String getMessage() {
-        return "Sono ammissibili da 2 a 4 giocatori";
+        return "The number of players is not valid";
     }
 }

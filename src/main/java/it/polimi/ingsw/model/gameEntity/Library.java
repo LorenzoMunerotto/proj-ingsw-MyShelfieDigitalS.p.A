@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -79,8 +80,7 @@ public class Library {
         if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS) {
             throw new IllegalArgumentException("Row or column parameter is out of bounds.");
         }
-        ItemTile itemTile = grid[row][column];
-        return itemTile;
+        return grid[row][column];
     }
 
     public int getROWS(){
@@ -133,8 +133,7 @@ public class Library {
 
      */
     public ItemTile getUpperItemTile(Integer row, Integer col){
-        ItemTile itemTile = getItemTile(row-1, col);
-        return itemTile;
+        return getItemTile(row-1, col);
     }
 
     /**
@@ -142,8 +141,7 @@ public class Library {
 
      */
     public ItemTile getLowerItemTile(Integer row, Integer col){
-        ItemTile itemTile = getItemTile(row+1, col);
-        return itemTile;
+        return getItemTile(row+1, col);
     }
 
     /**
@@ -151,8 +149,7 @@ public class Library {
 
      */
     public ItemTile getRightItemTile(Integer row, Integer col){
-        ItemTile itemTile = getItemTile(row, col+1);
-        return itemTile;
+        return getItemTile(row, col+1);
     }
 
     /**
@@ -160,8 +157,7 @@ public class Library {
      *
      */
     public ItemTile getLeftItemTile(Integer row, Integer col){
-        ItemTile itemTile = getItemTile(row, col-1);
-        return itemTile;
+        return getItemTile(row, col-1);
     }
 
     public void insertItemTile(Integer col, ItemTile itemTile){
@@ -173,7 +169,6 @@ public class Library {
                 break;
             }
         }
-
     }
 
     /**
@@ -194,9 +189,7 @@ public class Library {
 
         Character[][] helpgrid = new Character[getROWS()][getCOLUMNS()];
         for (int i = 0; i < getROWS(); i++) {
-            for (int j = 0; j < getCOLUMNS(); j++) {
-                helpgrid[i][j] = Character.valueOf('W');
-            }
+            Arrays.fill(helpgrid[i], Character.valueOf('W'));
         }
         List<Pair<Integer, Integer>> sameTileList = new ArrayList<>();
         List<Pair<Integer, Integer>> differentTileTypeTail = new ArrayList<>();

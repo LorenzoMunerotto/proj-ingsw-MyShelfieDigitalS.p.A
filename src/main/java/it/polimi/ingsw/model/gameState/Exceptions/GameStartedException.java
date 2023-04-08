@@ -4,6 +4,6 @@ public class GameStartedException extends Exception {
 
     @Override
     public String getMessage() {
-        return "la partità è già iniziata";
+        return "The game has already started";
     }
 }

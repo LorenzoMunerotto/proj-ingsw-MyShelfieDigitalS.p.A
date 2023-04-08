@@ -24,8 +24,6 @@ class BoardManagerTest {
     BoardManager boardManager;
 
 
-
-
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/isRefillTimeTest.csv")
     void isRefillTimeTest(String boardAsString, Boolean isRefillTime){

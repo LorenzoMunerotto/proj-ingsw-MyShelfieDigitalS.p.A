@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameEntity.Player;
@@ -19,30 +18,15 @@ public class GameData {
 
     /** It's the number of players chosen by the first player who connected to the server. read-only. Immutable */
     private int numOfPlayers;
-
-
-
     private Integer currentPlayerIndex;
-
     /** Board of the game. */
     private  Board board;
-
     /** Bag of the game */
     private final Bag bag;
-
-
     private List<Player> players;
-
-
-
     private List<CommonGoalCard> commonGoalCardsList;
-
     private int currentNumOfPlayers;
     private boolean started;
-
-
-
-
     private Optional<String> firstFullLibraryUsername;
 
 
