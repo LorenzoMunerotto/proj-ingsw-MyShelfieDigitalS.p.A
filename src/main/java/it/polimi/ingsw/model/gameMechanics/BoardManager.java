@@ -2,13 +2,14 @@ package it.polimi.ingsw.model.gameMechanics;
 
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.Bag;
-import it.polimi.ingsw.model.gameEntity.BoardCell;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class that manages the board.
@@ -24,148 +25,112 @@ public class BoardManager {
      */
     final Bag bag;
 
-    /**
-     * Constructor for the board manager, initializes the board and the bag.
-     *
-     *
-     */
+
     public BoardManager( Board board, Bag bag) {
         this.board = board;
         this.bag = bag;
     }
 
-    /**
-     * Refills the board with new random item tiles from the bag,
-     * if there are no more valid cells on the board.
-     */
-    public void refillBoard() {
-        if(this.board.getValidCells().size() != 0) throw new IllegalArgumentException("There are still valid cells on the board!");
-        int emptyCells = board.getEmptyCells();
-        List<ItemTile> itemTileList = bag.getRandomItemTiles(emptyCells);
-
-        for (int row = 0; row < board.getBoardGrid().length; row++) {
-            for (int column = 0; column < board.getBoardGrid()[row].length; column++) {
-
-                BoardCell currentCell = board.getBoardGrid()[row][column];
-                
-                if (currentCell != null) {
-                    if(currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY){
-                        currentCell.setItemTile(itemTileList.remove(0));
-                        board.setEmptyCells(board.getEmptyCells() - 1);
-                    }
-                }
-            }
-        }
-    }
 
     /**
-     * Updates the status of the board and of the board cells and it update setValid value.
+     * @return true if there are no tiles that a player can take in the board
      */
-    public void updateBoard() {
-        BoardCell[][] boardGrid = this.board.getBoardGrid();
-        List<BoardCell> validCells = new ArrayList<>();
-        int emptyCells = 0;
+    public boolean isRefillTime(){
 
-        for (int row = 0; row < boardGrid.length; row++) {
-            for (int column = 0; column < boardGrid[row].length; column++) {
-                BoardCell currentCell = boardGrid[row][column];
-                if (currentCell != null) {
-                    if (currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                        emptyCells++;
-                    } else {
-                        int freeSides = 0;
-                        // top
-                        if (row == 0 || boardGrid[row - 1][column] == null || boardGrid[row - 1][column].getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                            freeSides++;
-                        }
-                        // bottom
-                        if (row == boardGrid.length - 1 || boardGrid[row + 1][column] == null || boardGrid[row + 1][column].getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                            freeSides++;
-                        }
-                        // left
-                        if (column == 0 || boardGrid[row][column - 1] == null || boardGrid[row][column - 1].getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                            freeSides++;
-                        }
-                        // right
-                        if (column == boardGrid[row].length - 1 || boardGrid[row][column + 1] == null || boardGrid[row][column + 1].getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                            freeSides++;
-                        }
-                        if (freeSides > 0 && freeSides < 4) {
-                            validCells.add(currentCell);
-                            currentCell.setValid(true);
-                        } else {
-                            currentCell.setValid(false);
-                        }
-                    }
-                }
-
-            }
-        }
-        board.setEmptyCells(emptyCells);
-        board.setValidCells(validCells);
-    }
-
-    /**
-     * Grabs the item tiles from the board.
-     *
-     * @param coordinates the coordinates of the cells to grab
-     * @return the list of item tiles grabbed
-     */
-    public List<ItemTile> grabItemTiles(List<Pair<Integer, Integer>> coordinates) {
-        int size = coordinates.size();
-        if (size < 1 || size > 3)
-            throw new IllegalArgumentException("Invalid number of coordinates");
-
-        List<ItemTile> itemTileList = new ArrayList<>();
-        List<BoardCell> cellList = new ArrayList<>();
-
-        for (Pair<Integer, Integer> coordinate : coordinates) {
-            BoardCell currentCell = board.getBoardGrid()[coordinate.getValue0()][coordinate.getValue1()];
-            if (currentCell == null || currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY)
-                throw new IllegalArgumentException("Invalid coordinates");
-            if (!currentCell.isValid())
-                throw new IllegalArgumentException("You can't grab an item tile from this cell");
-            cellList.add(currentCell);
-        }
-
-        if (isAdjacent(cellList)) {
-            for (BoardCell cell : cellList) {
-                itemTileList.add(cell.getItemTile());
-                cell.setItemTile(new ItemTile(ItemTileType.EMPTY));
-                board.setEmptyCells(board.getEmptyCells() + 1);
-            }
-        } else throw new IllegalArgumentException("The cells are not adjacent");
-        return itemTileList;
-    }
-
-    /**
-     * Checks if the cells are adjacent.
-     *
-     * @param cells the list of cells to check
-     * @return true if the cells are adjacent, false otherwise
-     */
-    public boolean isAdjacent(List<BoardCell> cells) {
-        int rowDistance, columnDistance;
-        for (int i = 0; i < cells.size() - 1; i++) {
-            rowDistance = Math.abs(cells.get(i).getRow() - cells.get(i + 1).getRow());
-            columnDistance = Math.abs(cells.get(i).getColumn() - cells.get(i + 1).getColumn());
-            if (!((rowDistance == 0 && columnDistance == 1) || (rowDistance == 1 && columnDistance == 0))) {
-                return false;
+        for (int row = 0; row < board.getROWS(); row++) {
+            for (int col = 0; col < board.getCOLUMNS(); col++) {
+                if (!(board.getBoardCell(row,col).isPlayable())) continue;
+                if ((board.getBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY) && !(board.isAlone(row,col))) return false;
             }
         }
         return true;
     }
 
-    public void getEmptyCells() {
-        int emptyCells = 0;
-        for (int row = 0; row < board.getBoardGrid().length; row++) {
-            for (int column = 0; column < board.getBoardGrid()[row].length; column++) {
-                BoardCell currentCell = board.getBoardGrid()[row][column];
-                if (currentCell != null && currentCell.getItemTile().getItemTileType() == ItemTileType.EMPTY) {
-                    emptyCells++;
+    /**
+     * Refills the board with new random item tiles from the bag
+     */
+    public void refillBoard() {
+
+        bag.shuffle();
+
+        for (int row = 0; row < board.getROWS(); row++) {
+            for (int col = 0; col < board.getCOLUMNS(); col++) {
+                if (!(board.getBoardCell(row,col).isPlayable())) continue;
+                if (board.getBoardCell(row,col).getItemTile().getItemTileType()==ItemTileType.EMPTY) {
+                    board.putItemTile(row,col, bag.getRandomItemTile());
                 }
             }
         }
-        board.setEmptyCells(emptyCells);
     }
+
+
+
+
+    public List<ItemTile> grabItemTiles(List<Pair<Integer, Integer>> coordinates) {
+
+        int size = coordinates.size();
+        if (size < 1 || size > 3) throw new IllegalArgumentException("Invalid number of coordinates");
+        if (new HashSet<>(coordinates).size()<size) throw new IllegalArgumentException("Invalid number of coordinates - coordinate duplicate");
+        if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - le celle non sono in linea");
+
+
+        for (Pair<Integer, Integer> coordinate : coordinates) {
+            int row = coordinate.getValue0();
+            int col = coordinate.getValue1();
+
+            if (!board.getBoardCell(row,col).isPlayable() ) throw new IllegalArgumentException("Invalid coordinates - per cella non in gioco");
+            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new IllegalArgumentException("Invalid coordinates - per cella vuota");
+            if (!hasSideFree(row,col)) throw new IllegalArgumentException("Invalid coordinates - there is a tile, which has not a side free at the beginning of the turn");
+            if (board.isAlone(row,col))throw new IllegalArgumentException("Invalid coordinates - cella isolata");
+        }
+
+        List<ItemTile> itemTileList = new ArrayList<>();
+        for (Pair<Integer, Integer> coordinate : coordinates) {
+            int row = coordinate.getValue0();
+            int col = coordinate.getValue1();
+
+            itemTileList.add(board.takeItemTile(row,col));
+
+        }
+
+        return itemTileList;
+
+    }
+
+
+
+    private boolean hasSideFree( int row, int col){
+        if (!(Board.hasLeftBoardCell(row,col) && Board.hasUpperBoardCell(row,col) && Board.hasRightBoardCell(row,col) && Board.hasLowerBoardCell(row,col))){
+            return  true;
+        }
+        if (!(board.getLeftBoardCell(row,col).isPlayable() && board.getUpperBoardCell(row,col).isPlayable() && board.getRightBoardCell(row,col).isPlayable() && board.getLowerBoardCell(row,col).isPlayable())){
+            return true;
+        }
+        if (!(board.getLeftBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY && board.getUpperBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY && board.getRightBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY && board.getLowerBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isLined(List<Pair<Integer, Integer>> coordinates){
+
+        int number = coordinates.size();
+
+        boolean sameRow = coordinates.stream().map(Pair::getValue0).collect(Collectors.toSet()).size()==1;
+        List<Integer> columns = coordinates.stream().map(Pair::getValue1).sorted().collect(Collectors.toList());
+        boolean inRow = (columns.get(columns.size()-1)-columns.get(0) == number-1) && sameRow;
+
+        boolean sameColumn = coordinates.stream().map(Pair::getValue1).collect(Collectors.toSet()).size()==1;
+        List<Integer> rows = coordinates.stream().map(Pair::getValue0).sorted().collect(Collectors.toList());
+        boolean inColumn = (rows.get(rows.size()-1)-rows.get(0) == number-1) && sameColumn;
+
+
+        return inRow || inColumn;
+
+    }
+
+
+
+
+
 }

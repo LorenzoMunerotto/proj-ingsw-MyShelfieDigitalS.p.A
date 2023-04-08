@@ -15,10 +15,13 @@ public class ItemTile {
     /**
      * Constructor for item tile, initializes item tile type.
      *
-     * @param itemTileType the type of the item tile
+     *
      */
-    public ItemTile(ItemTileType itemTileType) {
-        this.itemTileType = itemTileType;
+    public ItemTile() {
+        this.itemTileType = ItemTileType.EMPTY;
+    }
+    public ItemTile(ItemTileType type){
+        this.itemTileType = type;
     }
 
     /**

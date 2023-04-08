@@ -65,6 +65,11 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>/src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <!-- Testing Plugins -->
             <plugin>
@@ -128,5 +133,9 @@
             </plugin>
         </plugins>
     </build>
+
+
+
+
 
 </project>

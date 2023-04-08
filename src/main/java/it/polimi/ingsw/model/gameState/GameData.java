@@ -2,8 +2,11 @@ package it.polimi.ingsw.model.gameState;
 
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
+import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
+import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
+import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameEntity.Player;
 
@@ -15,12 +18,14 @@ import java.util.*;
 public class GameData {
 
     /** It's the number of players chosen by the first player who connected to the server. read-only. Immutable */
-    private final int numOfPlayers;
+    private int numOfPlayers;
+
+
 
     private Integer currentPlayerIndex;
 
     /** Board of the game. */
-    private final Board board;
+    private  Board board;
 
     /** Bag of the game */
     private final Bag bag;
@@ -34,19 +39,23 @@ public class GameData {
 
     private int currentNumOfPlayers;
     private boolean started;
+
+
+
+
     private Optional<String> firstFullLibraryUsername;
 
 
-    public GameData( int numOfPlayers){
-        this.numOfPlayers = numOfPlayers;
-        this.board = new Board(numOfPlayers);
+    public GameData(){
+        this.numOfPlayers = 0;
         this.bag = new Bag();
         this.currentPlayerIndex = null;
         this.started= false;
         this.currentNumOfPlayers=0;
         this.players= new ArrayList<>();
-        //this.commonGoalCardsList = CommonCardFactory.createCards();
+        this.commonGoalCardsList = CommonCardFactory.createCards();
         this.firstFullLibraryUsername = Optional.empty();
+
     }
 
     /**
@@ -87,6 +96,7 @@ public class GameData {
         currentNumOfPlayers++;
         if (currentNumOfPlayers==numOfPlayers){
             this.started=true;
+            this.board =new Board(numOfPlayers);
             Collections.shuffle(this.players, new Random());
             players.get(0).setChair(true);
             this.currentPlayerIndex = 0;
@@ -106,6 +116,39 @@ public class GameData {
         return currentNumOfPlayers;
     }
 
+    public void setNumOfPlayers(int numOfPlayers) throws InvalidNumOfPlayers {
+        if (numOfPlayers<2 || numOfPlayers>4) throw new InvalidNumOfPlayers();
+        this.numOfPlayers = numOfPlayers;
+    }
+
+    public void nextPlayer(){
+        if (currentPlayerIndex==numOfPlayers-1){
+            currentPlayerIndex=0;
+        }
+        else{
+            currentPlayerIndex++;
+        }
+    }
+
+    public Integer getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
 
 
+
+    public Optional<String> getFirstFullLibraryUsername() {
+        return firstFullLibraryUsername;
+    }
+
+    public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
+        this.firstFullLibraryUsername = Optional.of(firstFullLibraryUsername);
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getPlayer(int i){
+        return players.get(i);
+    }
 }

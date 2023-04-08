@@ -17,17 +17,13 @@ public class Bag {
      * List of the item tiles im the bag.
      */
     private final List<ItemTile> itemTiles;
-    /**
-     * Generator of a random number.
-     */
-    private final Random random;
+
 
     /**
      * Constructor for bag, initializes the bag with 22 item tile of each type, except for the empty type.
      */
     public Bag() {
         this.itemTiles = new ArrayList<>();
-        this.random = new Random();
         for (ItemTileType type : ItemTileType.values()) {
             if (type == ItemTileType.EMPTY) {
                 continue;
@@ -48,19 +44,17 @@ public class Bag {
         return this.itemTiles;
     }
 
-    /**
-     * Get list of random item tile from the bag.
-     * It also removes those item tile from the bag.
-     *
-     * @param number is the amount of item tiles to get and remove
-     * @return list of item tile randomly picked
-     */
-    public List<ItemTile> getRandomItemTiles(int number) {
-        if (number > this.itemTiles.size()) {
-            throw new IllegalArgumentException("The parameter is greater than number of tiles in the bag");
+
+    public ItemTile getRandomItemTile() {
+
+        if (itemTiles.size()==0) {
+            throw new IllegalArgumentException("The bag is empty");
         }
-        return IntStream.range(0, number)
-                .mapToObj(i -> this.itemTiles.remove(random.nextInt(this.itemTiles.size())))
-                .collect(Collectors.toList());
+        ItemTile itemTile = itemTiles.remove(0);
+        return itemTile;
+    }
+
+    public void shuffle(){
+        Collections.shuffle(itemTiles);
     }
 }

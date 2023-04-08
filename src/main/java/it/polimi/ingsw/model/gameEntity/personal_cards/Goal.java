@@ -1,26 +1,51 @@
 package it.polimi.ingsw.model.gameEntity.personal_cards;
 
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+
 public class Goal {
 
-    private final int row;
-    private final int column;
-    private final String color;
+    private int row;
+    private int column;
+    private  String itemTileType;
 
-    public Goal(int row, int column, String color){
+    public Goal(int row, int column, String itemTileType){
         this.row = row;
         this.column = column;
-        this.color = color;
+        this.itemTileType = itemTileType;
     }
 
-    public int getRow(){
-        return this.row;
+    public Goal(){
+
+    }
+    public int getRow() {
+        return row;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 
     public int getColumn() {
-        return this.column;
+        return column;
     }
 
-    public String getColor(){
-        return this.color;
+    public void setColumn(int column) {
+        this.column = column;
     }
+
+    public String getItemTileType() {
+        return itemTileType;
+    }
+
+    public void setItemTileType(String itemTileType) {
+        this.itemTileType =itemTileType;
+    }
+
+    /*
+    @Override
+    public String toString() {
+        return "<"+row+","+column+">"+" : "+itemTileType+" ";
+    }
+
+     */
 }

@@ -1,9 +1,9 @@
 package it.polimi.ingsw.model.gameState.Exceptions;
 
-public class GameStartedException extends Exception {
+public class InvalidNumOfPlayers extends Exception {
 
     @Override
     public String getMessage() {
-        return "la partità è già iniziata";
+        return "Sono ammissibili da 2 a 4 giocatori";
     }
 }

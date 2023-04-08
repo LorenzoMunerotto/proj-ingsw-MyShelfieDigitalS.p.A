@@ -8,10 +8,6 @@ public class Player {
     private final String username;
     private boolean chair;
     private PersonalGoalCard personalGoalCard;
-
-
-
-
     private Library library;
 
     private int totPoints;
@@ -27,7 +23,6 @@ public class Player {
             throw new IllegalUsernameException();
         }
 
-        //public Player(String username, int numberPersonalCard) throws IOException {
         this.username = username;
         this.chair = false;
         this.totPoints =0;

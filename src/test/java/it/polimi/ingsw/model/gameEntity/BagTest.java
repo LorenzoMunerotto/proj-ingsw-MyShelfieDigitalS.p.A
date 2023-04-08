@@ -43,26 +43,5 @@ class BagTest {
         }
     }
 
-    @Test
-    @DisplayName("Test getRandomItemTiles for a correct number as parameter")
-    void testGetRandomItemTiles_correctNumber() {
-        Random random = new Random();
-        int originalNumber = bag.getItemTiles().size();
-        int randomNumber = random.nextInt(originalNumber) + 1;
-        List<ItemTile> randomItems = bag.getRandomItemTiles(randomNumber);
-        assertAll(
-                () -> assertEquals(randomNumber, randomItems.size()),
-                () -> assertEquals(originalNumber - randomNumber, bag.getItemTiles().size()),
-                () -> assertFalse(bag.getItemTiles().containsAll(randomItems))
-        );
-    }
 
-    @Test
-    @DisplayName("Test getRandomItemTiles for a wrong number as parameter")
-    void testGetRandomItemTiles_wrongNumber() {
-        Random random = new Random();
-        int maxSize = bag.getItemTiles().size();
-        int randomNumber = random.nextInt(Integer.MIN_VALUE - maxSize) + maxSize;
-        assertThrows(IllegalArgumentException.class, () -> bag.getRandomItemTiles(randomNumber));
-    }
 }

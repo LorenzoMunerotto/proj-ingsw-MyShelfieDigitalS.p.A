@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -25,18 +25,13 @@ public class LibraryManager {
      * @param column  number of the column chosen by the player
      * @param itemTileList The orderly list of the tiles chosen by the player
      */
-    public void insertItemTiles(int column, List<ItemTile> itemTileList){
+    public void insertItemTiles(int column, List<ItemTile> itemTileList)  {
 
-        int counter = 0;
-        for (int row= library.getROWS()-1 ; row<=0; row--) {
-            if (library.getItemTile(row,column).getItemTileType() == ItemTileType.EMPTY) counter++;
+        for(ItemTile itemTile : itemTileList){
+            library.insertItemTile(column, itemTile);
         }
-        if(counter > itemTileList.size()) throw new IllegalArgumentException("The column is already full");
 
     }
-
-
-
 
 
     public int adjacentPoints(){
@@ -63,6 +58,16 @@ public class LibraryManager {
 
         int totAdjacentPoint = library.getListGroupsAdjacentTiles().stream().filter(filterGroup).map(calculateCommonPoints).reduce(0, Integer::sum);
         return totAdjacentPoint;
+
+    }
+
+    public void hasEnoughSpace(Integer col, Integer num){
+
+        int counter = 0;
+        for (int row= library.getROWS()-1 ; row>=0; row--) {
+            if (library.getItemTile(row,col).getItemTileType() == ItemTileType.EMPTY) counter++;
+        }
+        if(counter < num) throw new IllegalArgumentException("the column cannot contain all the selected tiles");
 
     }
 

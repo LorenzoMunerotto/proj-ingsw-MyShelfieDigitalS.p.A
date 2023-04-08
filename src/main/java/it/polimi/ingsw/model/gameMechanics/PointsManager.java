@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.gameMechanics;
 
 import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -56,7 +58,34 @@ public class PointsManager {
     public int personalPoints(){
 
 
-    return 0;
+        List<Goal> goals = player.getPersonalGoalCard().getGoals();
+
+        int counter =0;
+        for (Goal goal : goals) {
+            int row = goal.getRow();
+            int col = goal.getColumn();
+
+
+            if (player.getLibrary().getItemTile(row, col).getItemTileType() == ItemTileType.valueOf(goal.getItemTileType())) {
+                counter++;
+            }
+        }
+
+            switch (counter){
+
+                case 1:  return 1;
+                case 2:  return 2;
+                case 3:  return 4;
+                case 4:  return 6;
+                case 5:  return 9;
+                case 6:  return 12;
+
+            }
+
+
+
+
+        return 0;
 
     }
 
@@ -71,11 +100,13 @@ public class PointsManager {
 
     public int finalPoint(){
 
+
         if (firstFullLibraryUsername.isPresent()){
             if (firstFullLibraryUsername.get().equals(player.getUsername())) {
                 return 1;
             }
         }
+
         return 0;
     }
 

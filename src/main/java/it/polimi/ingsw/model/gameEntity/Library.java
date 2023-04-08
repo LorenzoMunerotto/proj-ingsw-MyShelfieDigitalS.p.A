@@ -76,7 +76,7 @@ public class Library {
      *
      */
     public ItemTile getItemTile(int row, int column){
-        if (row < 0 || row >= grid.length || column < 0 || column >= grid[row].length) {
+        if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS) {
             throw new IllegalArgumentException("Row or column parameter is out of bounds.");
         }
         ItemTile itemTile = grid[row][column];
@@ -162,6 +162,18 @@ public class Library {
     public ItemTile getLeftItemTile(Integer row, Integer col){
         ItemTile itemTile = getItemTile(row, col-1);
         return itemTile;
+    }
+
+    public void insertItemTile(Integer col, ItemTile itemTile){
+        if (grid[0][col].getItemTileType()!=ItemTileType.EMPTY) throw new IllegalArgumentException("La colonna è già piena");
+
+        for(int row= ROWS-1; row>=0; row--){
+            if (grid[row][col].getItemTileType()==ItemTileType.EMPTY){
+                grid[row][col]=itemTile;
+                break;
+            }
+        }
+
     }
 
     /**
@@ -300,5 +312,16 @@ public class Library {
 
 
         return listGroupsAdjacentTiles;
+    }
+
+    public boolean isFull(){
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if (grid[i][j].getItemTileType()==ItemTileType.EMPTY){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

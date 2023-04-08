@@ -1,50 +1,71 @@
 package it.polimi.ingsw.model.gameEntity.personal_cards;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class PersonalGoalCard {
-    private int numberCard;
-    private File fileJson;
+    private int number;
+
 
     public ArrayList<Goal> goals;
+
+
+    public PersonalGoalCard() {
+    }
+
+    public PersonalGoalCard(int number, ArrayList<Goal> goals) {
+        this.number = number;
+        this.goals = goals;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public ArrayList<Goal> getGoals() {
         return goals;
     }
 
-    /**
-     * create the File, JSON file to Java object
-     * @param randomNumber number between 1 and 12 to choose the PersonalCards
-     *  @return file
-     */
-    public File createFile(int randomNumber){
-        String pathFile = "configPersonalCard" + String.valueOf(randomNumber) + ".json";
-        File nomeFileJson =new File(pathFile);
-        return nomeFileJson;
+    public void setGoals(ArrayList<Goal> goals) {
+        this.goals = goals;
     }
 
-    public PersonalGoalCard(int numberCard) throws IOException {
-        this.numberCard = numberCard;
-        this.fileJson = createFile(numberCard);
-        this.goals = createGoals(fileJson);
+    public static PersonalGoalCard makePersonalGoalCard(int number)  {
+
+        ObjectMapper mapper = new ObjectMapper();
+        InputStream is = PersonalGoalCard.class.getResourceAsStream("/configPersonalGoalsCards.json");
+
+
+
+        AllPersonalGoalCards allPersonalGoalCards = null;
+        try {
+            allPersonalGoalCards = mapper.readValue(is, AllPersonalGoalCards.class);
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
+
+        return allPersonalGoalCards.getCards().get(number);
     }
 
-    /**
-     * ObjectMapper instantiation, eserialization into the `Goal` class
-     * Creating Object of ObjectMapper define in Jackson API
-     * @param fileJson
-     * @return
-     * @throws IOException
-     */
-    public ArrayList<Goal> createGoals(File fileJson) throws IOException {
-        ObjectMapper om = new ObjectMapper();
-        ArrayList<Goal> personalGoalCard = om.readValue(fileJson, new TypeReference<ArrayList<Goal>>() {});
-        return personalGoalCard;
-    };
+    @Override
+
+    public String toString() {
+        String str ="Personal Card "+number+" ";
+            for (Goal goal: goals){
+               str+= "["+goal.getRow()+","+goal.getColumn()+"]"+":"+goal.getItemTileType()+"  ";
+            }
+        return str;
+    }
 
 
 }

@@ -1,19 +1,27 @@
 package it.polimi.ingsw.model.gameEntity;
 
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Class representing the board of the game.
  */
 public class Board {
 
+    private static final int ROWS = 9;
+    private static final int COLUMNS = 9;
+
     /**
      * Data structure to represent the board.
      */
     private final BoardCell[][] boardGrid;
-    private int emptyCells;
-    private List<BoardCell> validCells;
+
 
     /**
      * Index of the cell of the board [row][column].
@@ -51,67 +59,160 @@ public class Board {
         if(numPlayers < 2 || numPlayers > 4) throw new IllegalArgumentException("Invalid number of players");
         boolean createCell3 = (numPlayers == 3 || numPlayers == 4);
         boolean createCell4 = (numPlayers == 4);
+
+
         this.boardGrid = new BoardCell[][] {
-                { null, null, null, (createCell3 ? new BoardCell(0, 3) : null), (createCell4 ? new BoardCell(0, 4) : null), null, null, null, null },
-                { null, null, null, new BoardCell(1, 3), new BoardCell(1, 4), (createCell4 ? new BoardCell(1, 5) : null), null, null, null },
-                { null, null, (createCell3 ? new BoardCell(2, 2) : null), new BoardCell(2, 3), new BoardCell(2, 4), new BoardCell(2, 5), (createCell3 ? new BoardCell(2, 6) : null), null, null },
-                { null, (createCell4 ? new BoardCell(3, 1) : null), new BoardCell(3, 2), new BoardCell(3, 3), new BoardCell(3, 4), new BoardCell(3, 5), new BoardCell(3, 6), new BoardCell(3, 7), (createCell3 ? new BoardCell(3, 8) : null) },
-                { (createCell4 ? new BoardCell(4, 0) : null), new BoardCell(4, 1), new BoardCell(4, 2), new BoardCell(4, 3), new BoardCell(4, 4), new BoardCell(4, 5), new BoardCell(4, 6), new BoardCell(4, 7), (createCell4 ? new BoardCell(4, 8) : null) },
-                { (createCell3 ? new BoardCell(5, 0) : null), new BoardCell(5, 1), new BoardCell(5, 2), new BoardCell(5, 3), new BoardCell(5, 4), new BoardCell(5, 5), new BoardCell(5, 6), (createCell4 ? new BoardCell(5, 7) : null), null },
-                { null, null, (createCell3 ? new BoardCell(6, 2) : null), new BoardCell(6, 3), new BoardCell(6, 4), new BoardCell(6, 5), (createCell3 ? new BoardCell(6, 6) : null), null, null },
-                { null, null, null, (createCell4 ? new BoardCell(7, 3) : null), new BoardCell(7, 4), new BoardCell(7, 5), null, null, null },
-                { null, null, null, null, (createCell4 ? new BoardCell(8, 4) : null), (createCell3 ? new BoardCell(8, 5) : null), null, null, null },
+                { new BoardCell(false), new BoardCell(false), new BoardCell(false), (createCell3 ? new BoardCell(true) : new BoardCell(false)), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false), new BoardCell(false), new BoardCell(false) },
+                { new BoardCell(false), new BoardCell(false), new BoardCell(false), new BoardCell(true), new BoardCell(true), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false), new BoardCell(false) },
+                { new BoardCell(false), new BoardCell(false), (createCell3 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(true), new BoardCell(true), new BoardCell(true), (createCell3 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false) },
+                { new BoardCell(false), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), (createCell3 ? new BoardCell(true) : new BoardCell(false)) },
+                { (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), (createCell4 ? new BoardCell(true) : new BoardCell(false)) },
+                { (createCell3 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), new BoardCell(true), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false) },
+                { new BoardCell(false), new BoardCell(false), (createCell3 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(true), new BoardCell(true), new BoardCell(true), (createCell3 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false) },
+                { new BoardCell(false), new BoardCell(false), new BoardCell(false), (createCell4 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(true), new BoardCell(true), new BoardCell(false), new BoardCell(false), new BoardCell(false) },
+                { new BoardCell(false), new BoardCell(false), new BoardCell(false), new BoardCell(false), (createCell4 ? new BoardCell(true) : new BoardCell(false)), (createCell3 ? new BoardCell(true) : new BoardCell(false)), new BoardCell(false), new BoardCell(false), new BoardCell(false) },
         };
-        switch (numPlayers){
-            case 2: this.emptyCells = 29; break;
-            case 3: this.emptyCells = 37; break;
-            case 4: this.emptyCells = 45; break;
+    }
+
+    /**
+     * Get the BoardCell in pos[row][column]
+     *
+     */
+    public BoardCell getBoardCell(int row, int column){
+        if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS) {
+            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
         }
-        this.validCells = new ArrayList<>();
+        BoardCell boardCell = boardGrid[row][column];
+        return boardCell;
+    }
+
+    public void putItemTile(int row, int col, ItemTile itemTile){
+        if (row < 0 || row >= ROWS || col < 0 || col >= COLUMNS) {
+            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
+        }
+        if (!boardGrid[row][col].isPlayable()) throw new IllegalArgumentException("stai cercando di mettere una tessera su una cella non in gioco");
+        if (boardGrid[row][col].getItemTile().getItemTileType()!=ItemTileType.EMPTY) throw new IllegalArgumentException("stai cercando di mettere una tessera sopra ad una tessera valida");
+        boardGrid[row][col].setItemTile(itemTile);
+    }
+
+    public ItemTile takeItemTile(int row, int col){
+        if (row < 0 || row >= ROWS || col < 0 || col >= COLUMNS) {
+            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
+        }
+        if (!boardGrid[row][col].isPlayable()) throw new IllegalArgumentException("stai cercando di predere una tessera su una cella non in gioco");
+        if (boardGrid[row][col].getItemTile().getItemTileType()==ItemTileType.EMPTY) throw new IllegalArgumentException("stai cercando di prendere una tessera su una cella vuota");
+        ItemTile itemTile = boardGrid[row][col].getItemTile();
+        boardGrid[row][col].setItemTile(new ItemTile());
+        return itemTile;
+    }
+
+
+    /**
+     * Return True if the tile in pos[row][col] has Upper tile
+     *
+     */
+
+    public static boolean hasUpperBoardCell(Integer row, Integer col){
+        return row>0 && row < ROWS && col>=0 && col<COLUMNS;
     }
 
     /**
-     * Get the grid of the board.
+     * Return True if the tile in pos[row][col] has Lower tile
      *
-     * @return grid of the board
      */
-    public BoardCell[][] getBoardGrid() {
-        return this.boardGrid;
+    public static boolean hasLowerBoardCell(Integer row, Integer col){
+        return row >= 0 && row < ROWS-1 && col>=0 && col < COLUMNS ;
     }
 
     /**
-     * Get the number of empty cells in the board.
-     *
-     * @return number of empty cells
+     * Return True if the tile in pos[row][col] has Right tile
      */
-    public int getEmptyCells() {
-        return this.emptyCells;
+    public static boolean hasRightBoardCell(Integer row, Integer col){
+        return row >= 0 && row < ROWS && col>=0 && col < COLUMNS-1 ;
     }
 
     /**
-     * Set the number of empty cells in the board.
-     *
-     * @param emptyCells number of empty cells
+     * Return True if the tile in pos[row][col] has Left tile
+
      */
-    public void setEmptyCells(int emptyCells) {
-        this.emptyCells = emptyCells;
+    public static boolean hasLeftBoardCell(Integer row, Integer col){
+        return row >= 0 && row < ROWS && col>0 && col < COLUMNS ;
     }
 
     /**
-     * Get the list of valid cells in the board.
-     *
-     * @return list of valid cells
+     * Return the Upper tile of the tile in pos[row][col]
+
      */
-    public List<BoardCell> getValidCells() {
-        return this.validCells;
+    public BoardCell getUpperBoardCell(Integer row, Integer col){
+        return getBoardCell(row-1, col);
+
     }
 
     /**
-     * Set the list of valid cells in the board.
-     *
-     * @param validCells list of valid cells
+     * Return the Lower tile of the tile in pos[row][col]
+
      */
-    public void setValidCells(List<BoardCell> validCells) {
-        this.validCells = validCells;
+    public BoardCell getLowerBoardCell(Integer row, Integer col){
+        return getBoardCell(row+1, col);
+
     }
+
+    /**
+     * Return the Right tile of the tile in pos[row][col]
+
+     */
+    public BoardCell getRightBoardCell(Integer row, Integer col){
+        return getBoardCell(row, col+1);
+
+    }
+
+    /**
+     * Return the Left tile of the tile in pos[row][col]
+     *
+     */
+    public BoardCell getLeftBoardCell(Integer row, Integer col){
+       return  getBoardCell(row, col-1);
+
+    }
+    public int getROWS(){
+        return ROWS;
+    }
+
+    public int getCOLUMNS(){
+        return COLUMNS;
+    }
+
+    public boolean isAlone (int row, int col){
+        int count =0;
+        if (Board.hasLeftBoardCell(row,col)){
+            if (getLeftBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY){
+                count++;
+            }
+        }
+        else count++;
+        if (Board.hasUpperBoardCell(row,col)){
+            if (getUpperBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY){
+                count++;
+            }
+        }
+        else count++;
+        if (Board.hasRightBoardCell(row,col)){
+            if (getRightBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY){
+                count++;
+            }
+        }
+        else count++;
+        if (Board.hasLowerBoardCell(row,col)){
+            if (getLowerBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY){
+                count++;
+            }
+        }
+        else count++;
+
+        return count==4;
+    }
+
+
+
+
 }
