@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Player;
+import it.polimi.ingsw.model.gameEntity.personal_cards.AllPersonalGoalCards;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameMechanics.LibraryManager;
@@ -120,13 +121,12 @@ public class Game {
 
         Set<Integer> numberOfPersonalCards = new HashSet<>();
         Random random = new Random();
+        AllPersonalGoalCards allPersonalGoalCards = AllPersonalGoalCards.makeAllPersonalGoalCards();
         for(int i=0; i<gameData.getNumOfPlayers();i++){
             while (true){
                 int randomNumber= random.nextInt(12);
                 if(!numberOfPersonalCards.contains(randomNumber)){
-                    PersonalGoalCard randomPersonalGoalCard = null;
-
-                    randomPersonalGoalCard = PersonalGoalCard.makePersonalGoalCard(randomNumber);
+                    PersonalGoalCard randomPersonalGoalCard = allPersonalGoalCards.getCards().get(randomNumber);
 
                     gameData.getPlayer(i).setPersonalGoalCard(randomPersonalGoalCard);
                     numberOfPersonalCards.add(randomNumber);

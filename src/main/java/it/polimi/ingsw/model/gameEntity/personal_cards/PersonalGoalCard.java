@@ -7,12 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class PersonalGoalCard {
     private int number;
 
 
-    public ArrayList<Goal> goals;
+    public List<Goal> goals;
 
 
     public PersonalGoalCard() {
@@ -31,7 +33,7 @@ public class PersonalGoalCard {
         this.number = number;
     }
 
-    public ArrayList<Goal> getGoals() {
+    public List<Goal> getGoals() {
         return goals;
     }
 
@@ -39,23 +41,6 @@ public class PersonalGoalCard {
         this.goals = goals;
     }
 
-    public static PersonalGoalCard makePersonalGoalCard(int number)  {
-
-        ObjectMapper mapper = new ObjectMapper();
-        InputStream is = PersonalGoalCard.class.getResourceAsStream("/configPersonalGoalsCards.json");
-
-
-
-        AllPersonalGoalCards allPersonalGoalCards = null;
-        try {
-            allPersonalGoalCards = mapper.readValue(is, AllPersonalGoalCards.class);
-        } catch (IOException e) {
-
-            throw new RuntimeException(e);
-        }
-
-        return allPersonalGoalCards.getCards().get(number);
-    }
 
     @Override
 
@@ -65,6 +50,14 @@ public class PersonalGoalCard {
                str+= "["+goal.getRow()+","+goal.getColumn()+"]"+":"+goal.getItemTileType()+"  ";
             }
         return str;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonalGoalCard that = (PersonalGoalCard) o;
+        return number == that.number && goals.equals(that.goals);
     }
 
 
