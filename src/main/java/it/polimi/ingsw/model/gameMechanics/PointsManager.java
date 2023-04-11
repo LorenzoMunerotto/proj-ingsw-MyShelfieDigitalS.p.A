@@ -25,6 +25,10 @@ public class PointsManager {
         this.firstFullLibraryUsername = firstFullLibraryUsername;
     }
 
+    
+    /**
+     * @return total points achieved related to Common Cards
+     */
     public int commonPoints() {
         int commonPoints =0;
 
@@ -55,6 +59,9 @@ public class PointsManager {
     }
 
 
+    /**
+     * @return total points achieved related to Common Cards
+     */
     public int personalPoints(){
 
 
@@ -83,8 +90,6 @@ public class PointsManager {
             }
 
 
-
-
         return 0;
 
     }
@@ -97,7 +102,9 @@ public class PointsManager {
 
     }
 
-
+    /**
+     * @return the additional point to the first player to the first finisher
+     */
     public int finalPoint(){
 
 
@@ -110,7 +117,9 @@ public class PointsManager {
         return 0;
     }
 
-
+    /**
+     * update Total Points adding Points related to: Common and Personal Card, adjacent Items, (optional) final point
+     */
     public void updateTotalPoints(){
         player.setTotPoints(commonPoints()+personalPoints()+adjacentPoints()+finalPoint());
     }

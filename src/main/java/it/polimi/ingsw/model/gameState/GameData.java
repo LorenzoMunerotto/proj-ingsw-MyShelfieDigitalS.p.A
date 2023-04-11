@@ -64,7 +64,12 @@ public class GameData {
     public int getNumOfPlayers(){
         return numOfPlayers;
     }
-
+    /**
+     * List<Player>
+     * @param newPlayer New Player element to implement in List<Player>, increase currentNumOfPlayers, board
+     * @throws UsernameAlreadyExistsException
+     * @throws GameStartedException
+     */
     public void addPlayer(Player newPlayer) throws UsernameAlreadyExistsException, GameStartedException {
 
         if (started){
@@ -100,11 +105,18 @@ public class GameData {
         return currentNumOfPlayers;
     }
 
+    /**
+     * Initial method (first player) that set the number of player for the game
+     * @param numOfPlayers number of player for the game
+     * @throws InvalidNumOfPlayers
+     */
     public void setNumOfPlayers(int numOfPlayers) throws InvalidNumOfPlayers {
         if (numOfPlayers<2 || numOfPlayers>4) throw new InvalidNumOfPlayers();
         this.numOfPlayers = numOfPlayers;
     }
-
+    /**
+     * increase currentPlayerIndex at the end of the respective previous player's play
+     */
     public void nextPlayer(){
         if (currentPlayerIndex==numOfPlayers-1){
             currentPlayerIndex=0;
@@ -114,6 +126,10 @@ public class GameData {
         }
     }
 
+    /**
+     *
+     * @return the number of the player who is playing this turn
+     */
     public Integer getCurrentPlayerIndex() {
         return currentPlayerIndex;
     }

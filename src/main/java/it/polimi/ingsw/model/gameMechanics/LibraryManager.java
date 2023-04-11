@@ -33,7 +33,10 @@ public class LibraryManager {
 
     }
 
-
+    /**
+     * it calculates the numbers of point related to adjacent card melds for the specific library
+     * @return total Points
+     */
     public int adjacentPoints(){
 
         Predicate<Pair<ItemTileType,Integer>> filterGroup =
