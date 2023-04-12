@@ -72,8 +72,10 @@ public class Board {
     }
 
     /**
-     * Get the BoardCell in pos[row][column]
-     *
+     * This method return the BoardCell in boardGrid[row][col]
+     * @param row
+     * @param column
+     * @return boardGrid[row][column]
      */
     public BoardCell getBoardCell(int row, int column){
         if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS) {
@@ -82,6 +84,17 @@ public class Board {
         return boardGrid[row][column];
     }
 
+    /**
+     * This method set the itemTile in BoardCell at boardGrid[row][col]
+     * only if the boardCell is playable and the present itemTileType is EMPTY
+     *
+     * So for example It's impossible to set a tile "CAT" on a BoardCell if
+     * this boardCell has a tile "FRAME"
+     *
+     * @param row
+     * @param col
+     * @param itemTile
+     */
     public void putItemTile(int row, int col, ItemTile itemTile){
         if (row < 0 || row >= ROWS || col < 0 || col >= COLUMNS) {
             throw new IllegalArgumentException("Row or column parameter is out of bounds.");
@@ -91,6 +104,13 @@ public class Board {
         boardGrid[row][col].setItemTile(itemTile);
     }
 
+    /**
+     * This method return the itemTile in boardGrid[row][col]
+     * and set to EMPTY the itemTile in boardGrid[row][col]
+     * @param row
+     * @param col
+     * @return
+     */
     public ItemTile takeItemTile(int row, int col){
         if (row < 0 || row >= ROWS || col < 0 || col >= COLUMNS) {
             throw new IllegalArgumentException("Row or column parameter is out of bounds.");
@@ -177,6 +197,15 @@ public class Board {
     public int getCOLUMNS(){
         return COLUMNS;
     }
+
+
+    /**
+     * This method tell if the boardCell in boardGrid[row][col] is alone
+     * A Boardcell is alone if all 4 adjacent cells have an Empty itemTile
+     * @param row
+     * @param col
+     * @return
+     */
 
     public boolean isAlone (int row, int col){
         int count =0;

@@ -4,11 +4,14 @@ import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
+import org.javatuples.Pair;
 
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 
 public class PointsManager {
@@ -47,11 +50,11 @@ public class PointsManager {
 
 
         for (CommonGoalCard commonGoalCard : commonGoalCardList){
-                if(!commonGoalCard.isSmartPlayer(player.getUsername()) && commonGoalCard.checkRules(player.getLibrary())){
-                    commonGoalCard.addSmartPlayer(player.getUsername());
+                if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
+                    commonGoalCard.addSmartPlayer(player);
                 }
-                if(commonGoalCard.isSmartPlayer(player.getUsername())){
-                    commonPoints+= commonGoalCard.getPoint(pointsSource, player.getUsername());
+                if(commonGoalCard.isSmartPlayer(player)){
+                    commonPoints+= commonGoalCard.getPoint(pointsSource, player);
                 }
         }
 
@@ -94,11 +97,38 @@ public class PointsManager {
 
     }
 
+    /**
+     * @return total points achieved related to adjacent Groups
+     */
     public int adjacentPoints(){
 
-        LibraryManager libraryManager = new LibraryManager(player.getLibrary());
 
-      return libraryManager.adjacentPoints();
+        Predicate<Pair<ItemTileType,Integer>> filterGroup =
+                (group) -> (group.getValue0()!=ItemTileType.EMPTY && group.getValue1()>2);
+
+
+        Function<Pair<ItemTileType,Integer>,Integer> calculateCommonPoints =
+                (group)->{
+                    Integer numberOfTile = group.getValue1();
+
+                    if (numberOfTile==3) return 2;
+                    else if (numberOfTile==4) return 3;
+                    else if (numberOfTile==5) return 5;
+                    else return 8;
+
+                };
+
+
+        LibraryManager libraryManager = new LibraryManager(player.getLibrary());
+        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
+
+         /* In caso di errori nei test per facilitare il debug
+        System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).collect(Collectors.toList()));
+        System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).collect(Collectors.toList()));
+         */
+
+        int totAdjacentPoint = listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).reduce(0, Integer::sum);
+        return totAdjacentPoint;
 
     }
 

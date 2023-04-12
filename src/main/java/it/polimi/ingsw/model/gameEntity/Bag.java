@@ -45,6 +45,11 @@ public class Bag {
     }
 
 
+    /**
+     * takes and removes a tile from the bag
+     * @return ItemTile in first position
+     * The order of the tiles is random because the constructor of the bag mixes the tiles in the list
+     */
     public ItemTile getRandomItemTile() {
 
         if (itemTiles.size()==0) {
@@ -54,6 +59,10 @@ public class Bag {
         return itemTile;
     }
 
+
+    /**
+     * shuffle the tiles inside the bag
+     */
     public void shuffle(){
         Collections.shuffle(itemTiles);
     }

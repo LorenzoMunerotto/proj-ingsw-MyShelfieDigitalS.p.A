@@ -4,7 +4,8 @@ import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 
 public class Player {
-    //int numberPersonalCard;
+
+    //private int ClintID;
     private final String username;
     private boolean chair;
     private PersonalGoalCard personalGoalCard;
@@ -27,8 +28,6 @@ public class Player {
         this.chair = false;
         this.totPoints =0;
         this.library = new Library();
-        //this.numberPersonalCard = numberPersonalCard;
-        //this.personalGoalCard = new PersonalGoalCard(numberPersonalCard);
     }
 
     public int getTotPoints() {

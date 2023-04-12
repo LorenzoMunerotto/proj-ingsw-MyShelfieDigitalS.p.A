@@ -24,6 +24,10 @@ public class AllPersonalGoalCards {
     }
 
 
+    /**
+     * this method get the object AllPersonalGoalCards from JSON file
+     * @return allPersonalGoalCards
+     */
     public static AllPersonalGoalCards makeAllPersonalGoalCards()  {
 
         ObjectMapper mapper = new ObjectMapper();

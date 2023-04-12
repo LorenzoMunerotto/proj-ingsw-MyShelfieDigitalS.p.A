@@ -12,14 +12,17 @@ public class ItemTile {
      */
     private final ItemTileType itemTileType;
 
+
     /**
-     * Constructor for item tile, initializes item tile type.
-     *
-     *
+     * Constructor for item tile, initializes item tile EMPTY.
      */
     public ItemTile() {
         this.itemTileType = ItemTileType.EMPTY;
     }
+
+    /**
+     * Constructor for item tile, initializes item tile type.
+     */
     public ItemTile(ItemTileType type){
         this.itemTileType = type;
     }

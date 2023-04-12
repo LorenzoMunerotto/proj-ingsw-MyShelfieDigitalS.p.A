@@ -26,7 +26,7 @@ public class Main {
         game.boardInitialization();
         game.assignAllPersonalCard();
 
-        while (game.getGameData().getFirstFullLibraryUsername().isEmpty() || game.getGameData().getCurrentPlayerIndex() != 0) {
+        while (game.getGameData().getFirstFullLibraryUsername().isEmpty() || game.getGameData().getCurrentPlayer().hasChair()==false) {
 
             drawer.drawTurnInformation();
             drawer.drawBoard();

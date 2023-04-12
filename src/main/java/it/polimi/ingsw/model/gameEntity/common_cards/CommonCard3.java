@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.gameEntity.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-//import it.polimi.ingsw.model.gameMechanics.LibraryManager;
+import it.polimi.ingsw.model.gameMechanics.LibraryManager;
 import org.javatuples.Pair;
 
 import java.util.List;
@@ -26,7 +26,8 @@ public class CommonCard3 extends CommonGoalCard {
     @Override
     public boolean checkRules(Library library) {
 
-        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = library.getListGroupsAdjacentTiles();
+        LibraryManager libraryManager = new LibraryManager(library);
+        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
         int counter =0;
         for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles){
             if(group.getValue0()!=ItemTileType.EMPTY && group.getValue1()==4){
