@@ -11,7 +11,9 @@ import java.util.Set;
  */
 public class CommonCard8 extends CommonGoalCard {
 
-
+    /**
+     * Constructor of the class.
+     */
     public CommonCard8() {
         super(8);
     }

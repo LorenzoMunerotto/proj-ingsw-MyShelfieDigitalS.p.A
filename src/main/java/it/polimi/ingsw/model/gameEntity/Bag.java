@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.*;
 
 /**
  * Class representing the bag which contains all the itemTiles.
@@ -17,7 +15,6 @@ public class Bag {
      * List of the item tiles im the bag.
      */
     private final List<ItemTile> itemTiles;
-
 
     /**
      * Constructor for bag, initializes the bag with 22 item tile of each type, except for the empty type.
@@ -44,24 +41,21 @@ public class Bag {
         return this.itemTiles;
     }
 
-
     /**
-     * takes and removes a tile from the bag
-     * @return ItemTile in first position
-     * The order of the tiles is random because the constructor of the bag mixes the tiles in the list
+     * Get a random item tile from the bag.
+     *
+     * @return a random item tile from the bag
      */
     public ItemTile getRandomItemTile() {
 
         if (itemTiles.size()==0) {
             throw new IllegalArgumentException("The bag is empty");
         }
-        ItemTile itemTile = itemTiles.remove(0);
-        return itemTile;
+        return itemTiles.remove(0);
     }
 
-
     /**
-     * shuffle the tiles inside the bag
+     * This method shuffles the item tiles in the bag.
      */
     public void shuffle(){
         Collections.shuffle(itemTiles);

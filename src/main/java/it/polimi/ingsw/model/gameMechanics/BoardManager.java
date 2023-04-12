@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
  * Class that manages the board.
  */
 public class BoardManager {
-
     /**
      * The board of the game.
      */
@@ -25,15 +24,21 @@ public class BoardManager {
      */
     final Bag bag;
 
-
+    /**
+     * Constructor of the class.
+     *
+     * @param board the board of the game
+     * @param bag the bag of the game
+     */
     public BoardManager( Board board, Bag bag) {
         this.board = board;
         this.bag = bag;
     }
 
-
     /**
-     * @return true if there are no tiles that a player can take in the board
+     * Checks if the board is ready for the refill.
+     *
+     * @return true if the board is ready, false otherwise
      */
     public boolean isRefillTime(){
 
@@ -63,25 +68,28 @@ public class BoardManager {
         }
     }
 
-
-
-
+    /**
+     * This method grabs the item tiles from the board and returns them.
+     *
+     * @param coordinates the coordinates of the item tiles to grab
+     * @return the item tiles grabbed
+     */
     public List<ItemTile> grabItemTiles(List<Pair<Integer, Integer>> coordinates) {
 
         int size = coordinates.size();
         if (size < 1 || size > 3) throw new IllegalArgumentException("Invalid number of coordinates");
-        if (new HashSet<>(coordinates).size()<size) throw new IllegalArgumentException("Invalid number of coordinates - coordinate duplicate");
-        if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - le celle non sono in linea");
+        if (new HashSet<>(coordinates).size()<size) throw new IllegalArgumentException("Invalid number of coordinates - duplicate coordinates");
+        if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - the cells are not in line");
 
 
         for (Pair<Integer, Integer> coordinate : coordinates) {
             int row = coordinate.getValue0();
             int col = coordinate.getValue1();
 
-            if (!board.getBoardCell(row,col).isPlayable() ) throw new IllegalArgumentException("Invalid coordinates - per cella non in gioco");
-            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new IllegalArgumentException("Invalid coordinates - per cella vuota");
+            if (!board.getBoardCell(row,col).isPlayable() ) throw new IllegalArgumentException("Invalid coordinates - the cell is not playable");
+            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new IllegalArgumentException("Invalid coordinates - the cell is empty");
             if (!hasSideFree(row,col)) throw new IllegalArgumentException("Invalid coordinates - there is a tile, which has not a side free at the beginning of the turn");
-            if (board.isAlone(row,col))throw new IllegalArgumentException("Invalid coordinates - cella isolata");
+            if (board.isAlone(row,col))throw new IllegalArgumentException("Invalid coordinates - the cell is alone");
         }
 
         List<ItemTile> itemTileList = new ArrayList<>();
@@ -94,11 +102,15 @@ public class BoardManager {
         }
 
         return itemTileList;
-
     }
 
-
-
+    /**
+     * This method checks if the cell has a side free.
+     *
+     * @param row the row of the cell
+     * @param col the column of the cell
+     * @return true if the cell has a side free, false otherwise
+     */
     private boolean hasSideFree( int row, int col){
         if (!(Board.hasLeftBoardCell(row,col) && Board.hasUpperBoardCell(row,col) && Board.hasRightBoardCell(row,col) && Board.hasLowerBoardCell(row,col))){
             return  true;
@@ -106,12 +118,15 @@ public class BoardManager {
         if (!(board.getLeftBoardCell(row,col).isPlayable() && board.getUpperBoardCell(row,col).isPlayable() && board.getRightBoardCell(row,col).isPlayable() && board.getLowerBoardCell(row,col).isPlayable())){
             return true;
         }
-        if (!(board.getLeftBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY && board.getUpperBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY && board.getRightBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY && board.getLowerBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY)){
-            return true;
-        }
-        return false;
+        return !(board.getLeftBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY && board.getUpperBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY && board.getRightBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY && board.getLowerBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY);
     }
 
+    /**
+     * This method checks if the coordinates are in line.
+     *
+     * @param coordinates the coordinates to check
+     * @return true if the coordinates are in line, false otherwise
+     */
     private boolean isLined(List<Pair<Integer, Integer>> coordinates){
 
         int number = coordinates.size();
@@ -123,7 +138,6 @@ public class BoardManager {
         boolean sameColumn = coordinates.stream().map(Pair::getValue1).collect(Collectors.toSet()).size()==1;
         List<Integer> rows = coordinates.stream().map(Pair::getValue0).sorted().collect(Collectors.toList());
         boolean inColumn = (rows.get(rows.size()-1)-rows.get(0) == number-1) && sameColumn;
-
 
         return inRow || inColumn;
 

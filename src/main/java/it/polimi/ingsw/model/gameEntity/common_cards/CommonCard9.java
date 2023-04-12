@@ -11,12 +11,12 @@ import java.util.Set;
  */
 public class CommonCard9 extends CommonGoalCard {
 
-
+    /**
+     * Constructor of the class.
+     */
     public CommonCard9() {
        super(9);
     }
-
-
 
     /**
      * Check if the rules of the card are respected.

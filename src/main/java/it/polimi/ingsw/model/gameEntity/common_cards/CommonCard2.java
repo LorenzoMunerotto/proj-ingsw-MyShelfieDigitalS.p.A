@@ -8,9 +8,11 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
  */
 public class CommonCard2 extends CommonGoalCard{
 
+    /**
+     * Constructor of the class.
+     */
     public CommonCard2(){
         super(2);
-
     }
 
     /**
@@ -19,7 +21,6 @@ public class CommonCard2 extends CommonGoalCard{
      * @param library is the library
      * @return true if the rules are respected, false otherwise
      */
-
     @Override
     public boolean checkRules(Library library) {
         ItemTileType itemTile1 = library.getItemTile(0,0).getItemTileType();

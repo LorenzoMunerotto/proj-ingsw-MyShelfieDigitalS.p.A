@@ -14,7 +14,9 @@ import java.util.Map;
  */
 public class CommonCard4 extends CommonGoalCard {
 
-
+    /**
+     * Constructor of the class.
+     */
     public CommonCard4(){
         super(4);
     }

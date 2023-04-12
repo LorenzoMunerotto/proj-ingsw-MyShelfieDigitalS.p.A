@@ -11,7 +11,9 @@ import java.util.Map;
  */
 public class CommonCard6 extends CommonGoalCard {
 
-
+    /**
+     * Creates a new CommonCard6.
+     */
     public CommonCard6() {
        super(6);
     }

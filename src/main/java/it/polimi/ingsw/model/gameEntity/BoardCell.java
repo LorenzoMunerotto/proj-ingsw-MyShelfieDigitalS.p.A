@@ -14,7 +14,7 @@ public class BoardCell {
      * For example the boardCell in boardGrid[0,0] has playable=false always,
      * boardCell in boardGrid[4,4] has playable=true always,
      * boardCell in boardGrid[4,0] has playable=true when numOfPlayers=4 and has playable=false when numOfPlayers<4
-     * It's final because this attribute depends on the numOfPlayers and it cannot be changed during the game
+     * It's final because this attribute depends on the numOfPlayers, and it cannot be changed during the game
      */
     private final boolean playable;
 

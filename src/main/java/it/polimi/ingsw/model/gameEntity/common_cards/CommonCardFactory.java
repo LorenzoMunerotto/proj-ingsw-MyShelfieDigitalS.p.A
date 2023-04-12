@@ -26,7 +26,6 @@ public class CommonCardFactory {
     /**
      * Creates 2 random cards for the game.
      *
-     * @param numberOfPlayers is the number of players in the game
      * @return a list of 2 random cards
      */
     public static List<CommonGoalCard> createCards(){

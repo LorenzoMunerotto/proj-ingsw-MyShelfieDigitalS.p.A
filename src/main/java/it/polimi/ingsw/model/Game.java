@@ -13,15 +13,28 @@ import org.javatuples.Pair;
 
 import java.util.*;
 
+/**
+ * This class represents the game.
+ */
 public class Game {
+    /**
+     * This attribute represents the game data.
+     */
+    private final GameData gameData;
 
-    private GameData gameData;
-
-
+    /**
+     * This constructor creates a new game.
+     */
     public Game(){
         this.gameData=new GameData();
     }
 
+    /**
+     * This method starts the game.
+     *
+     * @param coordinates the coordinates of the item tiles to be grabbed
+     * @param column the column where the item tiles will be placed
+     */
     public void play(List<Pair<Integer, Integer>> coordinates, int column){
 
         BoardManager boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
@@ -45,13 +58,21 @@ public class Game {
         if( boardManager.isRefillTime()){
             boardManager.refillBoard();
         }
-
     }
+
+    /**
+     * This method returns the game data.
+     *
+     * @return the game data
+     */
     public GameData getGameData() {
 
         return gameData;
     }
 
+    /**
+     * This method initializes the board.
+     */
     public void boardInitialization(){
         BoardManager boardManager = new BoardManager(gameData.getBoard(),gameData.getBag());
         if( boardManager.isRefillTime()){
@@ -59,7 +80,9 @@ public class Game {
         }
     }
 
-
+    /**
+     * This method assigns all the personal cards.
+     */
     public void assignAllPersonalCard(){
 
         Set<Integer> numberOfPersonalCards = new HashSet<>();

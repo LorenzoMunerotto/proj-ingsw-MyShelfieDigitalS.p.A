@@ -13,14 +13,35 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-
+/**
+ * Class that manages the points of the game.
+ */
 public class PointsManager {
-    private Player player;
-    private Integer numOfPlayers;
-    private List<CommonGoalCard> commonGoalCardList;
+    /**
+     * The player of the game.
+     */
+    private final Player player;
+    /**
+     * The number of players of the game.
+     */
+    private final Integer numOfPlayers;
+    /**
+     * The list of the common goal cards of the game.
+     */
+    private final List<CommonGoalCard> commonGoalCardList;
+    /**
+     * The username of the first player that has completed the library.
+     */
+    private final Optional<String> firstFullLibraryUsername;
 
-    private Optional<String> firstFullLibraryUsername;
-
+    /**
+     * Constructor of the class.
+     *
+     * @param currentPlayer the player of the game
+     * @param numOfPlayers the number of players of the game
+     * @param commonGoalCardList the list of the common goal cards of the game
+     * @param firstFullLibraryUsername the username of the first player that has completed the library
+     */
     public PointsManager(Player currentPlayer, Integer numOfPlayers, List<CommonGoalCard> commonGoalCardList, Optional<String> firstFullLibraryUsername) {
         this.player = currentPlayer;
         this.numOfPlayers = numOfPlayers;
@@ -28,8 +49,9 @@ public class PointsManager {
         this.firstFullLibraryUsername = firstFullLibraryUsername;
     }
 
-    
     /**
+     * Get the total points of the player, related to the common cards.
+     *
      * @return total points achieved related to Common Cards
      */
     public int commonPoints() {
@@ -48,7 +70,6 @@ public class PointsManager {
                 break;
         }
 
-
         for (CommonGoalCard commonGoalCard : commonGoalCardList){
                 if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
                     commonGoalCard.addSmartPlayer(player);
@@ -57,16 +78,16 @@ public class PointsManager {
                     commonPoints+= commonGoalCard.getPoint(pointsSource, player);
                 }
         }
-
         return commonPoints;
     }
 
 
     /**
+     * Get the total points of the player, related to the personal card.
+     *
      * @return total points achieved related to Common Cards
      */
     public int personalPoints(){
-
 
         List<Goal> goals = player.getPersonalGoalCard().getGoals();
 
@@ -75,50 +96,37 @@ public class PointsManager {
             int row = goal.getRow();
             int col = goal.getColumn();
 
-
             if (player.getLibrary().getItemTile(row, col).getItemTileType() == ItemTileType.valueOf(goal.getItemTileType())) {
                 counter++;
             }
         }
-
             switch (counter){
-
                 case 1:  return 1;
                 case 2:  return 2;
                 case 3:  return 4;
                 case 4:  return 6;
                 case 5:  return 9;
                 case 6:  return 12;
-
             }
-
-
         return 0;
-
     }
 
     /**
+     * Get the total points of the player, related to the adjacent items.
+     *
      * @return total points achieved related to adjacent Groups
      */
     public int adjacentPoints(){
-
-
         Predicate<Pair<ItemTileType,Integer>> filterGroup =
                 (group) -> (group.getValue0()!=ItemTileType.EMPTY && group.getValue1()>2);
-
-
         Function<Pair<ItemTileType,Integer>,Integer> calculateCommonPoints =
                 (group)->{
-                    Integer numberOfTile = group.getValue1();
-
+                    int numberOfTile = group.getValue1();
                     if (numberOfTile==3) return 2;
                     else if (numberOfTile==4) return 3;
                     else if (numberOfTile==5) return 5;
                     else return 8;
-
                 };
-
-
         LibraryManager libraryManager = new LibraryManager(player.getLibrary());
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
 
@@ -126,33 +134,27 @@ public class PointsManager {
         System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).collect(Collectors.toList()));
         System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).collect(Collectors.toList()));
          */
-
-        int totAdjacentPoint = listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).reduce(0, Integer::sum);
-        return totAdjacentPoint;
-
+        return listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).reduce(0, Integer::sum);
     }
 
     /**
+     * Get the final point of the player, if he is the first to complete the library.
+     *
      * @return the additional point to the first player to the first finisher
      */
     public int finalPoint(){
-
-
         if (firstFullLibraryUsername.isPresent()){
             if (firstFullLibraryUsername.get().equals(player.getUsername())) {
                 return 1;
             }
         }
-
         return 0;
     }
 
     /**
-     * update Total Points adding Points related to: Common and Personal Card, adjacent Items, (optional) final point
+     * This method updates the Total Points adding Points related to: Common and Personal Card, adjacent Items, (optional) final point
      */
     public void updateTotalPoints(){
         player.setTotPoints(commonPoints()+personalPoints()+adjacentPoints()+finalPoint());
     }
-
- 
 }

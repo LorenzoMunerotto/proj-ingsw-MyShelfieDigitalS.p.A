@@ -8,11 +8,12 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
  */
 public class CommonCard11 extends CommonGoalCard {
 
-
+    /**
+     * Constructor of the class.
+     */
     public CommonCard11() {
         super(11);
     }
-
 
     /**
      * Check if the rules of the card are respected.

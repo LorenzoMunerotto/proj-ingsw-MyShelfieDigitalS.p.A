@@ -9,7 +9,9 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
  */
 public class CommonCard7 extends CommonGoalCard {
 
-
+    /**
+     * Creates a new CommonCard7.
+     */
     public CommonCard7() {
         super(7);
     }

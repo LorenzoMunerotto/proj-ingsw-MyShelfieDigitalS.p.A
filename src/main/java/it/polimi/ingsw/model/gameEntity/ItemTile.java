@@ -12,7 +12,6 @@ public class ItemTile {
      */
     private final ItemTileType itemTileType;
 
-
     /**
      * Constructor for item tile, initializes item tile EMPTY.
      */

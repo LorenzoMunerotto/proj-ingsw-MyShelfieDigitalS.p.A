@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.gameState.Exceptions;
 
+/**
+ * Exception thrown when the username is not valid.
+ */
 public class IllegalUsernameException extends Exception {
 
     @Override

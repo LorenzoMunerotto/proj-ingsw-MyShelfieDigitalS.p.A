@@ -12,9 +12,11 @@ import java.util.List;
  */
 public class CommonCard3 extends CommonGoalCard {
 
+    /**
+     * Constructor of the class.
+     */
     public CommonCard3(){
         super(3);
-
     }
 
     /**

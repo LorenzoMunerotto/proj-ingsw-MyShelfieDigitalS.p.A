@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model.gameState.Exceptions;
 
+/**
+ * Exception thrown when the game has already started.
+ */
 public class GameStartedException extends Exception {
 
     @Override

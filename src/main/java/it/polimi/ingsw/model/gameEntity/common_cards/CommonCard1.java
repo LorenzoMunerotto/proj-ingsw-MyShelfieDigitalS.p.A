@@ -12,13 +12,12 @@ import java.util.List;
  */
 public class CommonCard1 extends CommonGoalCard{
 
-
+    /**
+     * Constructor of the class.
+     */
     public CommonCard1(){
         super(1);
-
     }
-
-
 
     /**
      * Check if the rules of the card are respected.
@@ -38,6 +37,5 @@ public class CommonCard1 extends CommonGoalCard{
             }
         }
         return counter>=6;
-
     }
 }
