@@ -25,6 +25,10 @@ public class AllPersonalGoalCards {
         this.cards = cards;
     }
 
+    public AllPersonalGoalCards(){
+
+    }
+
     /**
      * Get the list of all personal goal cards.
      *
@@ -39,19 +43,21 @@ public class AllPersonalGoalCards {
      *
      * @return allPersonalGoalCards object
      */
-    public static AllPersonalGoalCards makeAllPersonalGoalCards()  {
+    public static AllPersonalGoalCards makeAllPersonalGoalCards() {
 
         ObjectMapper mapper = new ObjectMapper();
         InputStream is = PersonalGoalCard.class.getResourceAsStream("/configPersonalGoalsCards.json");
+
+        if (is == null) {
+            throw new RuntimeException("File /configPersonalGoalsCards.json not found.");
+        }
 
         AllPersonalGoalCards allPersonalGoalCards;
         try {
             allPersonalGoalCards = mapper.readValue(is, AllPersonalGoalCards.class);
         } catch (IOException e) {
-
             throw new RuntimeException(e);
         }
-
         return allPersonalGoalCards;
     }
 

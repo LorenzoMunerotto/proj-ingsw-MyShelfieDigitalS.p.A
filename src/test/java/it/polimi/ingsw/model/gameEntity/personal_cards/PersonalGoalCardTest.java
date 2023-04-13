@@ -20,6 +20,4 @@ class PersonalGoalCardTest {
     assertEquals(AllPersonalGoalCards.makeAllPersonalGoalCards().getPersonalGoalCard(index),PersonalGoalCardHelper.newPersonalGoalCardFromString(personalCardAsString));
 
   }
-
-
 }

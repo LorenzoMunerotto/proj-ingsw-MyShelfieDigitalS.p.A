@@ -1,6 +1,6 @@
-# questo è un commento
+# that is a comment
 #
-# i primi tre test sono con le librerie vuote (2-3-4 giocatori) fanno da template per altri test
+# the first three are used to test the empty board, for 2, 3 and 4 players
 #
 """ 2 |
     -----, -----, -----, --3--, --4--, -----, -----, -----, -----|
@@ -37,7 +37,7 @@
     -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
     -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",true
 #
-# 4 tessere isolate
+# Used to test the case with 4 alone tiles
 """ 4 |
     -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
     -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
@@ -48,18 +48,6 @@
     -----, -----, PLANT, EMPTY, EMPTY, PLANT, EMPTY, -----, -----|
     -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
     -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",true
-#
-# 3 tessere isolate + 2 PLANT adiacenti
-""" 4 |
-    -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
-    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
-    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
-    -----, EMPTY, EMPTY, CAT,   EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
-    EMPTY, EMPTY, EMPTY, EMPTY, GAME,  EMPTY, EMPTY, EMPTY, EMPTY|
-    EMPTY, EMPTY, PLANT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
-    -----, -----, PLANT, EMPTY, EMPTY, PLANT, EMPTY, -----, -----|
-    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
-    -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",false
 #
 #
 """ 2 |
@@ -72,4 +60,16 @@
     -----, -----, --3--, EMPTY, EMPTY, EMPTY, --3--, -----, -----|
     -----, -----, -----, --4--, EMPTY, EMPTY, -----, -----, -----|
     -----, -----, -----, -----, --4--, --3--, -----, -----, -----|""",false
+#
+# Used to test the case with 3 alone tiles and 2 adjacent Plant tiles
+""" 4 |
+    -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, EMPTY, EMPTY, CAT,   EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, GAME,  EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, PLANT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, PLANT, EMPTY, EMPTY, PLANT, EMPTY, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",false
 #

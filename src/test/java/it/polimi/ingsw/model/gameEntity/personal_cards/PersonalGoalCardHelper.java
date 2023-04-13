@@ -23,14 +23,12 @@ public class PersonalGoalCardHelper {
            String[] singleGoal = card[i].split(",");
            int row = Integer.parseInt(singleGoal[0]);
            int col = Integer.parseInt(singleGoal[1]);
-           String itemTiletype = singleGoal[2];
-           Goal goal = new Goal(row,col,itemTiletype);
+           String itemTileType = singleGoal[2];
+           Goal goal = new Goal(row,col,itemTileType);
            goals.add(goal);
        }
         return new PersonalGoalCard(numOfCard,goals);
     }
-
-
 }
 
 

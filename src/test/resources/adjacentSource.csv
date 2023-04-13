@@ -1,13 +1,13 @@
-# questo è un commento
+# that is a comment
 #
-# inizio test - test con libreria vuota
-"""EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+# Start first test - empty library
+""" EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
     EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
     EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
     EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
     EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
     EMPTY, EMPTY, EMPTY, EMPTY, EMPTY""",0
-# fine primo test
+# end first test
 #
 """ EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
     EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
@@ -30,5 +30,3 @@
     FRAME, TROPHY,CAT,   CAT,   CAT  |
     TROPHY,TROPHY,TROPHY,CAT,   CAT   """,21
 #
-
-

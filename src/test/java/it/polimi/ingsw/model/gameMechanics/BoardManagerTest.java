@@ -46,8 +46,5 @@ class BoardManagerTest {
             assertTrue(BoardTestHelper.checkAllNotEmpty(board));
             assertTrue(BoardTestHelper.checkAllTilesNotEmptyNotRefill(oldBoard, board));
         }
-
     }
-
-
 }

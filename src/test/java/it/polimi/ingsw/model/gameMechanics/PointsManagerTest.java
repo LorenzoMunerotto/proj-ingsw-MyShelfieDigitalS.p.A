@@ -24,7 +24,7 @@ class PointsManagerTest {
     PointsManager pointsManager;
     LibraryTestHelper libraryTestHelper;
 
-    private Logger logger = Logger.getLogger(LibraryManagerTest.class.getName());
+    //private Logger logger = Logger.getLogger(LibraryManagerTest.class.getName());
 
     @BeforeEach
     void setUp() throws IllegalUsernameException {
@@ -63,9 +63,6 @@ class PointsManagerTest {
         pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
 
         assertEquals(14, pointsManager.commonPoints());
-
-
-
     }
 
     @Test
@@ -136,7 +133,7 @@ class PointsManagerTest {
 
         libraryTestHelper.setLibraryFromString(libraryAsString);
 
-        /* in caso di errori facilita il debug
+        /* It helps the debugging
         logger.info("Adjacent Item Tile Group List: "+libraryManager.getListGroupsAdjacentTiles().toString());
          */
 
@@ -147,8 +144,4 @@ class PointsManagerTest {
         assertEquals(expectedPoints,pointsManager.adjacentPoints());
 
     }
-
-
-
-
 }

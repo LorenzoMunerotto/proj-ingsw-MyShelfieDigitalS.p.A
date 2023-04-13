@@ -84,13 +84,6 @@ public class Goal {
         this.itemTileType =itemTileType;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "<"+row+","+column+">"+" : "+itemTileType+" ";
-    }
-    */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,6 +91,4 @@ public class Goal {
         Goal goal = (Goal) o;
         return row == goal.row && column == goal.column && itemTileType.equals(goal.itemTileType);
     }
-
-
 }

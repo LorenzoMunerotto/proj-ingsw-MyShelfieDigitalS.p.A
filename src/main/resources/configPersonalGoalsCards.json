@@ -3,71 +3,23 @@
     {
       "number": 1,
       "goals": [
-        {
-          "row": 0,
-          "column": 4,
-          "itemTileType": "GAME"
-        },
-        {
-          "row": 2,
-          "column": 0,
-          "itemTileType": "TROPHY"
-        },
-        {
-          "row": 2,
-          "column": 2,
-          "itemTileType": "FRAME"
-        },
-        {
-          "row": 3,
-          "column": 3,
-          "itemTileType": "PLANT"
-        },
-        {
-          "row": 4,
-          "column": 1,
-          "itemTileType": "BOOK"
-        },
-        {
-          "row": 4,
-          "column": 2,
-          "itemTileType": "CAT"
-        }
+        {"row": 0, "column": 4, "itemTileType": "GAME"},
+        {"row": 2, "column": 0, "itemTileType": "TROPHY"},
+        {"row": 2, "column": 2, "itemTileType": "FRAME"},
+        {"row": 3, "column": 3, "itemTileType": "PLANT"},
+        {"row": 4, "column": 1, "itemTileType": "BOOK"},
+        {"row": 4, "column": 2, "itemTileType": "CAT"}
       ]
     },
     {
       "number": 2,
       "goals": [
-        {
-          "row": 0,
-          "column": 0,
-          "itemTileType": "CAT"
-        },
-        {
-          "row": 1,
-          "column": 3,
-          "itemTileType": "FRAME"
-        },
-        {
-          "row": 2,
-          "column": 1,
-          "itemTileType": "PLANT"
-        },
-        {
-          "row": 3,
-          "column": 0,
-          "itemTileType": "TROPHY"
-        },
-        {
-          "row": 4,
-          "column": 4,
-          "itemTileType": "GAME"
-        },
-        {
-          "row": 5,
-          "column": 2,
-          "itemTileType": "BOOK"
-        }
+        {"row": 0, "column": 0, "itemTileType": "CAT"},
+        {"row": 1, "column": 3, "itemTileType": "FRAME"},
+        {"row": 2, "column": 1, "itemTileType": "PLANT"},
+        {"row": 3, "column": 0, "itemTileType": "TROPHY"},
+        {"row": 4, "column": 4, "itemTileType": "GAME"},
+        {"row": 5, "column": 2, "itemTileType": "BOOK"}
       ]
     },
     {
