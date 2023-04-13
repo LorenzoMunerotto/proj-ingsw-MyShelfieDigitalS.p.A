@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Controller {
 
-    GameData gameData;
+    final GameData gameData;
 
     public Controller(GameData gameData) {
         this.gameData = gameData;

@@ -14,7 +14,6 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,7 +40,7 @@ class PointsManagerTest {
         List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
         commonGoalCardList.add(new CommonCard4());
         commonGoalCardList.add(new CommonCard11());
-        Player player2 = null;
+        Player player2;
         try {
             player2 = new Player("anna");
         } catch (IllegalUsernameException e) {
@@ -71,8 +70,8 @@ class PointsManagerTest {
         List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
         commonGoalCardList.add(new CommonCard1());
         commonGoalCardList.add(new CommonCard12());
-        Player player2 = null;
-        Player player3 = null;
+        Player player2;
+        Player player3;
         try {
             player2 = new Player("anna");
             player3 = new Player("sara");

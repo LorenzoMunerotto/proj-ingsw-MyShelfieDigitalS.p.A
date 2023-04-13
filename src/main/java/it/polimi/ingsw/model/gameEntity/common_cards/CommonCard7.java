@@ -62,7 +62,7 @@ public class CommonCard7 extends CommonGoalCard {
             if (currentItemTile.getItemTileType() != library.getItemTile(row+3,col-3).getItemTileType()) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+4,col-4).getItemTileType()) {
+            if (currentItemTile.getItemTileType() != library.getItemTile(row+4, 0).getItemTileType()) {
                 continue;
             }
             return true;

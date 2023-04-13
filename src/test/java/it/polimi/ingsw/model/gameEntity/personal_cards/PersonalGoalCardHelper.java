@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.gameEntity.personal_cards;
 
 
-import java.util.ArrayList;
-
-
 
 /*public class PersonalGoalCardHelper {
 

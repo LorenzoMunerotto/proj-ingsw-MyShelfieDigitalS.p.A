@@ -8,21 +8,20 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
 import it.polimi.ingsw.model.gameState.GameData;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Drawer {
 
-    GameData gameData;
+    final GameData gameData;
 
     public Drawer(GameData gameData) {
         this.gameData = gameData;
     }
 
     public void drawGameInfo() {
-        System.out.println("Common Goal Cards: \n");
+        System.out.println("Common Goal Cards:");
         for (CommonGoalCard card : gameData.getCommonGoalCardsList()) {
             System.out.println("Card " + card.getIndex() + ": " + card.getDescription());
         }
