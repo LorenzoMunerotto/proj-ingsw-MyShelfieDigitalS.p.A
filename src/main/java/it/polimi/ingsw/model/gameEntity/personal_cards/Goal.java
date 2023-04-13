@@ -31,6 +31,12 @@ public class Goal {
     }
 
     /**
+     * Goal default constructor. the jackson library uses it to map the json file.
+     */
+    public Goal(){
+
+    }
+    /**
      * Get the row of the goal.
      *
      * @return Row of the goal.
