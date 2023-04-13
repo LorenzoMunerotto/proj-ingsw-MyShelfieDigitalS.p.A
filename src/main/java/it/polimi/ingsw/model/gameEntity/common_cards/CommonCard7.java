@@ -13,7 +13,8 @@ public class CommonCard7 extends CommonGoalCard {
      * Creates a new CommonCard7.
      */
     public CommonCard7() {
-        super(7);
+        super(7, "Five tiles of the same type forming a\n" +
+                "diagonal.");
     }
 
 

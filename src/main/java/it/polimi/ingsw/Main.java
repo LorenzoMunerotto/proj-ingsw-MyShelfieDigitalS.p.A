@@ -15,9 +15,15 @@ public class Main {
     public static void main(String[] args) {
 
 
-        System.out.println("My Shelfie!");
-
-
+        System.out.println("\n" +
+                "███╗   ███╗██╗   ██╗    ███████╗██╗  ██╗███████╗██╗     ███████╗██╗███████╗██╗\n" +
+                "████╗ ████║╚██╗ ██╔╝    ██╔════╝██║  ██║██╔════╝██║     ██╔════╝██║██╔════╝██║\n" +
+                "██╔████╔██║ ╚████╔╝     ███████╗███████║█████╗  ██║     █████╗  ██║█████╗  ██║\n" +
+                "██║╚██╔╝██║  ╚██╔╝      ╚════██║██╔══██║██╔══╝  ██║     ██╔══╝  ██║██╔══╝  ╚═╝\n" +
+                "██║ ╚═╝ ██║   ██║       ███████║██║  ██║███████╗███████╗██║     ██║███████╗██╗\n" +
+                "╚═╝     ╚═╝   ╚═╝       ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝\n" +
+                "                                                                              \n");
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------");
         Game game = new Game();
         Controller controller = new Controller(game.getGameData());
         Drawer drawer = new Drawer(game.getGameData());
@@ -26,11 +32,9 @@ public class Main {
         game.boardInitialization();
         game.assignAllPersonalCard();
 
-        while (game.getGameData().getFirstFullLibraryUsername().isEmpty() || game.getGameData().getCurrentPlayer().hasChair()==false) {
-
-            drawer.drawTurnInformation();
-            drawer.drawBoard();
-            drawer.currentLibrary();
+        while (game.getGameData().getFirstFullLibraryUsername().isEmpty() || !game.getGameData().getCurrentPlayer().hasChair()) {
+            drawer.drawCurrentPlayerInfo();
+            drawer.drawGameInfo();
 
             Integer currentPlayer = game.getGameData().getCurrentPlayerIndex();
 
@@ -44,10 +48,6 @@ public class Main {
             }
         }
         drawer.showRank();
-
-
-
-
     }
 
 }

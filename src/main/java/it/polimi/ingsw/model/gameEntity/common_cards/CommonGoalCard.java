@@ -10,10 +10,13 @@ import java.util.List;
 public abstract class CommonGoalCard {
 
     /**
-     * is the index of the CommonGoalCard
+     * It is the index of the CommonGoalCard.
      */
     private final Integer index;
-    //private String description;
+    /**
+     * It is the description of the CommonGoalCard.
+     */
+    private final String description;
 
     /**
      * The list of the usernames of the players who have reached the goal of
@@ -21,8 +24,9 @@ public abstract class CommonGoalCard {
      */
     private final List<String> smartPlayersTail;
 
-    public CommonGoalCard(Integer index) {
+    public CommonGoalCard(Integer index, String description) {
         this.index = index;
+        this.description = description;
         this.smartPlayersTail =  new ArrayList<>();
     }
 
@@ -46,7 +50,6 @@ public abstract class CommonGoalCard {
         return smartPlayersTail.contains(player.getUsername());
     }
 
-
     /**
      * This method provides the points that a player, who has achieved the goal,
      * has earned based on the order of achievement and the number of players in the game.
@@ -65,6 +68,15 @@ public abstract class CommonGoalCard {
      * @return the index of the CommonGoalCard
      */
     public Integer getIndex()  {return index;}
+
+    /**
+     * Get the description of the CommonGoalCard.
+     *
+     * @return the description of the CommonGoalCard
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * This method checks if the player has reached the goal of this commonGoalCard

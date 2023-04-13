@@ -38,7 +38,7 @@ public class GameData {
     /**
      * Constructor of the class.
      */
-    public GameData(){
+    public GameData() {
         this.numOfPlayers = 0;
         this.bag = new Bag();
         this.currentPlayerIndex = null;

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 
-public class PersonalGoalCardHelper {
+/*public class PersonalGoalCardHelper {
 
     public static PersonalGoalCard newPersonalGoalCardFromString(String str){
         String newstr;
@@ -29,7 +29,7 @@ public class PersonalGoalCardHelper {
        }
         return new PersonalGoalCard(numOfCard,goals);
     }
-}
+}*/
 
 
 

@@ -15,7 +15,9 @@ public class CommonCard6 extends CommonGoalCard {
      * Creates a new CommonCard6.
      */
     public CommonCard6() {
-       super(6);
+       super(6, "Eight tiles of the same type. There’s no\n" +
+               "restriction about the position of these\n" +
+               "tiles.");
     }
 
     /**

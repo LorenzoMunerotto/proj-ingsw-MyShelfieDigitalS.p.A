@@ -18,7 +18,10 @@ public class CommonCard4 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard4(){
-        super(4);
+        super(4, "Two groups each containing 4 tiles of\n" +
+                "the same type in a 2x2 square. The tiles\n" +
+                "of one square can be different from\n" +
+                "those of the other square.");
     }
 
 

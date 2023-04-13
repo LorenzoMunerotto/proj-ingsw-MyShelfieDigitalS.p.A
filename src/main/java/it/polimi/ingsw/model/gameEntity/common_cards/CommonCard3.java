@@ -16,7 +16,8 @@ public class CommonCard3 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard3(){
-        super(3);
+        super(3, "Four tiles of the same type in the four\n" +
+                "corners of the bookshelf.");
     }
 
     /**

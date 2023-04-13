@@ -1,9 +1,6 @@
 package it.polimi.ingsw.terminal;
 
 import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
-import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameState.GameData;
 import org.javatuples.Pair;
 
@@ -23,91 +20,80 @@ public class Controller {
     public void manageNewUsers() {
 
         InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader tastiera = new BufferedReader(input);
-
-
-
-        while(gameData.getCurrentNumOfPlayers()==0) {
+        BufferedReader keyboard = new BufferedReader(input);
+        
+        while (gameData.getCurrentNumOfPlayers() == 0) {
             try {
-                System.out.print("1st player, select username: ");
-                String username = tastiera.readLine();
+                System.out.print("You are the first player, please select your username: ");
+                String username = keyboard.readLine();
                 Player newPlayer = new Player(username);
                 gameData.addPlayer(newPlayer);
+                System.out.println("Welcome " + username + " to the game!");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
 
-        while(gameData.getNumOfPlayers()==0) {
+        while (gameData.getNumOfPlayers() == 0) {
             try {
-                System.out.print("1st player, select numberOfPlayer: ");
-                Integer numOfPlayer = Integer.valueOf(tastiera.readLine());
+                System.out.print("Please, select the number of player for this game: ");
+                int numOfPlayer = Integer.parseInt(keyboard.readLine());
                 gameData.setNumOfPlayers(numOfPlayer);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
 
-
         while (gameData.getCurrentNumOfPlayers() != gameData.getNumOfPlayers()) {
             try {
-                System.out.print("new player " + (gameData.getCurrentNumOfPlayers() + 1) + "/" + gameData.getNumOfPlayers() + " select username: ");
-                String username = tastiera.readLine();
+                System.out.print("You are the player number " + (gameData.getCurrentNumOfPlayers() + 1) + " , please select your username: ");
+                String username = keyboard.readLine();
                 Player newPlayer = new Player(username);
                 gameData.addPlayer(newPlayer);
+                System.out.println("Welcome " + username + " to the game!");
             } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }
 
-
-    public Pair<List<Pair<Integer, Integer>>,Integer> takePlayerInput() {
+    public Pair<List<Pair<Integer, Integer>>, Integer> takePlayerInput() {
         InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader tastiera = new BufferedReader(input);
-
+        BufferedReader keyboard = new BufferedReader(input);
 
         List<Pair<Integer, Integer>> listOfCoordinate = new ArrayList<>();
-        Integer column  = null;
+        int column;
+        
+        System.out.println("Please insert the coordinates of the desired tiles in the order of insertion and the column of the library where to insert them.");
+        System.out.println("Note that you can pick from 1 to 3 tiles!");
+        System.out.println("While typing follow this template: row1column1-row2column2-row3column3|column");
+        try {
+            String commands = keyboard.readLine();
 
-            System.out.println("inserire coordinate delle tessere desiderate nell'ordine di inserimento e la colonna dove inserirle  ");
-            System.out.println("es. 74-75|2");
-            try {
-                String comandi = tastiera.readLine();
+            // pars the commands
+            String newStr;
+            newStr = commands.replaceAll(" ", "");
+            newStr = newStr.replaceAll("\n", "");
+            newStr = newStr.replaceAll("\"", "");
+            String[] new_commands = newStr.split("\\|");
 
-                //parsare i comandi
-                String newstr;
-                newstr = comandi.replaceAll(" ", "");
-                newstr = newstr.replaceAll("\n", "");
-                newstr = newstr.replaceAll("\"", "");
-                String[] new_comandi = newstr.split("\\|");
+            String[] coordinates = new_commands[0].split("-");
 
-                String[] coordinate = new_comandi[0].split("-");
+            column = Integer.parseInt(new_commands[1]);
 
-                column = Integer.valueOf(new_comandi[1]);
+            for (String coordinate : coordinates) {
 
-                for (String coordinata : coordinate) {
+                int row = Integer.parseInt(String.valueOf(coordinate.charAt(0)));
+                int col = Integer.parseInt(String.valueOf(coordinate.charAt(1)));
 
-                    int row = Integer.valueOf("" + coordinata.charAt(0));
-                    int col = Integer.valueOf("" + coordinata.charAt(1));
-
-                    Pair pair = new Pair<>(row, col);
-                    listOfCoordinate.add(pair);
-                }
-
-            }
-            catch (Exception e) {
-
-                throw new IllegalArgumentException("l'input inserito non è accettabile");
-
+                Pair<Integer, Integer> pair = new Pair<>(row, col);
+                listOfCoordinate.add(pair);
             }
 
-            return new Pair<>(listOfCoordinate,column);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Your choice is not valid");
+        }
 
-
-
+        return new Pair<>(listOfCoordinate, column);
     }
-
-
-
-
 }

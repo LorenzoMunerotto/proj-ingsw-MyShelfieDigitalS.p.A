@@ -96,7 +96,7 @@ public class PointsManager {
             int row = goal.getRow();
             int col = goal.getColumn();
 
-            if (player.getLibrary().getItemTile(row, col).getItemTileType() == ItemTileType.valueOf(goal.getItemTileType())) {
+            if (player.getLibrary().getItemTile(row, col).getItemTileType() == goal.getItemTileType()) {
                 counter++;
             }
         }

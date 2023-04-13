@@ -12,7 +12,11 @@ public class CommonCard12 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard12() {
-        super(12);
+        super(12, "Five columns of increasing or decreasing\n" +
+                "height. Starting from the first column on\n" +
+                "the left or on the right, each next column\n" +
+                "must be made of exactly one more tile.\n" +
+                "Tiles can be of any type. ");
     }
 
     /**

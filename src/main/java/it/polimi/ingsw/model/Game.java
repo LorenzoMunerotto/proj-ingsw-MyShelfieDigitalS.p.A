@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 
-import it.polimi.ingsw.model.gameEntity.personal_cards.AllPersonalGoalCards;
+import it.polimi.ingsw.model.gameEntity.personal_cards.CardsContainer;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameMechanics.LibraryManager;
@@ -25,37 +25,37 @@ public class Game {
     /**
      * This constructor creates a new game.
      */
-    public Game(){
-        this.gameData=new GameData();
+    public Game() {
+        this.gameData = new GameData();
     }
 
     /**
      * This method starts the game.
      *
      * @param coordinates the coordinates of the item tiles to be grabbed
-     * @param column the column where the item tiles will be placed
+     * @param column      the column where the item tiles will be placed
      */
-    public void play(List<Pair<Integer, Integer>> coordinates, int column){
+    public void play(List<Pair<Integer, Integer>> coordinates, int column) {
 
         BoardManager boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
         LibraryManager libraryManager = new LibraryManager(gameData.getCurrentPlayer().getLibrary());
-        PointsManager pointsManager = new PointsManager(gameData.getCurrentPlayer(), gameData.getNumOfPlayers(),gameData.getCommonGoalCardsList(),gameData.getFirstFullLibraryUsername());
+        PointsManager pointsManager = new PointsManager(gameData.getCurrentPlayer(), gameData.getNumOfPlayers(), gameData.getCommonGoalCardsList(), gameData.getFirstFullLibraryUsername());
 
         int numberOfTiles = coordinates.size();
-        //sequenza critica
-        libraryManager.hasEnoughSpace(column,numberOfTiles);
+        // critical section
+        libraryManager.hasEnoughSpace(column, numberOfTiles);
         List<ItemTile> itemTileList = boardManager.grabItemTiles(coordinates);
         libraryManager.insertItemTiles(column, itemTileList);
         //
 
-        if (libraryManager.isFull()){
+        if (libraryManager.isFull()) {
             gameData.setFirstFullLibraryUsername(gameData.getCurrentPlayer().getUsername());
         }
 
         pointsManager.updateTotalPoints();
         gameData.nextPlayer();
 
-        if( boardManager.isRefillTime()){
+        if (boardManager.isRefillTime()) {
             boardManager.refillBoard();
         }
     }
@@ -73,9 +73,9 @@ public class Game {
     /**
      * This method initializes the board.
      */
-    public void boardInitialization(){
-        BoardManager boardManager = new BoardManager(gameData.getBoard(),gameData.getBag());
-        if( boardManager.isRefillTime()){
+    public void boardInitialization() {
+        BoardManager boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
+        if (boardManager.isRefillTime()) {
             boardManager.refillBoard();
         }
     }
@@ -83,22 +83,12 @@ public class Game {
     /**
      * This method assigns all the personal cards.
      */
-    public void assignAllPersonalCard(){
+    public void assignAllPersonalCard() {
 
-        Set<Integer> numberOfPersonalCards = new HashSet<>();
-        Random random = new Random();
-        AllPersonalGoalCards allPersonalGoalCards = AllPersonalGoalCards.makeAllPersonalGoalCards();
-        for(int i=0; i<gameData.getNumOfPlayers();i++){
-            while (true){
-                int randomNumber= random.nextInt(12);
-                if(!numberOfPersonalCards.contains(randomNumber)){
-                    PersonalGoalCard randomPersonalGoalCard = allPersonalGoalCards.getCards().get(randomNumber);
-
-                    gameData.getPlayer(i).setPersonalGoalCard(randomPersonalGoalCard);
-                    numberOfPersonalCards.add(randomNumber);
-                    break;
-                }
-            }
+        CardsContainer cardsContainer = new CardsContainer();
+        List<PersonalGoalCard> personalGoalCards = cardsContainer.getPersonalGoalCards(gameData.getNumOfPlayers());
+        for (int i = 0; i < gameData.getNumOfPlayers(); i++) {
+            gameData.getPlayers().get(i).setPersonalGoalCard(personalGoalCards.get(i));
         }
     }
 }

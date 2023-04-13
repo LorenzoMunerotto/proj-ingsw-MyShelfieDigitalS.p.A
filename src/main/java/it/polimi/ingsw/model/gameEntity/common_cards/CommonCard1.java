@@ -16,7 +16,11 @@ public class CommonCard1 extends CommonGoalCard{
      * Constructor of the class.
      */
     public CommonCard1(){
-        super(1);
+        super(1, "Six groups each containing at least\n" +
+                "2 tiles of the same type (not necessarily\n" +
+                "in the depicted shape).\n" +
+                "The tiles of one group can be different\n" +
+                "from those of another group.");
     }
 
     /**

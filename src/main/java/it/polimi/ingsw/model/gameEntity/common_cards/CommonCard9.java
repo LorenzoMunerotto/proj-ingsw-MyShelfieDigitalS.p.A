@@ -15,7 +15,8 @@ public class CommonCard9 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard9() {
-       super(9);
+       super(9, "Two columns each formed by 6\n" +
+               "different types of tiles. ");
     }
 
     /**

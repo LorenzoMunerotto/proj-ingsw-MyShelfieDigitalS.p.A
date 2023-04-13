@@ -12,7 +12,7 @@ public class CommonCard11 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard11() {
-        super(11);
+        super(11, "Five tiles of the same type forming an X.");
     }
 
     /**
