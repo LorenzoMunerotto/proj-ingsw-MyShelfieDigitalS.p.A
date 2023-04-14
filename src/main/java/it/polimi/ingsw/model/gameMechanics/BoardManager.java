@@ -6,10 +6,9 @@ import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Class that manages the board.
@@ -81,7 +80,6 @@ public class BoardManager {
         if (new HashSet<>(coordinates).size()<size) throw new IllegalArgumentException("Invalid number of coordinates - duplicate coordinates");
         if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - the cells are not in line");
 
-
         for (Pair<Integer, Integer> coordinate : coordinates) {
             int row = coordinate.getValue0();
             int col = coordinate.getValue1();
@@ -98,9 +96,7 @@ public class BoardManager {
             int col = coordinate.getValue1();
 
             itemTileList.add(board.takeItemTile(row,col));
-
         }
-
         return itemTileList;
     }
 
@@ -111,7 +107,7 @@ public class BoardManager {
      * @param col the column of the cell
      * @return true if the cell has a side free, false otherwise
      */
-    private boolean hasSideFree( int row, int col){
+    protected boolean hasSideFree( int row, int col){
         if (!(Board.hasLeftBoardCell(row,col) && Board.hasUpperBoardCell(row,col) && Board.hasRightBoardCell(row,col) && Board.hasLowerBoardCell(row,col))){
             return  true;
         }
@@ -127,24 +123,15 @@ public class BoardManager {
      * @param coordinates the coordinates to check
      * @return true if the coordinates are in line, false otherwise
      */
-    private boolean isLined(List<Pair<Integer, Integer>> coordinates){
-
+    protected boolean isLined(List<Pair<Integer, Integer>> coordinates) {
+        coordinates.sort(Comparator.comparing((Pair<Integer, Integer> coordinate) -> coordinate.getValue0()).thenComparing(Pair::getValue1));
+        Set<Integer> uniqueRows = coordinates.stream().map(Pair::getValue0).collect(Collectors.toSet());
+        Set<Integer> uniqueColumns = coordinates.stream().map(Pair::getValue1).collect(Collectors.toSet());
         int number = coordinates.size();
 
-        boolean sameRow = coordinates.stream().map(Pair::getValue0).collect(Collectors.toSet()).size()==1;
-        List<Integer> columns = coordinates.stream().map(Pair::getValue1).sorted().collect(Collectors.toList());
-        boolean inRow = (columns.get(columns.size()-1)-columns.get(0) == number-1) && sameRow;
-
-        boolean sameColumn = coordinates.stream().map(Pair::getValue1).collect(Collectors.toSet()).size()==1;
-        List<Integer> rows = coordinates.stream().map(Pair::getValue0).sorted().collect(Collectors.toList());
-        boolean inColumn = (rows.get(rows.size()-1)-rows.get(0) == number-1) && sameColumn;
+        boolean inRow = uniqueRows.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueColumns.contains(coordinates.get(0).getValue1() + i));
+        boolean inColumn = uniqueColumns.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueRows.contains(coordinates.get(0).getValue0() + i));
 
         return inRow || inColumn;
-
     }
-
-
-
-
-
 }

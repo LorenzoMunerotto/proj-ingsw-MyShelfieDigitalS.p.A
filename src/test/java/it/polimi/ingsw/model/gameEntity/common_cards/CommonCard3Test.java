@@ -56,8 +56,6 @@ class CommonCard3Test {
         assertFalse(card3.checkRules(libraryTestHelper));
     }
 
-
-
     @Test
     @DisplayName("Test check rules for card 3 in square case")
     void checkRulesSquare() {

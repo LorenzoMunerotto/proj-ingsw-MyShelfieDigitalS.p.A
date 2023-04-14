@@ -76,7 +76,7 @@ public class Drawer {
         System.out.println("Points: " + gameData.getCurrentPlayer().getTotPoints());
         System.out.println("Personal Goal Card " + gameData.getCurrentPlayer().getPersonalGoalCard().getNumber() + ": ");
         for(Goal goal : gameData.getCurrentPlayer().getPersonalGoalCard().getGoals()) {
-            System.out.println("Row: " + goal.getRow() + " Column: " + goal.getColumn() + " Type: " + goal.getItemTileType());
+            System.out.println(goal.toString());
         }
 
         System.out.println("Library: ");

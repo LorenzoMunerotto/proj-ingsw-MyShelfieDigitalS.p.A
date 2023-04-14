@@ -14,10 +14,10 @@ public class CardsContainer {
     private List<PersonalGoalCard> personalGoalCards;
 
     public CardsContainer(){
-        initializeDeck();
+        createDeck();
     }
 
-    public void initializeDeck(){
+    public void createDeck(){
         ObjectMapper objectMapper = new ObjectMapper();
         try{
             personalGoalCards = objectMapper.readValue(new File("src/main/resources/configPersonalGoalsCards.json"), objectMapper.getTypeFactory().constructCollectionType(List.class, PersonalGoalCard.class));
@@ -30,11 +30,6 @@ public class CardsContainer {
     public List<PersonalGoalCard> getPersonalGoalCards(int numOfPlayers) {
         List<PersonalGoalCard> cardsCopy = new ArrayList<>(personalGoalCards);
         Collections.shuffle(cardsCopy);
-        /*for(int i = 0; i < numOfPlayers; i++){
-            System.out.println("Card number: " + cardsCopy.get(i).getNumber());
-            for(Goal goal: cardsCopy.get(i).getGoals())
-                System.out.println("Goal:\n Row: " + goal.getRow() + ", Column: " + goal.getColumn() + ", Type: " + goal.getItemTileType());
-        }*/
         return cardsCopy.stream().limit(numOfPlayers).collect(Collectors.toList());
     }
 }

@@ -3,8 +3,7 @@ package it.polimi.ingsw.model.gameEntity.common_cards;
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonCard1;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,8 +14,6 @@ class CommonCard1Test {
 
     CommonGoalCard card1;
     LibraryTestHelper libraryTestHelper;
-
-
 
     @BeforeEach
     void setUp() {

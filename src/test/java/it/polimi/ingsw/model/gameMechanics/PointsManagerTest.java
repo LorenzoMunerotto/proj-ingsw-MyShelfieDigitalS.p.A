@@ -127,7 +127,7 @@ class PointsManagerTest {
     }
 
     @ParameterizedTest(name = "{displayName} - {index}")
-    @CsvFileSource(resources = "/adjacentSource.csv")
+    @CsvFileSource(resources = "/adjacentPointTest.csv")
     void adjacentPoints( String libraryAsString, Integer expectedPoints) {
 
         libraryTestHelper.setLibraryFromString(libraryAsString);
@@ -141,6 +141,5 @@ class PointsManagerTest {
         Integer numOfPlayers = 3;
         pointsManager = new PointsManager(player, numOfPlayers, commonGoalCardList, firstFullLibraryUsername);
         assertEquals(expectedPoints,pointsManager.adjacentPoints());
-
     }
 }

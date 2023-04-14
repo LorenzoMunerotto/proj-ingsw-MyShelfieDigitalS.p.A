@@ -130,7 +130,7 @@ public class PointsManager {
         LibraryManager libraryManager = new LibraryManager(player.getLibrary());
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
 
-         /* In caso di errori nei test per facilitare il debug
+         /* To help the debugging
         System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).collect(Collectors.toList()));
         System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).collect(Collectors.toList()));
          */

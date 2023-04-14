@@ -61,50 +61,6 @@ public class Library {
     }
 
     /**
-     * Return True if the tile in pos[row][col] has Upper tile.
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return true if the tile has an upper tile
-     */
-    public static boolean hasUpperItemTile(Integer row, Integer col) {
-        return row > 0 && row < ROWS && col >= 0 && col < COLUMNS;
-    }
-
-    /**
-     * Return True if the tile in pos[row][col] has Lower tile.
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return true if the tile has a lower tile
-     */
-    public static boolean hasLowerItemTile(Integer row, Integer col) {
-        return row >= 0 && row < ROWS - 1 && col >= 0 && col < COLUMNS;
-    }
-
-    /**
-     * Return True if the tile in pos[row][col] has Right tile.
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return true if the tile has a right tile
-     */
-    public static boolean hasRightItemTile(Integer row, Integer col) {
-        return row >= 0 && row < ROWS && col >= 0 && col < COLUMNS - 1;
-    }
-
-    /**
-     * Return True if the tile in pos[row][col] has Left tile.
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return true if the tile has a left tile
-     */
-    public static boolean hasLeftItemTile(Integer row, Integer col) {
-        return row >= 0 && row < ROWS && col > 0 && col < COLUMNS;
-    }
-
-    /**
      * Get the grid of the library.
      *
      * @return the gird of the library
@@ -142,56 +98,15 @@ public class Library {
     }
 
     /**
-     * Get the Upper tile of the tile in pos[row][col].
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return the upper tile
-     */
-    public ItemTile getUpperItemTile(Integer row, Integer col) {
-        return getItemTile(row - 1, col);
-    }
-
-    /**
-     * Get the Lower tile of the tile in pos[row][col].
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return the lower tile
-     */
-    public ItemTile getLowerItemTile(Integer row, Integer col) {
-        return getItemTile(row + 1, col);
-    }
-
-    /**
-     * Get the Right tile of the tile in pos[row][col].
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return the right tile
-     */
-    public ItemTile getRightItemTile(Integer row, Integer col) {
-        return getItemTile(row, col + 1);
-    }
-
-    /**
-     * Get the Left tile of the tile in pos[row][col].
-     *
-     * @param row is the row of the grid
-     * @param col is the column of the grid
-     * @return the left tile
-     */
-    public ItemTile getLeftItemTile(Integer row, Integer col) {
-        return getItemTile(row, col - 1);
-    }
-
-    /**
      * Insert an item tile in the given column.
      *
      * @param col      is the column of the grid
      * @param itemTile is the item tile to insert
      */
     public void insertItemTile(Integer col, ItemTile itemTile) {
+        if (col < 0 || col >= COLUMNS) {
+            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
+        }
         if (grid[0][col].getItemTileType() != ItemTileType.EMPTY)
             throw new IllegalArgumentException("The column is full");
 

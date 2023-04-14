@@ -16,23 +16,41 @@ import java.util.*;
  */
 public class GameData {
 
-    /** It's the number of players chosen by the first player who connected to the server. read-only. Immutable */
-    private int numOfPlayers;
-    /** It's the index of the current player. */
-    private Integer currentPlayerIndex;
-    /** Board of the game. */
-    private  Board board;
-    /** Bag of the game */
+    /**
+     * Bag of the game
+     */
     private final Bag bag;
-    /** List of players */
+    /**
+     * List of players
+     */
     private final List<Player> players;
-    /** List of common goal cards */
+    /**
+     * List of common goal cards
+     */
     private final List<CommonGoalCard> commonGoalCardsList;
-    /** Number of players */
+    /**
+     * It's the number of players chosen by the first player who connected to the server. read-only. Immutable
+     */
+    private int numOfPlayers;
+    /**
+     * It's the index of the current player.
+     */
+    private Integer currentPlayerIndex;
+    /**
+     * Board of the game.
+     */
+    private Board board;
+    /**
+     * Number of players
+     */
     private int currentNumOfPlayers;
-    /** Boolean that indicates if the game has started */
+    /**
+     * Boolean that indicates if the game has started
+     */
     private boolean started;
-    /** Username of the first player that has completed the library */
+    /**
+     * Username of the first player that has completed the library
+     */
     private Optional<String> firstFullLibraryUsername;
 
     /**
@@ -42,9 +60,9 @@ public class GameData {
         this.numOfPlayers = 0;
         this.bag = new Bag();
         this.currentPlayerIndex = null;
-        this.started= false;
-        this.currentNumOfPlayers=0;
-        this.players= new ArrayList<>();
+        this.started = false;
+        this.currentNumOfPlayers = 0;
+        this.players = new ArrayList<>();
         this.commonGoalCardsList = CommonCardFactory.createCards();
         this.firstFullLibraryUsername = Optional.empty();
     }
@@ -72,8 +90,19 @@ public class GameData {
      *
      * @return the number of players
      */
-    public int getNumOfPlayers(){
+    public int getNumOfPlayers() {
         return numOfPlayers;
+    }
+
+    /**
+     * Set the number of players.
+     *
+     * @param numOfPlayers number of player for the game
+     * @throws InvalidNumOfPlayers if the number of players is not between 2 and 4
+     */
+    public void setNumOfPlayers(int numOfPlayers) throws InvalidNumOfPlayers {
+        if (numOfPlayers < 2 || numOfPlayers > 4) throw new InvalidNumOfPlayers();
+        this.numOfPlayers = numOfPlayers;
     }
 
     /**
@@ -81,24 +110,24 @@ public class GameData {
      *
      * @param newPlayer the player to add
      * @throws UsernameAlreadyExistsException if the username is already taken
-     * @throws GameStartedException if the game has already started
+     * @throws GameStartedException           if the game has already started
      */
     public void addPlayer(Player newPlayer) throws UsernameAlreadyExistsException, GameStartedException {
 
-        if (started){
+        if (started) {
             throw new GameStartedException();
         }
 
-        for(Player player: players) {
+        for (Player player : players) {
             if (newPlayer.getUsername().equalsIgnoreCase(player.getUsername())) {
                 throw new UsernameAlreadyExistsException();
             }
         }
         players.add(newPlayer);
         currentNumOfPlayers++;
-        if (currentNumOfPlayers==numOfPlayers){
-            this.started=true;
-            this.board =new Board(numOfPlayers);
+        if (currentNumOfPlayers == numOfPlayers) {
+            this.started = true;
+            this.board = new Board(numOfPlayers);
             Collections.shuffle(this.players, new Random());
             players.get(0).setChair(true);
             this.currentPlayerIndex = 0;
@@ -119,7 +148,7 @@ public class GameData {
      *
      * @return the current player
      */
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return players.get(currentPlayerIndex);
     }
 
@@ -128,28 +157,17 @@ public class GameData {
      *
      * @return the number of players that are currently playing
      */
-    public int getCurrentNumOfPlayers(){
+    public int getCurrentNumOfPlayers() {
         return currentNumOfPlayers;
     }
 
     /**
-     * Set the number of players.
-     *
-     * @param numOfPlayers number of player for the game
-     * @throws InvalidNumOfPlayers if the number of players is not between 2 and 4
-     */
-    public void setNumOfPlayers(int numOfPlayers) throws InvalidNumOfPlayers {
-        if (numOfPlayers<2 || numOfPlayers>4) throw new InvalidNumOfPlayers();
-        this.numOfPlayers = numOfPlayers;
-    }
-    /**
      * This method increase currentPlayerIndex at the end of the respective previous player's play.
      */
-    public void nextPlayer(){
-        if (currentPlayerIndex==numOfPlayers-1){
-            currentPlayerIndex=0;
-        }
-        else{
+    public void nextPlayer() {
+        if (currentPlayerIndex == numOfPlayers - 1) {
+            currentPlayerIndex = 0;
+        } else {
             currentPlayerIndex++;
         }
     }
@@ -187,16 +205,15 @@ public class GameData {
      * @return the list of players
      */
     public List<Player> getPlayers() {
-        return players;
+        return this.players;
     }
 
     /**
-     * Get the player with the given index.
+     * Return true if the game has started.
      *
-     * @param index the index of the player
-     * @return the player with the given index
+     * @return true if the game has started, false otherwise
      */
-    public Player getPlayer(int index){
-        return players.get(index);
+    public boolean isStarted() {
+        return this.started;
     }
 }

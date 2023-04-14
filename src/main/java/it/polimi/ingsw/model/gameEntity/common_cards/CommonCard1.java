@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * Class representing the common goal card 1.
  */
-public class CommonCard1 extends CommonGoalCard{
+public class CommonCard1 extends CommonGoalCard {
 
     /**
      * Constructor of the class.
      */
-    public CommonCard1(){
+    public CommonCard1() {
         super(1, "Six groups each containing at least\n" +
                 "2 tiles of the same type (not necessarily\n" +
                 "in the depicted shape).\n" +
@@ -34,12 +34,12 @@ public class CommonCard1 extends CommonGoalCard{
 
         LibraryManager libraryManager = new LibraryManager(library);
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
-        int counter =0;
-        for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles){
-            if(group.getValue0()!=ItemTileType.EMPTY && group.getValue1()==2){
+        int counter = 0;
+        for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles) {
+            if (group.getValue0() != ItemTileType.EMPTY && group.getValue1() == 2) {
                 counter++;
             }
         }
-        return counter>=6;
+        return counter >= 6;
     }
 }

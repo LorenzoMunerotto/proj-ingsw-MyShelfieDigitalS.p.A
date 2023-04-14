@@ -47,7 +47,6 @@ public class Game {
         List<ItemTile> itemTileList = boardManager.grabItemTiles(coordinates);
         libraryManager.insertItemTiles(column, itemTileList);
         //
-
         if (libraryManager.isFull()) {
             gameData.setFirstFullLibraryUsername(gameData.getCurrentPlayer().getUsername());
         }
@@ -66,7 +65,6 @@ public class Game {
      * @return the game data
      */
     public GameData getGameData() {
-
         return gameData;
     }
 

@@ -53,99 +53,30 @@ class LibraryTest {
         );
     }
 
-
-    /*
     @Test
-    @DisplayName("Adjacent Groups with Empty Library")
-    void testAdjacent0(){
-        List<Pair<ItemTileType,Integer>> listGroupsAdjacentTiles = library.getListGroupsAdjacentTiles();
+    @DisplayName("Test insert item tile for right and wrong parameters")
+    public void testInsertItemTile() {
 
-        assertEquals(1, listGroupsAdjacentTiles.size());
-        assertEquals(ItemTileType.EMPTY, listGroupsAdjacentTiles.get(0).getValue0());
-        assertEquals(30, listGroupsAdjacentTiles.get(0).getValue1());
+        libraryTestHelper.insertItemTile(0, new ItemTile(ItemTileType.PLANT));
+        assertEquals(ItemTileType.PLANT, libraryTestHelper.getItemTile(5, 0).getItemTileType());
 
+        libraryTestHelper.insertItemTile(0, new ItemTile(ItemTileType.CAT));
+        assertEquals(ItemTileType.CAT, libraryTestHelper.getItemTile(4, 0).getItemTileType());
+
+        libraryTestHelper.insertItemTile(1, new ItemTile(ItemTileType.FRAME));
+        assertEquals(ItemTileType.FRAME, libraryTestHelper.getItemTile(5, 1).getItemTileType());
+
+        libraryTestHelper.insertItemTile(1, new ItemTile(ItemTileType.TROPHY));
+        assertEquals(ItemTileType.TROPHY, libraryTestHelper.getItemTile(4, 1).getItemTileType());
+
+        for (int i = 0; i < 6; i++) {
+            libraryTestHelper.insertItemTile(2, new ItemTile(ItemTileType.BOOK));
+        }
+        assertEquals(ItemTileType.BOOK, libraryTestHelper.getItemTile(0, 2).getItemTileType());
+        assertThrows(IllegalArgumentException.class, () -> libraryTestHelper.insertItemTile(2, new ItemTile(ItemTileType.PLANT)));
+
+        assertThrows(IllegalArgumentException.class, () -> libraryTestHelper.insertItemTile(-1, new ItemTile(ItemTileType.PLANT)));
+        assertThrows(IllegalArgumentException.class, () -> libraryTestHelper.insertItemTile(5, new ItemTile(ItemTileType.PLANT)));
     }
-
-
-    @Test
-    @DisplayName("Adjacent Groups 1")
-    void testAdjacent1(){
-
-        ItemTileType[][] gridOfItemTileType = {
-                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
-                {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
-                {ItemTileType.GAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.EMPTY},
-                {ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.EMPTY},
-                {ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.FRAME,ItemTileType.EMPTY},
-                {ItemTileType.CAT,ItemTileType.CAT,ItemTileType.CAT,ItemTileType.CAT,ItemTileType.EMPTY}};
-
-        library.setLibrary(gridOfItemTileType);
-        List<Pair<ItemTileType,Integer>> listGroupsAdjacentTiles = library.getListGroupsAdjacentTiles();
-
-        assertEquals(5, listGroupsAdjacentTiles.size());
-        assertEquals(ItemTileType.EMPTY, listGroupsAdjacentTiles.get(0).getValue0());
-        assertEquals(14, listGroupsAdjacentTiles.get(0).getValue1());
-        assertEquals(ItemTileType.GAME, listGroupsAdjacentTiles.get(1).getValue0());
-        assertEquals(4, listGroupsAdjacentTiles.get(1).getValue1());
-        assertEquals(ItemTileType.PLANT, listGroupsAdjacentTiles.get(2).getValue0());
-        assertEquals(4, listGroupsAdjacentTiles.get(2).getValue1());
-        assertEquals(ItemTileType.FRAME, listGroupsAdjacentTiles.get(3).getValue0());
-        assertEquals(4, listGroupsAdjacentTiles.get(3).getValue1());
-        assertEquals(ItemTileType.CAT, listGroupsAdjacentTiles.get(4).getValue0());
-        assertEquals(4, listGroupsAdjacentTiles.get(4).getValue1());
-
-    }
-
-
-
-
-    @Test
-    @DisplayName("Adjacent Groups 2")
-    void testAdjacent2(){
-
-        ItemTileType[][] gridOfItemTileType = {
-                {ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.EMPTY,ItemTileType.EMPTY},
-                {ItemTileType.BOOK,ItemTileType.PLANT,ItemTileType.PLANT,ItemTileType.CAT,ItemTileType.EMPTY},
-                {ItemTileType.FRAME,ItemTileType.BOOK,ItemTileType.FRAME,ItemTileType.BOOK,ItemTileType.EMPTY},
-                {ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.EMPTY},
-                {ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.CAT,ItemTileType.CAT,ItemTileType.CAT},
-                {ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.CAT,ItemTileType.CAT}};
-
-        library.setLibrary(gridOfItemTileType);
-        List<Pair<ItemTileType,Integer>> listGroupsAdjacentTiles = library.getListGroupsAdjacentTiles();
-
-        assertEquals(13, listGroupsAdjacentTiles.size());
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.TROPHY,6)));
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.CAT,5)));
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.CAT,1)));
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.BOOK,1)));
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.PLANT,5)));
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.TROPHY,1)));
-    }
-
-    @Test
-    @DisplayName("Adjacent Groups 3 - @")
-    void testAdjacent3(){
-
-        ItemTileType[][] gridOfItemTileType = {
-                {ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.TROPHY},
-                {ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.GAME,ItemTileType.TROPHY},
-                {ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY},
-                {ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY},
-                {ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY},
-                {ItemTileType.TROPHY,ItemTileType.GAME,ItemTileType.TROPHY,ItemTileType.TROPHY,ItemTileType.TROPHY}};
-
-        library.setLibrary(gridOfItemTileType);
-        List<Pair<ItemTileType,Integer>> listGroupsAdjacentTiles = library.getListGroupsAdjacentTiles();
-
-        assertEquals(2, listGroupsAdjacentTiles.size());
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.TROPHY,20)));
-        assertTrue(listGroupsAdjacentTiles.contains(new Pair<>(ItemTileType.GAME,10)));
-
-    }
-
-
-     */
-
 }
 
