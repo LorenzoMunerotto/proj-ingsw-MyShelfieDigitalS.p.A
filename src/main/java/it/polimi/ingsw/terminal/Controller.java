@@ -46,7 +46,7 @@ public class Controller {
 
         while (gameData.getCurrentNumOfPlayers() != gameData.getNumOfPlayers()) {
             try {
-                System.out.print("You are the player number " + (gameData.getCurrentNumOfPlayers() + 1) + " , please select your username: ");
+                System.out.print("You are the player number " + (gameData.getCurrentNumOfPlayers() + 1) + " of " + gameData.getNumOfPlayers() + ", please select your username: ");
                 String username = keyboard.readLine();
                 Player newPlayer = new Player(username);
                 gameData.addPlayer(newPlayer);

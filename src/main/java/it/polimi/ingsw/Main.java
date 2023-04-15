@@ -33,6 +33,7 @@ public class Main {
         game.assignAllPersonalCard();
 
         while (game.getGameData().getFirstFullLibraryUsername().isEmpty() || !game.getGameData().getCurrentPlayer().hasChair()) {
+
             drawer.drawCurrentPlayerInfo();
             drawer.drawGameInfo();
 
@@ -49,7 +50,6 @@ public class Main {
         }
         drawer.showRank();
     }
-
 }
 
 

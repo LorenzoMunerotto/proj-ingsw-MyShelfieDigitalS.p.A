@@ -124,13 +124,14 @@ public class BoardManager {
      * @return true if the coordinates are in line, false otherwise
      */
     protected boolean isLined(List<Pair<Integer, Integer>> coordinates) {
-        coordinates.sort(Comparator.comparing((Pair<Integer, Integer> coordinate) -> coordinate.getValue0()).thenComparing(Pair::getValue1));
-        Set<Integer> uniqueRows = coordinates.stream().map(Pair::getValue0).collect(Collectors.toSet());
-        Set<Integer> uniqueColumns = coordinates.stream().map(Pair::getValue1).collect(Collectors.toSet());
-        int number = coordinates.size();
+        List<Pair<Integer, Integer>> coordinatesCopy = new ArrayList<>(coordinates);
+        coordinatesCopy.sort(Comparator.comparing((Pair<Integer, Integer> coordinate) -> coordinate.getValue0()).thenComparing(Pair::getValue1));
+        Set<Integer> uniqueRows = coordinatesCopy.stream().map(Pair::getValue0).collect(Collectors.toSet());
+        Set<Integer> uniqueColumns = coordinatesCopy.stream().map(Pair::getValue1).collect(Collectors.toSet());
+        int number = coordinatesCopy.size();
 
-        boolean inRow = uniqueRows.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueColumns.contains(coordinates.get(0).getValue1() + i));
-        boolean inColumn = uniqueColumns.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueRows.contains(coordinates.get(0).getValue0() + i));
+        boolean inRow = uniqueRows.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueColumns.contains(coordinatesCopy.get(0).getValue1() + i));
+        boolean inColumn = uniqueColumns.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueRows.contains(coordinatesCopy.get(0).getValue0() + i));
 
         return inRow || inColumn;
     }
