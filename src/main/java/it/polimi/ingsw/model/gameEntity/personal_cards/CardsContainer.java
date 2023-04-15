@@ -32,4 +32,8 @@ public class CardsContainer {
         Collections.shuffle(cardsCopy);
         return cardsCopy.stream().limit(numOfPlayers).collect(Collectors.toList());
     }
+
+    public List<PersonalGoalCard> getAllPersonalGoalCards() {
+        return this.personalGoalCards;
+    }
 }

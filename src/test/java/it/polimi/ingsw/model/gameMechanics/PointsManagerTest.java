@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.gameEntity.common_cards.*;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
 
+import it.polimi.ingsw.model.gameEntity.personal_cards.CardsContainer;
+import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,17 +23,19 @@ class PointsManagerTest {
 
     Player player;
     PointsManager pointsManager;
-    LibraryTestHelper libraryTestHelper;
-
-    //private Logger logger = Logger.getLogger(LibraryManagerTest.class.getName());
+    LibraryTestHelper library;
+    CardsContainer cardsContainer;
+    List<PersonalGoalCard> personalGoalCardList;
 
     @BeforeEach
     void setUp() throws IllegalUsernameException {
 
         player = new Player("giacomo");
-        libraryTestHelper = new LibraryTestHelper();
-        //sostituisco la libreria originale con il sottotipo che serve per fare i test
-        player.setLibrary(libraryTestHelper);
+        library = new LibraryTestHelper();
+        player.setLibrary(library);
+        cardsContainer = new CardsContainer();
+        cardsContainer.createDeck();
+        personalGoalCardList = cardsContainer.getAllPersonalGoalCards();
     }
 
     @Test
@@ -58,7 +62,7 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.PLANT},
                 {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.PLANT, ItemTileType.GAME, ItemTileType.PLANT},
         };
-        libraryTestHelper.setLibrary(libraryGrid);
+        library.setLibrary(libraryGrid);
         pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
 
         assertEquals(14, pointsManager.commonPoints());
@@ -92,13 +96,10 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.GAME, ItemTileType.PLANT, ItemTileType.EMPTY},
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.TROPHY, ItemTileType.FRAME},
         };
-        libraryTestHelper.setLibrary(libraryGrid);
+        library.setLibrary(libraryGrid);
         pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
 
         assertEquals(12, pointsManager.commonPoints());
-
-
-
     }
 
     @Test
@@ -119,27 +120,33 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.GAME, ItemTileType.PLANT, ItemTileType.EMPTY},
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.TROPHY, ItemTileType.FRAME},
         };
-        libraryTestHelper.setLibrary(libraryGrid);
+        library.setLibrary(libraryGrid);
         pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
 
         assertEquals(16, pointsManager.commonPoints());
-
     }
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/adjacentPointTest.csv")
     void adjacentPoints( String libraryAsString, Integer expectedPoints) {
 
-        libraryTestHelper.setLibraryFromString(libraryAsString);
+        library.setLibraryFromString(libraryAsString);
 
         /* It helps the debugging
         logger.info("Adjacent Item Tile Group List: "+libraryManager.getListGroupsAdjacentTiles().toString());
          */
 
-        List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
-        Optional<String> firstFullLibraryUsername = Optional.empty();
-        Integer numOfPlayers = 3;
-        pointsManager = new PointsManager(player, numOfPlayers, commonGoalCardList, firstFullLibraryUsername);
+        pointsManager = new PointsManager(player, 3, new ArrayList<>(), Optional.empty());
         assertEquals(expectedPoints,pointsManager.adjacentPoints());
+    }
+
+    @ParameterizedTest(name = "{displayName} - {index}")
+    @CsvFileSource(resources = "/personalGoalCardsPointsTest.csv")
+    public void personalGoalCardsPoints(String libraryAsString, Integer expectedPoints, Integer cardIndex) {
+        library.setLibraryFromString(libraryAsString);
+        player.setPersonalGoalCard(personalGoalCardList.get(cardIndex));
+
+        pointsManager = new PointsManager(player, 3, new ArrayList<>(), Optional.empty());
+        assertEquals(expectedPoints, pointsManager.personalPoints());
     }
 }

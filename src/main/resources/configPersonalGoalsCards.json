@@ -1,6 +1,6 @@
 [
   {
-    "number": 1,
+    "number": 0,
     "goals": [
       {
         "row": 0,
@@ -31,6 +31,41 @@
         "row": 4,
         "column": 2,
         "itemTileType": "CAT"
+      }
+    ]
+  },
+  {
+    "number": 1,
+    "goals": [
+      {
+        "row": 0,
+        "column": 0,
+        "itemTileType": "CAT"
+      },
+      {
+        "row": 1,
+        "column": 3,
+        "itemTileType": "FRAME"
+      },
+      {
+        "row": 2,
+        "column": 1,
+        "itemTileType": "PLANT"
+      },
+      {
+        "row": 3,
+        "column": 0,
+        "itemTileType": "TROPHY"
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "itemTileType": "GAME"
+      },
+      {
+        "row": 5,
+        "column": 2,
+        "itemTileType": "BOOK"
       }
     ]
   },
@@ -40,32 +75,32 @@
       {
         "row": 0,
         "column": 0,
-        "itemTileType": "CAT"
-      },
-      {
-        "row": 1,
-        "column": 3,
-        "itemTileType": "FRAME"
-      },
-      {
-        "row": 2,
-        "column": 1,
         "itemTileType": "PLANT"
       },
       {
-        "row": 3,
-        "column": 0,
-        "itemTileType": "TROPHY"
+        "row": 0,
+        "column": 2,
+        "itemTileType": "FRAME"
       },
       {
-        "row": 4,
+        "row": 1,
         "column": 4,
+        "itemTileType": "CAT"
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "itemTileType": "BOOK"
+      },
+      {
+        "row": 3,
+        "column": 1,
         "itemTileType": "GAME"
       },
       {
         "row": 5,
         "column": 2,
-        "itemTileType": "BOOK"
+        "itemTileType": "TROPHY"
       }
     ]
   },
@@ -74,32 +109,32 @@
     "goals": [
       {
         "row": 0,
-        "column": 0,
+        "column": 2,
         "itemTileType": "PLANT"
       },
       {
-        "row": 0,
+        "row": 1,
+        "column": 1,
+        "itemTileType": "BOOK"
+      },
+      {
+        "row": 2,
+        "column": 0,
+        "itemTileType": "GAME"
+      },
+      {
+        "row": 3,
         "column": 2,
         "itemTileType": "FRAME"
       },
       {
-        "row": 1,
+        "row": 4,
         "column": 4,
         "itemTileType": "CAT"
       },
       {
-        "row": 2,
-        "column": 3,
-        "itemTileType": "BOOK"
-      },
-      {
-        "row": 3,
-        "column": 1,
-        "itemTileType": "GAME"
-      },
-      {
         "row": 5,
-        "column": 2,
+        "column": 3,
         "itemTileType": "TROPHY"
       }
     ]
@@ -109,33 +144,33 @@
     "goals": [
       {
         "row": 0,
-        "column": 2,
-        "itemTileType": "PLANT"
+        "column": 4,
+        "itemTileType": "TROPHY"
       },
       {
         "row": 1,
         "column": 1,
-        "itemTileType": "BOOK"
+        "itemTileType": "GAME"
       },
       {
         "row": 2,
         "column": 0,
-        "itemTileType": "GAME"
+        "itemTileType": "BOOK"
       },
       {
         "row": 3,
-        "column": 2,
-        "itemTileType": "FRAME"
+        "column": 3,
+        "itemTileType": "CAT"
       },
       {
         "row": 4,
-        "column": 4,
-        "itemTileType": "CAT"
+        "column": 1,
+        "itemTileType": "FRAME"
       },
       {
         "row": 5,
         "column": 3,
-        "itemTileType": "TROPHY"
+        "itemTileType": "PLANT"
       }
     ]
   },
@@ -143,34 +178,34 @@
     "number": 5,
     "goals": [
       {
-        "row": 0,
-        "column": 4,
-        "itemTileType": "TROPHY"
+        "row": 1,
+        "column": 0,
+        "itemTileType": "FRAME"
       },
       {
         "row": 1,
-        "column": 1,
+        "column": 3,
         "itemTileType": "GAME"
       },
       {
         "row": 2,
-        "column": 0,
-        "itemTileType": "BOOK"
+        "column": 2,
+        "itemTileType": "PLANT"
       },
       {
         "row": 3,
-        "column": 3,
+        "column": 1,
         "itemTileType": "CAT"
       },
       {
-        "row": 4,
-        "column": 1,
-        "itemTileType": "FRAME"
+        "row": 3,
+        "column": 4,
+        "itemTileType": "TROPHY"
       },
       {
         "row": 5,
-        "column": 3,
-        "itemTileType": "PLANT"
+        "column": 0,
+        "itemTileType": "BOOK"
       }
     ]
   },
@@ -178,41 +213,6 @@
     "number": 6,
     "goals": [
       {
-        "row": 1,
-        "column": 0,
-        "itemTileType": "FRAME"
-      },
-      {
-        "row": 1,
-        "column": 3,
-        "itemTileType": "GAME"
-      },
-      {
-        "row": 2,
-        "column": 2,
-        "itemTileType": "PLANT"
-      },
-      {
-        "row": 3,
-        "column": 1,
-        "itemTileType": "CAT"
-      },
-      {
-        "row": 3,
-        "column": 4,
-        "itemTileType": "TROPHY"
-      },
-      {
-        "row": 5,
-        "column": 0,
-        "itemTileType": "BOOK"
-      }
-    ]
-  },
-  {
-    "number": 7,
-    "goals": [
-      {
         "row": 0,
         "column": 4,
         "itemTileType": "FRAME"
@@ -245,7 +245,7 @@
     ]
   },
   {
-    "number": 8,
+    "number": 7,
     "goals": [
       {
         "row": 1,
@@ -275,6 +275,41 @@
       {
         "row": 5,
         "column": 3,
+        "itemTileType": "CAT"
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "goals": [
+      {
+        "row": 0,
+        "column": 2,
+        "itemTileType": "BOOK"
+      },
+      {
+        "row": 1,
+        "column": 1,
+        "itemTileType": "PLANT"
+      },
+      {
+        "row": 2,
+        "column": 2,
+        "itemTileType": "FRAME"
+      },
+      {
+        "row": 3,
+        "column": 3,
+        "itemTileType": "TROPHY"
+      },
+      {
+        "row": 4,
+        "column": 4,
+        "itemTileType": "GAME"
+      },
+      {
+        "row": 5,
+        "column": 0,
         "itemTileType": "CAT"
       }
     ]
@@ -285,32 +320,32 @@
       {
         "row": 0,
         "column": 2,
-        "itemTileType": "BOOK"
-      },
-      {
-        "row": 1,
-        "column": 1,
-        "itemTileType": "PLANT"
-      },
-      {
-        "row": 2,
-        "column": 2,
-        "itemTileType": "FRAME"
-      },
-      {
-        "row": 3,
-        "column": 3,
         "itemTileType": "TROPHY"
       },
       {
-        "row": 4,
+        "row": 0,
         "column": 4,
+        "itemTileType": "CAT"
+      },
+      {
+        "row": 2,
+        "column": 3,
+        "itemTileType": "BOOK"
+      },
+      {
+        "row": 4,
+        "column": 1,
         "itemTileType": "GAME"
+      },
+      {
+        "row": 4,
+        "column": 3,
+        "itemTileType": "FRAME"
       },
       {
         "row": 5,
         "column": 0,
-        "itemTileType": "CAT"
+        "itemTileType": "PLANT"
       }
     ]
   },
@@ -320,41 +355,6 @@
       {
         "row": 0,
         "column": 2,
-        "itemTileType": "TROPHY"
-      },
-      {
-        "row": 0,
-        "column": 4,
-        "itemTileType": "CAT"
-      },
-      {
-        "row": 2,
-        "column": 3,
-        "itemTileType": "BOOK"
-      },
-      {
-        "row": 4,
-        "column": 1,
-        "itemTileType": "GAME"
-      },
-      {
-        "row": 4,
-        "column": 3,
-        "itemTileType": "FRAME"
-      },
-      {
-        "row": 5,
-        "column": 0,
-        "itemTileType": "PLANT"
-      }
-    ]
-  },
-  {
-    "number": 11,
-    "goals": [
-      {
-        "row": 0,
-        "column": 2,
         "itemTileType": "GAME"
       },
       {
@@ -385,7 +385,7 @@
     ]
   },
   {
-    "number": 12,
+    "number": 11,
     "goals": [
       {
         "row": 1,
