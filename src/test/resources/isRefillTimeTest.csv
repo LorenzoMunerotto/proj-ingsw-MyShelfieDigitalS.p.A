@@ -1,0 +1,111 @@
+# that is a comment
+#
+# the first three are used to test the empty board, for 2, 3 and 4 players
+#
+""" 2 |
+    -----, -----, -----, --3--, --4--, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, --4--, -----, -----, -----|
+    -----, -----, --3--, EMPTY, EMPTY, EMPTY, --3--, -----, -----|
+    -----, --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --3--|
+    --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --4--|
+    --3--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, --3--, EMPTY, EMPTY, EMPTY, --3--, -----, -----|
+    -----, -----, -----, --4--, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, --4--, --3--, -----, -----, -----|""",true
+#
+#
+""" 3 |
+    -----, -----, -----, EMPTY, --4--, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, --4--, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --4--|
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, -----, -----, --4--, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, --4--, EMPTY, -----, -----, -----|""",true
+#
+#
+""" 4 |
+    -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",true
+#
+# Used to test the case with 4 alone tiles
+""" 4 |
+    -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, EMPTY, EMPTY, CAT,   EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, GAME,  EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, PLANT, EMPTY, EMPTY, PLANT, EMPTY, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",true
+#
+# Used to test the case with 2 adjacent tiles
+""" 2 |
+    -----, -----, -----, --3--, --4--, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, --4--, -----, -----, -----|
+    -----, -----, --3--, EMPTY, GAME,  EMPTY, --3--, -----, -----|
+    -----, --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --3--|
+    --4--, EMPTY, EMPTY, EMPTY, GAME,  BOOK,  EMPTY, EMPTY, --4--|
+    --3--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, --3--, EMPTY, EMPTY, EMPTY, --3--, -----, -----|
+    -----, -----, -----, --4--, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, --4--, --3--, -----, -----, -----|""",false
+#
+# Used to test the case with 3 alone tiles and 2 adjacent tiles
+""" 4 |
+    -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, EMPTY, EMPTY, CAT,   EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, GAME,  EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, PLANT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, PLANT, EMPTY, EMPTY, PLANT, EMPTY, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",false
+#
+# Used to test the case with 1 alone tile in the edge, 4 players
+""" 4 |
+    -----, -----, -----, EMPTY, EMPTY, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+      CAT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, PLANT, EMPTY, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, EMPTY, EMPTY, -----, -----, -----|""",true
+#
+# Used to test the case with 1 alone tile in the edge, 3 players
+""" 3 |
+    -----, -----, -----, EMPTY, --4--, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, --4--, -----, -----, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY|
+    --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --4--|
+    PLANT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----, -----|
+    -----, -----, -----, --4--, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, --4--, EMPTY, -----, -----, -----|""",true
+#
+# Used to test case with 1 alone tile in the edge, 2 players
+""" 2 |
+    -----, -----, -----, --3--, --4--, -----, -----, -----, -----|
+    -----, -----, -----, EMPTY, EMPTY, --4--, -----, -----, -----|
+    -----, -----, --3--, EMPTY, EMPTY, EMPTY, --3--, -----, -----|
+    -----, --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --3--|
+    --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --4--|
+    --3--,   CAT, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, -----|
+    -----, -----, --3--, EMPTY, EMPTY, EMPTY, --3--, -----, -----|
+    -----, -----, -----, --4--, EMPTY, EMPTY, -----, -----, -----|
+    -----, -----, -----, -----, --4--, --3--, -----, -----, -----|""",true
+#
