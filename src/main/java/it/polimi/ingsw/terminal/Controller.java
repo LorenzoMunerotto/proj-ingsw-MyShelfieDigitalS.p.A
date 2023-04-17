@@ -1,113 +1,111 @@
 package it.polimi.ingsw.terminal;
 
+import it.polimi.ingsw.*;
+import it.polimi.ingsw.model.gameEntity.ItemTile;
+import it.polimi.ingsw.model.gameState.events.Move;
 import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
-import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
+import it.polimi.ingsw.model.gameMechanics.BoardManager;
+import it.polimi.ingsw.model.gameMechanics.LibraryManager;
+import it.polimi.ingsw.model.gameMechanics.PointsManager;
 import it.polimi.ingsw.model.gameState.GameData;
-import org.javatuples.Pair;
+import it.polimi.ingsw.model.gameState.events.NumOfPlayerChoice;
+import it.polimi.ingsw.model.gameState.events.UsernameChoice;
+import it.polimi.ingsw.model.gameState.events.VirtualGameData;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class Controller {
+public class Controller extends AbstractListenable implements Listener, EventHandler {
 
     GameData gameData;
 
-    public Controller(GameData gameData) {
+    public Controller(GameData gameData, Drawer drawer) {
+        super();
+        drawer.addListener(this);
         this.gameData = gameData;
     }
 
-    public void manageNewUsers() {
 
-        InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader tastiera = new BufferedReader(input);
-
-
-
-        while(gameData.getCurrentNumOfPlayers()==0) {
-            try {
-                System.out.print("1st player, select username: ");
-                String username = tastiera.readLine();
-                Player newPlayer = new Player(username);
-                gameData.addPlayer(newPlayer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        while(gameData.getNumOfPlayers()==0) {
-            try {
-                System.out.print("1st player, select numberOfPlayer: ");
-                Integer numOfPlayer = Integer.valueOf(tastiera.readLine());
-                gameData.setNumOfPlayers(numOfPlayer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-
-        while (gameData.getCurrentNumOfPlayers() != gameData.getNumOfPlayers()) {
-            try {
-                System.out.print("new player " + (gameData.getCurrentNumOfPlayers() + 1) + "/" + gameData.getNumOfPlayers() + " select username: ");
-                String username = tastiera.readLine();
-                Player newPlayer = new Player(username);
-                gameData.addPlayer(newPlayer);
-            } catch (Exception e) {
-            }
+    /**
+     * handle the numOfPlayerChoice event
+     * tries to modify the gameData, if an exception is thrown notifies the event to the view
+     * @param numOfPlayerChoice
+     */
+    public void handle(NumOfPlayerChoice numOfPlayerChoice) {
+        try {
+            gameData.setNumOfPlayers(numOfPlayerChoice.getNumOfPlayer());
+        } catch (Exception e) {
+            notifyAllListeners(numOfPlayerChoice);
         }
     }
 
+    @Override
+    public void handle(VirtualGameData virtualGameData) {
+        //deve rimanere così per ora
+    }
 
-    public Pair<List<Pair<Integer, Integer>>,Integer> takePlayerInput() {
-        InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader tastiera = new BufferedReader(input);
+    /**
+     * handle the move event
+     * tries to modify the gameData, if an exception is thrown notifies the event to the view
+     * @param move
+     */
+    public void handle(Move move) {
+
+        BoardManager boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
+        LibraryManager libraryManager = new LibraryManager(gameData.getCurrentPlayer().getLibrary());
+        PointsManager pointsManager = new PointsManager(gameData.getCurrentPlayer(), gameData.getNumOfPlayers(),gameData.getCommonGoalCardsList(),gameData.getFirstFullLibraryUsername());
+
+        int numberOfTiles = move.getCoordinateList().size();
+
+        try {
+            libraryManager.hasEnoughSpace(move.getColumn(), numberOfTiles);
+            List<ItemTile> itemTileList = boardManager.grabItemTiles(move.getCoordinateList());
+            libraryManager.insertItemTiles(move.getColumn(), itemTileList);
+        }catch (Exception e){
+            notifyAllListeners(move); //se la mossa infrange qualche regola si notifica la view
+        }
+
+        if (libraryManager.isFull()){
+            gameData.setFirstFullLibraryUsername(gameData.getCurrentPlayer().getUsername());
+        }
+
+        pointsManager.updateTotalPoints();
 
 
-        List<Pair<Integer, Integer>> listOfCoordinate = new ArrayList<>();
-        Integer column  = null;
+        if( boardManager.isRefillTime()){
+            boardManager.refillBoard();
+        }
 
-            System.out.println("inserire coordinate delle tessere desiderate nell'ordine di inserimento e la colonna dove inserirle  ");
-            System.out.println("es. 74-75|2");
-            try {
-                String comandi = tastiera.readLine();
+        gameData.nextPlayer();
+    }
 
-                //parsare i comandi
-                String newstr;
-                newstr = comandi.replaceAll(" ", "");
-                newstr = newstr.replaceAll("\n", "");
-                newstr = newstr.replaceAll("\"", "");
-                String[] new_comandi = newstr.split("\\|");
 
-                String[] coordinate = new_comandi[0].split("-");
+    /**
+     * handle the usernameChoice event
+     * tries to modify the gameData, if an exception is thrown notifies the event to the view
+     * @param usernameChoice
+     */
+    public void handle(UsernameChoice usernameChoice) {
 
-                column = Integer.valueOf(new_comandi[1]);
-
-                for (String coordinata : coordinate) {
-
-                    int row = Integer.valueOf("" + coordinata.charAt(0));
-                    int col = Integer.valueOf("" + coordinata.charAt(1));
-
-                    Pair pair = new Pair<>(row, col);
-                    listOfCoordinate.add(pair);
-                }
-
-            }
-            catch (Exception e) {
-
-                throw new IllegalArgumentException("l'input inserito non è accettabile");
-
-            }
-
-            return new Pair<>(listOfCoordinate,column);
-
+        Player newPlayer = null;
+        try {
+            newPlayer = new Player(usernameChoice.getUsername());
+            gameData.addPlayer(newPlayer);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            notifyAllListeners(usernameChoice);
+        }
 
 
     }
 
-
+    /**
+     * This is part of Observable-Observer pattern
+     * @param event
+     */
+    @Override
+    public void update(Event event) {
+        event.accept(this);
+    }
 
 
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.gameMechanics;
 
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.Bag;
+import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
@@ -74,7 +75,7 @@ public class BoardManager {
      * @param coordinates the coordinates of the item tiles to grab
      * @return the item tiles grabbed
      */
-    public List<ItemTile> grabItemTiles(List<Pair<Integer, Integer>> coordinates) {
+    public List<ItemTile> grabItemTiles(List<Coordinate> coordinates) {
 
         int size = coordinates.size();
         if (size < 1 || size > 3) throw new IllegalArgumentException("Invalid number of coordinates");
@@ -82,9 +83,9 @@ public class BoardManager {
         if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - the cells are not in line");
 
 
-        for (Pair<Integer, Integer> coordinate : coordinates) {
-            int row = coordinate.getValue0();
-            int col = coordinate.getValue1();
+        for (Coordinate coordinate : coordinates) {
+            int row = coordinate.getRow();
+            int col = coordinate.getCol();
 
             if (!board.getBoardCell(row,col).isPlayable() ) throw new IllegalArgumentException("Invalid coordinates - the cell is not playable");
             if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new IllegalArgumentException("Invalid coordinates - the cell is empty");
@@ -93,9 +94,9 @@ public class BoardManager {
         }
 
         List<ItemTile> itemTileList = new ArrayList<>();
-        for (Pair<Integer, Integer> coordinate : coordinates) {
-            int row = coordinate.getValue0();
-            int col = coordinate.getValue1();
+        for (Coordinate coordinate : coordinates) {
+            int row = coordinate.getRow();
+            int col = coordinate.getCol();
 
             itemTileList.add(board.takeItemTile(row,col));
 
@@ -127,16 +128,16 @@ public class BoardManager {
      * @param coordinates the coordinates to check
      * @return true if the coordinates are in line, false otherwise
      */
-    private boolean isLined(List<Pair<Integer, Integer>> coordinates){
+    private boolean isLined(List<Coordinate> coordinates){
 
         int number = coordinates.size();
 
-        boolean sameRow = coordinates.stream().map(Pair::getValue0).collect(Collectors.toSet()).size()==1;
-        List<Integer> columns = coordinates.stream().map(Pair::getValue1).sorted().collect(Collectors.toList());
+        boolean sameRow = coordinates.stream().map(Coordinate::getRow).collect(Collectors.toSet()).size()==1;
+        List<Integer> columns = coordinates.stream().map(Coordinate::getCol).sorted().collect(Collectors.toList());
         boolean inRow = (columns.get(columns.size()-1)-columns.get(0) == number-1) && sameRow;
 
-        boolean sameColumn = coordinates.stream().map(Pair::getValue1).collect(Collectors.toSet()).size()==1;
-        List<Integer> rows = coordinates.stream().map(Pair::getValue0).sorted().collect(Collectors.toList());
+        boolean sameColumn = coordinates.stream().map(Coordinate::getCol).collect(Collectors.toSet()).size()==1;
+        List<Integer> rows = coordinates.stream().map(Coordinate::getRow).sorted().collect(Collectors.toList());
         boolean inColumn = (rows.get(rows.size()-1)-rows.get(0) == number-1) && sameColumn;
 
         return inRow || inColumn;

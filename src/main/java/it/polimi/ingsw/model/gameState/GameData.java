@@ -1,20 +1,25 @@
 package it.polimi.ingsw.model.gameState;
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameEntity.personal_cards.AllPersonalGoalCards;
+import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
+import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
 import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameEntity.Player;
+import it.polimi.ingsw.model.gameState.events.VirtualGameData;
 
 import java.util.*;
 
 /**
  * Class representing the objects of the game.
  */
-public class GameData {
+public class GameData extends AbstractListenable {
 
     /** It's the number of players chosen by the first player who connected to the server. read-only. Immutable */
     private int numOfPlayers;
@@ -35,12 +40,16 @@ public class GameData {
     /** Username of the first player that has completed the library */
     private Optional<String> firstFullLibraryUsername;
 
+
+
     /**
      * Constructor of the class.
      */
     public GameData(){
+        super();
         this.numOfPlayers = 0;
         this.bag = new Bag();
+        this.board = null;
         this.currentPlayerIndex = null;
         this.started= false;
         this.currentNumOfPlayers=0;
@@ -98,11 +107,36 @@ public class GameData {
         currentNumOfPlayers++;
         if (currentNumOfPlayers==numOfPlayers){
             this.started=true;
-            this.board =new Board(numOfPlayers);
+            this.board = new Board(numOfPlayers);
             Collections.shuffle(this.players, new Random());
             players.get(0).setChair(true);
             this.currentPlayerIndex = 0;
+
+            //riempie la board
+            BoardManager boardManager = new BoardManager(board,bag);
+            if( boardManager.isRefillTime()){
+                boardManager.refillBoard();
+            }
+
+            //assegna le carte personali
+            Set<Integer> numberOfPersonalCards = new HashSet<>();
+            Random random = new Random();
+            AllPersonalGoalCards allPersonalGoalCards = AllPersonalGoalCards.makeAllPersonalGoalCards();
+            for(int i=0; i<numOfPlayers;i++){
+                while (true){
+                    int randomNumber= random.nextInt(12);
+                    if(!numberOfPersonalCards.contains(randomNumber)){
+                        PersonalGoalCard randomPersonalGoalCard = allPersonalGoalCards.getCards().get(randomNumber);
+
+                        players.get(i).setPersonalGoalCard(randomPersonalGoalCard);
+                        numberOfPersonalCards.add(randomNumber);
+                        break;
+                    }
+                }
+            }
         }
+
+        notifyAllListeners(new VirtualGameData(this));
     }
 
     /**
@@ -141,6 +175,7 @@ public class GameData {
     public void setNumOfPlayers(int numOfPlayers) throws InvalidNumOfPlayers {
         if (numOfPlayers<2 || numOfPlayers>4) throw new InvalidNumOfPlayers();
         this.numOfPlayers = numOfPlayers;
+        notifyAllListeners(new VirtualGameData(this));
     }
     /**
      * This method increase currentPlayerIndex at the end of the respective previous player's play.
@@ -152,6 +187,8 @@ public class GameData {
         else{
             currentPlayerIndex++;
         }
+
+        notifyAllListeners(new VirtualGameData(this));
     }
 
     /**
@@ -199,4 +236,11 @@ public class GameData {
     public Player getPlayer(int index){
         return players.get(index);
     }
+
+
+    public boolean isStarted() {
+        return started;
+    }
+
+
 }
