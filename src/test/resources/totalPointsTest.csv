@@ -1,0 +1,18 @@
+# Personal card 0, 6 goals achieved
+# Common card 1, not achieved
+# Common card 2, achieved
+""" GAME,   EMPTY, EMPTY, EMPTY,  GAME|
+    EMPTY,  EMPTY, EMPTY, EMPTY, EMPTY|
+    TROPHY, EMPTY, FRAME, EMPTY, EMPTY|
+    EMPTY,  EMPTY, EMPTY, PLANT, EMPTY|
+    EMPTY,  BOOK,  CAT,   EMPTY, EMPTY|
+    GAME,   EMPTY, EMPTY, EMPTY,   GAME""", 20 , 0, 1, 2
+# Personal card 0, 5 goals achieved
+# Common card 1, not achieved
+# Common card 2, achieved
+""" GAME,   EMPTY, EMPTY, EMPTY,  GAME|
+    EMPTY,  EMPTY, EMPTY, EMPTY, EMPTY|
+    TROPHY, EMPTY, GAME, EMPTY, EMPTY|
+    EMPTY,  EMPTY, EMPTY, PLANT, EMPTY|
+    EMPTY,  BOOK,  CAT,   EMPTY, EMPTY|
+    GAME,   EMPTY, EMPTY, EMPTY,   GAME""", 17 , 0, 1, 2

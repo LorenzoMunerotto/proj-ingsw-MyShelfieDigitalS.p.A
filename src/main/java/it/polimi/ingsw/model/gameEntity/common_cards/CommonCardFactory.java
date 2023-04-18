@@ -93,4 +93,26 @@ public class CommonCardFactory {
         return cardNumber;
     }
 
+    /**
+     * This method is used for testing.
+     *
+     * @return a list of all the common cards
+     */
+    public static List<CommonGoalCard> getAllCommonCards(){
+        List<CommonGoalCard> allCommonCards = new ArrayList<>(CARDS_NUMBER);
+        allCommonCards.add(new CommonCard1());
+        allCommonCards.add(new CommonCard2());
+        allCommonCards.add(new CommonCard3());
+        allCommonCards.add(new CommonCard4());
+        allCommonCards.add(new CommonCard5());
+        allCommonCards.add(new CommonCard6());
+        allCommonCards.add(new CommonCard7());
+        allCommonCards.add(new CommonCard8());
+        allCommonCards.add(new CommonCard9());
+        allCommonCards.add(new CommonCard10());
+        allCommonCards.add(new CommonCard11());
+        allCommonCards.add(new CommonCard12());
+        return allCommonCards;
+    }
+
 }

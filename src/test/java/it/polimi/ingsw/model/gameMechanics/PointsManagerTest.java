@@ -149,4 +149,20 @@ class PointsManagerTest {
         pointsManager = new PointsManager(player, 3, new ArrayList<>(), Optional.empty());
         assertEquals(expectedPoints, pointsManager.personalPoints());
     }
+
+    @ParameterizedTest(name = "{displayName} - {index}")
+    @CsvFileSource(resources = "/totalPointsTest.csv")
+    public void allPoints(String libraryAsString, Integer expectedPoints, Integer personalCardIndex, Integer commonCardIndex, Integer commonCardIndex2) {
+        library.setLibraryFromString(libraryAsString);
+        player.setPersonalGoalCard(personalGoalCardList.get(personalCardIndex));
+        List<CommonGoalCard> commonGoalCardList = CommonCardFactory.getAllCommonCards();
+        List<CommonGoalCard> twoCardsList = new ArrayList<>();
+        twoCardsList.add(commonGoalCardList.get(commonCardIndex - 1));
+        twoCardsList.add(commonGoalCardList.get(commonCardIndex2 - 1));
+
+        pointsManager = new PointsManager(player, 3, twoCardsList, Optional.empty());
+        pointsManager.updateTotalPoints();
+        assertEquals(expectedPoints, player.getTotPoints());
+
+    }
 }
