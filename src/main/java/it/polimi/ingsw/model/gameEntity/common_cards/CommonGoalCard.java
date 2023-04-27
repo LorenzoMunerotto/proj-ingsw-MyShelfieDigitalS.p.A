@@ -13,7 +13,7 @@ public abstract class CommonGoalCard {
      * is the index of the CommonGoalCard
      */
     private final Integer index;
-    //private String description;
+    private String description;
 
     /**
      * The list of the usernames of the players who have reached the goal of

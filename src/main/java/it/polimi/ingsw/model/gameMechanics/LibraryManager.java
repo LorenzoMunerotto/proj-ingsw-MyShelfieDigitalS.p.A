@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model.gameMechanics;
 
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
 import org.javatuples.Pair;
 
 
@@ -14,11 +16,11 @@ import java.util.List;
 /**
  * Class that manage the library
  */
-public class LibraryManager {
+public class LibraryManager extends AbstractListenable {
     /**
      * The library of the game.
      */
-    private final Library library;
+    private Library library;
 
     /**
      * Constructor of the class.
@@ -26,6 +28,14 @@ public class LibraryManager {
      * @param library the library of the game
      */
     public LibraryManager(Library library) {
+        this.library = library;
+    }
+
+    public LibraryManager(){
+        // per il controller
+    }
+
+    public void setLibrary(Library library) {
         this.library = library;
     }
 
@@ -40,6 +50,7 @@ public class LibraryManager {
         for(ItemTile itemTile : itemTileList){
             library.insertItemTile(column, itemTile);
         }
+
     }
 
     /**
@@ -49,13 +60,13 @@ public class LibraryManager {
      * @param col number of the column
      * @param num number of the cell EMPTY
      */
-    public void hasEnoughSpace(Integer col, Integer num){
+    public void hasEnoughSpace(Integer col, Integer num) throws BreakRulesException {
 
         int counter = 0;
         for (int row= library.getROWS()-1 ; row>=0; row--) {
             if (library.getItemTile(row,col).getItemTileType() == ItemTileType.EMPTY) counter++;
         }
-        if(counter < num) throw new IllegalArgumentException("The column cannot contain all the selected tiles");
+        if(counter < num) throw new BreakRulesException(BreakRules.COLUMN_OUT_OF_SPACE);
 
     }
 

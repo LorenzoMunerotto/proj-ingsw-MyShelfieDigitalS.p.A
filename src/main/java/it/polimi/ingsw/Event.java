@@ -10,9 +10,9 @@ public interface Event {
 
     /**
      * This method is a part of the implementation of Visitor pattern applied to Observe-Observable pattern
-     * @param eventHandler is the object that has a method to handle the event
+     * @param
      */
-    void accept(EventHandler eventHandler);
+    void accept(Listener listener);
 
 
 

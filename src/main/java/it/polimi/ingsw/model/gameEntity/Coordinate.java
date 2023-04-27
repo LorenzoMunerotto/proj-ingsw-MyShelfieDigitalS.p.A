@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.gameEntity;
 
+import java.io.Serializable;
+
 /**
  * This class represents the couple (row,col) which
  * identifies a boardCell
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
 
     /**
      * the number which identifies the row
@@ -43,4 +45,6 @@ public class Coordinate {
     public int getCol() {
         return col;
     }
+
+
 }

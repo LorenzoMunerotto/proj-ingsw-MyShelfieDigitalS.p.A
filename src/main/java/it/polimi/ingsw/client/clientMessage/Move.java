@@ -1,7 +1,5 @@
-package it.polimi.ingsw.model.gameState.events;
+package it.polimi.ingsw.client.clientMessage;
 
-import it.polimi.ingsw.EventHandler;
-import it.polimi.ingsw.Event;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
  * This class represents the player's choices/play
  * It's an event for the Observer-Observable pattern
  */
-public class Move implements Event {
+public class Move implements ClientMessage {
 
 
     /**
@@ -38,12 +36,9 @@ public class Move implements Event {
         return column;
     }
 
-    /**
-     * @see Event
-     * @param eventHandler
-     */
     @Override
-    public void accept(EventHandler eventHandler) {
-        eventHandler.handle(this);
+    public String getMessage() {
+        return null;
     }
 }
+
