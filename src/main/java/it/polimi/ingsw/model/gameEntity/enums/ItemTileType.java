@@ -37,7 +37,4 @@ public enum ItemTileType {
     public String getColor() {
         return this.color;
     }
-
-
-
 }

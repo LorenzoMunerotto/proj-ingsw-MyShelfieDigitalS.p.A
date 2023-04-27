@@ -15,10 +15,9 @@ public class CommonCard10 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard10() {
-        super(10, "Two lines each formed by 5 different\n" +
-                "types of tiles. One line can show the\n" +
-                "same or a different combination of the\n" +
-                "other line.");
+        super(10, """
+                Two lines each formed by 5 different types of tiles.
+                One line can show the same or a different combination of the other line.""");
     }
 
     /**

@@ -6,14 +6,15 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 /**
  * Class representing the common goal card 1.
  */
-public class CommonCard2 extends CommonGoalCard{
+public class CommonCard2 extends CommonGoalCard {
 
     /**
      * Constructor of the class.
      */
-    public CommonCard2(){
-        super(2, "Four tiles of the same type in the four\n" +
-                "corners of the bookshelf. ");
+    public CommonCard2() {
+        super(2, """
+                Four groups each containing at least 4 tiles of the same type.
+                The tiles of one group can be different from those of another group.""");
     }
 
     /**
@@ -24,10 +25,10 @@ public class CommonCard2 extends CommonGoalCard{
      */
     @Override
     public boolean checkRules(Library library) {
-        ItemTileType itemTile1 = library.getItemTile(0,0).getItemTileType();
-        ItemTileType itemTile2 = library.getItemTile(0,4).getItemTileType();
-        ItemTileType itemTile3 = library.getItemTile(5,0).getItemTileType();
-        ItemTileType itemTile4 = library.getItemTile(5,4).getItemTileType();
+        ItemTileType itemTile1 = library.getItemTile(0, 0).getItemTileType();
+        ItemTileType itemTile2 = library.getItemTile(0, 4).getItemTileType();
+        ItemTileType itemTile3 = library.getItemTile(5, 0).getItemTileType();
+        ItemTileType itemTile4 = library.getItemTile(5, 4).getItemTileType();
         return itemTile1 == itemTile2 && itemTile2 == itemTile3 && itemTile3 == itemTile4;
     }
 }

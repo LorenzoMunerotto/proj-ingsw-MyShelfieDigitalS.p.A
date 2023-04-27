@@ -12,7 +12,8 @@ public class CommonCard11 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard11() {
-        super(11, "Five tiles of the same type forming an X.");
+        super(11, """
+                Five tiles of the same type forming an X.""");
     }
 
     /**
@@ -26,20 +27,20 @@ public class CommonCard11 extends CommonGoalCard {
 
         for (int row = 0; row < library.getROWS() - 2; row++) {
             for (int col = 0; col < library.getCOLUMNS() - 2; col++) {
-                ItemTileType currentType = library.getItemTile(row,col).getItemTileType();
+                ItemTileType currentType = library.getItemTile(row, col).getItemTileType();
                 if (currentType == ItemTileType.EMPTY) {
                     continue;
                 }
-                if (currentType != library.getItemTile(row,col+2).getItemTileType()) {
+                if (currentType != library.getItemTile(row, col + 2).getItemTileType()) {
                     continue;
                 }
-                if (currentType != library.getItemTile(row+1,col+1).getItemTileType()) {
+                if (currentType != library.getItemTile(row + 1, col + 1).getItemTileType()) {
                     continue;
                 }
-                if (currentType != library.getItemTile(row+2,col).getItemTileType()) {
+                if (currentType != library.getItemTile(row + 2, col).getItemTileType()) {
                     continue;
                 }
-                if (currentType != library.getItemTile(row+2,col+2).getItemTileType()) {
+                if (currentType != library.getItemTile(row + 2, col + 2).getItemTileType()) {
                     continue;
                 }
                 return true;

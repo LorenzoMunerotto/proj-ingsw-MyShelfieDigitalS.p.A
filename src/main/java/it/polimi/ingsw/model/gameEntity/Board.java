@@ -85,6 +85,10 @@ public class Board {
         return boardGrid[row][column];
     }
 
+    public BoardCell[][] getBoardGrid() {
+        return boardGrid;
+    }
+
     /**
      * This method set the itemTile in BoardCell at boardGrid[row][col],
      * only if the boardCell is playable and the present itemTileType is EMPTY
