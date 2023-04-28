@@ -1,27 +1,26 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Library;
+import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
 import it.polimi.ingsw.model.gameState.GameData;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class CLIDrawer {
-    private final GameData gameData;
+    private final VirtualModel virtualModel;
 
-    public CLIDrawer(GameData gameData) {
-        this.gameData = gameData;
+    public CLIDrawer(VirtualModel virtualModel) {
+        this.virtualModel = virtualModel;
     }
 
     public void printGame() {
         printGameObjects();
-        printCards();
+        printCommonGoalCards();
         printSeparator();
     }
 
@@ -33,10 +32,10 @@ public class CLIDrawer {
      * Print the board and the two libraries parallel to each other.
      */
     public void printGameObjects() {
-        Board board = gameData.getBoard();
-        Library currentLibrary = gameData.getCurrentPlayer().getLibrary();
+        Board board = virtualModel.getBoard();
+        Library currentLibrary = virtualModel.getLibrary();
         Library personalCardLibrary = new Library();
-        for (Goal goal : gameData.getCurrentPlayer().getPersonalGoalCard().getGoals()) {
+        for (Goal goal : virtualModel.getPersonalGoalCard().getGoals()) {
             personalCardLibrary.setItemTile(goal.getRow(), goal.getColumn(), new ItemTile(goal.getItemTileType()));
         }
 
@@ -159,6 +158,7 @@ public class CLIDrawer {
                 System.out.print(CLIColors.YELLOW_BOLD + "├─────" + CLIColors.RESET);
             }
             System.out.println(CLIColors.YELLOW_BOLD + "┤" + CLIColors.RESET);
+
         }
     }
 
@@ -224,88 +224,82 @@ public class CLIDrawer {
     /**
      * Print the common goal cards.
      */
-    public void printCommonGoalCards() {
-        List<CommonGoalCard> commonGoalCards = gameData.getCommonGoalCardsList();
-        List<List<String>> cardDescriptions = new ArrayList<>();
-        int maxLineWidth = 0;
-        for (CommonGoalCard commonGoalCard : commonGoalCards) {
-            String description = commonGoalCard.getDescription();
-            String[] lines = description.split("\n");
-            cardDescriptions.add(Arrays.asList(lines));
-            for (String line : lines) {
-                maxLineWidth = Math.max(maxLineWidth, line.length());
+    private void printCommonGoalCards() {
+        List<CommonGoalCard> commonGoalCards = virtualModel.getCommonGoalCards();
+
+        int maxLineLength = 0;
+        for (CommonGoalCard card : commonGoalCards) {
+            String description = card.getDescription();
+            String[] descriptionLines = description.split("\n");
+            for (String line : descriptionLines) {
+                int lineWidth = 1 + line.length();
+                maxLineLength = Math.max(maxLineLength, lineWidth);
             }
         }
 
-        int maxRows = cardDescriptions.stream().mapToInt(List::size).max().orElse(0);
-
-        // Stampa la riga superiore della cornice
-        for (int i = 0; i < cardDescriptions.size(); i++) {
-            System.out.print("┌" + "─".repeat(maxLineWidth) + "┐");
-            if (i < cardDescriptions.size() - 1) {
-                System.out.print(" ");
-            }
+        for (int i = 0; i < commonGoalCards.size(); i++) {
+            System.out.print("╭" + "─".repeat(maxLineLength) + "╮");
         }
         System.out.println();
 
-        for (int i = 0; i < cardDescriptions.size(); i++) {
-            System.out.printf("│CommonGoalCard %d Points:8%-" + (maxLineWidth - ("CommonGoalCard ").length() - 4 - " Points:8".length() - (i * 2)) + "s│", commonGoalCards.get(i).getIndex(), "");
-            if (i < cardDescriptions.size() - 1) {
-                System.out.print(" ");
-            }
+        for (CommonGoalCard card : commonGoalCards) {
+            String commonCard = " Common Card: " + CLIColors.PURPLE_BRIGHT + card.getIndex() + CLIColors.RESET;
+            String points = " Points:" + CLIColors.PURPLE_BRIGHT + " 8 " + CLIColors.RESET;
+            int commonCardLength = commonCard.replaceAll("\\x1B\\[[;\\d]*m", "").length();
+            int pointsLength = points.replaceAll("\\x1B\\[[;\\d]*m", "").length();
+            int padding = Math.max(0, maxLineLength - (commonCardLength + pointsLength));
+            System.out.print("│" + commonCard + " ".repeat(padding) + points + "│");
         }
         System.out.println();
 
-        for (int row = 0; row < maxRows; row++) {
-            for (int i = 0; i < cardDescriptions.size(); i++) {
-                List<String> descriptionLines = cardDescriptions.get(i);
-
-                if (row < descriptionLines.size()) {
-                    System.out.printf("│%-" + maxLineWidth + "s│", descriptionLines.get(row));
+        int maxLinesNumber = 2;
+        for (int i = 0; i < maxLinesNumber; i++) {
+            for (CommonGoalCard card : commonGoalCards) {
+                String description = card.getDescription();
+                String[] descriptionLines = description.split("\n");
+                if (i < descriptionLines.length) {
+                    String line = " " + descriptionLines[i];
+                    int padding = Math.max(0, maxLineLength - line.length());
+                    String newLineWithPadding = line + " ".repeat(padding);
+                    System.out.print("│" + newLineWithPadding + "│");
                 } else {
-                    System.out.printf("│%-" + maxLineWidth + "s│", "");
-                }
-
-                if (i < cardDescriptions.size() - 1) {
-                    System.out.print(" ");
+                    System.out.print("│" + " ".repeat(maxLineLength) + "│");
                 }
             }
             System.out.println();
         }
 
-        // Stampa la riga inferiore della cornice
-        for (int i = 0; i < cardDescriptions.size(); i++) {
-            System.out.print("└" + "─".repeat(maxLineWidth) + "┘");
-            if (i < cardDescriptions.size() - 1) {
-                System.out.print(" ");
+        for (int i = 0; i < commonGoalCards.size(); i++) {
+            System.out.print("╰" + "─".repeat(maxLineLength) + "╯");
+        }
+        System.out.println();
+    }
+
+    private void printBag() {
+        System.out.println("Remaining item tiles in the bag: " + CLIColors.PURPLE_BRIGHT + virtualModel.getBag().getItemTiles().size() + CLIColors.RESET);
+    }
+
+    protected void printLeaderBoard() {
+        List<Player> players = virtualModel.getPlayers();
+        players.sort(Comparator.comparingInt(Player::getTotPoints).reversed());
+        String headerFormat = CLIColors.GREEN + "║" + CLIColors.CYAN + " %-4s " + CLIColors.GREEN + "║" + CLIColors.CYAN + " %-20s " + CLIColors.GREEN + "║" + CLIColors.CYAN + " %-5s " + CLIColors.GREEN + "║" + CLIColors.RESET;
+        String[] colors = {CLIColors.YELLOW_BRIGHT, CLIColors.RED_BRIGHT, CLIColors.PURPLE_BRIGHT, CLIColors.BLUE_BRIGHT};
+
+        System.out.println(CLIColors.GREEN + "╔══════╦══════════════════════╦════════╗" + CLIColors.RESET);
+        System.out.printf(headerFormat, "Rank", "Leaderboard", "Points");
+        System.out.println();
+        System.out.println(CLIColors.GREEN + "╠══════╬══════════════════════╬════════╣" + CLIColors.RESET);
+
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            System.out.printf(CLIColors.GREEN + "║" + CLIColors.RESET + colors[i] + "   %s  " + CLIColors.RESET + CLIColors.GREEN + "║" + CLIColors.RESET + colors[i] + " %-20s " + CLIColors.RESET + CLIColors.GREEN + "║" + CLIColors.RESET + colors[i] + "    %s   " + CLIColors.RESET + CLIColors.GREEN + "║" + CLIColors.RESET, (i+1), player.getUsername(), player.getTotPoints());
+            System.out.println();
+            if (i < players.size() - 1) {
+                System.out.println(CLIColors.GREEN + "╠══════╬══════════════════════╬════════╣" + CLIColors.RESET);
+            } else {
+                System.out.println(CLIColors.GREEN + "╚══════╩══════════════════════╩════════╝" + CLIColors.RESET);
             }
         }
-        System.out.println();
     }
 
-    private void printCards(){
-        int maxLineWidth = 66;
-        List<CommonGoalCard> commonGoalCards = gameData.getCommonGoalCardsList();
-        String commonCard = " Common Card: " + commonGoalCards.get(0).getIndex();
-        String points = " Points: x ";
-        int commonCardLength = commonCard.length();
-        int pointsLength = points.length();
-        for(int i = 0; i < commonGoalCards.size(); i++){
-            System.out.print("┌" + "─".repeat(maxLineWidth) + "┐");
-        }
-        System.out.println();
-        System.out.println("|" + " Common Card: " + commonGoalCards.get(0).getIndex() + " ".repeat(maxLineWidth-(commonCardLength + pointsLength)) + "Points: 8 " + "||" + " Common Card: " + commonGoalCards.get(1).getIndex() +" ".repeat(maxLineWidth-25) + "Points: 8 " + "|");
-        for(int i = 0; i < 2; i++){
-            System.out.println("|" + " ".repeat(maxLineWidth) + "||" + " ".repeat(maxLineWidth) + "|");
-        }
-        for(int i = 0; i < commonGoalCards.size(); i++){
-            System.out.print("└" + "─".repeat(maxLineWidth) + "┘");
-        }
-        System.out.println();
-    }
-
-    public void printItemTilesBag() {
-        Bag bag = gameData.getBag();
-        System.out.println("Remaining item tiles: " + bag.getItemTiles().size());
-    }
 }

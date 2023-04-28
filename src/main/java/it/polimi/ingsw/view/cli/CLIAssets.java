@@ -55,4 +55,18 @@ public class CLIAssets {
     );
 
     public static  final String output = CLIColors.PURPLE_BRIGHT + "> " + CLIColors.RESET;
+
+    public static final char[] clockChars = {'◴', '◷', '◶', '◵'};
+
+    private static final String shortDescription = """
+            Six groups, each with at least 2 same-type tiles. Groups may have different tiles.
+            Four groups, each with at least 4 same-type tiles. Groups may have different tiles.
+            Four same-type tiles in the bookshelf's four corners.
+            Two groups, each with a 2x2 square of 4 same-type tiles. Squares may have different tiles.
+            Three columns with 6 tiles each, max 3 different types. Columns may have different combinations.
+            Eight same-type tiles, no position restrictions.
+            Four lines, each with 5 tiles, max 3 different types. Lines may have different combinations.
+            Two lines, each with 5 different tile types. Lines may have different combinations.
+            Five columns with increasing/decreasing height. Next column has 1 more tile. Any tile type.
+            """;
 }

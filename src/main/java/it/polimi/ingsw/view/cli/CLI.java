@@ -8,15 +8,26 @@ import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualModelProxy;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+
+import static it.polimi.ingsw.view.cli.CLIAssets.*;
 
 public class CLI extends View {
     private static final Scanner scanner = new Scanner(System.in);
 
+    public CLI(VirtualModelProxy virtualModel) {
+        super(virtualModel);
+    }
+
+    /**
+     * Clears the console.
+     */
     public static void clear() {
         try {
             String os = System.getProperty("os.name");
@@ -34,6 +45,9 @@ public class CLI extends View {
         }
     }
 
+    /**
+     * Asks the user to choose his username.
+     */
     private void chooseUsername() {
         this.username = "";
         System.out.print(CLIAssets.output + "Please insert your username: ");
@@ -47,6 +61,9 @@ public class CLI extends View {
         }
     }
 
+    /**
+     * Asks the user to choose the number of players for the game.
+     */
     private void choosePlayersNumber() {
         this.playersNumber = 0;
         String playersNumberString;
@@ -65,6 +82,9 @@ public class CLI extends View {
         }
     }
 
+    /**
+     * Asks the user to choose the item tiles to grab from the board.
+     */
     private void chooseTiles() {
         this.coordinates = "";
         System.out.printf(CLIAssets.output + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
@@ -79,6 +99,9 @@ public class CLI extends View {
         }
     }
 
+    /**
+     * Asks the user to choose the column of the library where to place the tiles.
+     */
     private void chooseColumn() {
         this.column = 0;
         String columnString;
@@ -102,10 +125,10 @@ public class CLI extends View {
     // winning message
     // print leaderboard
 
-    protected void createGame() throws IllegalUsernameException, UsernameAlreadyExistsException, GameStartedException, InvalidNumOfPlayers {
+    protected void createGame(Game game) throws IllegalUsernameException, UsernameAlreadyExistsException, GameStartedException, InvalidNumOfPlayers {
         List<Player> players = new ArrayList<>();
-        Game game = new Game();
         GameData gameData = game.getGameData();
+        System.out.println("                           Welcome to");
         System.out.println(CLIAssets.MYSHELFIE_TITLE);
         this.chooseUsername();
         players.add(new Player(this.username));
@@ -120,14 +143,21 @@ public class CLI extends View {
         }
         game.boardInitialization();
         game.assignAllPersonalCard();
-        CLIDrawer drawer = new CLIDrawer(gameData);
+        virtualModel.initializeVirtualModel(gameData);
+        CLIDrawer drawer = new CLIDrawer(virtualModel);
         for (int i = 0; i < this.playersNumber; i++) {
-            System.out.println("Player " + CLIColors.PURPLE_BRIGHT + gameData.getCurrentPlayer().getUsername() + CLIColors.RESET + " turn");
+            clear();
             drawer.printSeparator();
             drawer.printGame();
-            this.chooseTiles();
+            playTurn();
             gameData.nextPlayer();
         }
+        for(Player player : gameData.getPlayers()){
+            Random random = new Random();
+            int points = random.nextInt(10);
+            player.setTotPoints(points);
+        }
+        drawer.printLeaderBoard();
         // send to server somehow and check if username is available
 
     }
@@ -138,5 +168,53 @@ public class CLI extends View {
         // check if username is available
         // check if there is a game to join
         // check if there is space in the game
+    }
+
+    @Override
+    protected void waitForTurn() {
+        System.out.print("Waiting for other players to play their turn...");
+
+        Thread clockThread = new Thread(() -> {
+            int index = 0;
+
+            while (!Thread.currentThread().isInterrupted()) {
+                System.out.print("\b" + clockChars[index]);
+                index = (index + 1) % clockChars.length;
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        });
+
+        clockThread.start();
+
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+
+        clockThread.interrupt();
+        try {
+            clockThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("\nContinuing...");
+    }
+
+    protected void playTurn() {
+        System.out.println(CLIAssets.output + "It is your turn!");
+        try {
+            this.chooseTiles();
+            this.chooseColumn();
+        } catch (Exception e) {
+            System.out.println("Error while playing turn");
+        }
+    }
+
+    protected void showMessage(String message){
+        System.out.printf("%s%s%s%s%n", CLIAssets.output,CLIColors.RED_BRIGHT, message, CLIColors.RESET);
     }
 }

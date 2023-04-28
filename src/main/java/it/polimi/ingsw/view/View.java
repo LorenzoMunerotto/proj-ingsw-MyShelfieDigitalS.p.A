@@ -1,11 +1,13 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
 import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIAssets;
+import it.polimi.ingsw.view.cli.VirtualModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,7 +20,12 @@ public abstract class View {
     protected int column;
     protected int MIN_PLAYERS_NUMBER = 2;
     protected int MAX_PLAYERS_NUMBER = 4;
+    protected String winner;
     protected VirtualModel virtualModel;
+
+    public View (VirtualModel virtualModel){
+        this.virtualModel = virtualModel;
+    }
 
     protected static boolean isUsernameValid(String username) {
         Pattern pattern = Pattern.compile(CLIAssets.USERNAME_REGEX);
@@ -37,10 +44,26 @@ public abstract class View {
         this.playersNumber = 0;
     }
 
-    protected  abstract void createGame() throws UsernameAlreadyExistsException, GameStartedException, IllegalUsernameException, InvalidNumOfPlayers;
+    protected  abstract void createGame(Game game) throws UsernameAlreadyExistsException, GameStartedException, IllegalUsernameException, InvalidNumOfPlayers;
 
-    public static void main(String[] args) throws UsernameAlreadyExistsException, IllegalUsernameException, GameStartedException, InvalidNumOfPlayers {
-        View view = new CLI();
-        view.createGame();
+    protected abstract void waitForTurn();
+
+    public static void main(String[] args) {
+        Game game = new Game();
+        VirtualModelProxy virtualModel = new VirtualModelProxy();
+        View view = new CLI(virtualModel);
+        try {
+            view.createGame(game);
+        } catch (UsernameAlreadyExistsException | GameStartedException | IllegalUsernameException |
+                 InvalidNumOfPlayers e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void checkForWinner(){
+        if(virtualModel.getWinner() != null){
+            winner = virtualModel.getWinner();
+
+        }
     }
 }
