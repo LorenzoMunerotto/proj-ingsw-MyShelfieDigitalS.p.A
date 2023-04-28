@@ -12,7 +12,7 @@ public class ModelView {
     private int playerIndex;
     private CommonCardClient[] commonCardClients;
     private ClientLibrary personalCard;
-    private int[] totPoints;
+    private int[] totPointsPlayers;
 
 
 

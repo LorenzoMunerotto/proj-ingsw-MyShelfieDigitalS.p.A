@@ -1,17 +1,12 @@
 package it.polimi.ingsw;
 
-import it.polimi.ingsw.client.GraphicController;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.terminal.Controller;
 import it.polimi.ingsw.terminal.Drawer;
 import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.javatuples.Pair;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,16 +57,9 @@ public class Main extends Application {
         drawer.showRank();
     }
 
-
     @Override
-    public void start (Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Graphic.fxml"));
-        Scene scene= new Scene(fxmlLoader.load(),1920,1080);
-        popola();
-        stage.setScene(scene);
-        stage.show();
-        popola();
-        stage.show();
+    public void start(Stage stage) throws Exception {
+
     }
 }
 
