@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.gameState.Exceptions;
+package it.polimi.ingsw.model.gameState.exceptions;
 
 import it.polimi.ingsw.server.serverMessage.Error;
 

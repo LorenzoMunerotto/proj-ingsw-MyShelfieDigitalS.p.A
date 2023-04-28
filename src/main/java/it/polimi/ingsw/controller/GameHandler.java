@@ -1,16 +1,21 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.client.clientMessage.Move;
+import it.polimi.ingsw.client.view.VirtualModelProxy;
 import it.polimi.ingsw.model.gameEntity.Board;
+import it.polimi.ingsw.model.gameEntity.BoardCell;
+import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
-import it.polimi.ingsw.model.gameEntity.personal_cards.AllPersonalGoalCards;
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameEntity.personal_cards.CardsContainer;
+import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameMechanics.BreakRulesException;
 import it.polimi.ingsw.model.gameMechanics.LibraryManager;
 import it.polimi.ingsw.model.gameMechanics.PointsManager;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalNumOfPlayersException;
+import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.serverMessage.*;
@@ -19,8 +24,9 @@ import java.util.*;
 
 public class GameHandler {
 
-    private List<VirtualClient> clients;
-    GameData gameData;
+    private final List<VirtualClient> virtualClients;
+    private final GameData gameData;
+    private final VirtualModelProxy virtualModel;
     LibraryManager libraryManager;
     BoardManager boardManager;
     PointsManager pointsManager;
@@ -31,53 +37,45 @@ public class GameHandler {
      */
     public GameHandler() {
         this.gameData = new GameData();
-        this.clients = new ArrayList<>();
-
+        this.virtualModel = new VirtualModelProxy();
+        this.virtualClients = new ArrayList<>();
     }
 
     /**
      * This method set the managers in order to work on the current Player/library
      */
-    public void setUpManagers(){
+    public void setUpManagers() {
         libraryManager.setLibrary(gameData.getCurrentPlayer().getLibrary());
-        pointsManager.setPlayer(gameData.getCurrentPlayer());
     }
 
-    public void nextPlayer(){
-
-
-        if (gameData.getFirstFullLibraryUsername().isPresent() && gameData.getCurrentPlayerIndex()== gameData.getNumOfPlayers()-1){
-           //broadcast( new EndGameMessage());
-        }
-        else if (gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers()-1){
+    public void nextPlayer() {
+        if (gameData.getFirstFullLibraryUsername().isPresent() && gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers() - 1) {
+            //broadcast( new EndGameMessage());
+        } else if (gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers() - 1) {
             gameData.setCurrentPlayerIndex(0);
-
+        } else {
+            gameData.setCurrentPlayerIndex(gameData.getCurrentPlayerIndex() + 1);
         }
-        else{
-            gameData.setCurrentPlayerIndex(gameData.getCurrentPlayerIndex()+1);
-
-        }
-
-
-
     }
 
     /**
-     * This method send a message only to the currentPlayer
-     * @param serverMessage
+     * This method send a message only to the currentPlayer.
+     *
+     * @param serverMessage is the message to send
      */
-    public void sendToCurrentPlayer(ServerMessage serverMessage){
+    public void sendToCurrentPlayer(ServerMessage serverMessage) {
 
-        for (VirtualClient client: clients){
-            if (client.getUsername()==gameData.getCurrentPlayer().getUsername()){
+        for (VirtualClient client : virtualClients) {
+            if (Objects.equals(client.getUsername(), gameData.getCurrentPlayer().getUsername())) {
                 client.send(serverMessage);
             }
         }
     }
 
     /**
-     * This method process the message Move arrived from a Client,
-     * @param move
+     * This method process the message Move arrived from a Client.
+     *
+     * @param move the message arrived from the Client
      */
     public void handle(Move move) {
 
@@ -88,14 +86,13 @@ public class GameHandler {
             libraryManager.hasEnoughSpace(move.getColumn(), numberOfTiles);
             libraryManager.insertItemTiles(move.getColumn(), boardManager.grabItemTiles(move.getCoordinateList()));
 
-            //se parte un eccezione non serve fare quello sotto
             pointsManager.updateTotalPoints();
 
-            if (pointsManager.isThereFullLibrary()){
+            if (pointsManager.isPresentFirstFullLibraryUsername() && pointsManager.getFirstFullLibraryUsername().isPresent()) {
                 gameData.setFirstFullLibraryUsername(pointsManager.getFirstFullLibraryUsername().get());
             }
 
-            if( boardManager.isRefillTime()){
+            if (boardManager.isRefillTime()) {
                 boardManager.refillBoard();
             }
 
@@ -104,15 +101,13 @@ public class GameHandler {
             sendAll(new StartTurnMessage(gameData.getCurrentPlayer().getUsername()));
             sendToCurrentPlayer(new MoveRequest());
 
-        }catch (BreakRulesException e){
-
-
+        } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
             sendToCurrentPlayer(new MoveRequest());
-            // qua in base al tipo di eccezione che si è sollevata mando il messaggio al client per avvisarlo dell' errore
 
-            //se i metodi concludono senza solevare eccezioni  il modello è cambiato quindi è stato generato
-            // un evento dal manager, ascoltato dai virtual client e inviato ad ogni client
+            // based on the exception type, the client must be notified of the error
+            // if the methods end without throwing exceptions, the model has changed and an event has been generated by the manager
+            // listened by the virtual clients and sent to each client
         }
 
     }
@@ -122,119 +117,167 @@ public class GameHandler {
     }
 
     /**
-     * This method setup the GameHandler at the beginning of the match
+     * This method set up the GameHandler at the beginning of the match.
      */
-    public void startGame(){
-
-        //istanzio e assegno la board in base al numero di giocatori esatti
+    public void startGame() {
+        // create the board based on the number of players
         gameData.setBoard(new Board(gameData.getNumOfPlayers()));
 
-        //cro i manager
+        // create the managers
         this.libraryManager = new LibraryManager();
         this.boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
-        this.pointsManager = new PointsManager(libraryManager);
+        this.pointsManager = new PointsManager(gameData.getCurrentPlayer(), gameData.getNumOfPlayers(), gameData.getCommonGoalCardsList());
 
-        // ogni virtual client deve essere notificato degli eventi generati in gameData e nei managers
-        for (VirtualClient client : clients){
+        // each virtual client must be notified of the events generated in gameData and in the managers
+        for (VirtualClient client : virtualClients) {
             gameData.addListener(client);
             boardManager.addListener(client);
             libraryManager.addListener(client);
             pointsManager.addListener(client);
         }
 
-        //ogni client deve essere notificato degli eventi che rigurdano solo lui, tipo l'assegnamento delle carte  personali
-        //per questo ogni virtual client deve essere listener del rispetivo oggetto player
-        for (Player player : gameData.getPlayers() ){
-            for (VirtualClient client: clients){
-                if (client.getClientID()==player.getClintID()){
+        // each client must be notified of the events generated in his player
+        // it means that each virtual client must be listener of his player
+        for (Player player : gameData.getPlayers()) {
+            for (VirtualClient client : virtualClients) {
+                if (client.getClientID() == player.getClintID()) {
                     player.addListener(client);
                 }
             }
         }
 
-        //si decide l'ordine di gioco
-        Collections.shuffle(gameData.getPlayers(), new Random()); //farlo in questo modo è una cosa dangerous ma intanto funziona ;)
+        // it decides the order of the players
+        Collections.shuffle(gameData.getPlayers(), new Random());
 
-        //si assegnano le carte personali e comuni
+        // assign the personal goal cards to each player and the common goal cards
         assignPersonalGoalCard();
         assignCommonGoalCards();
 
-        //completo il set up dei managers
-        pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
-        pointsManager.setNumOfPlayers(gameData.getNumOfPlayers());
-
-        //per ultimo prima di partire si refilla la board
+        // refill the board
         boardManager.refillBoard();
 
-        gameData.setCurrentPlayerIndex(0);
-        // (per ora) da modificare usando chair
+        gameData.setCurrentPlayerIndex(0); // needs a fix to include the chair
 
         //sendAll(new StartGameMessage());
 
-        //comunico a tutti l'inizio del turno di un giocatore
+        // notify every client of the current turn
         sendAll(new StartTurnMessage(gameData.getCurrentPlayer().getUsername()));
-        //al giocatore corrente invio la richiesta della mossa
+
+        // to the current player is sent a MoveRequest
         sendToCurrentPlayer(new MoveRequest());
     }
 
     /**
      * This method set the PersonalGoalCard on each player in gameData
      */
-    public void assignPersonalGoalCard(){
-        Set<Integer> numberOfPersonalCards = new HashSet<>();
-        Random random = new Random();
-        AllPersonalGoalCards allPersonalGoalCards = AllPersonalGoalCards.makeAllPersonalGoalCards();
-        for(int i=0; i< gameData.getNumOfPlayers();i++){
-            while (true){
-                int randomNumber= random.nextInt(12);
-                if(!numberOfPersonalCards.contains(randomNumber)){
-                    PersonalGoalCard randomPersonalGoalCard = allPersonalGoalCards.getCards().get(randomNumber);
-                    gameData.getPlayers().get(i).setPersonalGoalCard(randomPersonalGoalCard);
-                    numberOfPersonalCards.add(randomNumber);
-                    break;
-                }
-            }
+    public void assignPersonalGoalCard() {
+        CardsContainer allPersonalGoalCards = new CardsContainer();
+        List<PersonalGoalCard> personalGoalCards = allPersonalGoalCards.getPersonalGoalCards(gameData.getNumOfPlayers());
+        for (Player player : gameData.getPlayers()) {
+            player.setPersonalGoalCard(personalGoalCards.remove(0));
         }
-
     }
 
     /**
      * This method set the commonGoalCardList in GameData
      */
-    public void assignCommonGoalCards(){
-
-        gameData.setCommonGoalCardsList( CommonCardFactory.createCards());
+    public void assignCommonGoalCards() {
+        gameData.setCommonGoalCardsList(CommonCardFactory.createCards());
     }
 
     /**
-     * This method create the Player, and add it in GameData
-     * @param username
-     * @param clientId
+     * This method create the Player, and add it in GameData.
+     *
+     * @param username is the username of the player
+     * @param clientId is the id of the client
      */
-    public void addPlayer(String username, Integer clientId){
-
-            gameData.addPlayer(new Player(username, clientId));
-
+    public void addPlayer(String username, Integer clientId) {
+        gameData.addPlayer(new Player(username, clientId));
     }
 
     /**
-     * This method broadcast a message to the players in game
-     * @param serverMessage
+     * This method broadcast a message to the players in game.
+     *
+     * @param serverMessage is the message to send
      */
-    public void sendAll(ServerMessage serverMessage){
-        for (VirtualClient client : clients){
+    public void sendAll(ServerMessage serverMessage) {
+        for (VirtualClient client : virtualClients) {
             client.send(serverMessage);
         }
-
     }
 
 
     /**
-     * This method add a VirtualClient in the list of virtualClients
-     * @param virtualClient
+     * This method add a VirtualClient in the list of virtualClients.
+     *
+     * @param virtualClient is the virtualClient to add
      */
-    public void addVirtualClient(VirtualClient virtualClient){
-        clients.add(virtualClient);
+    public void addVirtualClient(VirtualClient virtualClient) {
+        virtualClients.add(virtualClient);
     }
 
+    public void setUpVirtualModel(){
+        updateVirtualBoard();
+        updateVirtualLibrary();
+        setVirtualPersonalGoalCard();
+    }
+
+    /**
+     * This method updates the state of the virtual board.
+     */
+    public void updateVirtualBoard(){
+        int row = gameData.getBoard().getROWS();
+        int col = gameData.getBoard().getCOLUMNS();
+        BoardCell[][] virtualBoard = new BoardCell[row][col];
+        for(int currentRow = 0; currentRow < row; currentRow++){
+            for(int currentColumn = 0; currentColumn < col; currentColumn++){
+                BoardCell cell = gameData.getBoard().getBoardCell(currentRow,currentColumn);
+                virtualBoard[currentRow][currentColumn] = new BoardCell(cell.isPlayable());
+                if(virtualBoard[currentRow][currentColumn].isPlayable()){
+                    virtualBoard[currentRow][currentColumn].setItemTile(new ItemTile(cell.getItemTile().getItemTileType()));
+                }
+            }
+        }
+        virtualModel.updateBoard(virtualBoard);
+    }
+
+    /**
+     * This method updates the state of the virtual library.
+     */
+    public void updateVirtualLibrary(){
+        int row = gameData.getCurrentPlayer().getLibrary().getROWS();
+        int col = gameData.getCurrentPlayer().getLibrary().getCOLUMNS();
+        ItemTile[][] virtualLibrary = new ItemTile[row][col];
+        for(int currentRow = 0; currentRow < row; currentRow++){
+            for(int currentColumn = 0; currentColumn < col; currentColumn++){
+                ItemTile tile = gameData.getCurrentPlayer().getLibrary().getItemTile(currentRow,currentColumn);
+                virtualLibrary[currentRow][currentColumn] = new ItemTile(tile.getItemTileType());
+            }
+        }
+        virtualModel.updateLibrary(virtualLibrary);
+    }
+
+    /**
+     * This method set the state of the virtual personal goal card.
+     */
+    public void setVirtualPersonalGoalCard() {
+        int row = gameData.getCurrentPlayer().getLibrary().getROWS();
+        int col = gameData.getCurrentPlayer().getLibrary().getCOLUMNS();
+        ItemTile[][] virtualPersonalGoalCard = new ItemTile[row][col];
+
+        for (int currentRow = 0; currentRow < row; currentRow++) {
+            for (int currentColumn = 0; currentColumn < col; currentColumn++) {
+                virtualPersonalGoalCard[currentRow][currentColumn] = new ItemTile(ItemTileType.EMPTY);
+            }
+        }
+
+        List<Goal> goals = gameData.getCurrentPlayer().getPersonalGoalCard().getGoals();
+        for (Goal goal : goals) {
+            int goalRow = goal.getRow();
+            int goalCol = goal.getColumn();
+            ItemTileType type = goal.getItemTileType();
+            virtualPersonalGoalCard[goalRow][goalCol] = new ItemTile(type);
+        }
+        virtualModel.updatePersonalGoalCard(virtualPersonalGoalCard);
+    }
 }

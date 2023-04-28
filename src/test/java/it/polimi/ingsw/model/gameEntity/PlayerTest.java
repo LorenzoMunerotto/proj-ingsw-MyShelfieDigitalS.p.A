@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.personal_cards.CardsContainer;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,16 +13,8 @@ class PlayerTest {
     private Player player;
 
     @BeforeEach
-    void setUp() throws IllegalUsernameException {
-        player = new Player("Pippo");
-    }
-
-    @Test
-    @DisplayName("Test constructor with invalid username")
-    void testConstructorInvalidUsername() {
-        assertThrows(IllegalUsernameException.class, () -> new Player(null));
-        assertThrows(IllegalUsernameException.class, () -> new Player(""));
-        assertThrows(IllegalUsernameException.class, () -> new Player(" "));
+    void setUp(){
+        player = new Player("Pippo", 1);
     }
 
     @Test

@@ -1,9 +1,6 @@
-package it.polimi.ingsw.client.view.cli;
+package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.model.gameEntity.Bag;
-import it.polimi.ingsw.model.gameEntity.Board;
-import it.polimi.ingsw.model.gameEntity.Library;
-import it.polimi.ingsw.model.gameEntity.Player;
+import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.GameData;
@@ -15,12 +12,12 @@ public interface VirtualModel {
 
     void initializeVirtualModel(GameData gameData);
 
-    Board getBoard();
-    Library getLibrary();
-    PersonalGoalCard getPersonalGoalCard();
+    BoardCell[][] getBoard();
+    ItemTile[][] getLibrary();
+    ItemTile[][] getPersonalGoalCard();
     List<CommonGoalCard> getCommonGoalCards();
     List<Player> getPlayers();
-    Bag getBag();
+    int getBag();
 
     Player getCurrentPlayer();
 

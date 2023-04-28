@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.gameMechanics;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.board.BoardTestHelper;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import org.javatuples.Pair;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,16 +55,16 @@ class BoardManagerTest {
 
     @Test
     @DisplayName("Test grab item tiles with both valid and invalid coordinates")
-    public void testGrabItemTiles_Valid() {
+    public void testGrabItemTiles_Valid() throws BreakRulesException {
         board = new Board(2);
         bag = new Bag();
         boardManager = new BoardManager(board, new Bag());
         boardManager.refillBoard();
 
-        List<Pair<Integer, Integer>> coordinates = new ArrayList<>();
-        coordinates.add(Pair.with(1, 3));
-        coordinates.add(Pair.with(1, 4));
-        coordinates.add(Pair.with(1, 5));
+        List<Coordinate> coordinates = new ArrayList<>();
+        coordinates.add(new Coordinate(1,3));
+        coordinates.add(new Coordinate(1,4));
+        coordinates.add(new Coordinate(1,5));
         assertThrows(IllegalArgumentException.class, () -> boardManager.grabItemTiles(coordinates));
         coordinates.remove(2);
         List<ItemTile> grabbedTiles = boardManager.grabItemTiles(coordinates);
@@ -75,8 +74,8 @@ class BoardManagerTest {
         assertEquals(ItemTileType.EMPTY, board.getBoardCell(1, 4).getItemTile().getItemTileType());
 
         coordinates.clear();
-        coordinates.add(Pair.with(0, 3));
-        coordinates.add(Pair.with(0, 4));
+        coordinates.add(new Coordinate(0, 3));
+        coordinates.add(new Coordinate(0, 4));
         assertThrows(IllegalArgumentException.class, () -> boardManager.grabItemTiles(coordinates));
     }
 
@@ -100,13 +99,13 @@ class BoardManagerTest {
         boardManager = new BoardManager(board, new Bag());
         boardManager.refillBoard();
 
-        List<Pair<Integer, Integer>> coordinates = new ArrayList<>();
-        coordinates.add(Pair.with(1, 3));
-        coordinates.add(Pair.with(1, 4));
+        List<Coordinate> coordinates = new ArrayList<>();
+        coordinates.add(new Coordinate(1, 3));
+        coordinates.add(new Coordinate(1, 4));
         assertTrue(boardManager.isLined(coordinates));
 
         coordinates.remove(1);
-        coordinates.add(Pair.with(2, 4));
+        coordinates.add(new Coordinate(2, 4));
         assertFalse(boardManager.isLined(coordinates));
     }
 }

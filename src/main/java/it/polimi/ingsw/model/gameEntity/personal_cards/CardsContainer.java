@@ -9,14 +9,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class that contains all the personal goal cards.
+ */
 public class CardsContainer {
-
+    /**
+     * The list of all the personal goal cards.
+     */
     private List<PersonalGoalCard> personalGoalCards;
 
+    /**
+     * Constructor of the class.
+     * It creates the deck of personal goal cards.
+     */
     public CardsContainer(){
         createDeck();
     }
 
+    /**
+     * Method that creates the deck of personal goal cards.
+     */
     public void createDeck(){
         ObjectMapper objectMapper = new ObjectMapper();
         try{
@@ -27,9 +39,24 @@ public class CardsContainer {
         }
     }
 
+    /**
+     * Get a list of personal goal cards, based on the number of players.
+     *
+     * @param numOfPlayers the number of players
+     * @return the list of personal goal cards
+     */
     public List<PersonalGoalCard> getPersonalGoalCards(int numOfPlayers) {
         List<PersonalGoalCard> cardsCopy = new ArrayList<>(personalGoalCards);
         Collections.shuffle(cardsCopy);
         return cardsCopy.stream().limit(numOfPlayers).collect(Collectors.toList());
+    }
+
+    /**
+     * Get the list of all the personal goal cards.
+     *
+     * @return the list of all the personal goal cards
+     */
+    public List<PersonalGoalCard> getAllPersonalGoalCards() {
+        return this.personalGoalCards;
     }
 }

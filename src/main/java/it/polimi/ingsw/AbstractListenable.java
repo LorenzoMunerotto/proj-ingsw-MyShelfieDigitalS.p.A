@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class AbstractListenable implements Listenable{
 
-    private List<Listener> listeners;
+    private final List<Listener> listeners;
 
     public AbstractListenable() {
         this.listeners = new ArrayList<>();
@@ -19,7 +19,6 @@ public abstract class AbstractListenable implements Listenable{
     public void addListener(Listener listener) {
         listeners.add(listener);
     }
-
 
     public void notifyAllListeners(Event event) {
         for (Listener listener: listeners){

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.client.clientMessage.*;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalNumOfPlayersException;
+import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.server.serverMessage.Error;
 

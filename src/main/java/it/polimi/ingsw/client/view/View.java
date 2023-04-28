@@ -1,12 +1,7 @@
 package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.view.cli.CLI;
-import it.polimi.ingsw.client.view.cli.VirtualModel;
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
-import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
-import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
+import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.client.view.cli.CLIAssets;
 
 import java.util.regex.Matcher;
@@ -23,7 +18,7 @@ public abstract class View {
     protected String winner;
     protected VirtualModel virtualModel;
 
-    public View (VirtualModel virtualModel){
+    public View(VirtualModel virtualModel) {
         this.virtualModel = virtualModel;
     }
 
@@ -39,29 +34,24 @@ public abstract class View {
         return matcher.matches();
     }
 
-    protected void reset(){
+    public static void main(String[] args) {
+        GameHandler game = new GameHandler();
+        VirtualModelProxy virtualModel = new VirtualModelProxy();
+        View view = new CLI(virtualModel);
+        view.createGame(game);
+    }
+
+    protected void reset() {
         this.username = "";
         this.playersNumber = 0;
     }
 
-    protected  abstract void createGame(Game game) throws UsernameAlreadyExistsException, GameStartedException, IllegalUsernameException, InvalidNumOfPlayers;
+    public abstract void createGame(GameHandler game);
 
     protected abstract void waitForTurn();
 
-    public static void main(String[] args) {
-        Game game = new Game();
-        VirtualModelProxy virtualModel = new VirtualModelProxy();
-        View view = new CLI(virtualModel);
-        try {
-            view.createGame(game);
-        } catch (UsernameAlreadyExistsException | GameStartedException | IllegalUsernameException |
-                 InvalidNumOfPlayers e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    protected void checkForWinner(){
-        if(virtualModel.getWinner() != null){
+    protected void checkForWinner() {
+        if (virtualModel.getWinner() != null) {
             winner = virtualModel.getWinner();
 
         }

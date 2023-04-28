@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.AbstractListenable;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.events.PersonalCardEvent;
 
@@ -10,7 +9,10 @@ import it.polimi.ingsw.model.gameState.events.PersonalCardEvent;
  */
 public class Player extends AbstractListenable {
 
-    private int clintID;
+    /**
+     * Client ID of the player.
+     */
+    private final int clientID;
     /**
      * Player username.
      */
@@ -39,13 +41,11 @@ public class Player extends AbstractListenable {
      * @param username is the Player's name
      */
     public Player(String username, Integer clintID) {
-
         this.username = username;
         this.chair = false;
         this.totPoints =0;
-        this.clintID=clintID;
+        this.clientID=clintID;
         this.library = new Library();
-
     }
 
     /**
@@ -110,7 +110,6 @@ public class Player extends AbstractListenable {
     public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
         this.personalGoalCard = personalGoalCard;
         notifyAllListeners(new PersonalCardEvent(personalGoalCard));
-
     }
 
     /**
@@ -119,7 +118,7 @@ public class Player extends AbstractListenable {
      * @return the library of the player
      */
     public Library getLibrary() {
-        return library;
+        return this.library;
     }
 
     /**
@@ -131,7 +130,12 @@ public class Player extends AbstractListenable {
         this.library = library;
     }
 
+    /**
+     * Get the clientID of the player.
+     *
+     * @return the clientID of the player
+     */
     public int getClintID() {
-        return clintID;
+        return this.clientID;
     }
 }

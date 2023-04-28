@@ -40,7 +40,7 @@ class LibraryManagerTest {
 
     @Test
     @DisplayName("Test the exception thrown when there is not enough space in the library")
-    public void testHasEnoughSpace() {
+    public void testHasEnoughSpace() throws BreakRulesException {
         libraryManager.hasEnoughSpace(0, 3);
 
         List<ItemTile> itemTileList = Arrays.asList(
@@ -51,7 +51,7 @@ class LibraryManagerTest {
         );
 
         libraryManager.insertItemTiles(0, itemTileList);
-        assertThrows(IllegalArgumentException.class, () -> libraryManager.hasEnoughSpace(0, 3));
+        assertThrows(BreakRulesException.class, () -> libraryManager.hasEnoughSpace(0, 3));
     }
 
     @Test

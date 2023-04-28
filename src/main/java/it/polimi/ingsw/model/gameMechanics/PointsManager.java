@@ -5,8 +5,6 @@ import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
-import it.polimi.ingsw.model.gameState.events.CommonCardReachEvent;
-import it.polimi.ingsw.model.gameState.events.FirstFullLibraryEvent;
 import it.polimi.ingsw.model.gameState.events.PointsUpdateEvent;
 import org.javatuples.Pair;
 
@@ -24,36 +22,34 @@ public class PointsManager extends AbstractListenable {
     /**
      * The player of the game.
      */
-    private Player player;
-
-    private final LibraryManager libraryManager;
+    private final Player player;
     /**
      * The number of players of the game.
      */
-    private Integer numOfPlayers;
+    private final Integer numOfPlayers;
     /**
      * The list of the common goal cards of the game.
      */
-    private List<CommonGoalCard> commonGoalCardList;
+    private final List<CommonGoalCard> commonGoalCardList;
     /**
      * The username of the first player that has completed the library.
      */
-    private boolean thereIsFullLibrary;
-    private Optional<String> firstFullLibraryUsername;
+    private final Optional<String> firstFullLibraryUsername;
+    private boolean isPresentFirstFullLibraryUsername;
 
-
-    public PointsManager(LibraryManager libraryManager) {
-        this.libraryManager = libraryManager;
-        this.thereIsFullLibrary =false;
-        this.firstFullLibraryUsername=Optional.empty();
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void setNumOfPlayers(Integer numOfPlayers) {
+    /**
+     * Constructor of the class.
+     *
+     * @param currentPlayer the player of the game
+     * @param numOfPlayers the number of players of the game
+     * @param commonGoalCardList the list of the common goal cards of the game
+     */
+    public PointsManager(Player currentPlayer, Integer numOfPlayers, List<CommonGoalCard> commonGoalCardList) {
+        this.player = currentPlayer;
         this.numOfPlayers = numOfPlayers;
+        this.commonGoalCardList = commonGoalCardList;
+        this.firstFullLibraryUsername = Optional.empty();
+        this.isPresentFirstFullLibraryUsername = false;
     }
 
     /**
@@ -64,27 +60,20 @@ public class PointsManager extends AbstractListenable {
     public int commonPoints() {
         int commonPoints =0;
 
-        List<Integer> pointsSource = new ArrayList<>();
-        switch (numOfPlayers){
-            case 2:
-                pointsSource = Arrays.asList(8,4);
-                break;
-            case 3:
-                pointsSource = Arrays.asList(8,6,4);
-                break;
-            case 4:
-                pointsSource = Arrays.asList(8,6,4,2);
-                break;
-        }
+        List<Integer> pointsSource = switch (numOfPlayers) {
+            case 2 -> Arrays.asList(8, 4);
+            case 3 -> Arrays.asList(8, 6, 4);
+            case 4 -> Arrays.asList(8, 6, 4, 2);
+            default -> new ArrayList<>();
+        };
 
         for (CommonGoalCard commonGoalCard : commonGoalCardList){
-                if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
-                    commonGoalCard.addSmartPlayer(player);
-                    notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getPoint(pointsSource, player), commonGoalCard.getIndex()));
-                }
-                if(commonGoalCard.isSmartPlayer(player)){
-                    commonPoints+= commonGoalCard.getPoint(pointsSource, player);
-                }
+            if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
+                commonGoalCard.addSmartPlayer(player);
+            }
+            if(commonGoalCard.isSmartPlayer(player)){
+                commonPoints+= commonGoalCard.getPoint(pointsSource, player);
+            }
         }
         return commonPoints;
     }
@@ -108,15 +97,15 @@ public class PointsManager extends AbstractListenable {
                 counter++;
             }
         }
-            switch (counter){
-                case 1:  return 1;
-                case 2:  return 2;
-                case 3:  return 4;
-                case 4:  return 6;
-                case 5:  return 9;
-                case 6:  return 12;
-            }
-        return 0;
+        return switch (counter) {
+            case 1 -> 1;
+            case 2 -> 2;
+            case 3 -> 4;
+            case 4 -> 6;
+            case 5 -> 9;
+            case 6 -> 12;
+            default -> 0;
+        };
     }
 
     /**
@@ -135,8 +124,7 @@ public class PointsManager extends AbstractListenable {
                     else if (numberOfTile==5) return 5;
                     else return 8;
                 };
-
-
+        LibraryManager libraryManager = new LibraryManager(player.getLibrary());
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
 
          /* To help the debugging
@@ -152,24 +140,12 @@ public class PointsManager extends AbstractListenable {
      * @return the additional point to the first player to the first finisher
      */
     public int finalPoint(){
-
-        if (thereIsFullLibrary == false && libraryManager.isFull()){
-            firstFullLibraryUsername = Optional.of(player.getUsername());
-            notifyAllListeners(new FirstFullLibraryEvent(player.getUsername()));
-            thereIsFullLibrary =true;
-        }
-
-        if (firstFullLibraryUsername.isEmpty()){
-            return 0;
-        }
-        else{
-            if (firstFullLibraryUsername.get().equals(player.getUsername())){
+        if (firstFullLibraryUsername.isPresent()){
+            if (firstFullLibraryUsername.get().equals(player.getUsername())) {
                 return 1;
             }
-            else{
-                return 0;
-            }
         }
+        return 0;
     }
 
     /**
@@ -184,15 +160,11 @@ public class PointsManager extends AbstractListenable {
         }
     }
 
-    public void setCommonGoalCardList(List<CommonGoalCard> commonGoalCardList) {
-        this.commonGoalCardList = commonGoalCardList;
-    }
-
-    public boolean isThereFullLibrary() {
-        return thereIsFullLibrary;
-    }
-
     public Optional<String> getFirstFullLibraryUsername() {
         return firstFullLibraryUsername;
+    }
+
+    public boolean isPresentFirstFullLibraryUsername() {
+        return isPresentFirstFullLibraryUsername;
     }
 }

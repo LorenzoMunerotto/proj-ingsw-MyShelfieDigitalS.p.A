@@ -21,8 +21,9 @@ public abstract class CommonGoalCard {
      */
     private final List<String> smartPlayersTail;
 
-    public CommonGoalCard(Integer index) {
+    public CommonGoalCard(Integer index, String description) {
         this.index = index;
+        this.description = description;
         this.smartPlayersTail =  new ArrayList<>();
     }
 
@@ -65,6 +66,15 @@ public abstract class CommonGoalCard {
      * @return the index of the CommonGoalCard
      */
     public Integer getIndex()  {return index;}
+
+    /**
+     * Get the description of the CommonGoalCard.
+     *
+     * @return the description of the CommonGoalCard
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * This method checks if the player has reached the goal of this commonGoalCard

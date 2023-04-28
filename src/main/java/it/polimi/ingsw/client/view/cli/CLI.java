@@ -1,19 +1,10 @@
 package it.polimi.ingsw.client.view.cli;
 
-import it.polimi.ingsw.model.Game;
-import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
-import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
-import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
-import it.polimi.ingsw.model.gameState.GameData;
+import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.client.view.View;
 import it.polimi.ingsw.client.view.VirtualModelProxy;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
@@ -125,41 +116,9 @@ public class CLI extends View {
     // winning message
     // print leaderboard
 
-    protected void createGame(Game game) throws IllegalUsernameException, UsernameAlreadyExistsException, GameStartedException, InvalidNumOfPlayers {
-        List<Player> players = new ArrayList<>();
-        GameData gameData = game.getGameData();
-        System.out.println("                           Welcome to");
-        System.out.println(CLIAssets.MYSHELFIE_TITLE);
+    public void createGame(GameHandler game) {
         this.chooseUsername();
-        players.add(new Player(this.username));
         this.choosePlayersNumber();
-        gameData.setNumOfPlayers(this.playersNumber);
-        for (int i = 1; i < this.playersNumber; i++) {
-            this.chooseUsername();
-            players.add(new Player(this.username));
-        }
-        for (Player player : players) {
-            gameData.addPlayer(player);
-        }
-        game.boardInitialization();
-        game.assignAllPersonalCard();
-        virtualModel.initializeVirtualModel(gameData);
-        CLIDrawer drawer = new CLIDrawer(virtualModel);
-        for (int i = 0; i < this.playersNumber; i++) {
-            clear();
-            drawer.printSeparator();
-            drawer.printGame();
-            playTurn();
-            gameData.nextPlayer();
-        }
-        for(Player player : gameData.getPlayers()){
-            Random random = new Random();
-            int points = random.nextInt(10);
-            player.setTotPoints(points);
-        }
-        drawer.printLeaderBoard();
-        // send to server somehow and check if username is available
-
     }
 
     protected void joinGame() {

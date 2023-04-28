@@ -1,9 +1,7 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.client.view.cli.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
-import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.GameData;
 
 import java.util.List;
@@ -12,40 +10,34 @@ import java.util.Observable;
 public class VirtualModelProxy implements VirtualModel {
 
     private Player currentPlayer;
-    private Board clientBoard;
-    private Library userLibrary;
+    private BoardCell[][] board;
+    private ItemTile[][] userLibrary;
     private String username;
     private List<CommonGoalCard> commonGoalCards;
-    private PersonalGoalCard personalGoalCard;
+    private ItemTile[][] personalGoalCard;
     private List<Player> gamePlayers;
-    private Bag gameBag;
-    private String winner = null;
+    private int gameBag;
+    private final String winner = null;
 
-    protected VirtualModelProxy() {
-
+    public VirtualModelProxy() {
     }
     @Override
     public void initializeVirtualModel(GameData gameData){
-        this.clientBoard = gameData.getBoard();
-        this.userLibrary = gameData.getCurrentPlayer().getLibrary();
-        this.username = gameData.getCurrentPlayer().getUsername();
-        this.commonGoalCards = gameData.getCommonGoalCardsList();
-        this.personalGoalCard = gameData.getCurrentPlayer().getPersonalGoalCard();
-        this.gamePlayers = gameData.getPlayers();
+
     }
 
     @Override
-    public Board getBoard() {
-        return this.clientBoard;
+    public BoardCell[][] getBoard() {
+        return this.board;
     }
 
     @Override
-    public Library getLibrary() {
+    public ItemTile[][] getLibrary() {
         return this.userLibrary;
     }
 
     @Override
-    public PersonalGoalCard getPersonalGoalCard() {
+    public ItemTile[][] getPersonalGoalCard() {
         return this.personalGoalCard;
     }
 
@@ -60,7 +52,7 @@ public class VirtualModelProxy implements VirtualModel {
     }
 
     @Override
-    public Bag getBag() {
+    public int getBag() {
         return this.gameBag;
     }
 
@@ -78,14 +70,16 @@ public class VirtualModelProxy implements VirtualModel {
         return this.currentPlayer;
     }
 
-    public void updateBoard (ItemTile[][] itemTiles){
-        for(int i = 0; i < clientBoard.getROWS(); i++){
-            for(int j = 0; j < clientBoard.getCOLUMNS(); j++){
-                if(clientBoard.getBoardCell(i, j).isPlayable()){
-                    this.clientBoard.putItemTile(i, j, itemTiles[i][j]);
-                }
-            }
-        }
+    public void updateBoard (BoardCell[][] updatedBoard){
+       this.board = updatedBoard;
+    }
+
+    public void updateLibrary (ItemTile[][] updatedLibrary){
+        this.userLibrary = updatedLibrary;
+    }
+
+    public void updatePersonalGoalCard (ItemTile[][] updatedPersonalGoalCard){
+        this.personalGoalCard = updatedPersonalGoalCard;
     }
 
     @Override

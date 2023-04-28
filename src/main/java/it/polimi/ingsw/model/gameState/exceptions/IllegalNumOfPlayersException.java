@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.gameState.Exceptions;
+package it.polimi.ingsw.model.gameState.exceptions;
 
 /**
  * Exception thrown when the number of players is not valid.
