@@ -1,9 +1,13 @@
 package it.polimi.ingsw.model.gameMechanics;
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
+import it.polimi.ingsw.model.gameState.events.CommonCardReachEvent;
+import it.polimi.ingsw.model.gameState.events.FirstFullLibraryEvent;
+import it.polimi.ingsw.model.gameState.events.PointsUpdateEvent;
 import org.javatuples.Pair;
 
 import java.util.Arrays;
@@ -16,37 +20,40 @@ import java.util.function.Predicate;
 /**
  * Class that manages the points of the game.
  */
-public class PointsManager {
+public class PointsManager extends AbstractListenable {
     /**
      * The player of the game.
      */
-    private final Player player;
+    private Player player;
+
+    private final LibraryManager libraryManager;
     /**
      * The number of players of the game.
      */
-    private final Integer numOfPlayers;
+    private Integer numOfPlayers;
     /**
      * The list of the common goal cards of the game.
      */
-    private final List<CommonGoalCard> commonGoalCardList;
+    private List<CommonGoalCard> commonGoalCardList;
     /**
      * The username of the first player that has completed the library.
      */
-    private final Optional<String> firstFullLibraryUsername;
+    private boolean thereIsFullLibrary;
+    private Optional<String> firstFullLibraryUsername;
 
-    /**
-     * Constructor of the class.
-     *
-     * @param currentPlayer the player of the game
-     * @param numOfPlayers the number of players of the game
-     * @param commonGoalCardList the list of the common goal cards of the game
-     * @param firstFullLibraryUsername the username of the first player that has completed the library
-     */
-    public PointsManager(Player currentPlayer, Integer numOfPlayers, List<CommonGoalCard> commonGoalCardList, Optional<String> firstFullLibraryUsername) {
-        this.player = currentPlayer;
+
+    public PointsManager(LibraryManager libraryManager) {
+        this.libraryManager = libraryManager;
+        this.thereIsFullLibrary =false;
+        this.firstFullLibraryUsername=Optional.empty();
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setNumOfPlayers(Integer numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
-        this.commonGoalCardList = commonGoalCardList;
-        this.firstFullLibraryUsername = firstFullLibraryUsername;
     }
 
     /**
@@ -73,6 +80,7 @@ public class PointsManager {
         for (CommonGoalCard commonGoalCard : commonGoalCardList){
                 if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
                     commonGoalCard.addSmartPlayer(player);
+                    notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getPoint(pointsSource, player), commonGoalCard.getIndex()));
                 }
                 if(commonGoalCard.isSmartPlayer(player)){
                     commonPoints+= commonGoalCard.getPoint(pointsSource, player);
@@ -127,7 +135,8 @@ public class PointsManager {
                     else if (numberOfTile==5) return 5;
                     else return 8;
                 };
-        LibraryManager libraryManager = new LibraryManager(player.getLibrary());
+
+
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
 
          /* To help the debugging
@@ -143,18 +152,47 @@ public class PointsManager {
      * @return the additional point to the first player to the first finisher
      */
     public int finalPoint(){
-        if (firstFullLibraryUsername.isPresent()){
-            if (firstFullLibraryUsername.get().equals(player.getUsername())) {
+
+        if (thereIsFullLibrary == false && libraryManager.isFull()){
+            firstFullLibraryUsername = Optional.of(player.getUsername());
+            notifyAllListeners(new FirstFullLibraryEvent(player.getUsername()));
+            thereIsFullLibrary =true;
+        }
+
+        if (firstFullLibraryUsername.isEmpty()){
+            return 0;
+        }
+        else{
+            if (firstFullLibraryUsername.get().equals(player.getUsername())){
                 return 1;
             }
+            else{
+                return 0;
+            }
         }
-        return 0;
     }
 
     /**
      * This method updates the Total Points adding Points related to: Common and Personal Card, adjacent Items, (optional) final point
      */
-    public void updateTotalPoints(){
-        player.setTotPoints(commonPoints()+personalPoints()+adjacentPoints()+finalPoint());
+    public void updateTotalPoints() {
+        Integer oldPoints = player.getTotPoints();
+        Integer updatedPoints = commonPoints() + personalPoints() + adjacentPoints() + finalPoint();
+        if (!oldPoints.equals(updatedPoints)) {
+            player.setTotPoints(updatedPoints);
+            notifyAllListeners(new PointsUpdateEvent(updatedPoints, player.getUsername()));
+        }
+    }
+
+    public void setCommonGoalCardList(List<CommonGoalCard> commonGoalCardList) {
+        this.commonGoalCardList = commonGoalCardList;
+    }
+
+    public boolean isThereFullLibrary() {
+        return thereIsFullLibrary;
+    }
+
+    public Optional<String> getFirstFullLibraryUsername() {
+        return firstFullLibraryUsername;
     }
 }

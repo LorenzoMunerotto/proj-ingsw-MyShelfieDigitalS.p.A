@@ -1,69 +1,54 @@
 package it.polimi.ingsw.model.gameState;
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
-import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
+import it.polimi.ingsw.model.gameState.Exceptions.IllegalNumOfPlayersException;
+import it.polimi.ingsw.model.gameState.Exceptions.DuplicateUsernameException;
 import it.polimi.ingsw.model.gameEntity.Player;
+import it.polimi.ingsw.model.gameState.events.*;
 
 import java.util.*;
 
 /**
  * Class representing the objects of the game.
  */
-public class GameData {
+public class GameData extends AbstractListenable {
 
-    /**
-     * Bag of the game
-     */
-    private final Bag bag;
-    /**
-     * List of players
-     */
-    private final List<Player> players;
-    /**
-     * List of common goal cards
-     */
-    private final List<CommonGoalCard> commonGoalCardsList;
-    /**
-     * It's the number of players chosen by the first player who connected to the server. read-only. Immutable
-     */
+    /** It's the number of players chosen by the first player who connected to the server. read-only. Immutable */
     private int numOfPlayers;
-    /**
-     * It's the index of the current player.
-     */
+    /** It's the index of the current player. */
     private Integer currentPlayerIndex;
-    /**
-     * Board of the game.
-     */
-    private Board board;
-    /**
-     * Number of players
-     */
+    /** Board of the game. */
+    private  Board board;
+    /** Bag of the game */
+    private final Bag bag;
+    /** List of players */
+    private final List<Player> players;
+    /** List of common goal cards */
+    private List<CommonGoalCard> commonGoalCardsList;
+    /** Number of players */
     private int currentNumOfPlayers;
-    /**
-     * Boolean that indicates if the game has started
-     */
-    private boolean started;
-    /**
-     * Username of the first player that has completed the library
-     */
+    /** Boolean that indicates if the game has started */
+
+    /** Username of the first player that has completed the library */
     private Optional<String> firstFullLibraryUsername;
+
+
 
     /**
      * Constructor of the class.
      */
-    public GameData() {
+    public GameData(){
+        super();
         this.numOfPlayers = 0;
         this.bag = new Bag();
+        this.board = null;
         this.currentPlayerIndex = null;
-        this.started = false;
-        this.currentNumOfPlayers = 0;
-        this.players = new ArrayList<>();
-        this.commonGoalCardsList = CommonCardFactory.createCards();
+        this.currentNumOfPlayers=0;
+        this.players= new ArrayList<>();
         this.firstFullLibraryUsername = Optional.empty();
     }
 
@@ -90,48 +75,23 @@ public class GameData {
      *
      * @return the number of players
      */
-    public int getNumOfPlayers() {
+    public int getNumOfPlayers(){
         return numOfPlayers;
-    }
-
-    /**
-     * Set the number of players.
-     *
-     * @param numOfPlayers number of player for the game
-     * @throws InvalidNumOfPlayers if the number of players is not between 2 and 4
-     */
-    public void setNumOfPlayers(int numOfPlayers) throws InvalidNumOfPlayers {
-        if (numOfPlayers < 2 || numOfPlayers > 4) throw new InvalidNumOfPlayers();
-        this.numOfPlayers = numOfPlayers;
     }
 
     /**
      * This method adds a player to the game.
      *
      * @param newPlayer the player to add
-     * @throws UsernameAlreadyExistsException if the username is already taken
-     * @throws GameStartedException           if the game has already started
+     * @throws DuplicateUsernameException if the username is already taken
+     * @throws GameStartedException if the game has already started
      */
-    public void addPlayer(Player newPlayer) throws UsernameAlreadyExistsException, GameStartedException {
+    public void addPlayer(Player newPlayer) {
 
-        if (started) {
-            throw new GameStartedException();
-        }
-
-        for (Player player : players) {
-            if (newPlayer.getUsername().equalsIgnoreCase(player.getUsername())) {
-                throw new UsernameAlreadyExistsException();
-            }
-        }
         players.add(newPlayer);
         currentNumOfPlayers++;
-        if (currentNumOfPlayers == numOfPlayers) {
-            this.started = true;
-            this.board = new Board(numOfPlayers);
-            Collections.shuffle(this.players, new Random());
-            players.get(0).setChair(true);
-            this.currentPlayerIndex = 0;
-        }
+
+
     }
 
     /**
@@ -148,29 +108,35 @@ public class GameData {
      *
      * @return the current player
      */
-    public Player getCurrentPlayer() {
+    public Player getCurrentPlayer(){
         return players.get(currentPlayerIndex);
     }
 
+    public Integer getCurrentPlayerClientID(){
+        return  players.get(currentPlayerIndex).getClintID();
+    }
     /**
      * Get the number of players that are currently playing.
      *
      * @return the number of players that are currently playing
      */
-    public int getCurrentNumOfPlayers() {
+    public int getCurrentNumOfPlayers(){
         return currentNumOfPlayers;
     }
 
     /**
-     * This method increase currentPlayerIndex at the end of the respective previous player's play.
+     * Set the number of players.
+     *
+     * @param numOfPlayers number of player for the game
+     * @throws IllegalNumOfPlayersException if the number of players is not between 2 and 4
      */
-    public void nextPlayer() {
-        if (currentPlayerIndex == numOfPlayers - 1) {
-            currentPlayerIndex = 0;
-        } else {
-            currentPlayerIndex++;
-        }
+    public void setNumOfPlayers(int numOfPlayers) throws IllegalNumOfPlayersException {
+        if (numOfPlayers<2 || numOfPlayers>4) throw new IllegalNumOfPlayersException();
+        this.numOfPlayers = numOfPlayers;
+
     }
+
+
 
     /**
      * Get the index of the player who is playing this turn.
@@ -196,7 +162,9 @@ public class GameData {
      * @param firstFullLibraryUsername the first player that has completed the library
      */
     public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
-        this.firstFullLibraryUsername = Optional.of(firstFullLibraryUsername);
+        if(firstFullLibraryUsername.isEmpty()) {
+            this.firstFullLibraryUsername = Optional.of(firstFullLibraryUsername);
+        }
     }
 
     /**
@@ -205,15 +173,49 @@ public class GameData {
      * @return the list of players
      */
     public List<Player> getPlayers() {
-        return this.players;
+        return players;
     }
 
     /**
-     * Return true if the game has started.
+     * Get the player with the given index.
      *
-     * @return true if the game has started, false otherwise
+     * @param index the index of the player
+     * @return the player with the given index
      */
-    public boolean isStarted() {
-        return this.started;
+    public Player getPlayer(int index){
+        return players.get(index);
+    }
+
+
+
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+
+
+    public void setCurrentPlayerIndex(Integer currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
+        notifyAllListeners(new CurrentPlayerUpdateEvent(getCurrentPlayer().getUsername()));
+
+
+    }
+
+
+    public void setCommonGoalCardsList(List<CommonGoalCard> commonGoalCardsList) {
+        this.commonGoalCardsList = commonGoalCardsList;
+        notifyAllListeners(new CommonCardEvent(commonGoalCardsList));
+    }
+
+    public Player getPlayerByClientId(Integer clientId){
+        for (Player player : players){
+            if (player.getClintID()==clientId){
+                return player;
+            }
+
+        }
+        // se non trova niente ritorna null
+        return null;
     }
 }

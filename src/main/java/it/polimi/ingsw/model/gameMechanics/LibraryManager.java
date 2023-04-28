@@ -1,25 +1,26 @@
 package it.polimi.ingsw.model.gameMechanics;
 
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
 import org.javatuples.Pair;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class that manage the library
  */
-public class LibraryManager {
+public class LibraryManager extends AbstractListenable {
     /**
      * The library of the game.
      */
-    private final Library library;
+    private Library library;
 
     /**
      * Constructor of the class.
@@ -30,6 +31,14 @@ public class LibraryManager {
         this.library = library;
     }
 
+    public LibraryManager(){
+        // per il controller
+    }
+
+    public void setLibrary(Library library) {
+        this.library = library;
+    }
+
     /**
      * This method inserts on the library the tiles chosen form the player.
      *
@@ -37,9 +46,11 @@ public class LibraryManager {
      * @param itemTileList The orderly list of the tiles chosen by the player
      */
     public void insertItemTiles(int column, List<ItemTile> itemTileList)  {
+
         for(ItemTile itemTile : itemTileList){
             library.insertItemTile(column, itemTile);
         }
+
     }
 
     /**
@@ -49,13 +60,14 @@ public class LibraryManager {
      * @param col number of the column
      * @param num number of the cell EMPTY
      */
-    public void hasEnoughSpace(Integer col, Integer num){
-        int counter = 0;
+    public void hasEnoughSpace(Integer col, Integer num) throws BreakRulesException {
 
+        int counter = 0;
         for (int row= library.getROWS()-1 ; row>=0; row--) {
             if (library.getItemTile(row,col).getItemTileType() == ItemTileType.EMPTY) counter++;
         }
-        if(counter < num) throw new IllegalArgumentException("The column cannot contain all the selected tiles");
+        if(counter < num) throw new BreakRulesException(BreakRules.COLUMN_OUT_OF_SPACE);
+
     }
 
     /**
@@ -64,65 +76,113 @@ public class LibraryManager {
      *
      * @return List of pair (ItemTileType, numberOfTile)
      */
-    public List<Pair<ItemTileType, Integer>> getListGroupsAdjacentTiles() {
+    public List<Pair<ItemTileType, Integer>> getListGroupsAdjacentTiles(){
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = new ArrayList<>();
-        boolean[][] visited = new boolean[library.getROWS()][library.getCOLUMNS()];
 
+        Character[][] helpGrid = new Character[library.getROWS()][library.getCOLUMNS()];
         for (int i = 0; i < library.getROWS(); i++) {
-            for (int j = 0; j < library.getCOLUMNS(); j++) {
-                if (!visited[i][j]) {
-                    ItemTileType currentItemTileType = library.getItemTile(i, j).getItemTileType();
-                    if (currentItemTileType != ItemTileType.EMPTY) {
-                        int count = deepSearch(i, j, visited, currentItemTileType);
-                        listGroupsAdjacentTiles.add(new Pair<>(currentItemTileType, count));
+            Arrays.fill(helpGrid[i], 'W');
+        }
+        List<Pair<Integer, Integer>> sameTileList = new ArrayList<>();
+        List<Pair<Integer, Integer>> differentTileTypeTail = new ArrayList<>();
+        List<Pair<Integer, Integer>> sameTileTypeTail = new ArrayList<>();
+        differentTileTypeTail.add(new Pair<>(0,0));
+
+        while(differentTileTypeTail.size()!=0) {
+
+            Integer row1;
+            Integer col1;
+            Pair<Integer, Integer> start1;
+            do {
+                start1 = differentTileTypeTail.remove(0);
+                row1 = start1.getValue0();
+                col1 = start1.getValue1();
+            }while(helpGrid[row1][col1]=='B' && differentTileTypeTail.size()>0);
+
+            ItemTileType currentItemTileType = library.getItemTile(row1, col1).getItemTileType();
+            Integer counter = 1;
+            boolean ok = differentTileTypeTail.size() != 0 || helpGrid[row1][col1] != 'B';
+            if(helpGrid[row1][col1]!='B') {
+                sameTileTypeTail.add(start1);
+            }
+
+            while (sameTileTypeTail.size() != 0) {
+
+                Pair<Integer, Integer> start = sameTileTypeTail.remove(0);
+                Integer row = start.getValue0();
+                Integer col = start.getValue1();
+                sameTileList.add(start);
+
+                helpGrid[row][col]='G';
+
+                if (Library.hasLowerItemTile(row, col) && helpGrid[row + 1][col] != 'B'&& helpGrid[row + 1][col] != 'P') {
+
+                    if (library.getLowerItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row + 1, col));
+                        counter++;
+                        helpGrid[row + 1][col] = 'P';
+
+                    } else {
+                        if (helpGrid[row + 1][col] == 'W') {
+                            helpGrid[row + 1][col] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row + 1, col));
+                        }
                     }
                 }
+                if (Library.hasUpperItemTile(row, col) && helpGrid[row - 1][col] != 'B' && helpGrid[row - 1][col] != 'P') {
+
+                    if (library.getUpperItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row - 1, col));
+                        counter++;
+                        helpGrid[row - 1][col] = 'P';
+
+                    } else {
+                        if (helpGrid[row - 1][col] == 'W') {
+                            helpGrid[row - 1][col] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row - 1, col));
+                        }
+                    }
+                }
+                if (Library.hasRightItemTile(row, col) && helpGrid[row][col + 1] != 'B' && helpGrid[row][col + 1] != 'P') {
+
+                    if (library.getRightItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row, col + 1));
+                        counter++;
+                        helpGrid[row][col + 1] = 'P';
+
+                    } else {
+                        if (helpGrid[row][col + 1] == 'W') {
+                            helpGrid[row][col + 1] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row, col + 1));
+                        }
+
+                    }
+                }
+                if (Library.hasLeftItemTile(row, col) && helpGrid[row][col - 1] != 'B' && helpGrid[row][col - 1] != 'P') {
+
+                    if (library.getLeftItemTile(row, col).getItemTileType() == currentItemTileType) {
+
+                        sameTileTypeTail.add(new Pair<>(row, col - 1));
+                        counter++;
+                        helpGrid[row][col - 1] = 'P';
+                    } else {
+                        if (helpGrid[row][col - 1] == 'W') {
+                            helpGrid[row][col - 1] = 'G';
+                            differentTileTypeTail.add(new Pair<>(row, col - 1));
+                        }
+                    }
+                }
+                helpGrid[row][col] = 'B';
+
+            }
+            if(ok) {
+                listGroupsAdjacentTiles.add(new Pair<>(currentItemTileType, counter));
             }
         }
         return listGroupsAdjacentTiles;
-    }
-
-    /**
-     * It is a recursive method that find the largest group of Adjacent item tiles of the same type on the library.
-     *
-     * @param row is the row of the current item tile
-     * @param col is the column of the current item tile
-     * @param visited is a matrix that contains the information about the visited item tiles
-     * @param currentItemTileType is the type of the current item tile
-     * @return the number of the item tiles of the same type of the current item tile
-     */
-    private int deepSearch(int row, int col, boolean[][] visited, ItemTileType currentItemTileType) {
-        if (row < 0 || row >= library.getROWS() || col < 0 || col >= library.getCOLUMNS() || visited[row][col] || library.getItemTile(row, col).getItemTileType() != currentItemTileType) {
-            return 0;
-        }
-
-        visited[row][col] = true;
-        int count = 1;
-
-        count += deepSearch(row + 1, col, visited, currentItemTileType);
-        count += deepSearch(row - 1, col, visited, currentItemTileType);
-        count += deepSearch(row, col + 1, visited, currentItemTileType);
-        count += deepSearch(row, col - 1, visited, currentItemTileType);
-
-        return count;
-    }
-
-    /**
-     * This method find the largest group of Adjacent item tiles of the same type on the library.
-     *
-     * @param listGroupsAdjacentTiles list of pair (ItemTileType, numberOfTile)
-     * @return Map of pair (ItemTileType, numberOfTile) with the largest group of Adjacent item tiles of the same type on the library
-     */
-    public Map<ItemTileType, Integer> getLargestGroupsMap(List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles) {
-        Map<ItemTileType, Integer> largestGroupsMap = new HashMap<>();
-        for (Pair<ItemTileType, Integer> pair : listGroupsAdjacentTiles) {
-            ItemTileType type = pair.getValue0();
-            int size = pair.getValue1();
-            if (!largestGroupsMap.containsKey(type) || size > largestGroupsMap.get(type)) {
-                largestGroupsMap.put(type, size);
-            }
-        }
-        return largestGroupsMap;
     }
 
     /**

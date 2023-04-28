@@ -1,19 +1,23 @@
 package it.polimi.ingsw.model.gameMechanics;
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.Bag;
+import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
 import org.javatuples.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Class that manages the board.
  */
-public class BoardManager {
+public class BoardManager extends AbstractListenable {
     /**
      * The board of the game.
      */
@@ -65,6 +69,8 @@ public class BoardManager {
                 }
             }
         }
+
+        notifyAllListeners(new BoardUpdateEvent(board, true));
     }
 
     /**
@@ -73,30 +79,35 @@ public class BoardManager {
      * @param coordinates the coordinates of the item tiles to grab
      * @return the item tiles grabbed
      */
-    public List<ItemTile> grabItemTiles(List<Pair<Integer, Integer>> coordinates) {
+    public List<ItemTile> grabItemTiles(List<Coordinate> coordinates) throws BreakRulesException {
 
         int size = coordinates.size();
-        if (size < 1 || size > 3) throw new IllegalArgumentException("Invalid number of coordinates");
-        if (new HashSet<>(coordinates).size()<size) throw new IllegalArgumentException("Invalid number of coordinates - duplicate coordinates");
-        if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - the cells are not in line");
+        if (size < 1 || size > 3) throw new BreakRulesException(BreakRules.TOO_MUCH_TILES_SELECTED);
+        if (new HashSet<>(coordinates).size()<size) throw new BreakRulesException(BreakRules.DUPLICATE_TILES_SELECTED);
 
-        for (Pair<Integer, Integer> coordinate : coordinates) {
-            int row = coordinate.getValue0();
-            int col = coordinate.getValue1();
+        if (!(isLined(coordinates))) throw new BreakRulesException(BreakRules.ALONE_TILE);
 
-            if (!board.getBoardCell(row,col).isPlayable() ) throw new IllegalArgumentException("Invalid coordinates - the cell is not playable");
-            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new IllegalArgumentException("Invalid coordinates - the cell is empty");
-            if (!hasSideFree(row,col)) throw new IllegalArgumentException("Invalid coordinates - there is a tile, which has not a side free at the beginning of the turn");
-            if (board.isAlone(row,col))throw new IllegalArgumentException("Invalid coordinates - the cell is alone");
+
+        for (Coordinate coordinate : coordinates) {
+            int row = coordinate.getRow();
+            int col = coordinate.getCol();
+
+            if (!board.getBoardCell(row,col).isPlayable() ) throw new BreakRulesException(BreakRules.NOT_PLAYABLE_TILE);
+            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new BreakRulesException(BreakRules.EMPTY_CELL);
+            if (!hasSideFree(row,col)) throw new BreakRulesException(BreakRules.SURROUNDED_TILE);
+            if (board.isAlone(row,col))throw new BreakRulesException(BreakRules.ALONE_TILE);
         }
 
         List<ItemTile> itemTileList = new ArrayList<>();
-        for (Pair<Integer, Integer> coordinate : coordinates) {
-            int row = coordinate.getValue0();
-            int col = coordinate.getValue1();
+        for (Coordinate coordinate : coordinates) {
+            int row = coordinate.getRow();
+            int col = coordinate.getCol();
 
             itemTileList.add(board.takeItemTile(row,col));
+
         }
+
+        notifyAllListeners(new BoardUpdateEvent(board, false));
         return itemTileList;
     }
 
@@ -107,7 +118,7 @@ public class BoardManager {
      * @param col the column of the cell
      * @return true if the cell has a side free, false otherwise
      */
-    protected boolean hasSideFree( int row, int col){
+    private boolean hasSideFree( int row, int col){
         if (!(Board.hasLeftBoardCell(row,col) && Board.hasUpperBoardCell(row,col) && Board.hasRightBoardCell(row,col) && Board.hasLowerBoardCell(row,col))){
             return  true;
         }
@@ -123,16 +134,24 @@ public class BoardManager {
      * @param coordinates the coordinates to check
      * @return true if the coordinates are in line, false otherwise
      */
-    protected boolean isLined(List<Pair<Integer, Integer>> coordinates) {
-        List<Pair<Integer, Integer>> coordinatesCopy = new ArrayList<>(coordinates);
-        coordinatesCopy.sort(Comparator.comparing((Pair<Integer, Integer> coordinate) -> coordinate.getValue0()).thenComparing(Pair::getValue1));
-        Set<Integer> uniqueRows = coordinatesCopy.stream().map(Pair::getValue0).collect(Collectors.toSet());
-        Set<Integer> uniqueColumns = coordinatesCopy.stream().map(Pair::getValue1).collect(Collectors.toSet());
-        int number = coordinatesCopy.size();
+    private boolean isLined(List<Coordinate> coordinates){
 
-        boolean inRow = uniqueRows.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueColumns.contains(coordinatesCopy.get(0).getValue1() + i));
-        boolean inColumn = uniqueColumns.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueRows.contains(coordinatesCopy.get(0).getValue0() + i));
+        int number = coordinates.size();
+
+        boolean sameRow = coordinates.stream().map(Coordinate::getRow).collect(Collectors.toSet()).size()==1;
+        List<Integer> columns = coordinates.stream().map(Coordinate::getCol).sorted().collect(Collectors.toList());
+        boolean inRow = (columns.get(columns.size()-1)-columns.get(0) == number-1) && sameRow;
+
+        boolean sameColumn = coordinates.stream().map(Coordinate::getCol).collect(Collectors.toSet()).size()==1;
+        List<Integer> rows = coordinates.stream().map(Coordinate::getRow).sorted().collect(Collectors.toList());
+        boolean inColumn = (rows.get(rows.size()-1)-rows.get(0) == number-1) && sameColumn;
 
         return inRow || inColumn;
+
     }
+
+
+
+
+
 }

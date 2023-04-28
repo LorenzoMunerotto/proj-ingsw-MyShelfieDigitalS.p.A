@@ -1,14 +1,16 @@
 package it.polimi.ingsw.model.gameEntity;
 
+import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
+import it.polimi.ingsw.model.gameState.events.PersonalCardEvent;
 
 /**
  * Class representing a player.
  */
-public class Player {
+public class Player extends AbstractListenable {
 
-    //private int ClintID;
+    private int clintID;
     /**
      * Player username.
      */
@@ -36,16 +38,14 @@ public class Player {
      *
      * @param username is the Player's name
      */
-    public Player(String username) throws IllegalUsernameException {
-
-        if(username == null || username.trim().isEmpty()){
-            throw new IllegalUsernameException();
-        }
+    public Player(String username, Integer clintID) {
 
         this.username = username;
         this.chair = false;
         this.totPoints =0;
+        this.clintID=clintID;
         this.library = new Library();
+
     }
 
     /**
@@ -109,6 +109,8 @@ public class Player {
      */
     public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
         this.personalGoalCard = personalGoalCard;
+        notifyAllListeners(new PersonalCardEvent(personalGoalCard));
+
     }
 
     /**
@@ -127,5 +129,9 @@ public class Player {
      */
     public void setLibrary(Library library) {
         this.library = library;
+    }
+
+    public int getClintID() {
+        return clintID;
     }
 }
