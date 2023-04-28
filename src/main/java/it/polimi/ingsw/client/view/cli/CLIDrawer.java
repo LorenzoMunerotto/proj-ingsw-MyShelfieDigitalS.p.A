@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.cli;
+package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
-import it.polimi.ingsw.model.gameState.GameData;
 
 import java.util.Comparator;
 import java.util.List;

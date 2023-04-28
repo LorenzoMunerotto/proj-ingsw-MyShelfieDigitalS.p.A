@@ -1,10 +1,10 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.client.view.cli.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.GameData;
-import it.polimi.ingsw.view.cli.VirtualModel;
 
 import java.util.List;
 import java.util.Observable;

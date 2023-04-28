@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.cli;
+package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.gameEntity.Player;
@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
 import it.polimi.ingsw.model.gameState.GameData;
-import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.view.VirtualModelProxy;
+import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.client.view.VirtualModelProxy;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-import static it.polimi.ingsw.view.cli.CLIAssets.*;
+import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
 
 public class CLI extends View {
     private static final Scanner scanner = new Scanner(System.in);

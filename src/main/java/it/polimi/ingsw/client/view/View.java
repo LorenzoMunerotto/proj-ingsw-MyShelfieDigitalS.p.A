@@ -1,13 +1,13 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.client.view.cli.CLI;
+import it.polimi.ingsw.client.view.cli.VirtualModel;
 import it.polimi.ingsw.model.Game;
 import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
 import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
 import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
 import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
-import it.polimi.ingsw.view.cli.CLI;
-import it.polimi.ingsw.view.cli.CLIAssets;
-import it.polimi.ingsw.view.cli.VirtualModel;
+import it.polimi.ingsw.client.view.cli.CLIAssets;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
