@@ -2,15 +2,11 @@ package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
-import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.GameData;
 
 import java.util.List;
-import java.util.Observable;
 
 public interface VirtualModel {
-
-    void initializeVirtualModel(GameData gameData);
 
     BoardCell[][] getBoard();
     ItemTile[][] getLibrary();
@@ -18,11 +14,7 @@ public interface VirtualModel {
     List<CommonGoalCard> getCommonGoalCards();
     List<Player> getPlayers();
     int getBag();
-
     Player getCurrentPlayer();
-
-    void update(Observable o, Object arg);
-
     String getUsername();
 
     String getWinner();

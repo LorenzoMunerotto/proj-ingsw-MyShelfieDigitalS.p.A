@@ -35,7 +35,7 @@ public class PointsManager extends AbstractListenable {
      * The username of the first player that has completed the library.
      */
     private final Optional<String> firstFullLibraryUsername;
-    private boolean isPresentFirstFullLibraryUsername;
+    private final boolean isPresentFirstFullLibraryUsername;
 
     /**
      * Constructor of the class.

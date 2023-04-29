@@ -91,9 +91,6 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
     @Override
     public void handle(UsernameChoice usernameChoice) {
-    /*
-          metodo che gestisce la scelta dell'username
-     */
 
         try {
             clientID = server.registerConnection(usernameChoice.getUsername(), this);

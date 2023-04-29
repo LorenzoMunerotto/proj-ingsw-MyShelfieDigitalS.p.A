@@ -21,10 +21,6 @@ public class VirtualModelProxy implements VirtualModel {
 
     public VirtualModelProxy() {
     }
-    @Override
-    public void initializeVirtualModel(GameData gameData){
-
-    }
 
     @Override
     public BoardCell[][] getBoard() {
@@ -80,10 +76,5 @@ public class VirtualModelProxy implements VirtualModel {
 
     public void updatePersonalGoalCard (ItemTile[][] updatedPersonalGoalCard){
         this.personalGoalCard = updatedPersonalGoalCard;
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-
     }
 }

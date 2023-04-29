@@ -2,15 +2,10 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.client.clientMessage.Move;
 import it.polimi.ingsw.client.view.VirtualModelProxy;
-import it.polimi.ingsw.model.gameEntity.Board;
-import it.polimi.ingsw.model.gameEntity.BoardCell;
-import it.polimi.ingsw.model.gameEntity.ItemTile;
-import it.polimi.ingsw.model.gameEntity.Player;
+import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.model.gameEntity.personal_cards.CardsContainer;
-import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
-import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
+import it.polimi.ingsw.model.gameEntity.personal_cards.*;
 import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameMechanics.BreakRulesException;
 import it.polimi.ingsw.model.gameMechanics.LibraryManager;
