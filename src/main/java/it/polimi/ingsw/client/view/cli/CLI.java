@@ -1,19 +1,36 @@
 package it.polimi.ingsw.client.view.cli;
 
-import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.client.view.MessageType;
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.client.view.VirtualModelProxy;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
 
+/**
+ * This class represents the CLI view of the game.
+ */
 public class CLI extends View {
+    /**
+     * It is the scanner used to read the user input.
+     */
     private static final Scanner scanner = new Scanner(System.in);
+    /**
+     * It is the drawer used to draw the game.
+     */
+    private final CLIDrawer drawer;
+    /**
+     * It is a thread that is used for waiting.
+     */
+    private Thread waitingThread;
 
-    public CLI(VirtualModelProxy virtualModel) {
-        super(virtualModel);
+    /**
+     * Default constructor, initializes the drawer.
+     */
+    public CLI() {
+        drawer = new CLIDrawer(this.virtualModel);
     }
 
     /**
@@ -30,7 +47,7 @@ public class CLI extends View {
             processBuilder.inheritIO().start().waitFor();
         } catch (IOException | InterruptedException e) {
             System.err.printf("%n%sError while clearing console (%s)%s%n",
-                    CLIColors.RED_BRIGHT, e.getMessage(), CLIColors.RESET);
+                    CLIConstants.RED_BRIGHT, e.getMessage(), CLIConstants.RESET);
             Thread.currentThread().interrupt();
             System.exit(1);
         }
@@ -47,7 +64,7 @@ public class CLI extends View {
             if (!isUsernameValid(this.username)) {
                 this.username = "";
                 System.out.printf(CLIAssets.output + "%sInvalid username%s, please try again: ",
-                        CLIColors.RED_BRIGHT, CLIColors.RESET);
+                        CLIConstants.RED_BRIGHT, CLIConstants.RESET);
             }
         }
     }
@@ -59,7 +76,7 @@ public class CLI extends View {
         this.playersNumber = 0;
         String playersNumberString;
         System.out.printf(CLIAssets.output + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
-                CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.playersNumber < MIN_PLAYERS_NUMBER || this.playersNumber > MAX_PLAYERS_NUMBER) {
             try {
                 playersNumberString = CLI.scanner.nextLine().strip();
@@ -68,9 +85,38 @@ public class CLI extends View {
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 System.out.printf(CLIAssets.output + "%sInvalid input%s, insert exact number of players for the game [%s2%s-%s4%s]: ",
-                        CLIColors.RED_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
+    }
+
+    /**
+     * Method for the first player of the game.
+     */
+    @Override
+    protected void createGame() {
+        this.chooseUsername();
+        this.choosePlayersNumber();
+        // send to server somehow
+        // check if username is available
+        // set the number of players for the game
+        // create a game
+        this.controller.createGame(this.username, this.playersNumber);
+        this.previousMessage = MessageType.CREATE_GAME;
+    }
+
+    /**
+     * Method for the players that join a game.
+     */
+    @Override
+    protected void joinGame() {
+        this.chooseUsername();
+        // send to server somehow
+        // check if username is available
+        // check if there is a game to join
+        // check if there is space in the game
+        this.controller.joinGame(this.username);
+        this.previousMessage = MessageType.JOIN_GAME;
     }
 
     /**
@@ -79,13 +125,13 @@ public class CLI extends View {
     private void chooseTiles() {
         this.coordinates = "";
         System.out.printf(CLIAssets.output + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
-                CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.coordinates.isBlank()) {
             coordinates = CLI.scanner.nextLine().strip().toUpperCase();
             if (!isCoordinatesValid(coordinates)) {
                 this.coordinates = "";
                 System.out.printf(CLIAssets.output + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
-                        CLIColors.RED_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
     }
@@ -97,7 +143,7 @@ public class CLI extends View {
         this.column = 0;
         String columnString;
         System.out.printf(CLIAssets.output + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
-                CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.column < 1 || this.column > 5) {
             try {
                 columnString = CLI.scanner.nextLine().strip();
@@ -106,40 +152,24 @@ public class CLI extends View {
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 System.out.printf(CLIAssets.output + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
-                        CLIColors.RED_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
     }
 
-    // error
-    // messages from other clients
-    // winning message
-    // print leaderboard
-
-    public void createGame(GameHandler game) {
-        this.chooseUsername();
-        this.choosePlayersNumber();
-    }
-
-    protected void joinGame() {
-        this.chooseUsername();
-        // send to server somehow
-        // check if username is available
-        // check if there is a game to join
-        // check if there is space in the game
-    }
-
+    /**
+     * Thread that prints a clock while waiting for other players to play their turn.
+     * maybe we can use it also while a client wait to other to connect to the server
+     */
     @Override
     protected void waitForTurn() {
-        System.out.print("Waiting for other players to play their turn...");
-
-        Thread clockThread = new Thread(() -> {
+        this.waitingThread = new Thread(() -> {
             int index = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
-                System.out.print("\b" + clockChars[index]);
+                System.out.print("Waiting for other players to play their turn...");
+                System.out.print(CLIConstants.BLUE_BRIGHT + "\b" + clockChars[index] + CLIConstants.RESET);
                 index = (index + 1) % clockChars.length;
-
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -147,33 +177,110 @@ public class CLI extends View {
                 }
             }
         });
-
-        clockThread.start();
-
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-
-        clockThread.interrupt();
-        try {
-            clockThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("\nContinuing...");
+        waitingThread.start();
     }
 
+    /**
+     * Stops the waiting thread.
+     */
+    private void stopWaiting() {
+        if (this.waitingThread != null) {
+            this.waitingThread.interrupt();
+            this.waitingThread = null;
+        }
+    }
+
+    /**
+     * Starts the game and prints the objects of the game.
+     */
+    @Override
+    protected void startGame(){
+        this.stopWaiting();
+        CLI.clear();
+        System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
+        try {
+            this.drawer.printGame();
+            this.previousMessage = MessageType.START_GAME;
+        } catch (Exception e) {
+            System.out.println("Error while starting game");
+        }
+    }
+
+    /**
+     * Shows the updated game.
+     */
+    @Override
+    protected void showGame(){
+        this.stopWaiting();
+        CLI.clear();
+        System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
+        try{
+            this.drawer.printGame();
+        } catch (Exception e) {
+            System.out.println("Error while showing game");
+        }
+    }
+
+    /**
+     * Plays the turn of the current player.
+     */
+    @Override
     protected void playTurn() {
         System.out.println(CLIAssets.output + "It is your turn!");
         try {
             this.chooseTiles();
             this.chooseColumn();
+            this.previousMessage = MessageType.PLAY_TURN;
         } catch (Exception e) {
             System.out.println("Error while playing turn");
         }
     }
 
-    protected void showMessage(String message){
-        System.out.printf("%s%s%s%s%n", CLIAssets.output,CLIColors.RED_BRIGHT, message, CLIColors.RESET);
+    /**
+     * It is the end of the game.
+     * It prints the leaderboard and the winner.
+     */
+    @Override
+    protected void endGame() {
+        this.drawer.printLeaderBoard();
+        if (Objects.equals(this.username, this.winner)) {
+            System.out.println(CLIAssets.output + "Congratulations, you won!");
+        } else {
+            System.out.println(CLIAssets.output + "You lost, better luck next time!");
+        }
+    }
+
+    /**
+     * Shows an error message.
+     */
+    @Override
+    protected void showErrorMessage() {
+        System.out.printf("%s%s%s%s%n", CLIAssets.output, CLIConstants.RED_BRIGHT, "Idk", CLIConstants.RESET);
+    }
+
+    /**
+     * Main method of the cli.
+     *
+     * @param args the arguments of the main method
+     */
+    @Override
+    public void main(String[] args) {
+        CLI.clear();
+        System.out.println(MYSHELFIE_TITLE);
+        String input = "";
+        System.out.printf(CLIAssets.output + "Do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
+                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+        while (input.isEmpty()) {
+            input = CLI.scanner.nextLine().strip().toUpperCase();
+            switch (input) {
+                case "C" -> this.createGame();
+                case "J" -> this.joinGame();
+                default -> {
+                    System.out.printf(CLIAssets.output + "%sInvalid input%s, do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
+                            CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                    input = "";
+                }
+            }
+        }
     }
 }

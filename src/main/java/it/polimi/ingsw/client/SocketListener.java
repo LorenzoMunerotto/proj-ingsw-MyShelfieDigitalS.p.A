@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.clientMessage.ClientMessage;
-import it.polimi.ingsw.client.view.cli.CLIColors;
+import it.polimi.ingsw.client.view.cli.CLIConstants;
 import it.polimi.ingsw.server.serverMessage.*;
 
 import java.io.*;
@@ -9,19 +9,19 @@ import java.net.Socket;
 
 public class SocketListener implements Runnable {
 
-    Client client1;
+    Client client;
     Socket socketServer;
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
 
-    public SocketListener(Client client1) {
+    public SocketListener(Client client) {
 
-        this.client1 = client1;
+        this.client = client;
         try {
             System.out.println("I'm trying to connect to the server");
             socketServer = new Socket("localhost", 1235);
-            System.out.println(CLIColors.GREEN_BRIGHT + "Connection established" + CLIColors.RESET);
+            System.out.println(CLIConstants.GREEN_BRIGHT + "Connection established" + CLIConstants.RESET);
 
             outputStream = new ObjectOutputStream(socketServer.getOutputStream());
             inputStream = new ObjectInputStream(socketServer.getInputStream());
@@ -36,21 +36,21 @@ public class SocketListener implements Runnable {
         ServerMessage input = (ServerMessage) inputStream.readObject();
         System.out.println("--> new message received from server: " + input);
         if (input instanceof NumOfPlayerRequest) {
-            client1.handle((NumOfPlayerRequest) input);
+            client.handle((NumOfPlayerRequest) input);
         } else if (input instanceof CustomMessage) {
-            client1.handle((CustomMessage) input);
+            client.handle((CustomMessage) input);
         } else if (input instanceof UsernameRequest) {
-            client1.handle((UsernameRequest) input);
+            client.handle((UsernameRequest) input);
         } else if (input instanceof BoardUpdateMessage) {
-            client1.handle((BoardUpdateMessage) input);
+            client.handle((BoardUpdateMessage) input);
         } else if (input instanceof StartTurnMessage) {
-            client1.handle((StartTurnMessage) input);
+            client.handle((StartTurnMessage) input);
         } else if (input instanceof MoveRequest) {
-            client1.handle((MoveRequest) input);
+            client.handle((MoveRequest) input);
         } else if (input instanceof LibraryUpdateMessage) {
-            client1.handle((LibraryUpdateMessage) input);
+            client.handle((LibraryUpdateMessage) input);
         } else {
-            client1.handle(input);
+            client.handle(input);
         }
     }
 

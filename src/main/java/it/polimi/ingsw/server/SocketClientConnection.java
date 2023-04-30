@@ -171,8 +171,8 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
             }
 
         }catch (IOException e){
-            // qua se non legge, il client si è scollegato
-            // bisogna killare l'intera partita
+            // if it doesn't read, the client has disconnected
+            // we have to kill the entire game
         }
         catch (ClassNotFoundException e){
 

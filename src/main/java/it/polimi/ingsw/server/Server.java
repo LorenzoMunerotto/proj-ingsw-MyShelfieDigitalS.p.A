@@ -68,7 +68,6 @@ public class Server {
     public Integer assignClientId() {
         Integer clientId = nextClientId;
         nextClientId++;
-
         return clientId;
     }
 

@@ -7,13 +7,30 @@ import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import java.util.Comparator;
 import java.util.List;
 
+import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
+import static it.polimi.ingsw.client.view.cli.CLIConstants.*;
+
+/**
+ * This class is used to print the game objects on the CLI.
+ */
 public class CLIDrawer {
+    /**
+     * It is the virtual model of the game.
+     */
     private final VirtualModel virtualModel;
 
+    /**
+     * It is the constructor of the class.
+     *
+     * @param virtualModel is the virtual model of the game
+     */
     public CLIDrawer(VirtualModel virtualModel) {
         this.virtualModel = virtualModel;
     }
 
+    /**
+     * Prints everything related to the turn of the player.
+     */
     public void printGame() {
         printGameObjects();
         printCommonGoalCards();
@@ -21,8 +38,11 @@ public class CLIDrawer {
         printLeaderBoard();
     }
 
+    /**
+     * Prints a basic separator.
+     */
     protected void printSeparator() {
-        System.out.printf("%s%s%s%n", CLIColors.WHITE_BRIGHT, "-".repeat(300), CLIColors.RESET);
+        System.out.printf("%s%s%s%n", WHITE_BRIGHT, HORIZONTAL_LINE.repeat(300), RESET);
     }
 
     /**
@@ -33,23 +53,34 @@ public class CLIDrawer {
         ItemTile[][] currentLibrary = virtualModel.getLibrary();
         ItemTile[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
 
-        System.out.println(CLIAssets.PRINT_OBJECTS_TITLE);
+        System.out.println(PRINT_OBJECTS_TITLE);
         printFirstRow(board, currentLibrary, personalCardLibrary);
         printfTopLine(board, currentLibrary, personalCardLibrary);
 
         for (int row = 0; row < board.length; row++) {
             printBoardCells(board, row);
-            if (row < currentLibrary.length && row < personalCardLibrary.length) {
-                System.out.print("     ");
-                printLibraryCells(currentLibrary, row, true);
-                System.out.print("  ");
-                printLibraryCells(personalCardLibrary, row, false);
-            } else {
-                System.out.println();
-            }
+            printLibraries(currentLibrary, personalCardLibrary, row);
             printMiddleLine(board, currentLibrary, personalCardLibrary, row);
         }
         printBottomLine(board);
+    }
+
+    /**
+     * Print the libraries.
+     *
+     * @param currentLibrary      is the current library to print
+     * @param personalCardLibrary is the library based on the personal goal card to print
+     * @param row                 is the row of the board
+     */
+    private void printLibraries(ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary, int row) {
+        if (row < currentLibrary.length && row < personalCardLibrary.length) {
+            System.out.print("     ");
+            printLibraryCells(currentLibrary, row, true);
+            System.out.print("  ");
+            printLibraryCells(personalCardLibrary, row, false);
+        } else {
+            System.out.println();
+        }
     }
 
     /**
@@ -62,17 +93,17 @@ public class CLIDrawer {
     private void printFirstRow(BoardCell[][] board, ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("     ");
+        sb.append(" ".repeat(5));
         for (int col = 0; col < board.length; col++) {
-            sb.append(String.format("  %s   ", CLIAssets.CARDINALITY_MAP_COLUMN.get(col)));
+            sb.append(String.format("  %s   ", CARDINALITY_MAP_COLUMN.get(col)));
         }
         sb.append("          ");
         for (int col = 0; col < currentLibrary[0].length; col++) {
-            sb.append(String.format("  %s   ", CLIAssets.CARDINALITY_MAP_COLUMN.get(col)));
+            sb.append(String.format("  %s   ", CARDINALITY_MAP_COLUMN.get(col)));
         }
         sb.append("       ");
         for (int col = 0; col < personalCardLibrary[0].length; col++) {
-            sb.append(String.format("  %s   ", CLIAssets.CARDINALITY_MAP_COLUMN.get(col)));
+            sb.append(String.format("  %s   ", CARDINALITY_MAP_COLUMN.get(col)));
         }
         System.out.println(sb);
     }
@@ -85,9 +116,9 @@ public class CLIDrawer {
      * @param personalCardLibrary is the library based on the personal goal card to print
      */
     private void printfTopLine(BoardCell[][] board, ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary) {
-        printDelimiterLine(board.length, "    ");
-        printDelimiterLine(currentLibrary[0].length, "         ");
-        printDelimiterLine(personalCardLibrary[0].length, "      ");
+        printDelimiterLine(board.length, " ".repeat(4));
+        printDelimiterLine(currentLibrary[0].length, " ".repeat(9));
+        printDelimiterLine(personalCardLibrary[0].length, " ".repeat(6));
         System.out.println();
     }
 
@@ -99,12 +130,12 @@ public class CLIDrawer {
      */
     private void printDelimiterLine(int numColumns, String offset) {
         StringBuilder sb = new StringBuilder();
-        sb.append(offset).append(CLIColors.YELLOW_BOLD).append("┌").append(CLIColors.RESET);
+        sb.append(offset).append(YELLOW_BOLD).append(CORNER_TOP_LEFT).append(RESET);
 
         for (int col = 0; col < numColumns - 1; col++) {
-            sb.append(CLIColors.YELLOW_BOLD).append("─────┬").append(CLIColors.RESET);
+            sb.append(YELLOW_BOLD).append(HORIZONTAL_LINE.repeat(5)).append(T_DOWN).append(RESET);
         }
-        sb.append(CLIColors.YELLOW_BOLD).append("─────┐").append(CLIColors.RESET);
+        sb.append(YELLOW_BOLD).append(HORIZONTAL_LINE.repeat(5)).append(CORNER_TOP_RIGHT).append(RESET);
 
         System.out.print(sb);
     }
@@ -119,40 +150,43 @@ public class CLIDrawer {
      */
     private void printMiddleLine(BoardCell[][] board, ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary, int row) {
         if (row < currentLibrary.length - 1) {
-            System.out.print("    ");
-            for (int col = 0; col < board.length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "├─────" + CLIColors.RESET);
-            }
-            System.out.print(CLIColors.YELLOW_BOLD + "┤         " + CLIColors.RESET);
-            for (int col = 0; col < currentLibrary[0].length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "├─────" + CLIColors.RESET);
-            }
-            System.out.print(CLIColors.YELLOW_BOLD + "┤      " + CLIColors.RESET);
+            printMiddleLineDuplicate(board, currentLibrary, BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
+            System.out.print(BOARD_SHORT_DISTANCE_SEPARATOR_FRAME_FORMAT);
             for (int col = 0; col < personalCardLibrary[0].length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "├─────" + CLIColors.RESET);
+                System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
             }
-            System.out.println(CLIColors.YELLOW_BOLD + "┤" + CLIColors.RESET);
+            System.out.println(YELLOW_BOLD + T_LEFT + RESET);
         } else if (row == currentLibrary.length - 1) {
-            System.out.print("    ");
-            for (int col = 0; col < board.length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "├─────" + CLIColors.RESET);
-            }
-            System.out.print(CLIColors.YELLOW_BOLD + "┤         " + CLIColors.RESET);
-            for (int col = 0; col < currentLibrary[0].length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "└─────" + CLIColors.RESET);
-            }
-            System.out.print(CLIColors.YELLOW_BOLD + "┘      " + CLIColors.RESET);
+            printMiddleLineDuplicate(board, currentLibrary, LIBRARY_BOTTOM_FRAME_FORMAT);
+            System.out.print(YELLOW_BOLD + CORNER_BOTTOM_RIGHT + " ".repeat(6) + RESET);
             for (int col = 0; col < personalCardLibrary[0].length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "└─────" + CLIColors.RESET);
+                System.out.print(LIBRARY_BOTTOM_FRAME_FORMAT);
             }
-            System.out.println(CLIColors.YELLOW_BOLD + "┘" + CLIColors.RESET);
+            System.out.println(YELLOW_BOLD + CORNER_BOTTOM_RIGHT + RESET);
         } else if (row < board.length - 1) {
             System.out.print("    ");
             for (int col = 0; col < board.length; col++) {
-                System.out.print(CLIColors.YELLOW_BOLD + "├─────" + CLIColors.RESET);
+                System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
             }
-            System.out.println(CLIColors.YELLOW_BOLD + "┤" + CLIColors.RESET);
+            System.out.println(YELLOW_BOLD + T_LEFT + RESET);
+        }
+    }
 
+    /**
+     * Refactor to avoid duplicate code.
+     *
+     * @param board                            is the board to print
+     * @param currentLibrary                   is the current library to print
+     * @param boardAndLibraryMiddleFrameFormat is the format of the middle frame
+     */
+    private void printMiddleLineDuplicate(BoardCell[][] board, ItemTile[][] currentLibrary, String boardAndLibraryMiddleFrameFormat) {
+        System.out.print("    ");
+        for (int col = 0; col < board.length; col++) {
+            System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
+        }
+        System.out.print(BOARD_LONG_DISTANCE_SEPARATOR_FRAME_FORMAT);
+        for (int col = 0; col < currentLibrary[0].length; col++) {
+            System.out.print(boardAndLibraryMiddleFrameFormat);
         }
     }
 
@@ -162,11 +196,11 @@ public class CLIDrawer {
      * @param board is the board to print
      */
     private void printBottomLine(BoardCell[][] board) {
-        System.out.print(CLIColors.YELLOW_BOLD + "    └" + CLIColors.RESET);
+        System.out.print(YELLOW_BOLD + CORNER_BOTTOM_LEFT + RESET);
         for (int col = 0; col < board.length - 1; col++) {
-            System.out.print(CLIColors.YELLOW_BOLD + "─────┴" + CLIColors.RESET);
+            System.out.print(YELLOW_BOLD + HORIZONTAL_LINE.repeat(5) + T_UP + RESET);
         }
-        System.out.println(CLIColors.YELLOW_BOLD + "─────┘" + CLIColors.RESET);
+        System.out.println(YELLOW_BOLD + HORIZONTAL_LINE.repeat(5) + CORNER_BOTTOM_RIGHT + RESET);
     }
 
     /**
@@ -176,20 +210,19 @@ public class CLIDrawer {
      * @param row   is the current row
      */
     private void printBoardCells(BoardCell[][] board, int row) {
-        String rowLetter = CLIAssets.CARDINALITY_MAP_ROW.get(row);
-        StringBuilder sb = new StringBuilder();
+        String rowLetter = CARDINALITY_MAP_ROW.get(row);
+        StringBuilder stringBuilder = new StringBuilder();
 
-        sb.append(String.format(" %s  %s│%s", rowLetter, CLIColors.YELLOW_BOLD, CLIColors.RESET));
+        stringBuilder.append(String.format(" %s  %s" + VERTICAL_LINE + "%s", rowLetter, YELLOW_BOLD, RESET));
         for (int col = 0; col < board.length; col++) {
             if (board[row][col].isPlayable()) {
-                sb.append(CLIAssets.ITEM_TILES_TYPES_CLI_COLORS.get((board[row][col].getItemTile().getItemTileType())));
+                stringBuilder.append(ITEM_TILES_TYPES_CLI_COLORS.get((board[row][col].getItemTile().getItemTileType())));
             } else {
-                sb.append(CLIColors.BLUE_BACKGROUND_BRIGHT + "     " + CLIColors.RESET);
+                stringBuilder.append(BLUE_BACKGROUND_BRIGHT + "     " + RESET);
             }
-            sb.append(CLIColors.YELLOW_BOLD + "│" + CLIColors.RESET);
+            stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET);
         }
-
-        System.out.print(sb);
+        System.out.print(stringBuilder);
     }
 
     /**
@@ -200,18 +233,18 @@ public class CLIDrawer {
      * @param isCurrentLibrary is true if the library is the current library, false otherwise
      */
     private void printLibraryCells(ItemTile[][] library, int row, boolean isCurrentLibrary) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        sb.append("  ").append(CLIAssets.CARDINALITY_MAP_ROW.get(row)).append(" ");
+        stringBuilder.append("  ").append(CARDINALITY_MAP_ROW.get(row)).append(" ");
         for (int col = 0; col < library[0].length; col++) {
-            sb.append(CLIColors.YELLOW_BOLD + "│" + CLIColors.RESET).append(CLIAssets.ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col].getItemTileType()));
+            stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col].getItemTileType()));
         }
-        sb.append(CLIColors.YELLOW_BOLD + "│" + CLIColors.RESET);
+        stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET);
 
         if (isCurrentLibrary) {
-            System.out.print(sb);
+            System.out.print(stringBuilder);
         } else {
-            System.out.println(sb);
+            System.out.println(stringBuilder);
         }
     }
 
@@ -232,17 +265,17 @@ public class CLIDrawer {
         }
 
         for (int i = 0; i < commonGoalCards.size(); i++) {
-            System.out.print("╭" + "─".repeat(maxLineLength) + "╮");
+            System.out.printf(SMOOTH_CORNER_TOP_LEFT + HORIZONTAL_LINE.repeat(maxLineLength) + SMOOTH_CORNER_TOP_RIGHT);
         }
         System.out.println();
 
         for (CommonGoalCard card : commonGoalCards) {
-            String commonCard = " Common Card: " + CLIColors.PURPLE_BRIGHT + card.getIndex() + CLIColors.RESET;
-            String points = " Points:" + CLIColors.PURPLE_BRIGHT + " 8 " + CLIColors.RESET;
+            String commonCard = " Common Card: " + PURPLE_BRIGHT + card.getIndex() + RESET;
+            String points = " Points:" + PURPLE_BRIGHT + " 8 " + RESET;
             int commonCardLength = commonCard.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int pointsLength = points.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int padding = Math.max(0, maxLineLength - (commonCardLength + pointsLength));
-            System.out.print("│" + commonCard + " ".repeat(padding) + points + "│");
+            System.out.print(VERTICAL_LINE + commonCard + " ".repeat(padding) + points + VERTICAL_LINE);
         }
         System.out.println();
 
@@ -255,45 +288,51 @@ public class CLIDrawer {
                     String line = " " + descriptionLines[i];
                     int padding = Math.max(0, maxLineLength - line.length());
                     String newLineWithPadding = line + " ".repeat(padding);
-                    System.out.print("│" + newLineWithPadding + "│");
+                    System.out.print(VERTICAL_LINE + newLineWithPadding + VERTICAL_LINE);
                 } else {
-                    System.out.print("│" + " ".repeat(maxLineLength) + "│");
+                    System.out.print(VERTICAL_LINE + " ".repeat(maxLineLength) + VERTICAL_LINE);
                 }
             }
             System.out.println();
         }
 
         for (int i = 0; i < commonGoalCards.size(); i++) {
-            System.out.print("╰" + "─".repeat(maxLineLength) + "╯");
+            System.out.print(SMOOTH_CORNER_BOTTOM_LEFT + HORIZONTAL_LINE.repeat(maxLineLength) + SMOOTH_CORNER_BOTTOM_RIGHT);
         }
         System.out.println();
     }
 
+    /**
+     * Prints the remaining item tiles in the bag.
+     * Don't know if it's useful.
+     */
     private void printBag() {
-        System.out.println("Remaining item tiles in the bag: " + CLIColors.PURPLE_BRIGHT + virtualModel.getBag() + CLIColors.RESET);
+        System.out.println("Remaining item tiles in the bag: " + PURPLE_BRIGHT + virtualModel.getBag() + RESET);
     }
 
+    /**
+     * Prints the leader board.
+     */
     protected void printLeaderBoard() {
         List<Player> players = virtualModel.getPlayers();
         players.sort(Comparator.comparingInt(Player::getTotPoints).reversed());
-        String headerFormat = CLIColors.GREEN + "║" + CLIColors.CYAN + " %-4s " + CLIColors.GREEN + "║" + CLIColors.CYAN + " %-20s " + CLIColors.GREEN + "║" + CLIColors.CYAN + " %-5s " + CLIColors.GREEN + "║" + CLIColors.RESET;
-        String[] colors = {CLIColors.YELLOW_BRIGHT, CLIColors.RED_BRIGHT, CLIColors.PURPLE_BRIGHT, CLIColors.BLUE_BRIGHT};
+        String[] colors = {YELLOW_BRIGHT, RED_BRIGHT, PURPLE_BRIGHT, BLUE_BRIGHT};
 
-        System.out.println(CLIColors.GREEN + "╔══════╦══════════════════════╦════════╗" + CLIColors.RESET);
-        System.out.printf(headerFormat, "Rank", "Leaderboard", "Points");
+        System.out.println(LEADERBOARD_TOP_FRAME_FORMAT);
+        System.out.printf(LEADERBOARD_HEADER_FORMAT, "Rank", "Leaderboard", "Points");
         System.out.println();
-        System.out.println(CLIColors.GREEN + "╠══════╬══════════════════════╬════════╣" + CLIColors.RESET);
+        System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
 
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            System.out.printf(CLIColors.GREEN + "║" + CLIColors.RESET + colors[i] + "   %s  " + CLIColors.RESET + CLIColors.GREEN + "║" + CLIColors.RESET + colors[i] + " %-20s " + CLIColors.RESET + CLIColors.GREEN + "║" + CLIColors.RESET + colors[i] + "    %s   " + CLIColors.RESET + CLIColors.GREEN + "║" + CLIColors.RESET, (i+1), player.getUsername(), player.getTotPoints());
+            System.out.printf(GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "   %s  " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + " %-20s " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "    %s   " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET, (i + 1), player.getUsername(), player.getTotPoints());
             System.out.println();
             if (i < players.size() - 1) {
-                System.out.println(CLIColors.GREEN + "╠══════╬══════════════════════╬════════╣" + CLIColors.RESET);
+                System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
             } else {
-                System.out.println(CLIColors.GREEN + "╚══════╩══════════════════════╩════════╝" + CLIColors.RESET);
+                System.out.println(LEADERBOARD_BOTTOM_FRAME_FORMAT);
+
             }
         }
     }
-
 }

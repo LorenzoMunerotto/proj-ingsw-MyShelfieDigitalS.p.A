@@ -11,24 +11,23 @@ public class SocketServer implements Runnable {
     private final Integer port;
     private final Server server;
     private final ExecutorService executorService;
-    private boolean active;
+    private final boolean active;
 
     public SocketServer(Integer port, Server server) {
         this.port = port;
         this.server = server;
-        this.active=true;
+        this.active = true;
         this.executorService = Executors.newCachedThreadPool();
     }
 
-    public void acceptConnection(ServerSocket serverSocket){
-        while(active){
-            try{
+    public void acceptConnection(ServerSocket serverSocket) {
+        while (active) {
+            try {
                 SocketClientConnection socketClient =
                         new SocketClientConnection(serverSocket.accept(), server);
-                System.out.println("new client try to connect");
+                System.out.println("A new client is trying to connect...");
                 executorService.submit(socketClient);
-            }
-            catch(IOException e){
+            } catch (IOException e) {
                 System.err.println("Error! " + e.getMessage());
             }
         }
@@ -36,7 +35,6 @@ public class SocketServer implements Runnable {
 
     @Override
     public void run() {
-
         try {
             ServerSocket serverSocket = new ServerSocket(port);
             System.out.println("make server socket");

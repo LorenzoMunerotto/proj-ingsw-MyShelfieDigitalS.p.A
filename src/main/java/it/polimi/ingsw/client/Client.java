@@ -1,10 +1,9 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.view.View;
-import it.polimi.ingsw.client.view.VirtualModelProxy;
 import it.polimi.ingsw.client.view.cli.CLI;
 import it.polimi.ingsw.client.view.cli.CLIAssets;
-import it.polimi.ingsw.client.view.cli.CLIColors;
+import it.polimi.ingsw.client.view.cli.CLIConstants;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.server.serverMessage.*;
 
@@ -72,11 +71,11 @@ public class Client {
      */
     public static String chooseViewType(){
         String viewType = "";
-        System.out.printf(CLIAssets.output + "Select preferred interface between cli and gui [%sc%s/%sg%s]: ", CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+        System.out.printf(CLIAssets.output + "Select preferred interface between cli and gui [%sc%s/%sg%s]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (viewType.isEmpty()){
             viewType = Client.input.nextLine().strip().toLowerCase();
             if(!availableViewType.contains(viewType)){
-                System.out.printf(CLIAssets.output + "%sInvalid input%s, please select preferred interface between cli and gui [%sc%s/%sg%s]: ", CLIColors.RED_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET, CLIColors.CYAN_BRIGHT, CLIColors.RESET);
+                System.out.printf(CLIAssets.output + "%sInvalid input%s, please select preferred interface between cli and gui [%sc%s/%sg%s]: ", CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
                 viewType = "";
             }
         }
@@ -85,10 +84,10 @@ public class Client {
 
     public static void main(String[] Args){
 
-        Client client1 = new Client();
+        Client client = new Client();
         String viewType = chooseViewType();
         if(viewType.equals("c")){
-            client1.view = new CLI(new VirtualModelProxy());
+            client.view = new CLI();
         }
         else{
             System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
@@ -96,3 +95,5 @@ public class Client {
     }
 
 }
+
+// swith case, o errore o a seconda dello stato della partita fa qualcosa
