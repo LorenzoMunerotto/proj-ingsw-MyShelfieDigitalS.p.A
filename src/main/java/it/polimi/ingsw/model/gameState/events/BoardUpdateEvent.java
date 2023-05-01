@@ -10,7 +10,6 @@ public class BoardUpdateEvent extends ModelEvent {
     private final ItemTileType[][] boardGrid;
     private final boolean refill;
 
-
     public BoardUpdateEvent(Board board, boolean isRefill) {
         this.boardGrid = new ItemTileType[board.getROWS()][board.getCOLUMNS()];
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.client.clientMessage.Move;
-import it.polimi.ingsw.client.view.VirtualModelProxy;
+import it.polimi.ingsw.client.view.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
@@ -21,7 +21,7 @@ public class GameHandler {
 
     private final List<VirtualClient> virtualClients;
     private final GameData gameData;
-    private final VirtualModelProxy virtualModel;
+    private final VirtualModel virtualModel;
     LibraryManager libraryManager;
     BoardManager boardManager;
     PointsManager pointsManager;
@@ -32,7 +32,7 @@ public class GameHandler {
      */
     public GameHandler() {
         this.gameData = new GameData();
-        this.virtualModel = new VirtualModelProxy();
+        this.virtualModel = new VirtualModel();
         this.virtualClients = new ArrayList<>();
     }
 

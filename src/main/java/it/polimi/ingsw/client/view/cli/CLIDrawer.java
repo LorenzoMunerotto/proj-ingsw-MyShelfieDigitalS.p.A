@@ -35,7 +35,6 @@ public class CLIDrawer {
         printGameObjects();
         printCommonGoalCards();
         printSeparator();
-        printLeaderBoard();
     }
 
     /**

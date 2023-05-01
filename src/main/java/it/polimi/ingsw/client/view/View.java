@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.view;
 
-import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.view.cli.CLIAssets;
 
 import java.util.regex.Matcher;
@@ -48,18 +47,17 @@ public abstract class View {
      * It is the previous message received.
      */
     protected MessageType previousMessage;
-    /**
-     * It is the controller of the client.
-     */
-    protected ClientController controller;
 
     /**
      * This constructor initializes the virtual model and the controller.
      * Maybe.
      */
     public View() {
-        this.virtualModel= new VirtualModelProxy();
-        this.controller = new ClientController(virtualModel, this);
+        this.virtualModel= new VirtualModel();
+    }
+
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
     }
 
     /**
@@ -101,6 +99,10 @@ public abstract class View {
      * @param args are the arguments of the main method
      */
     public abstract void main(String[] args);
+
+    public abstract String chooseUsername();
+
+    public abstract Integer choosePlayersNumber();
 
     /**
      * This method is the method that creates the game.
@@ -163,34 +165,6 @@ public abstract class View {
     protected void checkForWinner() {
         if (virtualModel.getWinner() != null) {
             winner = virtualModel.getWinner();
-        }
-    }
-
-    /**
-     * This method is the method that updates the view.
-     *
-     * @param message is the message received
-     */
-    public void updateView(MessageType message){
-        switch (message) {
-            case CREATE_GAME -> this.createGame();
-            case JOIN_GAME -> this.joinGame();
-            case START_GAME -> {
-                this.startGame();
-                this.turnManager();
-            }
-            case PLAY_TURN -> {
-                this.showGame();
-                this.checkForWinner();
-                if (!this.winner.isEmpty()) {
-                    this.turnManager();
-                } else {
-                    this.endGame();
-                }
-            }
-            case SHOW_ERROR_MESSAGE -> showErrorMessage();
-            default -> {
-            }
         }
     }
 }

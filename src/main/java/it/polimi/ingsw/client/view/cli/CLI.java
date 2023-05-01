@@ -56,7 +56,8 @@ public class CLI extends View {
     /**
      * Asks the user to choose his username.
      */
-    private void chooseUsername() {
+    @Override
+    public String chooseUsername() {
         this.username = "";
         System.out.print(CLIAssets.output + "Please insert your username: ");
         while (this.username.isBlank()) {
@@ -67,12 +68,14 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET);
             }
         }
+        return this.username;
     }
 
     /**
      * Asks the user to choose the number of players for the game.
      */
-    private void choosePlayersNumber() {
+    @Override
+    public Integer choosePlayersNumber() {
         this.playersNumber = 0;
         String playersNumberString;
         System.out.printf(CLIAssets.output + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
@@ -88,6 +91,7 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
+        return this.playersNumber;
     }
 
     /**
@@ -101,7 +105,6 @@ public class CLI extends View {
         // check if username is available
         // set the number of players for the game
         // create a game
-        this.controller.createGame(this.username, this.playersNumber);
         this.previousMessage = MessageType.CREATE_GAME;
     }
 
@@ -115,7 +118,6 @@ public class CLI extends View {
         // check if username is available
         // check if there is a game to join
         // check if there is space in the game
-        this.controller.joinGame(this.username);
         this.previousMessage = MessageType.JOIN_GAME;
     }
 
@@ -266,8 +268,7 @@ public class CLI extends View {
     @Override
     public void main(String[] args) {
         CLI.clear();
-        System.out.println(MYSHELFIE_TITLE);
-        String input = "";
+        /*String input = "";
         System.out.printf(CLIAssets.output + "Do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (input.isEmpty()) {
@@ -281,6 +282,6 @@ public class CLI extends View {
                     input = "";
                 }
             }
-        }
+        }*/
     }
 }

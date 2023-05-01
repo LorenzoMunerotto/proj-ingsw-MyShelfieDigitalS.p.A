@@ -1,6 +1,9 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.clientMessage.NumOfPlayerChoice;
+import it.polimi.ingsw.client.clientMessage.UsernameChoice;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.client.view.VirtualModel;
 import it.polimi.ingsw.client.view.cli.CLI;
 import it.polimi.ingsw.client.view.cli.CLIAssets;
 import it.polimi.ingsw.client.view.cli.CLIConstants;
@@ -16,26 +19,28 @@ import java.util.concurrent.Executors;
 public class Client {
 
     private final SocketListener socketListener;
-    private View view;
+    private final View view;
+
+    private VirtualModel virtualModel;
     private static final Scanner input = new Scanner(System.in);
     private static final List<String> availableViewType = Arrays.asList("c", "g");
 
-    public Client() {
+    public Client(View view) {
         this.socketListener= new SocketListener(this);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
+        this.view = view;
+        this.virtualModel = this.view.getVirtualModel();
     }
 
+    public void handle(UsernameRequest usernameRequest){
+        socketListener.send(new UsernameChoice(view.chooseUsername()));
+    }
     public void handle(NumOfPlayerRequest numOfPlayerRequest) {
     }
 
     public void handle(CustomMessage customMessage){
         System.out.println(customMessage.getMessage());
-    }
-
-
-
-    public void handle(UsernameRequest usernameRequest){
     }
 
     public void handle(ServerMessage message){
@@ -82,16 +87,25 @@ public class Client {
         return viewType;
     }
 
+    public View getView() {
+        return view;
+    }
+
     public static void main(String[] Args){
 
         Client client = new Client();
         String viewType = chooseViewType();
         if(viewType.equals("c")){
-            client.view = new CLI();
+            System.out.printf(CLIAssets.output + "You selected cli interface%n");
+            client = new Client(new CLI());
         }
         else{
             System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
+            client = new Client(new CLI());
         }
+
+        client.view.main(Args);
+
     }
 
 }

@@ -6,74 +6,206 @@ import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import java.util.List;
 
 /**
- * This interface represents the virtual model, for the proxy pattern.
- * Only getters are needed.
+ * This class represents the virtual model, for the proxy pattern.
+ * Don't know how to update it.
+ * A new model every time? Or with the update method below?
+ * It defines new data structures for the game objects, with the essential information for the view.
  */
-public interface VirtualModel {
+public class VirtualModel {
+
+    /**
+     * The current player.
+     */
+    private Player currentPlayer;
+    /**
+     * A new data structure that represents the board.
+     */
+    private BoardCell[][] board;
+    /**
+     * A new data structure that represents the library.
+     */
+    private ItemTile[][] userLibrary;
+    /**
+     * The username.
+     */
+    private String username;
+    /**
+     * The common goal cards.
+     * Maybe a triplet that contains the current point, the index and the description.
+     */
+    private List<CommonGoalCard> commonGoalCards;
+    /**
+     * A new data structure that represents the personal goal card.
+     */
+    private ItemTile[][] personalGoalCard;
+    /**
+     * A list of the players of the game.
+     */
+    private List<Player> gamePlayers;
+    /**
+     * The number of tiles in the bag.
+     */
+    private int gameBag;
+    /**
+     * The winner of the game.
+     */
+    private String winner = null;
+
+    /**
+     * Default constructor.
+     * Maybe it should initialize at least the username and the list of players?
+     */
+    public VirtualModel() {
+    }
 
     /**
      * Get the board.
      *
      * @return the board.
      */
-    BoardCell[][] getBoard();
+    public BoardCell[][] getBoard() {
+        return this.board;
+    }
 
     /**
      * Get the library.
      *
      * @return the library.
      */
-    ItemTile[][] getLibrary();
+    public ItemTile[][] getLibrary() {
+        return this.userLibrary;
+    }
 
     /**
      * Get the personal goal card.
      *
      * @return the personal goal card.
      */
-    ItemTile[][] getPersonalGoalCard();
+    public ItemTile[][] getPersonalGoalCard() {
+        return this.personalGoalCard;
+    }
 
     /**
      * Get the common goal cards.
      *
      * @return the common goal cards.
      */
-    List<CommonGoalCard> getCommonGoalCards();
+
+    public List<CommonGoalCard> getCommonGoalCards() {
+        return this.commonGoalCards;
+    }
 
     /**
      * Get the players.
      *
      * @return the players.
      */
-    List<Player> getPlayers();
+
+    public List<Player> getPlayers() {
+        return this.gamePlayers;
+    }
 
     /**
      * Get the bag.
      *
      * @return the bag.
      */
-    int getBag();
 
-    /**
-     * Get the current player.
-     *
-     * @return the current player.
-     */
-    Player getCurrentPlayer();
+    public int getBag() {
+        return this.gameBag;
+    }
 
     /**
      * Get the username.
      *
      * @return the username.
      */
-    String getUsername();
+
+    public String getUsername() {
+        return this.username;
+    }
 
     /**
      * Get the winner.
      *
      * @return the winner.
      */
-    String getWinner();
 
-    // In the beginning I have a copy of the objects that I need to show to the user
-    // when them get updated in the model I have to update them in the view through the controller
+    public String getWinner() {
+        return this.winner;
+    }
+
+    /**
+     * Get the current player.
+     *
+     * @return the current player.
+     */
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    /**
+     * Update the board.
+     *
+     * @param updatedBoard the updated board.
+     */
+    public void updateBoard (BoardCell[][] updatedBoard){
+       this.board = updatedBoard;
+    }
+
+    /**
+     * Update the library.
+     *
+     * @param updatedLibrary the updated library.
+     */
+    public void updateLibrary (ItemTile[][] updatedLibrary){
+        this.userLibrary = updatedLibrary;
+    }
+
+    /**
+     * Update the personal goal card.
+     * It doesn't really need to be updated, it should be only set at the beginning of the game.
+     *
+     * @param updatedPersonalGoalCard the updated personal goal card.
+     */
+    public void updatePersonalGoalCard (ItemTile[][] updatedPersonalGoalCard){
+        this.personalGoalCard = updatedPersonalGoalCard;
+    }
+
+    /**
+     * Update the common goal cards.
+     *
+     * @param updatedCommonGoalCards the updated common goal cards.
+     */
+    public void updateCommonGoalCards (List<CommonGoalCard> updatedCommonGoalCards){
+        this.commonGoalCards = updatedCommonGoalCards;
+    }
+
+    /**
+     * Update the winner.
+     *
+     * @param winner the winner.
+     */
+    public void updateWinner(String winner){
+        this.winner = winner;
+    }
+
+    /**
+     * Update the current player.
+     *
+     * @param currentPlayer the current player.
+     */
+    public void updateCurrentPlayer(Player currentPlayer){
+        this.currentPlayer = currentPlayer;
+    }
+
+    /**
+     * Update the bag.
+     *
+     * @param gameBag the bag.
+     */
+    public void updateBag(int gameBag){
+        this.gameBag = gameBag;
+    }
 }

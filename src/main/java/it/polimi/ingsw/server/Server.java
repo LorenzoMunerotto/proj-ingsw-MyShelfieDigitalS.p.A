@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.server.serverMessage.CustomMessage;
 import it.polimi.ingsw.server.serverMessage.Error;
 import it.polimi.ingsw.server.serverMessage.ErrorMessage;
+import it.polimi.ingsw.server.serverMessage.StartGameMessage;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -20,10 +21,11 @@ public class Server {
     private Integer nextClientId;
     private GameHandler currentGameHandler;
     private Integer numOfPlayers;
+    private static final int PORT = 1235;
 
 
     public Server() {
-        this.socketServer = new SocketServer(1235, this);
+        this.socketServer = new SocketServer(PORT, this);
         nextClientId = 1;
         ClientIdMapVirtualClient = new HashMap<>();
         ClientIdMapUsername = new HashMap<>();

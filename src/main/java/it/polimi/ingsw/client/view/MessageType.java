@@ -8,5 +8,5 @@ public enum MessageType {
     JOIN_GAME,
     START_GAME,
     PLAY_TURN,
-    SHOW_ERROR_MESSAGE;
+    SHOW_ERROR_MESSAGE
 }

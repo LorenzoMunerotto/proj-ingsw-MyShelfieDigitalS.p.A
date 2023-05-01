@@ -19,10 +19,7 @@ public class VirtualClient implements ModelChangeEventHandler {
     private final SocketClientConnection socketClientConnection;
     private final Integer clientID;
     private final String username;
-
     private final GameHandler gameHandler;
-
-
 
     public VirtualClient(SocketClientConnection socketClientConnection, String username, Integer clientID, GameHandler gameHandler) {
         this.socketClientConnection = socketClientConnection;
