@@ -153,7 +153,7 @@ public class GameHandler {
 
         gameData.setCurrentPlayerIndex(0); // needs a fix to include the chair
 
-        //sendAll(new StartGameMessage());
+
 
         // notify every client of the current turn
         sendAll(new StartTurnMessage(gameData.getCurrentPlayer().getUsername()));

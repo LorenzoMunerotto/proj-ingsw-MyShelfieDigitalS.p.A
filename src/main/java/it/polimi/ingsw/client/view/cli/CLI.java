@@ -267,6 +267,7 @@ public class CLI extends View {
      */
     @Override
     public void main(String[] args) {
+
         CLI.clear();
         /*String input = "";
         System.out.printf(CLIAssets.output + "Do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",

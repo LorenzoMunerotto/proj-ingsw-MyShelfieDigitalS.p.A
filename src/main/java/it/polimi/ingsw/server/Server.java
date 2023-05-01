@@ -121,6 +121,7 @@ public class Server {
             socketClientConnection.setUpNumOfPlayers();
         } else if (waiting.size() == numOfPlayers) {
             currentGameHandler.sendAll(new CustomMessage("Number of players reached!"));
+            currentGameHandler.sendAll( new StartGameMessage());
             waiting.clear();
             currentGameHandler.startGame();
 

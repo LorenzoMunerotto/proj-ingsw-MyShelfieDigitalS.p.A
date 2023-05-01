@@ -49,6 +49,8 @@ public class SocketListener implements Runnable {
             client.handle((MoveRequest) input);
         } else if (input instanceof LibraryUpdateMessage) {
             client.handle((LibraryUpdateMessage) input);
+        } else if (input instanceof StartGameMessage) {
+            client.handle((StartGameMessage) input);
         } else {
             client.handle(input);
         }

@@ -37,6 +37,7 @@ public class Client {
         socketListener.send(new UsernameChoice(view.chooseUsername()));
     }
     public void handle(NumOfPlayerRequest numOfPlayerRequest) {
+        socketListener.send(new NumOfPlayerChoice(view.choosePlayersNumber()));
     }
 
     public void handle(CustomMessage customMessage){
@@ -45,6 +46,11 @@ public class Client {
 
     public void handle(ServerMessage message){
         System.out.println(message.getMessage());
+    }
+
+    public void handle(StartGameMessage startGameMessage){
+        System.out.println(startGameMessage.getMessage());
+
     }
 
 
@@ -62,6 +68,7 @@ public class Client {
 
 
     public void handle(LibraryUpdateMessage libraryUpdateMessage){
+
     }
 
     public void handle(MoveRequest moveRequest){
@@ -93,7 +100,7 @@ public class Client {
 
     public static void main(String[] Args){
 
-        Client client = new Client();
+        Client client;
         String viewType = chooseViewType();
         if(viewType.equals("c")){
             System.out.printf(CLIAssets.output + "You selected cli interface%n");
