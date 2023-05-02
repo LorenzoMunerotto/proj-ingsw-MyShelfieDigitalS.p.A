@@ -4,12 +4,10 @@ import it.polimi.ingsw.client.view.VirtualModel;
 import it.polimi.ingsw.client.view.clientEntity.ClientBoardCell;
 
 import it.polimi.ingsw.client.view.clientEntity.ClientLibrary;
-import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
-import java.util.Comparator;
 import java.util.List;
 
 import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
@@ -200,7 +198,7 @@ public class CLIDrawer {
      * @param board is the board to print
      */
     private void printBottomLine(ClientBoardCell[][] board) {
-        System.out.print(YELLOW_BOLD + CORNER_BOTTOM_LEFT + RESET);
+        System.out.print(" ".repeat(4) + YELLOW_BOLD + CORNER_BOTTOM_LEFT + RESET);
         for (int col = 0; col < board.length - 1; col++) {
             System.out.print(YELLOW_BOLD + HORIZONTAL_LINE.repeat(5) + T_UP + RESET);
         }

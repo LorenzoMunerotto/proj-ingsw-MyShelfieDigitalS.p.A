@@ -53,8 +53,6 @@ public class VirtualModel {
      */
     private int numOfTilesInBag;
 
-
-
     /**
      * Default constructor.
      * Maybe it should initialize at least the username and the list of players?

@@ -135,7 +135,7 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(PointsUpdateMessage pointsUpdateMessage) {
-            virtualModel.updatePointsByUsername(pointsUpdateMessage.getUsername(), pointsUpdateMessage.getPoints());
+        virtualModel.updatePointsByUsername(pointsUpdateMessage.getUsername(), pointsUpdateMessage.getPoints());
     }
 
     @Override

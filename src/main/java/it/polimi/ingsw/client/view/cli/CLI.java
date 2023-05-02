@@ -41,7 +41,7 @@ public class CLI extends View {
      */
     public static void clear() {
 
-        // genera questo errore: TERM environment variable not set. genera questo errore
+        // TERM environment variable not set.
         try {
             String os = System.getProperty("os.name");
             ProcessBuilder processBuilder;
