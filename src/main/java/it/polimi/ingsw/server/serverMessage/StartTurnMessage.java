@@ -17,4 +17,9 @@ public class StartTurnMessage implements ServerMessage {
     public String getUsername() {
         return username;
     }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 }

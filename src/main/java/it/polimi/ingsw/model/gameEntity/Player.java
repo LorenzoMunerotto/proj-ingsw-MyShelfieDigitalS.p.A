@@ -2,7 +2,7 @@ package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
-import it.polimi.ingsw.model.gameState.events.PersonalCardEvent;
+import it.polimi.ingsw.model.gameState.events.PersonalCardSetEvent;
 
 /**
  * Class representing a player.
@@ -109,7 +109,7 @@ public class Player extends AbstractListenable {
      */
     public void setPersonalGoalCard(PersonalGoalCard personalGoalCard) {
         this.personalGoalCard = personalGoalCard;
-        notifyAllListeners(new PersonalCardEvent(personalGoalCard));
+        notifyAllListeners(new PersonalCardSetEvent(personalGoalCard));
     }
 
     /**

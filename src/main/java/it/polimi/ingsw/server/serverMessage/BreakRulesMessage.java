@@ -14,4 +14,9 @@ public class BreakRulesMessage implements ServerMessage {
     public String getMessage() {
         return type.getDescription();
     }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 }

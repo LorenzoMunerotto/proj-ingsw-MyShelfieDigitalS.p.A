@@ -68,7 +68,7 @@ public class BoardManager extends AbstractListenable {
             }
         }
 
-        notifyAllListeners(new BoardUpdateEvent(board, true));
+
     }
 
     /**
@@ -101,6 +101,7 @@ public class BoardManager extends AbstractListenable {
 
             itemTileList.add(board.takeItemTile(row,col));
         }
+        notifyAllListeners(new BoardUpdateEvent(board, false));
         return itemTileList;
     }
 

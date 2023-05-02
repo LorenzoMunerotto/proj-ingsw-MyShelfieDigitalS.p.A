@@ -3,11 +3,12 @@ package it.polimi.ingsw.model.gameEntity.common_cards;
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class CommonGoalCard {
+public abstract class CommonGoalCard implements Serializable {
 
     /**
      * is the index of the CommonGoalCard

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.serverMessage;
+package it.polimi.ingsw.server;
 
 /**
  * This enum is used to send error messages to the client.

@@ -2,8 +2,11 @@ package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.MessageType;
 import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -37,6 +40,8 @@ public class CLI extends View {
      * Clears the console.
      */
     public static void clear() {
+
+        // genera questo errore: TERM environment variable not set. genera questo errore
         try {
             String os = System.getProperty("os.name");
             ProcessBuilder processBuilder;
@@ -124,7 +129,7 @@ public class CLI extends View {
     /**
      * Asks the user to choose the item tiles to grab from the board.
      */
-    private void chooseTiles() {
+    public List<Coordinate> chooseTiles() {
         this.coordinates = "";
         System.out.printf(CLIAssets.output + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
@@ -136,12 +141,50 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
+
+        //parser per ritornare all'oggetto client delle list of Coordinate che il server sia in grado di processare
+        List<Coordinate> coordinateList = new ArrayList<>();
+        String newstr;
+        newstr = coordinates.replaceAll(" ", "");
+        newstr = newstr.replaceAll("\n", "");
+        newstr = newstr.replaceAll("\"", "");
+
+
+        String[] coordinate = newstr.split("-");
+
+
+        for (String coordinata : coordinate) {
+            int row;
+            if (coordinata.charAt(0) == 'A'){
+              row = 0;
+            } else if (coordinata.charAt(0) == 'B') {
+                row = 1;
+            }
+            else if (coordinata.charAt(0) == 'C') {
+                row = 2;
+            }
+            else if (coordinata.charAt(0) == 'D') {
+              row = 3;
+            }
+            else if (coordinata.charAt(0) == 'E') {
+              row = 4;
+            }
+            else  {
+              row = 5;
+            }
+            int col = Integer.valueOf("" + coordinata.charAt(1));
+
+            coordinateList.add(new Coordinate(row, col));
+        }
+
+        return coordinateList;
+
     }
 
     /**
      * Asks the user to choose the column of the library where to place the tiles.
      */
-    private void chooseColumn() {
+    public Integer chooseColumn() {
         this.column = 0;
         String columnString;
         System.out.printf(CLIAssets.output + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
@@ -157,6 +200,7 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
+        return column-1;
     }
 
     /**
@@ -196,7 +240,7 @@ public class CLI extends View {
      * Starts the game and prints the objects of the game.
      */
     @Override
-    protected void startGame(){
+    public void startGame(){
         this.stopWaiting();
         CLI.clear();
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
@@ -212,9 +256,9 @@ public class CLI extends View {
      * Shows the updated game.
      */
     @Override
-    protected void showGame(){
+    public void showGame(){
         this.stopWaiting();
-        CLI.clear();
+       // CLI.clear(); genera un errore ENV
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
         try{
             this.drawer.printGame();
@@ -268,8 +312,8 @@ public class CLI extends View {
     @Override
     public void main(String[] args) {
 
-        CLI.clear();
-        /*String input = "";
+        /* CLI.clear();
+        String input = "";
         System.out.printf(CLIAssets.output + "Do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (input.isEmpty()) {

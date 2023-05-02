@@ -7,9 +7,12 @@ public class BoardUpdateMessage implements ServerMessage {
     private final String message;
     private final ItemTileType[][] gridBoard;
 
-    public BoardUpdateMessage(String message, ItemTileType[][] gridBoard) {
+    private final boolean[][] playableGrid;
+
+    public BoardUpdateMessage(String message, ItemTileType[][] gridBoard, boolean[][] playableGrid) {
         this.message = message;
         this.gridBoard = gridBoard;
+        this.playableGrid = playableGrid;
     }
 
     @Override
@@ -19,5 +22,14 @@ public class BoardUpdateMessage implements ServerMessage {
 
     public ItemTileType[][] getGridBoard() {
         return gridBoard;
+    }
+
+    public boolean[][] getPlayableGrid() {
+        return playableGrid;
+    }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
     }
 }

@@ -135,7 +135,7 @@ public class GameData extends AbstractListenable {
      */
     public void setCommonGoalCardsList(List<CommonGoalCard> commonGoalCardsList) {
         this.commonGoalCardsList = commonGoalCardsList;
-        notifyAllListeners(new CommonCardEvent(commonGoalCardsList));
+        notifyAllListeners(new CommonCardsSetEvent(commonGoalCardsList));
     }
 
     /**

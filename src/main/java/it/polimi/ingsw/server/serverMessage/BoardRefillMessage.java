@@ -20,4 +20,9 @@ public class BoardRefillMessage implements ServerMessage {
     public ItemTileType[][] getGridBoard() {
         return gridBoard;
     }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 }

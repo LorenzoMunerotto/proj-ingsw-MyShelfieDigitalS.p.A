@@ -14,4 +14,9 @@ public class EndTurnMessage implements ServerMessage {
     public String getMessage() {
         return null;
     }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 }

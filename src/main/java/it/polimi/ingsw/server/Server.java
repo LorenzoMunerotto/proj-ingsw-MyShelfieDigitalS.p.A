@@ -2,7 +2,6 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.server.serverMessage.CustomMessage;
-import it.polimi.ingsw.server.serverMessage.Error;
 import it.polimi.ingsw.server.serverMessage.ErrorMessage;
 import it.polimi.ingsw.server.serverMessage.StartGameMessage;
 

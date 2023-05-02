@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.gameState.events;
 
-public class CurrentPlayerUpdateEvent extends ModelEvent {
+public class CurrentPlayerUpdateEvent implements ModelEvent {
 
     private final String username;
 
@@ -10,5 +10,10 @@ public class CurrentPlayerUpdateEvent extends ModelEvent {
 
     public String getUsername() {
         return username;
+    }
+
+
+    public void accept(ModelChangeEventHandler modelChangeEventHandler) {
+        modelChangeEventHandler.handle(this);
     }
 }

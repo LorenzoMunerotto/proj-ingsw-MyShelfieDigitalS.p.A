@@ -1,9 +1,10 @@
-package it.polimi.ingsw.server;
+package it.polimi.ingsw.model.gameState.events;
 
 import it.polimi.ingsw.Event;
 import it.polimi.ingsw.EventHandler;
 import it.polimi.ingsw.Listener;
 import it.polimi.ingsw.model.gameState.events.*;
+import it.polimi.ingsw.server.serverMessage.CommonCardsSetMessage;
 
 
 public interface ModelChangeEventHandler extends EventHandler, Listener
@@ -16,16 +17,20 @@ public interface ModelChangeEventHandler extends EventHandler, Listener
 
    @Override
    default void update(Event event) {
-
       event.accept(this);
    }
 
 
    void handle(BoardUpdateEvent boardUpdateEvent);
-   void handle(LibraryUpdateEvent libraryUpdateEvent);
-   void handle(PointsUpdateEvent pointsUpdateEvent);
+   void handle(CommonCardReachEvent commonCardReachEvent);
+   void handle(CommonCardsSetEvent commonCardsSetMessage);
    void handle(CurrentPlayerUpdateEvent currentPlayerUpdateEvent);
    void handle(FirstFullLibraryEvent firstFullLibraryEvent);
+   void handle(LibraryUpdateEvent libraryUpdateEvent);
+   void handle(PersonalCardSetEvent personalCardSetEvent);
+   void handle(PointsUpdateEvent pointsUpdateEvent);
+
+
 
 
 

@@ -35,7 +35,12 @@ public class SocketListener implements Runnable {
 
         ServerMessage input = (ServerMessage) inputStream.readObject();
         System.out.println("--> new message received from server: " + input);
-        if (input instanceof NumOfPlayerRequest) {
+
+
+        input.accept(client);
+
+
+      /*  if (input instanceof NumOfPlayerRequest) {
             client.handle((NumOfPlayerRequest) input);
         } else if (input instanceof CustomMessage) {
             client.handle((CustomMessage) input);
@@ -51,9 +56,14 @@ public class SocketListener implements Runnable {
             client.handle((LibraryUpdateMessage) input);
         } else if (input instanceof StartGameMessage) {
             client.handle((StartGameMessage) input);
-        } else {
+        } else if (input instanceof CommonCardsSetMessage) {
+            client.handle((CommonCardsSetMessage) input);
+        }
+        else {
             client.handle(input);
         }
+
+       */
     }
 
     @Override

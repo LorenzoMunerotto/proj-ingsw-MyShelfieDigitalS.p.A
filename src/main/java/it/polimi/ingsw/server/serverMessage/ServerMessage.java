@@ -11,5 +11,10 @@ public interface ServerMessage extends Serializable {
      *
      * @return the message
      */
+
     String getMessage();
+
+
+    void accept( ServerMessageHandler serverMessageHandler);
+
 }

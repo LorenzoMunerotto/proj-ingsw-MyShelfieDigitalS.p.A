@@ -12,5 +12,9 @@ public class ConnectionMessage implements ServerMessage {
         return message;
     }
 
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 
 }

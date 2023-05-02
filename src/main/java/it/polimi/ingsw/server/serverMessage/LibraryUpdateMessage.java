@@ -9,16 +9,10 @@ public class LibraryUpdateMessage implements ServerMessage {
     private final String libraryOwnerUsername;
     private final ItemTileType[][] libraryGrid;
 
-    public LibraryUpdateMessage(String message, String libraryOwnerUsername, Library library) {
+    public LibraryUpdateMessage(String message, String libraryOwnerUsername, ItemTileType[][] libraryGrid) {
         this.message = message;
         this.libraryOwnerUsername = libraryOwnerUsername;
-        this.libraryGrid = new ItemTileType[library.getROWS()][library.getCOLUMNS()];
-
-        for (int row = 0; row < library.getROWS(); row++) {
-            for (int col = 0; col < library.getCOLUMNS(); col++) {
-                this.libraryGrid[row][col] = library.getItemTile(row, col).getItemTileType();
-            }
-        }
+        this.libraryGrid = libraryGrid;
     }
 
     @Override
@@ -32,5 +26,10 @@ public class LibraryUpdateMessage implements ServerMessage {
 
     public ItemTileType[][] getLibraryGrid() {
         return libraryGrid;
+    }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
     }
 }

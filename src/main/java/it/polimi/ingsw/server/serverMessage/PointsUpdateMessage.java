@@ -25,4 +25,9 @@ public class PointsUpdateMessage implements ServerMessage {
     public Integer getPoints() {
         return points;
     }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 }

@@ -21,4 +21,9 @@ public class CommonCardReachMessage  implements ServerMessage {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
+    }
 }

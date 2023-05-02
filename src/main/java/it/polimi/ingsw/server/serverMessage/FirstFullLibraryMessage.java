@@ -8,8 +8,15 @@ public class FirstFullLibraryMessage implements ServerMessage{
         this.message = username + " is the first to fill the library, earns 1 point";
     }
 
+
     @Override
     public String getMessage() {
         return message;
+    }
+
+
+    @Override
+    public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
     }
 }

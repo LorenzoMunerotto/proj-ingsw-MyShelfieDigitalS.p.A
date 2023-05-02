@@ -10,6 +10,10 @@ import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameMechanics.BreakRulesException;
 import it.polimi.ingsw.model.gameMechanics.LibraryManager;
 import it.polimi.ingsw.model.gameMechanics.PointsManager;
+import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
+import it.polimi.ingsw.model.gameState.events.CommonCardsSetEvent;
+import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
+import it.polimi.ingsw.model.gameState.events.PersonalCardSetEvent;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.server.VirtualClient;
@@ -40,7 +44,9 @@ public class GameHandler {
      * This method set the managers in order to work on the current Player/library
      */
     public void setUpManagers() {
+
         libraryManager.setLibrary(gameData.getCurrentPlayer().getLibrary());
+        pointsManager.setPlayer(gameData.getCurrentPlayer());
     }
 
     public void nextPlayer() {
@@ -91,7 +97,7 @@ public class GameHandler {
                 boardManager.refillBoard();
             }
 
-            sendAll(new LibraryUpdateMessage("", gameData.getCurrentPlayer().getUsername(), gameData.getCurrentPlayer().getLibrary()));
+
             nextPlayer();
             sendAll(new StartTurnMessage(gameData.getCurrentPlayer().getUsername()));
             sendToCurrentPlayer(new MoveRequest());
@@ -121,7 +127,7 @@ public class GameHandler {
         // create the managers
         this.libraryManager = new LibraryManager();
         this.boardManager = new BoardManager(gameData.getBoard(), gameData.getBag());
-        this.pointsManager = new PointsManager(gameData.getCurrentPlayer(), gameData.getNumOfPlayers(), gameData.getCommonGoalCardsList());
+        this.pointsManager = new PointsManager(gameData.getNumOfPlayers());
 
         // each virtual client must be notified of the events generated in gameData and in the managers
         for (VirtualClient client : virtualClients) {
@@ -141,15 +147,38 @@ public class GameHandler {
             }
         }
 
+        for (Player player : gameData.getPlayers()) {
+            for (VirtualClient client : virtualClients) {
+                client.handle(new LibraryUpdateEvent(player.getLibrary(), player.getUsername()));
+            }
+        }
+
+
+
+
         // it decides the order of the players
         Collections.shuffle(gameData.getPlayers(), new Random());
 
         // assign the personal goal cards to each player and the common goal cards
         assignPersonalGoalCard();
+        for (Player player : gameData.getPlayers()) {
+            for (VirtualClient client : virtualClients) {
+                if (client.getClientID() == player.getClintID()) {
+                    client.handle(new PersonalCardSetEvent(player.getPersonalGoalCard()));
+                }
+            }
+        }
         assignCommonGoalCards();
+        pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
 
         // refill the board
         boardManager.refillBoard();
+
+        for (VirtualClient client : virtualClients) {
+            client.handle(new CommonCardsSetEvent(gameData.getCommonGoalCardsList()));
+            client.handle(new BoardUpdateEvent(gameData.getBoard(), true));
+        }
+
 
         gameData.setCurrentPlayerIndex(0); // needs a fix to include the chair
 
@@ -211,68 +240,9 @@ public class GameHandler {
         virtualClients.add(virtualClient);
     }
 
-    public void setUpVirtualModel(){
-        updateVirtualBoard();
-        updateVirtualLibrary();
-        setVirtualPersonalGoalCard();
-    }
 
-    /**
-     * This method updates the state of the virtual board.
-     */
-    public void updateVirtualBoard(){
-        int row = gameData.getBoard().getROWS();
-        int col = gameData.getBoard().getCOLUMNS();
-        BoardCell[][] virtualBoard = new BoardCell[row][col];
-        for(int currentRow = 0; currentRow < row; currentRow++){
-            for(int currentColumn = 0; currentColumn < col; currentColumn++){
-                BoardCell cell = gameData.getBoard().getBoardCell(currentRow,currentColumn);
-                virtualBoard[currentRow][currentColumn] = new BoardCell(cell.isPlayable());
-                if(virtualBoard[currentRow][currentColumn].isPlayable()){
-                    virtualBoard[currentRow][currentColumn].setItemTile(new ItemTile(cell.getItemTile().getItemTileType()));
-                }
-            }
-        }
-        virtualModel.updateBoard(virtualBoard);
-    }
 
-    /**
-     * This method updates the state of the virtual library.
-     */
-    public void updateVirtualLibrary(){
-        int row = gameData.getCurrentPlayer().getLibrary().getROWS();
-        int col = gameData.getCurrentPlayer().getLibrary().getCOLUMNS();
-        ItemTile[][] virtualLibrary = new ItemTile[row][col];
-        for(int currentRow = 0; currentRow < row; currentRow++){
-            for(int currentColumn = 0; currentColumn < col; currentColumn++){
-                ItemTile tile = gameData.getCurrentPlayer().getLibrary().getItemTile(currentRow,currentColumn);
-                virtualLibrary[currentRow][currentColumn] = new ItemTile(tile.getItemTileType());
-            }
-        }
-        virtualModel.updateLibrary(virtualLibrary);
-    }
-
-    /**
-     * This method set the state of the virtual personal goal card.
-     */
-    public void setVirtualPersonalGoalCard() {
-        int row = gameData.getCurrentPlayer().getLibrary().getROWS();
-        int col = gameData.getCurrentPlayer().getLibrary().getCOLUMNS();
-        ItemTile[][] virtualPersonalGoalCard = new ItemTile[row][col];
-
-        for (int currentRow = 0; currentRow < row; currentRow++) {
-            for (int currentColumn = 0; currentColumn < col; currentColumn++) {
-                virtualPersonalGoalCard[currentRow][currentColumn] = new ItemTile(ItemTileType.EMPTY);
-            }
-        }
-
-        List<Goal> goals = gameData.getCurrentPlayer().getPersonalGoalCard().getGoals();
-        for (Goal goal : goals) {
-            int goalRow = goal.getRow();
-            int goalCol = goal.getColumn();
-            ItemTileType type = goal.getItemTileType();
-            virtualPersonalGoalCard[goalRow][goalCol] = new ItemTile(type);
-        }
-        virtualModel.updatePersonalGoalCard(virtualPersonalGoalCard);
+    public String getCurrentPlayerUsername(){
+        return gameData.getCurrentPlayer().getUsername();
     }
 }

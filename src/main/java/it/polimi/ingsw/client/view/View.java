@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.view;
 
 import it.polimi.ingsw.client.view.cli.CLIAssets;
+import it.polimi.ingsw.model.gameEntity.Coordinate;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,6 +106,10 @@ public abstract class View {
 
     public abstract Integer choosePlayersNumber();
 
+    public abstract List<Coordinate> chooseTiles();
+
+    public abstract Integer chooseColumn();
+
     /**
      * This method is the method that creates the game.
      */
@@ -122,7 +128,7 @@ public abstract class View {
     /**
      * This method is the method that shows the game.
      */
-    protected abstract void showGame();
+    public abstract void showGame();
 
     /**
      * This method is the method that waits for the turn of the player.
@@ -144,9 +150,11 @@ public abstract class View {
      */
     protected abstract void showErrorMessage();
 
+    /*
     /**
      * This method is the method that manages the turn of the player.
      */
+    /*
     protected void turnManager(){
         if (this.winner.isEmpty()){
             if (this.username.equals(virtualModel.getCurrentPlayer().getUsername())){
@@ -158,13 +166,7 @@ public abstract class View {
             this.endGame();
         }
     }
+    */
 
-    /**
-     * This method is the method that checks if there is a winner.
-     */
-    protected void checkForWinner() {
-        if (virtualModel.getWinner() != null) {
-            winner = virtualModel.getWinner();
-        }
-    }
+
 }

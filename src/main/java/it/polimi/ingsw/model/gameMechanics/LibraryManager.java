@@ -5,6 +5,7 @@ import it.polimi.ingsw.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
 import org.javatuples.Pair;
 
 
@@ -53,6 +54,8 @@ public class LibraryManager extends AbstractListenable {
         for(ItemTile itemTile : itemTileList){
             library.insertItemTile(column, itemTile);
         }
+
+       notifyAllListeners(new LibraryUpdateEvent(library));
     }
 
     /**

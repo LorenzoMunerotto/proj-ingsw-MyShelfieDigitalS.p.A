@@ -1,8 +1,13 @@
 package it.polimi.ingsw.client.view.cli;
 
 import it.polimi.ingsw.client.view.VirtualModel;
+import it.polimi.ingsw.client.view.clientEntity.ClientBoardCell;
+
+import it.polimi.ingsw.client.view.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import org.javatuples.Pair;
 
 import java.util.Comparator;
 import java.util.List;
@@ -48,18 +53,18 @@ public class CLIDrawer {
      * Print the board and the two libraries parallel to each other.
      */
     public void printGameObjects() {
-        BoardCell[][] board = virtualModel.getBoard();
-        ItemTile[][] currentLibrary = virtualModel.getLibrary();
-        ItemTile[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
+        ClientBoardCell[][] board = virtualModel.getBoard();
+        ClientLibrary currentLibrary = virtualModel.getMyLibrary();
+        ClientLibrary personalCardLibrary = virtualModel.getPersonalGoalCard();
 
         System.out.println(PRINT_OBJECTS_TITLE);
-        printFirstRow(board, currentLibrary, personalCardLibrary);
-        printfTopLine(board, currentLibrary, personalCardLibrary);
+        printFirstRow(board, currentLibrary.getItemTileTypesGrid(), personalCardLibrary.getItemTileTypesGrid());
+        printfTopLine(board, currentLibrary.getItemTileTypesGrid(), personalCardLibrary.getItemTileTypesGrid());
 
         for (int row = 0; row < board.length; row++) {
             printBoardCells(board, row);
-            printLibraries(currentLibrary, personalCardLibrary, row);
-            printMiddleLine(board, currentLibrary, personalCardLibrary, row);
+            printLibraries(currentLibrary.getItemTileTypesGrid(), personalCardLibrary.getItemTileTypesGrid(), row);
+            printMiddleLine(board, currentLibrary.getItemTileTypesGrid(), personalCardLibrary.getItemTileTypesGrid(), row);
         }
         printBottomLine(board);
     }
@@ -71,7 +76,7 @@ public class CLIDrawer {
      * @param personalCardLibrary is the library based on the personal goal card to print
      * @param row                 is the row of the board
      */
-    private void printLibraries(ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary, int row) {
+    private void printLibraries(ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary, int row) {
         if (row < currentLibrary.length && row < personalCardLibrary.length) {
             System.out.print("     ");
             printLibraryCells(currentLibrary, row, true);
@@ -89,7 +94,7 @@ public class CLIDrawer {
      * @param currentLibrary      is the current library to print
      * @param personalCardLibrary is the library based on the personal goal card to print
      */
-    private void printFirstRow(BoardCell[][] board, ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary) {
+    private void printFirstRow(ClientBoardCell[][] board, ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(" ".repeat(5));
@@ -114,7 +119,7 @@ public class CLIDrawer {
      * @param currentLibrary      is the current library to print
      * @param personalCardLibrary is the library based on the personal goal card to print
      */
-    private void printfTopLine(BoardCell[][] board, ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary) {
+    private void printfTopLine(ClientBoardCell[][] board, ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary) {
         printDelimiterLine(board.length, " ".repeat(4));
         printDelimiterLine(currentLibrary[0].length, " ".repeat(9));
         printDelimiterLine(personalCardLibrary[0].length, " ".repeat(6));
@@ -147,7 +152,7 @@ public class CLIDrawer {
      * @param personalCardLibrary is the library based on the personal goal card to print
      * @param row                 is the current row
      */
-    private void printMiddleLine(BoardCell[][] board, ItemTile[][] currentLibrary, ItemTile[][] personalCardLibrary, int row) {
+    private void printMiddleLine(ClientBoardCell[][] board, ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary, int row) {
         if (row < currentLibrary.length - 1) {
             printMiddleLineDuplicate(board, currentLibrary, BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
             System.out.print(BOARD_SHORT_DISTANCE_SEPARATOR_FRAME_FORMAT);
@@ -178,7 +183,7 @@ public class CLIDrawer {
      * @param currentLibrary                   is the current library to print
      * @param boardAndLibraryMiddleFrameFormat is the format of the middle frame
      */
-    private void printMiddleLineDuplicate(BoardCell[][] board, ItemTile[][] currentLibrary, String boardAndLibraryMiddleFrameFormat) {
+    private void printMiddleLineDuplicate(ClientBoardCell[][] board, ItemTileType[][] currentLibrary, String boardAndLibraryMiddleFrameFormat) {
         System.out.print("    ");
         for (int col = 0; col < board.length; col++) {
             System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
@@ -194,7 +199,7 @@ public class CLIDrawer {
      *
      * @param board is the board to print
      */
-    private void printBottomLine(BoardCell[][] board) {
+    private void printBottomLine(ClientBoardCell[][] board) {
         System.out.print(YELLOW_BOLD + CORNER_BOTTOM_LEFT + RESET);
         for (int col = 0; col < board.length - 1; col++) {
             System.out.print(YELLOW_BOLD + HORIZONTAL_LINE.repeat(5) + T_UP + RESET);
@@ -208,14 +213,14 @@ public class CLIDrawer {
      * @param board is the board to print
      * @param row   is the current row
      */
-    private void printBoardCells(BoardCell[][] board, int row) {
+    private void printBoardCells(ClientBoardCell[][] board, int row) {
         String rowLetter = CARDINALITY_MAP_ROW.get(row);
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(String.format(" %s  %s" + VERTICAL_LINE + "%s", rowLetter, YELLOW_BOLD, RESET));
         for (int col = 0; col < board.length; col++) {
             if (board[row][col].isPlayable()) {
-                stringBuilder.append(ITEM_TILES_TYPES_CLI_COLORS.get((board[row][col].getItemTile().getItemTileType())));
+                stringBuilder.append(ITEM_TILES_TYPES_CLI_COLORS.get((board[row][col].getType())));
             } else {
                 stringBuilder.append(BLUE_BACKGROUND_BRIGHT + "     " + RESET);
             }
@@ -231,12 +236,12 @@ public class CLIDrawer {
      * @param row              is the current row
      * @param isCurrentLibrary is true if the library is the current library, false otherwise
      */
-    private void printLibraryCells(ItemTile[][] library, int row, boolean isCurrentLibrary) {
+    private void printLibraryCells(ItemTileType[][] library, int row, boolean isCurrentLibrary) {
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("  ").append(CARDINALITY_MAP_ROW.get(row)).append(" ");
         for (int col = 0; col < library[0].length; col++) {
-            stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col].getItemTileType()));
+            stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col]));
         }
         stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET);
 
@@ -313,8 +318,8 @@ public class CLIDrawer {
      * Prints the leader board.
      */
     protected void printLeaderBoard() {
-        List<Player> players = virtualModel.getPlayers();
-        players.sort(Comparator.comparingInt(Player::getTotPoints).reversed());
+        List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
+
         String[] colors = {YELLOW_BRIGHT, RED_BRIGHT, PURPLE_BRIGHT, BLUE_BRIGHT};
 
         System.out.println(LEADERBOARD_TOP_FRAME_FORMAT);
@@ -322,11 +327,10 @@ public class CLIDrawer {
         System.out.println();
         System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
 
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
-            System.out.printf(GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "   %s  " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + " %-20s " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "    %s   " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET, (i + 1), player.getUsername(), player.getTotPoints());
+        for (int i = 0; i < leaderBoards.size(); i++) {
+            System.out.printf(GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "   %s  " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + " %-20s " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "    %s   " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET, (i + 1), leaderBoards.get(i).getValue0(), leaderBoards.get(i).getValue1());
             System.out.println();
-            if (i < players.size() - 1) {
+            if (i < leaderBoards.size() - 1) {
                 System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
             } else {
                 System.out.println(LEADERBOARD_BOTTOM_FRAME_FORMAT);

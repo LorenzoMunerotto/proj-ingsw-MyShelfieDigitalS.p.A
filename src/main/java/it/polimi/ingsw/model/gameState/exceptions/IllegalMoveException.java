@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.gameState.exceptions;
 
-import it.polimi.ingsw.server.serverMessage.Error;
+import it.polimi.ingsw.server.Error;
 
 public class IllegalMoveException extends Exception {
 

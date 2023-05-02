@@ -22,7 +22,7 @@ public class PointsManager extends AbstractListenable {
     /**
      * The player of the game.
      */
-    private final Player player;
+    private  Player player;
     /**
      * The number of players of the game.
      */
@@ -30,7 +30,7 @@ public class PointsManager extends AbstractListenable {
     /**
      * The list of the common goal cards of the game.
      */
-    private final List<CommonGoalCard> commonGoalCardList;
+    private List<CommonGoalCard> commonGoalCardList;
     /**
      * The username of the first player that has completed the library.
      */
@@ -48,6 +48,12 @@ public class PointsManager extends AbstractListenable {
         this.player = currentPlayer;
         this.numOfPlayers = numOfPlayers;
         this.commonGoalCardList = commonGoalCardList;
+        this.firstFullLibraryUsername = Optional.empty();
+        this.isPresentFirstFullLibraryUsername = false;
+    }
+
+    public PointsManager(Integer numOfPlayers) {
+        this.numOfPlayers = numOfPlayers;
         this.firstFullLibraryUsername = Optional.empty();
         this.isPresentFirstFullLibraryUsername = false;
     }
@@ -166,5 +172,13 @@ public class PointsManager extends AbstractListenable {
 
     public boolean isPresentFirstFullLibraryUsername() {
         return isPresentFirstFullLibraryUsername;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setCommonGoalCardList(List<CommonGoalCard> commonGoalCardList) {
+        this.commonGoalCardList = commonGoalCardList;
     }
 }

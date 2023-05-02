@@ -3,9 +3,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.model.gameState.events.*;
-import it.polimi.ingsw.server.serverMessage.BoardUpdateMessage;
-import it.polimi.ingsw.server.serverMessage.ServerMessage;
-import it.polimi.ingsw.server.serverMessage.StartTurnMessage;
+import it.polimi.ingsw.server.serverMessage.*;
 
 /**
  * This class represents the Client in the Server.
@@ -50,16 +48,26 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     @Override
     public void handle(BoardUpdateEvent boardUpdateEvent) {
-          socketClientConnection.send(new BoardUpdateMessage("aggiornamento board", boardUpdateEvent.getBoardGrid()));
+          socketClientConnection.send(new BoardUpdateMessage("aggiornamento board", boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
+
+          //caso refil
+
     }
 
     @Override
     public void handle(LibraryUpdateEvent libraryUpdateEvent) {
+        if (libraryUpdateEvent.getUsername()==null) {
+            socketClientConnection.send(new LibraryUpdateMessage("aggiornamento libreria", gameHandler.getCurrentPlayerUsername(), libraryUpdateEvent.getLibraryGrid()));
+        }
+        else{
+            socketClientConnection.send(new LibraryUpdateMessage("aggiornamento libreria", libraryUpdateEvent.getUsername(), libraryUpdateEvent.getLibraryGrid()));
+        }
+        }
 
-    }
 
     @Override
     public void handle(PointsUpdateEvent pointsUpdateEvent) {
+        socketClientConnection.send(new PointsUpdateMessage("aggiornamento punteggi", pointsUpdateEvent.getUsername(), pointsUpdateEvent.getPoints()));
 
     }
 
@@ -70,9 +78,21 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     @Override
     public void handle(FirstFullLibraryEvent firstFullLibraryEvent) {
+        socketClientConnection.send(new FirstFullLibraryMessage(firstFullLibraryEvent.getUsername()));
+    }
+
+    @Override
+    public void handle(CommonCardsSetEvent commonCardsSetEvent){
+        socketClientConnection.send(new CommonCardsSetMessage(commonCardsSetEvent.getCommonGoalCardList()));
+    }
+
+    @Override
+    public void handle(CommonCardReachEvent commonCardReachEvent) {
 
     }
 
-
-
+    @Override
+    public void handle(PersonalCardSetEvent personalCardSetEvent) {
+        socketClientConnection.send(new PersonalCardSetMessage(personalCardSetEvent.getPersonalGoalCard()));
+    }
 }

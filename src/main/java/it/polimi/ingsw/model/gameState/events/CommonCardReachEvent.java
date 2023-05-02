@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.gameState.events;
 
-public class CommonCardReachEvent extends  ModelEvent{
+public class CommonCardReachEvent implements ModelEvent{
 
     private final String username;
     private final Integer points;
@@ -22,5 +22,10 @@ public class CommonCardReachEvent extends  ModelEvent{
 
     public Integer getCommonCardIndex() {
         return commonCardIndex;
+    }
+
+
+    public void accept(ModelChangeEventHandler modelChangeEventHandler) {
+        modelChangeEventHandler.handle(this);
     }
 }

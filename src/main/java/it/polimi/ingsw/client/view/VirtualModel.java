@@ -1,9 +1,19 @@
 package it.polimi.ingsw.client.view;
 
+import it.polimi.ingsw.client.view.clientEntity.ClientBoardCell;
+
+import it.polimi.ingsw.client.view.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.server.serverMessage.ServerMessage;
+import org.javatuples.Pair;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class represents the virtual model, for the proxy pattern.
@@ -13,22 +23,21 @@ import java.util.List;
  */
 public class VirtualModel {
 
+    private ServerMessage serverMessage;
+
+    private String myUsername;
     /**
-     * The current player.
+     * The current player username.
      */
-    private Player currentPlayer;
+    private String currentPlayerUsername;
     /**
      * A new data structure that represents the board.
      */
-    private BoardCell[][] board;
-    /**
-     * A new data structure that represents the library.
-     */
-    private ItemTile[][] userLibrary;
-    /**
-     * The username.
-     */
-    private String username;
+    private ClientBoardCell[][] board;
+
+    private HashMap<String, ClientLibrary> clientUsernameLibrary = new HashMap<>();
+    private HashMap<String, Integer> clientUsernamePoints = new HashMap<>();
+
     /**
      * The common goal cards.
      * Maybe a triplet that contains the current point, the index and the description.
@@ -37,19 +46,14 @@ public class VirtualModel {
     /**
      * A new data structure that represents the personal goal card.
      */
-    private ItemTile[][] personalGoalCard;
-    /**
-     * A list of the players of the game.
-     */
-    private List<Player> gamePlayers;
+    private ClientLibrary personalGoalCard;
+
     /**
      * The number of tiles in the bag.
      */
-    private int gameBag;
-    /**
-     * The winner of the game.
-     */
-    private String winner = null;
+    private int numOfTilesInBag;
+
+
 
     /**
      * Default constructor.
@@ -63,7 +67,7 @@ public class VirtualModel {
      *
      * @return the board.
      */
-    public BoardCell[][] getBoard() {
+    public ClientBoardCell[][] getBoard() {
         return this.board;
     }
 
@@ -72,16 +76,26 @@ public class VirtualModel {
      *
      * @return the library.
      */
-    public ItemTile[][] getLibrary() {
-        return this.userLibrary;
+    public ClientLibrary getMyLibrary() {
+
+        return clientUsernameLibrary.get(myUsername);
     }
+
+    public ClientLibrary getLibraryByUsername(String username){
+        return clientUsernameLibrary.get(username);
+    }
+
+    public int getPointsByUsername(String username){
+        return clientUsernamePoints.get(username);
+    }
+
 
     /**
      * Get the personal goal card.
      *
      * @return the personal goal card.
      */
-    public ItemTile[][] getPersonalGoalCard() {
+    public ClientLibrary getPersonalGoalCard() {
         return this.personalGoalCard;
     }
 
@@ -95,15 +109,7 @@ public class VirtualModel {
         return this.commonGoalCards;
     }
 
-    /**
-     * Get the players.
-     *
-     * @return the players.
-     */
 
-    public List<Player> getPlayers() {
-        return this.gamePlayers;
-    }
 
     /**
      * Get the bag.
@@ -112,28 +118,11 @@ public class VirtualModel {
      */
 
     public int getBag() {
-        return this.gameBag;
+        return this.numOfTilesInBag;
     }
 
-    /**
-     * Get the username.
-     *
-     * @return the username.
-     */
 
-    public String getUsername() {
-        return this.username;
-    }
 
-    /**
-     * Get the winner.
-     *
-     * @return the winner.
-     */
-
-    public String getWinner() {
-        return this.winner;
-    }
 
     /**
      * Get the current player.
@@ -141,8 +130,8 @@ public class VirtualModel {
      * @return the current player.
      */
 
-    public Player getCurrentPlayer() {
-        return this.currentPlayer;
+    public String getCurrentPlayer() {
+        return this.currentPlayerUsername;
     }
 
     /**
@@ -150,27 +139,51 @@ public class VirtualModel {
      *
      * @param updatedBoard the updated board.
      */
-    public void updateBoard (BoardCell[][] updatedBoard){
+    public void updateBoard (ClientBoardCell[][] updatedBoard){
        this.board = updatedBoard;
     }
 
     /**
-     * Update the library.
+     * Update the library in the ClientUsername-Library Map.
      *
-     * @param updatedLibrary the updated library.
+     * @param username the updated library owner.
+     * @param library yhe updated library.
      */
-    public void updateLibrary (ItemTile[][] updatedLibrary){
-        this.userLibrary = updatedLibrary;
+    public void updateLibraryByUsername (String username, ClientLibrary library){
+
+        if (clientUsernameLibrary.containsKey(username)){
+            clientUsernameLibrary.replace(username,library);
+        }
+        else{
+            //THIS BRANCH IS EXEC ONLY AT THE START OF THE GAME
+            clientUsernamePoints.put(username, 0);
+            clientUsernameLibrary.put(username,library);
+        }
     }
 
     /**
-     * Update the personal goal card.
+     * Updated the Points in ClientUsername-Points Map
+     * @param username
+     * @param points
+     */
+    public void updatePointsByUsername (String username, Integer points){
+
+        if (clientUsernamePoints.containsKey(username)){
+            clientUsernamePoints.replace(username, points);
+        }
+        else{
+            clientUsernamePoints.put(username, points);
+        }
+    }
+
+        /**
+     * Set the personal goal card.
      * It doesn't really need to be updated, it should be only set at the beginning of the game.
      *
-     * @param updatedPersonalGoalCard the updated personal goal card.
+     * @param clientLibrary the updated personal goal card.
      */
-    public void updatePersonalGoalCard (ItemTile[][] updatedPersonalGoalCard){
-        this.personalGoalCard = updatedPersonalGoalCard;
+    public void setPersonalGoalCard (ClientLibrary clientLibrary){
+        this.personalGoalCard = clientLibrary;
     }
 
     /**
@@ -182,30 +195,43 @@ public class VirtualModel {
         this.commonGoalCards = updatedCommonGoalCards;
     }
 
-    /**
-     * Update the winner.
-     *
-     * @param winner the winner.
-     */
-    public void updateWinner(String winner){
-        this.winner = winner;
-    }
+
 
     /**
      * Update the current player.
      *
-     * @param currentPlayer the current player.
+     * @param currentPlayerUsername the current player username.
      */
-    public void updateCurrentPlayer(Player currentPlayer){
-        this.currentPlayer = currentPlayer;
+    public void updateCurrentPlayerUsername(String currentPlayerUsername){
+        this.currentPlayerUsername = currentPlayerUsername;
     }
 
     /**
      * Update the bag.
      *
-     * @param gameBag the bag.
+     * @param numOfTilesInBag the bag.
      */
-    public void updateBag(int gameBag){
-        this.gameBag = gameBag;
+    public void updateBag(int numOfTilesInBag){
+        this.numOfTilesInBag = numOfTilesInBag;
+    }
+
+    public void setMyUsername(String myUsername) {
+        this.myUsername = myUsername;
+    }
+
+    public void setServerMessage(ServerMessage serverMessage) {
+        this.serverMessage = serverMessage;
+    }
+
+    public ServerMessage getServerMessage() {
+        return serverMessage;
+    }
+
+    public List<Pair<String, Integer>>  getLeaderBoard(){
+
+        List<Pair<String, Integer>> leaderBoards = new ArrayList<>();
+        clientUsernamePoints.forEach((username, points)-> leaderBoards.add(new Pair<>(username, points)));
+
+        return leaderBoards.stream().sorted(Comparator.comparingInt(Pair<String,Integer>::getValue1).reversed()).collect(Collectors.toList());
     }
 }
