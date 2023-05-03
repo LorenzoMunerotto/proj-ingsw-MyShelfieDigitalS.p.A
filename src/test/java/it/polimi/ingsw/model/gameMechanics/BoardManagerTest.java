@@ -65,7 +65,7 @@ class BoardManagerTest {
         coordinates.add(new Coordinate(1,3));
         coordinates.add(new Coordinate(1,4));
         coordinates.add(new Coordinate(1,5));
-        assertThrows(IllegalArgumentException.class, () -> boardManager.grabItemTiles(coordinates));
+        assertThrows(BreakRulesException.class, () -> boardManager.grabItemTiles(coordinates));
         coordinates.remove(2);
         List<ItemTile> grabbedTiles = boardManager.grabItemTiles(coordinates);
         assertEquals(2, grabbedTiles.size());
@@ -76,7 +76,7 @@ class BoardManagerTest {
         coordinates.clear();
         coordinates.add(new Coordinate(0, 3));
         coordinates.add(new Coordinate(0, 4));
-        assertThrows(IllegalArgumentException.class, () -> boardManager.grabItemTiles(coordinates));
+        assertThrows(BreakRulesException.class, () -> boardManager.grabItemTiles(coordinates));
     }
 
     @Test
