@@ -36,15 +36,15 @@ public class Client implements ServerMessageHandler{
 
     public void handle(UsernameRequest usernameRequest){
         String username = view.chooseUsername();
-        socketListener.send(new UsernameChoice(username));
         virtualModel.setMyUsername(username);
+        socketListener.send(new UsernameChoice(username));
+
     }
     public void handle(NumOfPlayerRequest numOfPlayerRequest) {
         socketListener.send(new NumOfPlayerChoice(view.choosePlayersNumber()));
     }
 
     public void handle(MoveRequest moveRequest){
-        view.showGame();
         List<Coordinate> coordinates = view.chooseTiles();
         Integer column = view.chooseColumn();
         socketListener.send(new Move(coordinates,column));
@@ -75,7 +75,13 @@ public class Client implements ServerMessageHandler{
 
     public void handle(StartTurnMessage startTurnMessage){
         virtualModel.updateCurrentPlayerUsername(startTurnMessage.getUsername());
+
+
+        //questo non va qua ma deve farlo la cli sulla base dell'ultimo messagio
         System.out.println(startTurnMessage.getMessage());
+        if (virtualModel.getCurrentPlayerUsername().equals(virtualModel.getMyUsername())){
+            view.showGame();
+        }
     }
 
 

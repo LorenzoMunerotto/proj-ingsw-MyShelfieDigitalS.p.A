@@ -34,36 +34,10 @@ public class SocketListener implements Runnable {
     public synchronized void readFromStream() throws IOException, ClassNotFoundException {
 
         ServerMessage input = (ServerMessage) inputStream.readObject();
-        System.out.println("--> new message received from server: " + input);
-
+        //System.out.println("--> new message received from server: " + input);
 
         input.accept(client);
 
-
-      /*  if (input instanceof NumOfPlayerRequest) {
-            client.handle((NumOfPlayerRequest) input);
-        } else if (input instanceof CustomMessage) {
-            client.handle((CustomMessage) input);
-        } else if (input instanceof UsernameRequest) {
-            client.handle((UsernameRequest) input);
-        } else if (input instanceof BoardUpdateMessage) {
-            client.handle((BoardUpdateMessage) input);
-        } else if (input instanceof StartTurnMessage) {
-            client.handle((StartTurnMessage) input);
-        } else if (input instanceof MoveRequest) {
-            client.handle((MoveRequest) input);
-        } else if (input instanceof LibraryUpdateMessage) {
-            client.handle((LibraryUpdateMessage) input);
-        } else if (input instanceof StartGameMessage) {
-            client.handle((StartGameMessage) input);
-        } else if (input instanceof CommonCardsSetMessage) {
-            client.handle((CommonCardsSetMessage) input);
-        }
-        else {
-            client.handle(input);
-        }
-
-       */
     }
 
     @Override

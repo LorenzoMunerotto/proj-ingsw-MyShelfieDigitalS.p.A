@@ -126,7 +126,7 @@ public class VirtualModel {
      * @return the current player.
      */
 
-    public String getCurrentPlayer() {
+    public String getCurrentPlayerUsername() {
         return this.currentPlayerUsername;
     }
 
@@ -213,6 +213,10 @@ public class VirtualModel {
 
     public void setMyUsername(String myUsername) {
         this.myUsername = myUsername;
+    }
+
+    public String getMyUsername() {
+        return myUsername;
     }
 
     public void setServerMessage(ServerMessage serverMessage) {

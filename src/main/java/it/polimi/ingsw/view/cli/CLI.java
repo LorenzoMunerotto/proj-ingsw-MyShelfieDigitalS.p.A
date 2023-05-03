@@ -167,10 +167,19 @@ public class CLI extends View {
             else if (coordinata.charAt(0) == 'E') {
               row = 4;
             }
-            else  {
-              row = 5;
+            else if (coordinata.charAt(0) == 'F') {
+                row = 5;
             }
-            int col = Integer.valueOf("" + coordinata.charAt(1));
+            else if (coordinata.charAt(0) == 'G') {
+                row = 6;
+            }
+            else if (coordinata.charAt(0) == 'H') {
+                row = 7;
+            }
+            else  {
+              row = 8;
+            }
+            int col = Integer.valueOf("" + coordinata.charAt(1))-1;
 
             coordinateList.add(new Coordinate(row, col));
         }

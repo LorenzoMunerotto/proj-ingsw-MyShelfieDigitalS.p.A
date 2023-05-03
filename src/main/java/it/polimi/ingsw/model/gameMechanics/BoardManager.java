@@ -77,21 +77,21 @@ public class BoardManager extends AbstractListenable {
      * @param coordinates the coordinates of the item tiles to grab
      * @return the item tiles grabbed
      */
-    public List<ItemTile> grabItemTiles(List<Coordinate> coordinates) {
+    public List<ItemTile> grabItemTiles(List<Coordinate> coordinates) throws BreakRulesException {
 
         int size = coordinates.size();
-        if (size < 1 || size > 3) throw new IllegalArgumentException("Invalid number of coordinates");
-        if (new HashSet<>(coordinates).size()<size) throw new IllegalArgumentException("Invalid number of coordinates - duplicate coordinates");
-        if (!(isLined(coordinates))) throw new IllegalArgumentException("Invalid coordinates - the cells are not in line");
+        if (size < 1 || size > 3) throw new BreakRulesException(BreakRules.TOO_MUCH_TILES_SELECTED);
+        if (new HashSet<>(coordinates).size()<size) throw new BreakRulesException(BreakRules.DUPLICATE_TILES_SELECTED);
+        if (!(isLined(coordinates))) throw new BreakRulesException(BreakRules.TILES_NOT_ALIGNED);
 
         for (Coordinate coordinate : coordinates) {
             int row = coordinate.getRow();
             int col = coordinate.getCol();
 
-            if (!board.getBoardCell(row,col).isPlayable() ) throw new IllegalArgumentException("Invalid coordinates - the cell is not playable");
-            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new IllegalArgumentException("Invalid coordinates - the cell is empty");
-            if (!hasSideFree(row,col)) throw new IllegalArgumentException("Invalid coordinates - there is a tile, which has not a side free at the beginning of the turn");
-            if (board.isAlone(row,col))throw new IllegalArgumentException("Invalid coordinates - the cell is alone");
+            if (!board.getBoardCell(row,col).isPlayable() ) throw new BreakRulesException(BreakRules.NOT_PLAYABLE_TILE);
+            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new BreakRulesException(BreakRules.EMPTY_CELL);
+            if (!hasSideFree(row,col)) throw new BreakRulesException(BreakRules.SURROUNDED_TILE);
+            if (board.isAlone(row,col))throw new BreakRulesException(BreakRules.ALONE_TILE);
         }
 
         List<ItemTile> itemTileList = new ArrayList<>();

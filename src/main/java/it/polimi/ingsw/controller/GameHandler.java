@@ -96,7 +96,6 @@ public class GameHandler {
 
             nextPlayer();
 
-            sendToCurrentPlayer(new MoveRequest());
 
         } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));

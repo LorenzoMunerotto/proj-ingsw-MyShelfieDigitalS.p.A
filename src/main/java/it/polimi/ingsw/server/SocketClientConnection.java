@@ -148,6 +148,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
     @Override
     public void handle(Move move) {
+
         server.getGameHandlerByClientId(clientID).handle(move);
     }
 
