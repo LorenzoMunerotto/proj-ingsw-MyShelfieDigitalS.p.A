@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.gameMechanics;
 
-import it.polimi.ingsw.AbstractListenable;
+import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;

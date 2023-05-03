@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.clientMessage.ClientMessage;
-import it.polimi.ingsw.client.view.cli.CLIConstants;
+import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.server.serverMessage.*;
 
 import java.io.*;

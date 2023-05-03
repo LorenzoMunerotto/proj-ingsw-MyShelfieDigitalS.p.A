@@ -1,13 +1,12 @@
 package it.polimi.ingsw.model.gameMechanics;
 
-import it.polimi.ingsw.AbstractListenable;
+import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
-import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;

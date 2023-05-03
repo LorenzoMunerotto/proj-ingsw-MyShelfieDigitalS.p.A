@@ -1,11 +1,9 @@
-package it.polimi.ingsw.client.view;
+package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.view.clientEntity.ClientBoardCell;
+import it.polimi.ingsw.client.clientEntity.ClientBoardCell;
 
-import it.polimi.ingsw.client.view.clientEntity.ClientLibrary;
-import it.polimi.ingsw.model.gameEntity.*;
+import it.polimi.ingsw.client.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
-import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.server.serverMessage.ServerMessage;
 import org.javatuples.Pair;
 

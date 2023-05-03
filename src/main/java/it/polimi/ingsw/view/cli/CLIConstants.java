@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.cli;
+package it.polimi.ingsw.view.cli;
 
 /**
  * This class contains all the constants used in the CLI.

@@ -1,8 +1,8 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.client.view.cli.CLIAssets;
-import it.polimi.ingsw.client.view.cli.CLIConstants;
+import it.polimi.ingsw.view.cli.CLIAssets;
+import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.server.Server;
 
 import java.util.Scanner;

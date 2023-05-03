@@ -1,7 +1,7 @@
-package it.polimi.ingsw.client.view.cli;
+package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.client.view.MessageType;
-import it.polimi.ingsw.client.view.View;
+import it.polimi.ingsw.client.MessageType;
+import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.io.IOException;
@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-
-import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
 
 /**
  * This class represents the CLI view of the game.
@@ -214,8 +212,8 @@ public class CLI extends View {
 
             while (!Thread.currentThread().isInterrupted()) {
                 System.out.print("Waiting for other players to play their turn...");
-                System.out.print(CLIConstants.BLUE_BRIGHT + "\b" + clockChars[index] + CLIConstants.RESET);
-                index = (index + 1) % clockChars.length;
+                System.out.print(CLIConstants.BLUE_BRIGHT + "\b" + CLIAssets.clockChars[index] + CLIConstants.RESET);
+                index = (index + 1) % CLIAssets.clockChars.length;
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.gameEntity;
 
-import it.polimi.ingsw.AbstractListenable;
+import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import it.polimi.ingsw.model.gameState.events.PersonalCardSetEvent;
 

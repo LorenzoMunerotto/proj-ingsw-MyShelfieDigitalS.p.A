@@ -1,6 +1,8 @@
-package it.polimi.ingsw.client.view;
+package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.client.view.cli.CLIAssets;
+import it.polimi.ingsw.client.MessageType;
+import it.polimi.ingsw.client.VirtualModel;
+import it.polimi.ingsw.view.cli.CLIAssets;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.util.List;

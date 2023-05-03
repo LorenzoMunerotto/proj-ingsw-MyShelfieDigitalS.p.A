@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model.gameState.events;
 
-import it.polimi.ingsw.Event;
-import it.polimi.ingsw.EventHandler;
-import it.polimi.ingsw.Listener;
-import it.polimi.ingsw.model.gameState.events.*;
-import it.polimi.ingsw.server.serverMessage.CommonCardsSetMessage;
+import it.polimi.ingsw.listener.Event;
+import it.polimi.ingsw.listener.EventHandler;
+import it.polimi.ingsw.listener.Listener;
 
 
 public interface ModelChangeEventHandler extends EventHandler, Listener

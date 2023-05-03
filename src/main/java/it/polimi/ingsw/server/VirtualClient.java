@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server;
 
 
-import it.polimi.ingsw.Event;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.model.gameState.events.*;
 import it.polimi.ingsw.server.serverMessage.*;

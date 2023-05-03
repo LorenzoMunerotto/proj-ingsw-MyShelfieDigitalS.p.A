@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model.gameState;
 
-import it.polimi.ingsw.AbstractListenable;
+import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Bag;
 import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;

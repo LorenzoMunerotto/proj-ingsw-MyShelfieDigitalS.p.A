@@ -1,17 +1,16 @@
-package it.polimi.ingsw.client.view.cli;
+package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.client.view.VirtualModel;
-import it.polimi.ingsw.client.view.clientEntity.ClientBoardCell;
+import it.polimi.ingsw.client.VirtualModel;
+import it.polimi.ingsw.client.clientEntity.ClientBoardCell;
 
-import it.polimi.ingsw.client.view.clientEntity.ClientLibrary;
+import it.polimi.ingsw.client.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
 import java.util.List;
 
-import static it.polimi.ingsw.client.view.cli.CLIAssets.*;
-import static it.polimi.ingsw.client.view.cli.CLIConstants.*;
+import static it.polimi.ingsw.view.cli.CLIAssets.*;
 
 /**
  * This class is used to print the game objects on the CLI.
@@ -44,7 +43,7 @@ public class CLIDrawer {
      * Prints a basic separator.
      */
     protected void printSeparator() {
-        System.out.printf("%s%s%s%n", WHITE_BRIGHT, HORIZONTAL_LINE.repeat(300), RESET);
+        System.out.printf("%s%s%s%n", CLIConstants.WHITE_BRIGHT, CLIConstants.HORIZONTAL_LINE.repeat(300), CLIConstants.RESET);
     }
 
     /**
@@ -132,12 +131,12 @@ public class CLIDrawer {
      */
     private void printDelimiterLine(int numColumns, String offset) {
         StringBuilder sb = new StringBuilder();
-        sb.append(offset).append(YELLOW_BOLD).append(CORNER_TOP_LEFT).append(RESET);
+        sb.append(offset).append(CLIConstants.YELLOW_BOLD).append(CLIConstants.CORNER_TOP_LEFT).append(CLIConstants.RESET);
 
         for (int col = 0; col < numColumns - 1; col++) {
-            sb.append(YELLOW_BOLD).append(HORIZONTAL_LINE.repeat(5)).append(T_DOWN).append(RESET);
+            sb.append(CLIConstants.YELLOW_BOLD).append(CLIConstants.HORIZONTAL_LINE.repeat(5)).append(CLIConstants.T_DOWN).append(CLIConstants.RESET);
         }
-        sb.append(YELLOW_BOLD).append(HORIZONTAL_LINE.repeat(5)).append(CORNER_TOP_RIGHT).append(RESET);
+        sb.append(CLIConstants.YELLOW_BOLD).append(CLIConstants.HORIZONTAL_LINE.repeat(5)).append(CLIConstants.CORNER_TOP_RIGHT).append(CLIConstants.RESET);
 
         System.out.print(sb);
     }
@@ -157,20 +156,20 @@ public class CLIDrawer {
             for (int col = 0; col < personalCardLibrary[0].length; col++) {
                 System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
             }
-            System.out.println(YELLOW_BOLD + T_LEFT + RESET);
+            System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.T_LEFT + CLIConstants.RESET);
         } else if (row == currentLibrary.length - 1) {
             printMiddleLineDuplicate(board, currentLibrary, LIBRARY_BOTTOM_FRAME_FORMAT);
-            System.out.print(YELLOW_BOLD + CORNER_BOTTOM_RIGHT + " ".repeat(6) + RESET);
+            System.out.print(CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_RIGHT + " ".repeat(6) + CLIConstants.RESET);
             for (int col = 0; col < personalCardLibrary[0].length; col++) {
                 System.out.print(LIBRARY_BOTTOM_FRAME_FORMAT);
             }
-            System.out.println(YELLOW_BOLD + CORNER_BOTTOM_RIGHT + RESET);
+            System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_RIGHT + CLIConstants.RESET);
         } else if (row < board.length - 1) {
             System.out.print("    ");
             for (int col = 0; col < board.length; col++) {
                 System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
             }
-            System.out.println(YELLOW_BOLD + T_LEFT + RESET);
+            System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.T_LEFT + CLIConstants.RESET);
         }
     }
 
@@ -198,11 +197,11 @@ public class CLIDrawer {
      * @param board is the board to print
      */
     private void printBottomLine(ClientBoardCell[][] board) {
-        System.out.print(" ".repeat(4) + YELLOW_BOLD + CORNER_BOTTOM_LEFT + RESET);
+        System.out.print(" ".repeat(4) + CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_LEFT + CLIConstants.RESET);
         for (int col = 0; col < board.length - 1; col++) {
-            System.out.print(YELLOW_BOLD + HORIZONTAL_LINE.repeat(5) + T_UP + RESET);
+            System.out.print(CLIConstants.YELLOW_BOLD + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.T_UP + CLIConstants.RESET);
         }
-        System.out.println(YELLOW_BOLD + HORIZONTAL_LINE.repeat(5) + CORNER_BOTTOM_RIGHT + RESET);
+        System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.CORNER_BOTTOM_RIGHT + CLIConstants.RESET);
     }
 
     /**
@@ -215,14 +214,14 @@ public class CLIDrawer {
         String rowLetter = CARDINALITY_MAP_ROW.get(row);
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(String.format(" %s  %s" + VERTICAL_LINE + "%s", rowLetter, YELLOW_BOLD, RESET));
+        stringBuilder.append(String.format(" %s  %s" + CLIConstants.VERTICAL_LINE + "%s", rowLetter, CLIConstants.YELLOW_BOLD, CLIConstants.RESET));
         for (int col = 0; col < board.length; col++) {
             if (board[row][col].isPlayable()) {
                 stringBuilder.append(ITEM_TILES_TYPES_CLI_COLORS.get((board[row][col].getType())));
             } else {
-                stringBuilder.append(BLUE_BACKGROUND_BRIGHT + "     " + RESET);
+                stringBuilder.append(CLIConstants.BLUE_BACKGROUND_BRIGHT + "     " + CLIConstants.RESET);
             }
-            stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET);
+            stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET);
         }
         System.out.print(stringBuilder);
     }
@@ -239,9 +238,9 @@ public class CLIDrawer {
 
         stringBuilder.append("  ").append(CARDINALITY_MAP_ROW.get(row)).append(" ");
         for (int col = 0; col < library[0].length; col++) {
-            stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col]));
+            stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col]));
         }
-        stringBuilder.append(YELLOW_BOLD + VERTICAL_LINE + RESET);
+        stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET);
 
         if (isCurrentLibrary) {
             System.out.print(stringBuilder);
@@ -267,17 +266,17 @@ public class CLIDrawer {
         }
 
         for (int i = 0; i < commonGoalCards.size(); i++) {
-            System.out.printf(SMOOTH_CORNER_TOP_LEFT + HORIZONTAL_LINE.repeat(maxLineLength) + SMOOTH_CORNER_TOP_RIGHT);
+            System.out.printf(CLIConstants.SMOOTH_CORNER_TOP_LEFT + CLIConstants.HORIZONTAL_LINE.repeat(maxLineLength) + CLIConstants.SMOOTH_CORNER_TOP_RIGHT);
         }
         System.out.println();
 
         for (CommonGoalCard card : commonGoalCards) {
-            String commonCard = " Common Card: " + PURPLE_BRIGHT + card.getIndex() + RESET;
-            String points = " Points:" + PURPLE_BRIGHT + " 8 " + RESET;
+            String commonCard = " Common Card: " + CLIConstants.PURPLE_BRIGHT + card.getIndex() + CLIConstants.RESET;
+            String points = " Points:" + CLIConstants.PURPLE_BRIGHT + " 8 " + CLIConstants.RESET;
             int commonCardLength = commonCard.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int pointsLength = points.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int padding = Math.max(0, maxLineLength - (commonCardLength + pointsLength));
-            System.out.print(VERTICAL_LINE + commonCard + " ".repeat(padding) + points + VERTICAL_LINE);
+            System.out.print(CLIConstants.VERTICAL_LINE + commonCard + " ".repeat(padding) + points + CLIConstants.VERTICAL_LINE);
         }
         System.out.println();
 
@@ -290,16 +289,16 @@ public class CLIDrawer {
                     String line = " " + descriptionLines[i];
                     int padding = Math.max(0, maxLineLength - line.length());
                     String newLineWithPadding = line + " ".repeat(padding);
-                    System.out.print(VERTICAL_LINE + newLineWithPadding + VERTICAL_LINE);
+                    System.out.print(CLIConstants.VERTICAL_LINE + newLineWithPadding + CLIConstants.VERTICAL_LINE);
                 } else {
-                    System.out.print(VERTICAL_LINE + " ".repeat(maxLineLength) + VERTICAL_LINE);
+                    System.out.print(CLIConstants.VERTICAL_LINE + " ".repeat(maxLineLength) + CLIConstants.VERTICAL_LINE);
                 }
             }
             System.out.println();
         }
 
         for (int i = 0; i < commonGoalCards.size(); i++) {
-            System.out.print(SMOOTH_CORNER_BOTTOM_LEFT + HORIZONTAL_LINE.repeat(maxLineLength) + SMOOTH_CORNER_BOTTOM_RIGHT);
+            System.out.print(CLIConstants.SMOOTH_CORNER_BOTTOM_LEFT + CLIConstants.HORIZONTAL_LINE.repeat(maxLineLength) + CLIConstants.SMOOTH_CORNER_BOTTOM_RIGHT);
         }
         System.out.println();
     }
@@ -309,7 +308,7 @@ public class CLIDrawer {
      * Don't know if it's useful.
      */
     private void printBag() {
-        System.out.println("Remaining item tiles in the bag: " + PURPLE_BRIGHT + virtualModel.getBag() + RESET);
+        System.out.println("Remaining item tiles in the bag: " + CLIConstants.PURPLE_BRIGHT + virtualModel.getBag() + CLIConstants.RESET);
     }
 
     /**
@@ -318,7 +317,7 @@ public class CLIDrawer {
     protected void printLeaderBoard() {
         List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
 
-        String[] colors = {YELLOW_BRIGHT, RED_BRIGHT, PURPLE_BRIGHT, BLUE_BRIGHT};
+        String[] colors = {CLIConstants.YELLOW_BRIGHT, CLIConstants.RED_BRIGHT, CLIConstants.PURPLE_BRIGHT, CLIConstants.BLUE_BRIGHT};
 
         System.out.println(LEADERBOARD_TOP_FRAME_FORMAT);
         System.out.printf(LEADERBOARD_HEADER_FORMAT, "Rank", "Leaderboard", "Points");
@@ -326,7 +325,7 @@ public class CLIDrawer {
         System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
 
         for (int i = 0; i < leaderBoards.size(); i++) {
-            System.out.printf(GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "   %s  " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + " %-20s " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET + colors[i] + "    %s   " + RESET + GREEN + VERTICAL_LINE_DOUBLE + RESET, (i + 1), leaderBoards.get(i).getValue0(), leaderBoards.get(i).getValue1());
+            System.out.printf(CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET + colors[i] + "   %s  " + CLIConstants.RESET + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET + colors[i] + " %-20s " + CLIConstants.RESET + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET + colors[i] + "    %s   " + CLIConstants.RESET + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET, (i + 1), leaderBoards.get(i).getValue0(), leaderBoards.get(i).getValue1());
             System.out.println();
             if (i < leaderBoards.size() - 1) {
                 System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);

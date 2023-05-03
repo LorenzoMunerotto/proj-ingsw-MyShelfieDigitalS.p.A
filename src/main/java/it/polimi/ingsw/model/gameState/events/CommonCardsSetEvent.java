@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.gameState.events;
 
-import it.polimi.ingsw.Listener;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 
 import java.util.List;

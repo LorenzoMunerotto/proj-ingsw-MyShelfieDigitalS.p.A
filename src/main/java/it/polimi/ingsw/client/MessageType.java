@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view;
+package it.polimi.ingsw.client;
 
 /**
  * This enum contains all the possible message types for the view phase.

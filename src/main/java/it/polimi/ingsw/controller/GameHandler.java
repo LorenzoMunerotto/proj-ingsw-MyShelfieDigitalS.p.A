@@ -1,19 +1,15 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.client.clientMessage.Move;
-import it.polimi.ingsw.client.view.VirtualModel;
+import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
-import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.*;
 import it.polimi.ingsw.model.gameMechanics.BoardManager;
 import it.polimi.ingsw.model.gameMechanics.BreakRulesException;
 import it.polimi.ingsw.model.gameMechanics.LibraryManager;
 import it.polimi.ingsw.model.gameMechanics.PointsManager;
-import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
-import it.polimi.ingsw.model.gameState.events.CommonCardsSetEvent;
 import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
-import it.polimi.ingsw.model.gameState.events.PersonalCardSetEvent;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.server.VirtualClient;

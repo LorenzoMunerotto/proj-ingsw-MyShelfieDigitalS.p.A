@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.view.clientEntity;
+package it.polimi.ingsw.client.clientEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
