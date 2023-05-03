@@ -12,14 +12,20 @@ public interface ModelChangeEventHandler extends EventHandler, Listener
 
    @Override
    default void handle(Event event) {
-
+      System.out.println("Errore nella gestione degli eventi");
    }
 
    @Override
    default void update(Event event) {
-      event.accept(this);
+      if (event instanceof ModelEvent){
+         update((ModelEvent) event);
+      }else{
+         System.out.println("Errore nella gestione degli eventi");
+      }
+
    }
 
+   void update(ModelEvent modelEvent);
 
    void handle(BoardUpdateEvent boardUpdateEvent);
    void handle(CommonCardReachEvent commonCardReachEvent);

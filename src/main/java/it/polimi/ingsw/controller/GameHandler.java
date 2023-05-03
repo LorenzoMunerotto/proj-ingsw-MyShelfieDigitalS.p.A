@@ -51,7 +51,7 @@ public class GameHandler {
 
     public void nextPlayer() {
         if (gameData.getFirstFullLibraryUsername().isPresent() && gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers() - 1) {
-            //broadcast( new EndGameMessage());
+            sendAll(new EndGameMessage());
         } else if (gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers() - 1) {
             gameData.setCurrentPlayerIndex(0);
         } else {
@@ -99,7 +99,7 @@ public class GameHandler {
 
 
             nextPlayer();
-            sendAll(new StartTurnMessage(gameData.getCurrentPlayer().getUsername()));
+
             sendToCurrentPlayer(new MoveRequest());
 
         } catch (BreakRulesException e) {
@@ -147,6 +147,7 @@ public class GameHandler {
             }
         }
 
+        //così comunico a tutti i client chi sono i giocatori e inizializzo librerie e punteggi su ciascun virtualModel
         for (Player player : gameData.getPlayers()) {
             for (VirtualClient client : virtualClients) {
                 client.handle(new LibraryUpdateEvent(player.getLibrary(), player.getUsername()));
@@ -154,41 +155,20 @@ public class GameHandler {
         }
 
 
-
-
         // it decides the order of the players
         Collections.shuffle(gameData.getPlayers(), new Random());
 
         // assign the personal goal cards to each player and the common goal cards
         assignPersonalGoalCard();
-        for (Player player : gameData.getPlayers()) {
-            for (VirtualClient client : virtualClients) {
-                if (client.getClientID() == player.getClintID()) {
-                    client.handle(new PersonalCardSetEvent(player.getPersonalGoalCard()));
-                }
-            }
-        }
+
         assignCommonGoalCards();
         pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
 
         // refill the board
         boardManager.refillBoard();
 
-        for (VirtualClient client : virtualClients) {
-            client.handle(new CommonCardsSetEvent(gameData.getCommonGoalCardsList()));
-            client.handle(new BoardUpdateEvent(gameData.getBoard(), true));
-        }
-
-
         gameData.setCurrentPlayerIndex(0); // needs a fix to include the chair
 
-
-
-        // notify every client of the current turn
-        sendAll(new StartTurnMessage(gameData.getCurrentPlayer().getUsername()));
-
-        // to the current player is sent a MoveRequest
-        sendToCurrentPlayer(new MoveRequest());
     }
 
     /**

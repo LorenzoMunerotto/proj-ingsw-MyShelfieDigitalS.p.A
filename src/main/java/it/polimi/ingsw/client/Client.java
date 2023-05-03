@@ -94,6 +94,14 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(BoardRefillMessage boardRefillMessage) {
+        ClientBoardCell[][] board = new ClientBoardCell[9][9];
+        for (int row =0; row<9; row++){
+            for (int col = 0; col<9; col++){
+                board[row][col]= new ClientBoardCell(boardRefillMessage.getGridBoard()[row][col],boardRefillMessage.getPlayableGrid()[row][col]);
+            }
+        }
+        virtualModel.updateBoard(board);
+
         System.out.println(boardRefillMessage.getMessage());
     }
 

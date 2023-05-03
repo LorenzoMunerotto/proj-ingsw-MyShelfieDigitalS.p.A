@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 
+import it.polimi.ingsw.Event;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.model.gameState.events.*;
 import it.polimi.ingsw.server.serverMessage.*;
@@ -46,11 +47,20 @@ public class VirtualClient implements ModelChangeEventHandler {
         return gameHandler;
     }
 
+
+    public void update(ModelEvent modelEvent) {
+        modelEvent.accept(this);
+    }
+
     @Override
     public void handle(BoardUpdateEvent boardUpdateEvent) {
-          socketClientConnection.send(new BoardUpdateMessage("aggiornamento board", boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
+        if (boardUpdateEvent.isRefill()==false) {
+            socketClientConnection.send(new BoardUpdateMessage("aggiornamento board", boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
+        }
+        else{
+            socketClientConnection.send(new BoardRefillMessage(boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
+        }
 
-          //caso refil
 
     }
 
@@ -60,7 +70,7 @@ public class VirtualClient implements ModelChangeEventHandler {
             socketClientConnection.send(new LibraryUpdateMessage("aggiornamento libreria", gameHandler.getCurrentPlayerUsername(), libraryUpdateEvent.getLibraryGrid()));
         }
         else{
-            socketClientConnection.send(new LibraryUpdateMessage("aggiornamento libreria", libraryUpdateEvent.getUsername(), libraryUpdateEvent.getLibraryGrid()));
+            socketClientConnection.send(new LibraryUpdateMessage("set up iniziale della libreria", libraryUpdateEvent.getUsername(), libraryUpdateEvent.getLibraryGrid()));
         }
         }
 
@@ -74,6 +84,9 @@ public class VirtualClient implements ModelChangeEventHandler {
     @Override
     public void handle(CurrentPlayerUpdateEvent currentPlayerUpdateEvent) {
         socketClientConnection.send(new StartTurnMessage(currentPlayerUpdateEvent.getUsername()));
+        if(currentPlayerUpdateEvent.getUsername()==username){
+            socketClientConnection.send(new MoveRequest());
+        }
     }
 
     @Override
@@ -95,4 +108,6 @@ public class VirtualClient implements ModelChangeEventHandler {
     public void handle(PersonalCardSetEvent personalCardSetEvent) {
         socketClientConnection.send(new PersonalCardSetMessage(personalCardSetEvent.getPersonalGoalCard()));
     }
+
+
 }

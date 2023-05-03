@@ -6,10 +6,12 @@ public class BoardRefillMessage implements ServerMessage {
 
     private final String message;
     private final ItemTileType[][] gridBoard;
+    private final boolean[][] playableGrid;
 
-    public BoardRefillMessage(ItemTileType[][] gridBoard) {
+    public BoardRefillMessage(ItemTileType[][] gridBoard, boolean[][] playableGrid) {
         this.message = "Board refilled";
         this.gridBoard = gridBoard;
+        this.playableGrid=playableGrid;
     }
 
     @Override
@@ -19,6 +21,10 @@ public class BoardRefillMessage implements ServerMessage {
 
     public ItemTileType[][] getGridBoard() {
         return gridBoard;
+    }
+
+    public boolean[][] getPlayableGrid() {
+        return playableGrid;
     }
 
     @Override

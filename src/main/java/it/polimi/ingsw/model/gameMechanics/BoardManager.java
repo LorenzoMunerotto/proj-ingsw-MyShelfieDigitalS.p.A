@@ -7,6 +7,7 @@ import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
+import it.polimi.ingsw.model.gameState.events.LibraryUpdateEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ public class BoardManager extends AbstractListenable {
                 }
             }
         }
-
+    notifyAllListeners(new BoardUpdateEvent(board, true));
 
     }
 
