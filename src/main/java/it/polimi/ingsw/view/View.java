@@ -112,20 +112,7 @@ public abstract class View {
 
     public abstract Integer chooseColumn();
 
-    /**
-     * This method is the method that creates the game.
-     */
-    protected abstract void createGame();
-
-    /**
-     * This method is the method that joins the game.
-     */
-    protected abstract void joinGame();
-
-    /**
-     * This method is the method that starts the game.
-     */
-    protected abstract void startGame();
+    public abstract void startGame();
 
     /**
      * This method is the method that shows the game.
@@ -135,40 +122,27 @@ public abstract class View {
     /**
      * This method is the method that waits for the turn of the player.
      */
-    protected abstract void waitForTurn();
+    public abstract void waitForTurn();
 
     /**
      * This method is the method that plays the turn of the player.
      */
-    protected abstract void playTurn();
+    public abstract void playTurn();
 
     /**
      * This method is the method that ends the game.
      */
-    protected abstract void endGame();
+    public abstract void endGame();
 
     /**
      * This method is the method that manages the turn of the player.
      */
-    protected abstract void showErrorMessage();
+    public abstract void showErrorMessage(String errorMessage);
 
-    /*
-    /**
-     * This method is the method that manages the turn of the player.
-     */
-    /*
-    protected void turnManager(){
-        if (this.winner.isEmpty()){
-            if (this.username.equals(virtualModel.getCurrentPlayer().getUsername())){
-                this.playTurn();
-            } else {
-                this.waitForTurn();
-            }
-        } else {
-            this.endGame();
-        }
-    }
-    */
+
+    public abstract void stopWaiting();
+
+    public abstract void showMessage(String message);
 
 
 }

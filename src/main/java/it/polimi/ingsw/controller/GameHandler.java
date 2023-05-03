@@ -83,17 +83,21 @@ public class GameHandler {
             libraryManager.hasEnoughSpace(move.getColumn(), numberOfTiles);
             libraryManager.insertItemTiles(move.getColumn(), boardManager.grabItemTiles(move.getCoordinateList()));
 
-            pointsManager.updateTotalPoints();
 
-            if (pointsManager.isPresentFirstFullLibraryUsername() && pointsManager.getFirstFullLibraryUsername().isPresent()) {
-                gameData.setFirstFullLibraryUsername(pointsManager.getFirstFullLibraryUsername().get());
+
+            if (!pointsManager.isPresentFirstFullLibraryUsername() && libraryManager.isFull()) {
+                pointsManager.setFirstFullLibraryUsername(Optional.of(getCurrentPlayerUsername()));
+                pointsManager.setPresentFirstFullLibraryUsername(true);
+                gameData.setFirstFullLibraryUsername(getCurrentPlayerUsername());
             }
+
+            pointsManager.updateTotalPoints();
 
             if (boardManager.isRefillTime()) {
                 boardManager.refillBoard();
             }
 
-
+            sendAll(new EndTurnMessage("turn finished"));
             nextPlayer();
 
 

@@ -51,6 +51,8 @@ public class VirtualModel {
      */
     private int numOfTilesInBag;
 
+    private String firstFullLibraryUsername;
+
     /**
      * Default constructor.
      * Maybe it should initialize at least the username and the list of players?
@@ -233,5 +235,13 @@ public class VirtualModel {
         clientUsernamePoints.forEach((username, points)-> leaderBoards.add(new Pair<>(username, points)));
 
         return leaderBoards.stream().sorted(Comparator.comparingInt(Pair<String,Integer>::getValue1).reversed()).collect(Collectors.toList());
+    }
+
+    public String getFirstFullLibraryUsername() {
+        return firstFullLibraryUsername;
+    }
+
+    public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
+        this.firstFullLibraryUsername = firstFullLibraryUsername;
     }
 }

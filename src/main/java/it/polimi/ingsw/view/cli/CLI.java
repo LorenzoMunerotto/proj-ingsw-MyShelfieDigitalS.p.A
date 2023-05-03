@@ -97,32 +97,6 @@ public class CLI extends View {
         return this.playersNumber;
     }
 
-    /**
-     * Method for the first player of the game.
-     */
-    @Override
-    protected void createGame() {
-        this.chooseUsername();
-        this.choosePlayersNumber();
-        // send to server somehow
-        // check if username is available
-        // set the number of players for the game
-        // create a game
-        this.previousMessage = MessageType.CREATE_GAME;
-    }
-
-    /**
-     * Method for the players that join a game.
-     */
-    @Override
-    protected void joinGame() {
-        this.chooseUsername();
-        // send to server somehow
-        // check if username is available
-        // check if there is a game to join
-        // check if there is space in the game
-        this.previousMessage = MessageType.JOIN_GAME;
-    }
 
     /**
      * Asks the user to choose the item tiles to grab from the board.
@@ -215,7 +189,7 @@ public class CLI extends View {
      * maybe we can use it also while a client wait to other to connect to the server
      */
     @Override
-    protected void waitForTurn() {
+    public void waitForTurn() {
         this.waitingThread = new Thread(() -> {
             int index = 0;
 
@@ -236,7 +210,7 @@ public class CLI extends View {
     /**
      * Stops the waiting thread.
      */
-    private void stopWaiting() {
+    public void stopWaiting() {
         if (this.waitingThread != null) {
             this.waitingThread.interrupt();
             this.waitingThread = null;
@@ -251,12 +225,13 @@ public class CLI extends View {
         this.stopWaiting();
         CLI.clear();
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
-        try {
+       /* try {
             this.drawer.printGame();
             this.previousMessage = MessageType.START_GAME;
         } catch (Exception e) {
             System.out.println("Error while starting game");
         }
+        */
     }
 
     /**
@@ -278,15 +253,8 @@ public class CLI extends View {
      * Plays the turn of the current player.
      */
     @Override
-    protected void playTurn() {
+    public void playTurn() {
         System.out.println(CLIAssets.output + "It is your turn!");
-        try {
-            this.chooseTiles();
-            this.chooseColumn();
-            this.previousMessage = MessageType.PLAY_TURN;
-        } catch (Exception e) {
-            System.out.println("Error while playing turn");
-        }
     }
 
     /**
@@ -294,7 +262,7 @@ public class CLI extends View {
      * It prints the leaderboard and the winner.
      */
     @Override
-    protected void endGame() {
+    public void endGame() {
         this.drawer.printLeaderBoard();
         if (Objects.equals(this.username, this.winner)) {
             System.out.println(CLIAssets.output + "Congratulations, you won!");
@@ -307,8 +275,8 @@ public class CLI extends View {
      * Shows an error message.
      */
     @Override
-    protected void showErrorMessage() {
-        System.out.printf("%s%s%s%s%n", CLIAssets.output, CLIConstants.RED_BRIGHT, "Idk", CLIConstants.RESET);
+    public void showErrorMessage(String errorMessage) {
+        System.out.printf("%s%s%s%s%n", CLIAssets.output, CLIConstants.RED_BRIGHT, errorMessage, CLIConstants.RESET);
     }
 
     /**
@@ -335,5 +303,12 @@ public class CLI extends View {
                 }
             }
         }*/
+    }
+
+    @Override
+    public void showMessage(String message) {
+        if (message!=null) {
+            System.out.println(message);
+        }
     }
 }

@@ -51,12 +51,12 @@ public class Client implements ServerMessageHandler{
     }
 
     public void handle(CustomMessage customMessage){
-        System.out.println(customMessage.getMessage());
+        view.showMessage(customMessage.getMessage());
     }
 
 
     public void handle(StartGameMessage startGameMessage){
-        System.out.println(startGameMessage.getMessage());
+        view.startGame();
 
     }
 
@@ -78,9 +78,11 @@ public class Client implements ServerMessageHandler{
 
 
         //questo non va qua ma deve farlo la cli sulla base dell'ultimo messagio
-        System.out.println(startTurnMessage.getMessage());
         if (virtualModel.getCurrentPlayerUsername().equals(virtualModel.getMyUsername())){
+            view.playTurn();
             view.showGame();
+        }else{
+            view.waitForTurn();
         }
     }
 
@@ -105,37 +107,42 @@ public class Client implements ServerMessageHandler{
         }
         virtualModel.updateBoard(board);
 
-        System.out.println(boardRefillMessage.getMessage());
+        // questo alla fine non dovrà essere qui
+        view.showMessage(boardRefillMessage.getMessage());
     }
 
     @Override
     public void handle(BreakRulesMessage breakRulesMessage) {
-        System.out.println(breakRulesMessage.getMessage());
+       view.showErrorMessage(breakRulesMessage.getMessage());
     }
 
     @Override
     public void handle(CommonCardReachMessage commonCardReachMessage) {
-        System.out.println(commonCardReachMessage.getMessage());
+        view.showMessage(commonCardReachMessage.getMessage());
     }
 
     @Override
     public void handle(EndGameMessage endGameMessage) {
-        System.out.println(endGameMessage.getMessage());
+        view.endGame();
     }
 
     @Override
     public void handle(EndTurnMessage endTurnMessage) {
-        System.out.println(endTurnMessage.getMessage());
+        view.stopWaiting();
+        // view.showMessage(endTurnMessage.getMessage());
+
     }
 
     @Override
     public void handle(ErrorMessage errorMessage) {
-        System.out.println(errorMessage.getMessage());
+        view.showMessage(errorMessage.getMessage());
     }
 
     @Override
     public void handle(FirstFullLibraryMessage firstFullLibraryMessage) {
-        System.out.println(firstFullLibraryMessage.getMessage());
+        virtualModel.setFirstFullLibraryUsername(firstFullLibraryMessage.getUsername());
+
+        view.showMessage(firstFullLibraryMessage.getMessage());
     }
 
     @Override

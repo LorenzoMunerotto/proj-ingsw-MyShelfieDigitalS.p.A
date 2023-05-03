@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
+import it.polimi.ingsw.model.gameState.events.FirstFullLibraryEvent;
 import it.polimi.ingsw.model.gameState.events.PointsUpdateEvent;
 import org.javatuples.Pair;
 
@@ -34,8 +35,8 @@ public class PointsManager extends AbstractListenable {
     /**
      * The username of the first player that has completed the library.
      */
-    private final Optional<String> firstFullLibraryUsername;
-    private final boolean isPresentFirstFullLibraryUsername;
+    private  Optional<String> firstFullLibraryUsername;
+    private  boolean isPresentFirstFullLibraryUsername;
 
     /**
      * Constructor of the class.
@@ -180,5 +181,14 @@ public class PointsManager extends AbstractListenable {
 
     public void setCommonGoalCardList(List<CommonGoalCard> commonGoalCardList) {
         this.commonGoalCardList = commonGoalCardList;
+    }
+
+    public void setFirstFullLibraryUsername(Optional<String> firstFullLibraryUsername) {
+        this.firstFullLibraryUsername = firstFullLibraryUsername;
+        notifyAllListeners(new FirstFullLibraryEvent(firstFullLibraryUsername.get()));
+    }
+
+    public void setPresentFirstFullLibraryUsername(boolean presentFirstFullLibraryUsername) {
+        isPresentFirstFullLibraryUsername = presentFirstFullLibraryUsername;
     }
 }
