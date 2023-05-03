@@ -3,12 +3,14 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.client.clientEntity.ClientBoardCell;
 
+import it.polimi.ingsw.client.clientEntity.ClientCommonCard;
 import it.polimi.ingsw.client.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
 import java.util.List;
+import java.util.Objects;
 
 import static it.polimi.ingsw.view.cli.CLIAssets.*;
 
@@ -253,10 +255,10 @@ public class CLIDrawer {
      * Print the common goal cards.
      */
     private void printCommonGoalCards() {
-        List<CommonGoalCard> commonGoalCards = virtualModel.getCommonGoalCards();
+        List<ClientCommonCard> commonGoalCards = virtualModel.getCommonGoalCards();
 
         int maxLineLength = 0;
-        for (CommonGoalCard card : commonGoalCards) {
+        for (ClientCommonCard card : commonGoalCards) {
             String description = card.getDescription();
             String[] descriptionLines = description.split("\n");
             for (String line : descriptionLines) {
@@ -270,9 +272,9 @@ public class CLIDrawer {
         }
         System.out.println();
 
-        for (CommonGoalCard card : commonGoalCards) {
+        for (ClientCommonCard card : commonGoalCards) {
             String commonCard = " Common Card: " + CLIConstants.PURPLE_BRIGHT + card.getIndex() + CLIConstants.RESET;
-            String points = " Points:" + CLIConstants.PURPLE_BRIGHT + " 8 " + CLIConstants.RESET;
+            String points = " Points:" + CLIConstants.PURPLE_BRIGHT + card.getCurrentPoints() + CLIConstants.RESET;
             int commonCardLength = commonCard.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int pointsLength = points.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int padding = Math.max(0, maxLineLength - (commonCardLength + pointsLength));
@@ -282,7 +284,7 @@ public class CLIDrawer {
 
         int maxLinesNumber = 2;
         for (int i = 0; i < maxLinesNumber; i++) {
-            for (CommonGoalCard card : commonGoalCards) {
+            for (ClientCommonCard card : commonGoalCards) {
                 String description = card.getDescription();
                 String[] descriptionLines = description.split("\n");
                 if (i < descriptionLines.length) {
@@ -314,7 +316,7 @@ public class CLIDrawer {
     /**
      * Prints the leader board.
      */
-    protected void printLeaderBoard() {
+    protected void printLeaderBoard(boolean isWinner) {
         List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
 
         String[] colors = {CLIConstants.YELLOW_BRIGHT, CLIConstants.RED_BRIGHT, CLIConstants.PURPLE_BRIGHT, CLIConstants.BLUE_BRIGHT};
@@ -333,6 +335,11 @@ public class CLIDrawer {
                 System.out.println(LEADERBOARD_BOTTOM_FRAME_FORMAT);
 
             }
+        }
+        if (isWinner) {
+            System.out.println(CLIAssets.output + "Congratulations, you won!");
+        } else {
+            System.out.println(CLIAssets.output + "You lost, better luck next time!");
         }
     }
 }

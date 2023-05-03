@@ -10,6 +10,10 @@ public class BreakRulesMessage implements ServerMessage {
         this.type = type;
     }
 
+    public BreakRules getType() {
+        return type;
+    }
+
     @Override
     public String getMessage() {
         return type.getDescription();

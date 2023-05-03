@@ -132,7 +132,7 @@ public abstract class View {
     /**
      * This method is the method that ends the game.
      */
-    public abstract void endGame();
+    public abstract void endGame(Boolean isWinner);
 
     /**
      * This method is the method that manages the turn of the player.

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.personal_cards.Goal;
+import it.polimi.ingsw.model.gameState.events.CommonCardReachEvent;
 import it.polimi.ingsw.model.gameState.events.FirstFullLibraryEvent;
 import it.polimi.ingsw.model.gameState.events.PointsUpdateEvent;
 import org.javatuples.Pair;
@@ -77,6 +78,8 @@ public class PointsManager extends AbstractListenable {
         for (CommonGoalCard commonGoalCard : commonGoalCardList){
             if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
                 commonGoalCard.addSmartPlayer(player);
+
+                notifyAllListeners(new CommonCardReachEvent(player.getUsername(),commonGoalCard.getPoint(pointsSource, player),commonGoalCard.getCurrentPointAvailable(numOfPlayers),commonGoalCard.getIndex()));
             }
             if(commonGoalCard.isSmartPlayer(player)){
                 commonPoints+= commonGoalCard.getPoint(pointsSource, player);

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.gameEntity.Player;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -59,6 +60,21 @@ public abstract class CommonGoalCard implements Serializable {
      */
     public int getPoint(List<Integer> pointsSource, Player player){
         return pointsSource.get(smartPlayersTail.indexOf(player.getUsername()));
+    }
+
+    public int getCurrentPointAvailable(Integer numOfPlayers){
+        List<Integer> pointsSource = switch (numOfPlayers) {
+            case 2 -> Arrays.asList(8, 4);
+            case 3 -> Arrays.asList(8, 6, 4);
+            case 4 -> Arrays.asList(8, 6, 4, 2);
+            default -> new ArrayList<>();
+        };
+        if(smartPlayersTail.size()==numOfPlayers){
+            return 0;
+        }
+        else{
+            return pointsSource.get(smartPlayersTail.size());
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.clientEntity.ClientCommonCard;
 import it.polimi.ingsw.client.clientMessage.Move;
 import it.polimi.ingsw.client.clientMessage.NumOfPlayerChoice;
 import it.polimi.ingsw.client.clientMessage.UsernameChoice;
@@ -12,6 +13,7 @@ import it.polimi.ingsw.client.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -93,7 +95,10 @@ public class Client implements ServerMessageHandler{
     }
 
     public void handle(CommonCardsSetMessage commonCardsSetMessage){
-        virtualModel.updateCommonGoalCards(commonCardsSetMessage.getCommonGoalCardList());
+        List<ClientCommonCard> clientCommonCards = new ArrayList<>();
+        clientCommonCards.add(new ClientCommonCard(commonCardsSetMessage.getCommonCard1Index(), commonCardsSetMessage.getCommonCard1PointsAvailable(), commonCardsSetMessage.getCommonCard1Description()));
+        clientCommonCards.add(new ClientCommonCard(commonCardsSetMessage.getCommonCard2Index(), commonCardsSetMessage.getCommonCard2PointsAvailable(), commonCardsSetMessage.getCommonCard2Description()));
+        virtualModel.setCommonGoalCards(clientCommonCards);
     }
 
 
@@ -113,17 +118,23 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(BreakRulesMessage breakRulesMessage) {
-       view.showErrorMessage(breakRulesMessage.getMessage());
+       view.showErrorMessage(breakRulesMessage.getType().getDescription());
     }
 
     @Override
     public void handle(CommonCardReachMessage commonCardReachMessage) {
+        virtualModel.updateCommonCardByIndex(commonCardReachMessage.getCommonCardIndex(),commonCardReachMessage.getPointsAvailable());
         view.showMessage(commonCardReachMessage.getMessage());
     }
 
     @Override
     public void handle(EndGameMessage endGameMessage) {
-        view.endGame();
+        boolean isWinner = false;
+        if (virtualModel.getMyUsername().equals(virtualModel.getLeaderBoard().get(0).getValue0())){
+           isWinner = true;
+        }
+        view.endGame(isWinner);
+
     }
 
     @Override

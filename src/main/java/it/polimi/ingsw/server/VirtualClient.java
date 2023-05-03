@@ -95,12 +95,12 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     @Override
     public void handle(CommonCardsSetEvent commonCardsSetEvent){
-        socketClientConnection.send(new CommonCardsSetMessage(commonCardsSetEvent.getCommonGoalCardList()));
+        socketClientConnection.send(new CommonCardsSetMessage(commonCardsSetEvent));
     }
 
     @Override
     public void handle(CommonCardReachEvent commonCardReachEvent) {
-
+        socketClientConnection.send(new CommonCardReachMessage(commonCardReachEvent));
     }
 
     @Override

@@ -2,8 +2,8 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.clientEntity.ClientBoardCell;
 
+import it.polimi.ingsw.client.clientEntity.ClientCommonCard;
 import it.polimi.ingsw.client.clientEntity.ClientLibrary;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.server.serverMessage.ServerMessage;
 import org.javatuples.Pair;
 
@@ -40,7 +40,7 @@ public class VirtualModel {
      * The common goal cards.
      * Maybe a triplet that contains the current point, the index and the description.
      */
-    private List<CommonGoalCard> commonGoalCards;
+    private List<ClientCommonCard> commonGoalCards;
     /**
      * A new data structure that represents the personal goal card.
      */
@@ -103,7 +103,7 @@ public class VirtualModel {
      * @return the common goal cards.
      */
 
-    public List<CommonGoalCard> getCommonGoalCards() {
+    public List<ClientCommonCard> getCommonGoalCards() {
         return this.commonGoalCards;
     }
 
@@ -189,7 +189,7 @@ public class VirtualModel {
      *
      * @param updatedCommonGoalCards the updated common goal cards.
      */
-    public void updateCommonGoalCards (List<CommonGoalCard> updatedCommonGoalCards){
+    public void setCommonGoalCards (List<ClientCommonCard> updatedCommonGoalCards){
         this.commonGoalCards = updatedCommonGoalCards;
     }
 
@@ -243,5 +243,13 @@ public class VirtualModel {
 
     public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
         this.firstFullLibraryUsername = firstFullLibraryUsername;
+    }
+
+    public void updateCommonCardByIndex(Integer index, Integer pointsAvailable){
+        for (ClientCommonCard clientCommonCard: commonGoalCards){
+            if (clientCommonCard.getIndex().equals(index)){
+                clientCommonCard.setCurrentPoints(pointsAvailable);
+            }
+        }
     }
 }

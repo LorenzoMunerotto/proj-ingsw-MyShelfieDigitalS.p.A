@@ -262,13 +262,9 @@ public class CLI extends View {
      * It prints the leaderboard and the winner.
      */
     @Override
-    public void endGame() {
-        this.drawer.printLeaderBoard();
-        if (Objects.equals(this.username, this.winner)) {
-            System.out.println(CLIAssets.output + "Congratulations, you won!");
-        } else {
-            System.out.println(CLIAssets.output + "You lost, better luck next time!");
-        }
+    public void endGame(Boolean isWinner) {
+        this.drawer.printLeaderBoard(isWinner);
+
     }
 
     /**
