@@ -153,7 +153,7 @@ public class Server {
             socketClientConnection.send(new ErrorMessage(GameCreationErrors.ILLEGAL_USERNAME));
             return null;
         }
-        if (UsernameMapClientID.keySet().stream().anyMatch(username::equalsIgnoreCase)) {
+        if (currentGameHandler.getPlayersUsername().stream().anyMatch(username::equalsIgnoreCase)) {
             socketClientConnection.send(new ErrorMessage(GameCreationErrors.DUPLICATE_USERNAME));
             return null;
         }
@@ -201,7 +201,7 @@ public class Server {
      */
     public synchronized void unregisterClient(int clientID) {
         VirtualClient client = ClientIdMapVirtualClient.get(clientID);
-        System.out.printf("Unregistering client %s ...", client.getUsername());
+        System.out.printf("Unregistering client %s with client id: %d...", client.getUsername(), client.getClientID());
         ClientIdMapVirtualClient.remove(clientID);
         UsernameMapClientID.remove(client.getUsername());
         waiting.remove(VirtualClientMapSocketClientConnection.get(client));

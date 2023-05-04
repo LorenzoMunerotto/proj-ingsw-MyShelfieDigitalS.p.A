@@ -15,6 +15,7 @@ import it.polimi.ingsw.server.VirtualClient;
 import it.polimi.ingsw.server.serverMessage.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameHandler {
 
@@ -233,5 +234,13 @@ public class GameHandler {
                 virtualClient.getSocketClientConnection().close();
             }
         }
+    }
+
+    /**
+     * Get the list of player's username of this game
+     * @return
+     */
+    public List<String> getPlayersUsername(){
+        return gameData.getPlayers().stream().map(player -> player.getUsername()).collect(Collectors.toList());
     }
 }
