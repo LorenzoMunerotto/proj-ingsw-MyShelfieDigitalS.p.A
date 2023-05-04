@@ -66,7 +66,7 @@ public class SocketListener implements Runnable {
             outputStream.flush();
 
         } catch (IOException e) {
-            System.out.println("Sending message failed" + e.getMessage());
+            System.out.println("Sending message failed " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -148,7 +148,7 @@ public class CLI extends View {
             int index = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
-                System.out.printf("\rWaiting for other players to play their turn...%s%s%s%n",CLIConstants.BLUE_BRIGHT,CLIConstants.clockChars[index],CLIConstants.RESET);
+                System.out.print("\rWaiting for other players to play their turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.clockChars[index] + CLIConstants.RESET + "     ");
                 index = (index + 1) % CLIConstants.clockChars.length;
                 try {
                     Thread.sleep(500);

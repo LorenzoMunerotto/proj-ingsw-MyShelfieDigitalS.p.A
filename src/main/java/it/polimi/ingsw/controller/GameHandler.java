@@ -44,11 +44,21 @@ public class GameHandler {
 
     public void nextPlayer() {
         if (gameData.getFirstFullLibraryUsername().isPresent() && gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers() - 1) {
-            sendAll(new EndGameMessage());
+           endGame();
         } else if (gameData.getCurrentPlayerIndex() == gameData.getNumOfPlayers() - 1) {
             gameData.setCurrentPlayerIndex(0);
         } else {
             gameData.setCurrentPlayerIndex(gameData.getCurrentPlayerIndex() + 1);
+        }
+    }
+
+    /**
+     * This method manage the game ending
+     */
+    private void endGame(){
+        sendAll(new EndGameMessage());
+        for(VirtualClient virtualClient: virtualClients){
+            virtualClient.getSocketClientConnection().close();
         }
     }
 
@@ -209,5 +219,19 @@ public class GameHandler {
 
     public String getCurrentPlayerUsername(){
         return gameData.getCurrentPlayer().getUsername();
+    }
+
+    /**
+     * This method stop the game when a client disconnected from the server
+     * @param username username of the player who lost the connection
+     */
+    public void stopGameByClientDisconnection(String username){
+
+        for(VirtualClient virtualClient: virtualClients){
+            if (!virtualClient.getUsername().equals(username)){
+                virtualClient.send(new DisconnectionMessage(username));
+                virtualClient.getSocketClientConnection().close();
+            }
+        }
     }
 }

@@ -124,6 +124,7 @@ public class Client implements ServerMessageHandler{
             view.playTurn();
             view.showGame();
         }else{
+            view.showGame();
             view.waitForTurn();
         }
     }
@@ -174,6 +175,12 @@ public class Client implements ServerMessageHandler{
     public void handle(EndTurnMessage endTurnMessage) {
         view.stopWaiting();
         // view.showMessage(endTurnMessage.getMessage());
+    }
+
+    @Override
+    public void handle(DisconnectionMessage disconnectionMessage) {
+        view.stopWaiting();
+        view.showMessage(disconnectionMessage.getMessage());
     }
 
     @Override

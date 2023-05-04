@@ -189,7 +189,6 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void handle(Move move) {
-
         server.getGameHandlerByClientId(clientID).handle(move);
     }
 
@@ -216,6 +215,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         } catch (IOException e) {
             // if it doesn't read, the client has disconnected
             // we have to kill the entire game
+            server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
             setActive(false);
         } catch (ClassNotFoundException e) {
             setActive(false);

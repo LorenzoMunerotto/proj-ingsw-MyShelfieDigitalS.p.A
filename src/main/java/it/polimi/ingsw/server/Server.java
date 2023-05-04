@@ -200,7 +200,6 @@ public class Server {
      * @param clientID is the clientID of the client
      */
     public synchronized void unregisterClient(int clientID) {
-        //getGameHandlerByClientId(clientID).unregisterPlayer(clientID);
         VirtualClient client = ClientIdMapVirtualClient.get(clientID);
         System.out.printf("Unregistering client %s ...", client.getUsername());
         ClientIdMapVirtualClient.remove(clientID);
