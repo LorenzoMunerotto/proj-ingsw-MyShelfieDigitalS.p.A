@@ -56,7 +56,6 @@ public class BoardManager extends AbstractListenable {
      * Refills the board with new random item tiles from the bag
      */
     public void refillBoard() {
-
         bag.shuffle();
 
         for (int row = 0; row < board.getROWS(); row++) {
@@ -67,8 +66,7 @@ public class BoardManager extends AbstractListenable {
                 }
             }
         }
-    notifyAllListeners(new BoardUpdateEvent(board, true));
-
+        notifyAllListeners(new BoardUpdateEvent(board, true));
     }
 
     /**

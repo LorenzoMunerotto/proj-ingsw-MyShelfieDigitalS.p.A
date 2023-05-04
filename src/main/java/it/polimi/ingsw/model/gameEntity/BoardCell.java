@@ -51,6 +51,4 @@ public class BoardCell {
     public boolean isPlayable() {
         return playable;
     }
-
-
 }

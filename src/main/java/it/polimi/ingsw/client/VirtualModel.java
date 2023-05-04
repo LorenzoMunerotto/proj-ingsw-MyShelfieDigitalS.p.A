@@ -4,19 +4,15 @@ import it.polimi.ingsw.client.clientEntity.ClientBoardCell;
 
 import it.polimi.ingsw.client.clientEntity.ClientCommonCard;
 import it.polimi.ingsw.client.clientEntity.ClientLibrary;
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.server.serverMessage.ServerMessage;
 import org.javatuples.Pair;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * This class represents the virtual model, for the proxy pattern.
- * Don't know how to update it.
- * A new model every time? Or with the update method below?
  * It defines new data structures for the game objects, with the essential information for the view.
  */
 public class VirtualModel {
@@ -29,28 +25,36 @@ public class VirtualModel {
      */
     private String currentPlayerUsername;
     /**
+     * The index of the first player.
+     */
+    private int firstPlayerIndex;
+    /**
      * A new data structure that represents the board.
      */
     private ClientBoardCell[][] board;
-
-    private HashMap<String, ClientLibrary> clientUsernameLibrary = new HashMap<>();
-    private HashMap<String, Integer> clientUsernamePoints = new HashMap<>();
-
+    /**
+     * Map of the username and the library.
+     */
+    private final Map<String, ClientLibrary> clientUsernameLibrary = new HashMap<>();
+    /**
+     * Map of the username and the points.
+     */
+    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
     /**
      * The common goal cards.
-     * Maybe a triplet that contains the current point, the index and the description.
      */
     private List<ClientCommonCard> commonGoalCards;
     /**
      * A new data structure that represents the personal goal card.
      */
     private ClientLibrary personalGoalCard;
-
     /**
      * The number of tiles in the bag.
      */
     private int numOfTilesInBag;
-
+    /**
+     * The username of the first player that has the full library.
+     */
     private String firstFullLibraryUsername;
 
     /**
@@ -102,32 +106,24 @@ public class VirtualModel {
      *
      * @return the common goal cards.
      */
-
     public List<ClientCommonCard> getCommonGoalCards() {
         return this.commonGoalCards;
     }
-
-
 
     /**
      * Get the bag.
      *
      * @return the bag.
      */
-
     public int getBag() {
         return this.numOfTilesInBag;
     }
-
-
-
 
     /**
      * Get the current player.
      *
      * @return the current player.
      */
-
     public String getCurrentPlayerUsername() {
         return this.currentPlayerUsername;
     }
@@ -135,11 +131,19 @@ public class VirtualModel {
     /**
      * Update the board.
      *
-     * @param updatedBoard the updated board.
+     * @param gridBoard is the updated board.
+     * @param playableGrid is the updated playable grid.
      */
-    public void updateBoard (ClientBoardCell[][] updatedBoard){
-       this.board = updatedBoard;
+    public void updateBoard(ItemTileType[][] gridBoard, boolean[][] playableGrid) {
+        ClientBoardCell[][] board = new ClientBoardCell[9][9];
+        for (int row = 0; row < 9; row++) {
+            for (int col = 0; col < 9; col++) {
+                board[row][col] = new ClientBoardCell(gridBoard[row][col], playableGrid[row][col]);
+            }
+        }
+        this.board = board;
     }
+
 
     /**
      * Update the library in the ClientUsername-Library Map.
@@ -160,9 +164,10 @@ public class VirtualModel {
     }
 
     /**
-     * Updated the Points in ClientUsername-Points Map
-     * @param username
-     * @param points
+     * Updated the points in the ClientUsername-Points Map.
+     *
+     * @param username is the username of the player
+     * @param points are the points of the player
      */
     public void updatePointsByUsername (String username, Integer points){
 
@@ -174,7 +179,7 @@ public class VirtualModel {
         }
     }
 
-        /**
+    /**
      * Set the personal goal card.
      * It doesn't really need to be updated, it should be only set at the beginning of the game.
      *
@@ -192,8 +197,6 @@ public class VirtualModel {
     public void setCommonGoalCards (List<ClientCommonCard> updatedCommonGoalCards){
         this.commonGoalCards = updatedCommonGoalCards;
     }
-
-
 
     /**
      * Update the current player.

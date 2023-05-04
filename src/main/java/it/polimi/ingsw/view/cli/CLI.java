@@ -1,13 +1,9 @@
 package it.polimi.ingsw.view.cli;
 
-import it.polimi.ingsw.client.MessageType;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -23,6 +19,10 @@ public class CLI extends View {
      */
     private final CLIDrawer drawer;
     /**
+     * It is the parser used to parse the user input.
+     */
+    private final CLIParser parser;
+    /**
      * It is a thread that is used for waiting.
      */
     private Thread waitingThread;
@@ -32,14 +32,14 @@ public class CLI extends View {
      */
     public CLI() {
         drawer = new CLIDrawer(this.virtualModel);
+        parser = new CLIParser();
     }
 
     /**
      * Clears the console.
      */
     public static void clear() {
-
-        // TERM environment variable not set.
+        /*TERM environment variable not set.
         try {
             String os = System.getProperty("os.name");
             ProcessBuilder processBuilder;
@@ -53,7 +53,7 @@ public class CLI extends View {
                     CLIConstants.RED_BRIGHT, e.getMessage(), CLIConstants.RESET);
             Thread.currentThread().interrupt();
             System.exit(1);
-        }
+        }*/
     }
 
     /**
@@ -62,12 +62,12 @@ public class CLI extends View {
     @Override
     public String chooseUsername() {
         this.username = "";
-        System.out.print(CLIAssets.output + "Please insert your username: ");
+        System.out.print(CLIConstants.CONSOLE_ARROW + "Please insert your username: ");
         while (this.username.isBlank()) {
             this.username = CLI.scanner.nextLine().strip();
             if (!isUsernameValid(this.username)) {
                 this.username = "";
-                System.out.printf(CLIAssets.output + "%sInvalid username%s, please try again: ",
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET);
             }
         }
@@ -81,7 +81,7 @@ public class CLI extends View {
     public Integer choosePlayersNumber() {
         this.playersNumber = 0;
         String playersNumberString;
-        System.out.printf(CLIAssets.output + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.playersNumber < MIN_PLAYERS_NUMBER || this.playersNumber > MAX_PLAYERS_NUMBER) {
             try {
@@ -90,7 +90,7 @@ public class CLI extends View {
                 if (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                System.out.printf(CLIAssets.output + "%sInvalid input%s, insert exact number of players for the game [%s2%s-%s4%s]: ",
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, insert exact number of players for the game [%s2%s-%s4%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
@@ -103,63 +103,17 @@ public class CLI extends View {
      */
     public List<Coordinate> chooseTiles() {
         this.coordinates = "";
-        System.out.printf(CLIAssets.output + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.coordinates.isBlank()) {
             coordinates = CLI.scanner.nextLine().strip().toUpperCase();
             if (!isCoordinatesValid(coordinates)) {
                 this.coordinates = "";
-                System.out.printf(CLIAssets.output + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-
-        //parser per ritornare all'oggetto client delle list of Coordinate che il server sia in grado di processare
-        List<Coordinate> coordinateList = new ArrayList<>();
-        String newstr;
-        newstr = coordinates.replaceAll(" ", "");
-        newstr = newstr.replaceAll("\n", "");
-        newstr = newstr.replaceAll("\"", "");
-
-
-        String[] coordinate = newstr.split("-");
-
-
-        for (String coordinata : coordinate) {
-            int row;
-            if (coordinata.charAt(0) == 'A'){
-              row = 0;
-            } else if (coordinata.charAt(0) == 'B') {
-                row = 1;
-            }
-            else if (coordinata.charAt(0) == 'C') {
-                row = 2;
-            }
-            else if (coordinata.charAt(0) == 'D') {
-              row = 3;
-            }
-            else if (coordinata.charAt(0) == 'E') {
-              row = 4;
-            }
-            else if (coordinata.charAt(0) == 'F') {
-                row = 5;
-            }
-            else if (coordinata.charAt(0) == 'G') {
-                row = 6;
-            }
-            else if (coordinata.charAt(0) == 'H') {
-                row = 7;
-            }
-            else  {
-              row = 8;
-            }
-            int col = Integer.valueOf("" + coordinata.charAt(1))-1;
-
-            coordinateList.add(new Coordinate(row, col));
-        }
-
-        return coordinateList;
-
+        return parser.parseCoordinates(coordinates);
     }
 
     /**
@@ -168,7 +122,7 @@ public class CLI extends View {
     public Integer chooseColumn() {
         this.column = 0;
         String columnString;
-        System.out.printf(CLIAssets.output + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.column < 1 || this.column > 5) {
             try {
@@ -177,11 +131,11 @@ public class CLI extends View {
                 if (this.column < 1 || this.column > 5)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
-                System.out.printf(CLIAssets.output + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        return column-1;
+        return parser.getColumnKey(this.column);
     }
 
     /**
@@ -194,9 +148,8 @@ public class CLI extends View {
             int index = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
-                System.out.print("Waiting for other players to play their turn...");
-                System.out.print(CLIConstants.BLUE_BRIGHT + "\b" + CLIAssets.clockChars[index] + CLIConstants.RESET);
-                index = (index + 1) % CLIAssets.clockChars.length;
+                System.out.printf("\rWaiting for other players to play their turn...%s%s%s%n",CLIConstants.BLUE_BRIGHT,CLIConstants.clockChars[index],CLIConstants.RESET);
+                index = (index + 1) % CLIConstants.clockChars.length;
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -240,7 +193,7 @@ public class CLI extends View {
     @Override
     public void showGame(){
         this.stopWaiting();
-       // CLI.clear(); genera un errore ENV
+        CLI.clear();
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
         try{
             this.drawer.printGame();
@@ -254,7 +207,7 @@ public class CLI extends View {
      */
     @Override
     public void playTurn() {
-        System.out.println(CLIAssets.output + "It is your turn!");
+        System.out.println(CLIConstants.CONSOLE_ARROW + "It is your turn!");
     }
 
     /**
@@ -272,7 +225,7 @@ public class CLI extends View {
      */
     @Override
     public void showErrorMessage(String errorMessage) {
-        System.out.printf("%s%s%s%s%n", CLIAssets.output, CLIConstants.RED_BRIGHT, errorMessage, CLIConstants.RESET);
+        System.out.printf("%s%sInvalid input!%s %s%n", CLIConstants.CONSOLE_ARROW, CLIConstants.RED_BRIGHT, CLIConstants.RESET, errorMessage);
     }
 
     /**
@@ -282,8 +235,8 @@ public class CLI extends View {
      */
     @Override
     public void main(String[] args) {
-
-        /* CLI.clear();
+        CLI.clear();
+        /*
         String input = "";
         System.out.printf(CLIAssets.output + "Do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);

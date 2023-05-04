@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.client.clientMessage.Move;
-import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.personal_cards.*;
@@ -21,7 +20,6 @@ public class GameHandler {
 
     private final List<VirtualClient> virtualClients;
     private final GameData gameData;
-    private final VirtualModel virtualModel;
     LibraryManager libraryManager;
     BoardManager boardManager;
     PointsManager pointsManager;
@@ -32,7 +30,6 @@ public class GameHandler {
      */
     public GameHandler() {
         this.gameData = new GameData();
-        this.virtualModel = new VirtualModel();
         this.virtualClients = new ArrayList<>();
     }
 
@@ -83,8 +80,6 @@ public class GameHandler {
             libraryManager.hasEnoughSpace(move.getColumn(), numberOfTiles);
             libraryManager.insertItemTiles(move.getColumn(), boardManager.grabItemTiles(move.getCoordinateList()));
 
-
-
             if (!pointsManager.isPresentFirstFullLibraryUsername() && libraryManager.isFull()) {
                 pointsManager.setFirstFullLibraryUsername(Optional.of(getCurrentPlayerUsername()));
                 pointsManager.setPresentFirstFullLibraryUsername(true);
@@ -99,7 +94,6 @@ public class GameHandler {
 
             sendAll(new EndTurnMessage("turn finished"));
             nextPlayer();
-
 
         } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
@@ -152,22 +146,16 @@ public class GameHandler {
                 client.handle(new LibraryUpdateEvent(player.getLibrary(), player.getUsername()));
             }
         }
-
-
         // it decides the order of the players
         Collections.shuffle(gameData.getPlayers(), new Random());
-
         // assign the personal goal cards to each player and the common goal cards
         assignPersonalGoalCard();
-
         assignCommonGoalCards();
         pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
-
         // refill the board
         boardManager.refillBoard();
 
         gameData.setCurrentPlayerIndex(0); // needs a fix to include the chair
-
     }
 
     /**
@@ -218,8 +206,6 @@ public class GameHandler {
     public void addVirtualClient(VirtualClient virtualClient) {
         virtualClients.add(virtualClient);
     }
-
-
 
     public String getCurrentPlayerUsername(){
         return gameData.getCurrentPlayer().getUsername();

@@ -1,14 +1,18 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import it.polimi.ingsw.server.Error;
+import it.polimi.ingsw.server.GameCreationErrors;
 
 public class ErrorMessage implements ServerMessage {
 
-    private final Error type;
+    private final GameCreationErrors type;
 
 
-    public ErrorMessage(Error type) {
+    public ErrorMessage(GameCreationErrors type) {
         this.type = type;
+    }
+
+    public GameCreationErrors getType() {
+        return type;
     }
 
     @Override

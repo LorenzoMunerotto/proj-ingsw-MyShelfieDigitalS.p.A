@@ -7,7 +7,6 @@ public class ClientBoardCell {
     private ItemTileType type;
     private boolean playable;
 
-
     public ClientBoardCell(ItemTileType type, boolean playable) {
         this.type = type;
         this.playable = playable;

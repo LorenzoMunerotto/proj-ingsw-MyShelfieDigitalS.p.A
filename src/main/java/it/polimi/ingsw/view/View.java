@@ -2,8 +2,8 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.MessageType;
 import it.polimi.ingsw.client.VirtualModel;
-import it.polimi.ingsw.view.cli.CLIAssets;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.view.cli.CLIConstants;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -71,7 +71,7 @@ public abstract class View {
      * @return true if the username is valid, false otherwise
      */
     protected static boolean isUsernameValid(String username) {
-        Pattern pattern = Pattern.compile(CLIAssets.USERNAME_REGEX);
+        Pattern pattern = Pattern.compile(CLIConstants.USERNAME_REGEX);
         Matcher matcher = pattern.matcher(username);
         return matcher.matches();
     }
@@ -83,7 +83,7 @@ public abstract class View {
      * @return true if the coordinates are valid, false otherwise
      */
     protected static boolean isCoordinatesValid(String coordinates) {
-        Pattern pattern = Pattern.compile(CLIAssets.COORDINATES_REGEX);
+        Pattern pattern = Pattern.compile(CLIConstants.COORDINATES_REGEX);
         Matcher matcher = pattern.matcher(coordinates);
         return matcher.matches();
     }
@@ -138,7 +138,6 @@ public abstract class View {
      * This method is the method that manages the turn of the player.
      */
     public abstract void showErrorMessage(String errorMessage);
-
 
     public abstract void stopWaiting();
 

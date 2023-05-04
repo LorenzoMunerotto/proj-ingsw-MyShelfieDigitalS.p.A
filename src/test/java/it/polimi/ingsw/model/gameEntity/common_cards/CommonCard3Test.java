@@ -3,8 +3,6 @@ package it.polimi.ingsw.model.gameEntity.common_cards;
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
 import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonCard3;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -107,7 +105,7 @@ class CommonCard3Test {
 
     @Test
     @DisplayName("Test check rules for L-scheme")
-    void checkRulesLscheme(){
+    void checkRulesLScheme(){
         ItemTileType[][] gridOfItemTileType = {
                 {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
                 {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
@@ -124,7 +122,7 @@ class CommonCard3Test {
 
     @Test
     @DisplayName("Test check rules for T-scheme")
-    void checkRulesTscheme(){
+    void checkRulesTScheme(){
         ItemTileType[][] gridOfItemTileType = {
                 {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},
                 {ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY,ItemTileType.EMPTY},

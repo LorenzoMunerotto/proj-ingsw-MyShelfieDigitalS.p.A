@@ -1,16 +1,17 @@
 package it.polimi.ingsw.server;
 
-
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.model.gameState.events.*;
 import it.polimi.ingsw.server.serverMessage.*;
+
+import java.util.Objects;
 
 /**
  * This class represents the Client in the Server.
  * For each client connected the server has an instance of this object
  * Every VirtualClients is a listeners of his GameData and his Managers,
  * so when they notify the virtual client of an Event [ModelEvent] virtualClient
- * manages it with the method handle(ModelEvent modelEvent)
+ * manages it with the method handle(ModelEvent)
  */
 public class VirtualClient implements ModelChangeEventHandler {
 
@@ -53,37 +54,34 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     @Override
     public void handle(BoardUpdateEvent boardUpdateEvent) {
-        if (boardUpdateEvent.isRefill()==false) {
-            socketClientConnection.send(new BoardUpdateMessage("aggiornamento board", boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
+        if (!boardUpdateEvent.isRefill()) {
+            socketClientConnection.send(new BoardUpdateMessage("updating the board", boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
         }
         else{
             socketClientConnection.send(new BoardRefillMessage(boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
         }
-
-
     }
 
     @Override
     public void handle(LibraryUpdateEvent libraryUpdateEvent) {
         if (libraryUpdateEvent.getUsername()==null) {
-            socketClientConnection.send(new LibraryUpdateMessage("aggiornamento libreria", gameHandler.getCurrentPlayerUsername(), libraryUpdateEvent.getLibraryGrid()));
+            socketClientConnection.send(new LibraryUpdateMessage("updating the library", gameHandler.getCurrentPlayerUsername(), libraryUpdateEvent.getLibraryGrid()));
         }
         else{
-            socketClientConnection.send(new LibraryUpdateMessage("set up iniziale della libreria", libraryUpdateEvent.getUsername(), libraryUpdateEvent.getLibraryGrid()));
+            socketClientConnection.send(new LibraryUpdateMessage("initial library setup", libraryUpdateEvent.getUsername(), libraryUpdateEvent.getLibraryGrid()));
         }
-        }
-
+    }
 
     @Override
     public void handle(PointsUpdateEvent pointsUpdateEvent) {
-        socketClientConnection.send(new PointsUpdateMessage("aggiornamento punteggi", pointsUpdateEvent.getUsername(), pointsUpdateEvent.getPoints()));
+        socketClientConnection.send(new PointsUpdateMessage("updating scores", pointsUpdateEvent.getUsername(), pointsUpdateEvent.getPoints()));
 
     }
 
     @Override
     public void handle(CurrentPlayerUpdateEvent currentPlayerUpdateEvent) {
         socketClientConnection.send(new StartTurnMessage(currentPlayerUpdateEvent.getUsername()));
-        if(currentPlayerUpdateEvent.getUsername()==username){
+        if(Objects.equals(currentPlayerUpdateEvent.getUsername(), username)){
             socketClientConnection.send(new MoveRequest());
         }
     }
@@ -107,6 +105,4 @@ public class VirtualClient implements ModelChangeEventHandler {
     public void handle(PersonalCardSetEvent personalCardSetEvent) {
         socketClientConnection.send(new PersonalCardSetMessage(personalCardSetEvent.getPersonalGoalCard()));
     }
-
-
 }

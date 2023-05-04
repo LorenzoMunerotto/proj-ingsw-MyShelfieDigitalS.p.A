@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
 public class ClientLibrary {
 
-        private ItemTileType[][] itemTileTypesGrid;
+        private final ItemTileType[][] itemTileTypesGrid;
 
     public ClientLibrary(ItemTileType[][] itemTileTypesGrid) {
         this.itemTileTypesGrid = itemTileTypesGrid;

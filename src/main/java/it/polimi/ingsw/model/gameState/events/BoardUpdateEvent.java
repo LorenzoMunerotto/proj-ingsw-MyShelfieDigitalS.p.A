@@ -9,7 +9,7 @@ public class BoardUpdateEvent implements ModelEvent {
     private final boolean[][] playableGrid;
     private final boolean refill;
 
-    public BoardUpdateEvent(Board board, boolean isRefill) {
+    public BoardUpdateEvent(Board board, boolean refill) {
         this.boardGrid = new ItemTileType[board.getROWS()][board.getCOLUMNS()];
         this.playableGrid = new boolean[board.getROWS()][board.getCOLUMNS()];
         for (int row = 0; row < board.getROWS(); row++) {
@@ -18,7 +18,7 @@ public class BoardUpdateEvent implements ModelEvent {
                 this.playableGrid[row][col] = board.getBoardCell(row,col).isPlayable();
             }
         }
-        this.refill = isRefill;
+        this.refill = refill;
     }
 
     public ItemTileType[][] getBoardGrid() {
@@ -36,6 +36,4 @@ public class BoardUpdateEvent implements ModelEvent {
     public void accept(ModelChangeEventHandler modelChangeEventHandler) {
         modelChangeEventHandler.handle(this);
     }
-
-
 }

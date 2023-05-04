@@ -1,16 +1,16 @@
 package it.polimi.ingsw.model.gameState.exceptions;
 
-import it.polimi.ingsw.server.Error;
+import it.polimi.ingsw.server.GameCreationErrors;
 
 public class IllegalMoveException extends Exception {
 
-    private final Error type;
+    private final GameCreationErrors type;
 
-    public IllegalMoveException(Error type) {
+    public IllegalMoveException(GameCreationErrors type) {
         this.type = type;
     }
 
-    public Error getType() {
+    public GameCreationErrors getType() {
         return type;
     }
 }

@@ -27,7 +27,6 @@ public class LibraryUpdateEvent implements ModelEvent {
             }
         }
         this.username=username;
-
     }
 
     public ItemTileType[][] getLibraryGrid() {

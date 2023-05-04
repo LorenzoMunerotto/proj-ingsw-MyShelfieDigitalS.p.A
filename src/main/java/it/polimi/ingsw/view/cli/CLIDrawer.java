@@ -5,14 +5,12 @@ import it.polimi.ingsw.client.clientEntity.ClientBoardCell;
 
 import it.polimi.ingsw.client.clientEntity.ClientCommonCard;
 import it.polimi.ingsw.client.clientEntity.ClientLibrary;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 
 import java.util.List;
-import java.util.Objects;
 
-import static it.polimi.ingsw.view.cli.CLIAssets.*;
+import static it.polimi.ingsw.view.cli.CLIConstants.*;
 
 /**
  * This class is used to print the game objects on the CLI.
@@ -22,6 +20,10 @@ public class CLIDrawer {
      * It is the virtual model of the game.
      */
     private final VirtualModel virtualModel;
+    /**
+     * It is the parser of the CLI.
+     */
+    private final CLIParser parser;
 
     /**
      * It is the constructor of the class.
@@ -30,6 +32,7 @@ public class CLIDrawer {
      */
     public CLIDrawer(VirtualModel virtualModel) {
         this.virtualModel = virtualModel;
+        this.parser = new CLIParser();
     }
 
     /**
@@ -98,15 +101,15 @@ public class CLIDrawer {
 
         sb.append(" ".repeat(5));
         for (int col = 0; col < board.length; col++) {
-            sb.append(String.format("  %s   ", CARDINALITY_MAP_COLUMN.get(col)));
+            sb.append(String.format("  %s   ", parser.getColumnValue(col)));
         }
         sb.append("          ");
         for (int col = 0; col < currentLibrary[0].length; col++) {
-            sb.append(String.format("  %s   ", CARDINALITY_MAP_COLUMN.get(col)));
+            sb.append(String.format("  %s   ", parser.getColumnValue(col)));
         }
         sb.append("       ");
         for (int col = 0; col < personalCardLibrary[0].length; col++) {
-            sb.append(String.format("  %s   ", CARDINALITY_MAP_COLUMN.get(col)));
+            sb.append(String.format("  %s   ", parser.getColumnValue(col)));
         }
         System.out.println(sb);
     }
@@ -213,7 +216,7 @@ public class CLIDrawer {
      * @param row   is the current row
      */
     private void printBoardCells(ClientBoardCell[][] board, int row) {
-        String rowLetter = CARDINALITY_MAP_ROW.get(row);
+        String rowLetter = parser.getRowValue(row);
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(String.format(" %s  %s" + CLIConstants.VERTICAL_LINE + "%s", rowLetter, CLIConstants.YELLOW_BOLD, CLIConstants.RESET));
@@ -238,7 +241,7 @@ public class CLIDrawer {
     private void printLibraryCells(ItemTileType[][] library, int row, boolean isCurrentLibrary) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append("  ").append(CARDINALITY_MAP_ROW.get(row)).append(" ");
+        stringBuilder.append("  ").append(parser.getRowValue(row)).append(" ");
         for (int col = 0; col < library[0].length; col++) {
             stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col]));
         }
@@ -337,9 +340,9 @@ public class CLIDrawer {
             }
         }
         if (isWinner) {
-            System.out.println(CLIAssets.output + "Congratulations, you won!");
+            System.out.println(CONSOLE_ARROW + "Congratulations, you won!");
         } else {
-            System.out.println(CLIAssets.output + "You lost, better luck next time!");
+            System.out.println(CONSOLE_ARROW + "You lost, better luck next time!");
         }
     }
 }

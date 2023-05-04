@@ -15,7 +15,7 @@ public abstract class CommonGoalCard implements Serializable {
      * is the index of the CommonGoalCard
      */
     private final Integer index;
-    private String description;
+    private final String description;
 
     /**
      * The list of the usernames of the players who have reached the goal of

@@ -1,7 +1,6 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.client.Client;
-import it.polimi.ingsw.view.cli.CLIAssets;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.server.Server;
 
@@ -13,7 +12,7 @@ public class MyShelfie {
 
     public static void main(String[] args) {
         String choice = "";
-        System.out.printf(CLIAssets.output + "Choose if you want to start this as a server or as a client [%ss%s/%sc%s]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Choose if you want to start this as a server or as a client [%ss%s/%sc%s]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (choice.isEmpty()) {
             choice = input.nextLine().strip().toLowerCase();
             if (choice.equals("s")) {

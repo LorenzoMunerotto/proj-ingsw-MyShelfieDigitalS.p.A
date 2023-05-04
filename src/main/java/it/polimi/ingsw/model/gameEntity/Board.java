@@ -190,7 +190,6 @@ public class Board {
      */
     public BoardCell getLowerBoardCell(Integer row, Integer col){
         return getBoardCell(row+1, col);
-
     }
 
     /**
@@ -202,7 +201,6 @@ public class Board {
      */
     public BoardCell getRightBoardCell(Integer row, Integer col){
         return getBoardCell(row, col+1);
-
     }
 
     /**
@@ -214,7 +212,6 @@ public class Board {
      */
     public BoardCell getLeftBoardCell(Integer row, Integer col){
        return  getBoardCell(row, col-1);
-
     }
 
     /**
