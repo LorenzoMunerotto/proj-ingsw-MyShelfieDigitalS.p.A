@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +33,8 @@ public class CardsContainer {
     public void createDeck(){
         ObjectMapper objectMapper = new ObjectMapper();
         try{
-            personalGoalCards = objectMapper.readValue(new File("src/main/resources/configPersonalGoalsCards.json"), objectMapper.getTypeFactory().constructCollectionType(List.class, PersonalGoalCard.class));
+            InputStream is = CardsContainer.class.getResourceAsStream("/configPersonalGoalsCards.json");
+            personalGoalCards = objectMapper.readValue(is, objectMapper.getTypeFactory().constructCollectionType(List.class, PersonalGoalCard.class));
         }catch (IOException e){
             e.printStackTrace();
             throw new RuntimeException("Failed to read JSON file: " + e.getMessage());
