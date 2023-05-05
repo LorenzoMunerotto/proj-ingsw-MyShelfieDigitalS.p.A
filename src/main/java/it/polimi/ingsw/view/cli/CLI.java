@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,7 +40,7 @@ public class CLI extends View {
      * Clears the console.
      */
     public static void clear() {
-        /*TERM environment variable not set.
+
         try {
             String os = System.getProperty("os.name");
             ProcessBuilder processBuilder;
@@ -53,7 +54,7 @@ public class CLI extends View {
                     CLIConstants.RED_BRIGHT, e.getMessage(), CLIConstants.RESET);
             Thread.currentThread().interrupt();
             System.exit(1);
-        }*/
+        }
     }
 
     /**
