@@ -79,7 +79,6 @@ public class VirtualModel {
      * @return the library.
      */
     public ClientLibrary getMyLibrary() {
-
         return clientUsernameLibrary.get(myUsername);
     }
 
@@ -143,7 +142,6 @@ public class VirtualModel {
         }
         this.board = board;
     }
-
 
     /**
      * Update the library in the ClientUsername-Library Map.

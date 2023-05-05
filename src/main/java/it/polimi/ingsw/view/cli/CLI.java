@@ -143,12 +143,12 @@ public class CLI extends View {
      * maybe we can use it also while a client wait to other to connect to the server
      */
     @Override
-    public void waitForTurn() {
+    public void waitForTurn(String username) {
         this.waitingThread = new Thread(() -> {
             int index = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
-                System.out.print("\rWaiting for other players to play their turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.clockChars[index] + CLIConstants.RESET + "     ");
+                System.out.print("\rWaiting for " + CLIConstants.CYAN_BRIGHT + username + CLIConstants.RESET + " to play the turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.clockChars[index] + CLIConstants.RESET);
                 index = (index + 1) % CLIConstants.clockChars.length;
                 try {
                     Thread.sleep(500);
@@ -178,13 +178,7 @@ public class CLI extends View {
         this.stopWaiting();
         CLI.clear();
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
-       /* try {
-            this.drawer.printGame();
-            this.previousMessage = MessageType.START_GAME;
-        } catch (Exception e) {
-            System.out.println("Error while starting game");
-        }
-        */
+        System.out.println(CLIConstants.MYSHELFIE_START);
     }
 
     /**

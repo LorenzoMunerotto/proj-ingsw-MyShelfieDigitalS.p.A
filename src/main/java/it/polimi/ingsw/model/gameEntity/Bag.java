@@ -46,7 +46,7 @@ public class Bag {
      *
      * @return a random item tile from the bag
      */
-    public ItemTile getRandomItemTile() {
+    public ItemTile grabItemTile() {
 
         if (itemTiles.size()==0) {
             throw new IllegalArgumentException("The bag is empty");

@@ -29,9 +29,7 @@ public class CommonCard2 extends CommonGoalCard {
         ItemTileType itemTile2 = library.getItemTile(0, 4).getItemTileType();
         ItemTileType itemTile3 = library.getItemTile(5, 0).getItemTileType();
         ItemTileType itemTile4 = library.getItemTile(5, 4).getItemTileType();
-        if (itemTile1==ItemTileType.EMPTY || itemTile2==ItemTileType.EMPTY || itemTile3==ItemTileType.EMPTY || itemTile4==ItemTileType.EMPTY){
-            return  false;
-        }
+        if(itemTile1 == ItemTileType.EMPTY || itemTile2 == ItemTileType.EMPTY || itemTile3 == ItemTileType.EMPTY || itemTile4 == ItemTileType.EMPTY) return false;
         return itemTile1 == itemTile2 && itemTile2 == itemTile3 && itemTile3 == itemTile4;
     }
 }

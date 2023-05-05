@@ -12,9 +12,12 @@ import java.util.List;
 public abstract class CommonGoalCard implements Serializable {
 
     /**
-     * is the index of the CommonGoalCard
+     * The index of the CommonGoalCard
      */
     private final Integer index;
+    /**
+     * The description of the commonGoalCard.
+     */
     private final String description;
 
     /**
@@ -23,6 +26,12 @@ public abstract class CommonGoalCard implements Serializable {
      */
     private final List<String> smartPlayersTail;
 
+    /**
+     * Constructor for the CommonGoalCard class, initializes the commonGoalCard with the given index and description.
+     *
+     * @param index is the index of the CommonGoalCard
+     * @param description is the description of the CommonGoalCard
+     */
     public CommonGoalCard(Integer index, String description) {
         this.index = index;
         this.description = description;
@@ -48,7 +57,6 @@ public abstract class CommonGoalCard implements Serializable {
     public boolean isSmartPlayer(Player player){
         return smartPlayersTail.contains(player.getUsername());
     }
-
 
     /**
      * This method provides the points that a player, who has achieved the goal,

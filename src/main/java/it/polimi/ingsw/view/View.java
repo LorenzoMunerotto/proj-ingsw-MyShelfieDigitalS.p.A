@@ -122,7 +122,7 @@ public abstract class View {
     /**
      * This method is the method that waits for the turn of the player.
      */
-    public abstract void waitForTurn();
+    public abstract void waitForTurn(String username);
 
     /**
      * This method is the method that plays the turn of the player.

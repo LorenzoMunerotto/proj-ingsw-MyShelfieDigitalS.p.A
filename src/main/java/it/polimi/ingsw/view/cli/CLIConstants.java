@@ -11,17 +11,34 @@ public class CLIConstants {
     /**
      * It is the title of the game.
      */
+    public static final String MYSHELFIE_WELCOME = ("""
+                 ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗        \s
+                 ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝        \s
+                 ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗          \s
+                 ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝          \s
+                 ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗        \s
+                  ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝        \s
+                                                                              """)
+            .replaceAll("█", CLIConstants.YELLOW_BRIGHT + "█" + CLIConstants.RESET)
+            .replaceAll("([╔╗║╝═╚╣╩╦])", CLIConstants.RED_BRIGHT + "$1" + CLIConstants.RESET);
+    public static final String MYSHELFIE_TO = ("""
+                                          ╔═╗
+                                       ╔══╝ ╚══╗ ╔══════╗
+                                       ╚══╗ ╔══╝ ║ ╔══╗ ║
+                                          ║ ║    ║ ║  ║ ║
+                                          ║ ╚══╗ ║ ╚══╝ ║
+                                          ╚════╝ ╚══════╝      \s
+                                                                              """);
     public static final String MYSHELFIE_TITLE = ("""
-                        
             ███╗   ███╗██╗   ██╗    ███████╗██╗  ██╗███████╗██╗     ███████╗██╗███████╗
             ████╗ ████║╚██╗ ██╔╝    ██╔════╝██║  ██║██╔════╝██║     ██╔════╝██║██╔════╝
-            ██╔████╔██║ ╚████╔╝     ███████╗███████║█████╗  ██║     █████╗  ██║█████╗\s
-            ██║╚██╔╝██║  ╚██╔╝      ╚════██║██╔══██║██╔══╝  ██║     ██╔══╝  ██║██╔══╝ \s
+            ██╔████╔██║ ╚████╔╝     ███████╗███████║█████╗  ██║     █████╗  ██║█████╗  \s
+            ██║╚██╔╝██║  ╚██╔╝      ╚════██║██╔══██║██╔══╝  ██║     ██╔══╝  ██║██╔══╝  \s
             ██║ ╚═╝ ██║   ██║       ███████║██║  ██║███████╗███████╗██║     ██║███████╗
-            ╚═╝     ╚═╝   ╚═╝       ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝
-                                                                                       """)
+            ╚═╝     ╚═╝   ╚═╝       ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝""")
             .replaceAll("█", CLIConstants.YELLOW_BRIGHT + "█" + CLIConstants.RESET)
-            .replaceAll("([╔╗║╝═╚])", CLIConstants.RED_BRIGHT + "$1" + CLIConstants.RESET);
+            .replaceAll("([╔╗║╝═╚╣╩╦])", CLIConstants.RED_BRIGHT + "$1" + CLIConstants.RESET);
+    public static final String MYSHELFIE_START = MYSHELFIE_WELCOME + CLIConstants.CYAN_BRIGHT + MYSHELFIE_TO + CLIConstants.RESET + MYSHELFIE_TITLE;
     /**
      * It is the regex used to check the validity of the username.
      */

@@ -125,7 +125,7 @@ public class Client implements ServerMessageHandler{
             view.showGame();
         }else{
             view.showGame();
-            view.waitForTurn();
+            view.waitForTurn(virtualModel.getCurrentPlayerUsername());
         }
     }
 
@@ -224,6 +224,11 @@ public class Client implements ServerMessageHandler{
         return viewType;
     }
 
+    /**
+     * Get the view.
+     *
+     * @return the view
+     */
     public View getView() {
         return view;
     }
