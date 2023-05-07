@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.client.MessageType;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.cli.CLIConstants;
@@ -47,10 +46,6 @@ public abstract class View {
      * Still don't know when and where to initialize it.
      */
     protected VirtualModel virtualModel;
-    /**
-     * It is the previous message received.
-     */
-    protected MessageType previousMessage;
 
     /**
      * This constructor initializes the virtual model and the controller.
@@ -86,16 +81,6 @@ public abstract class View {
         Pattern pattern = Pattern.compile(CLIConstants.COORDINATES_REGEX);
         Matcher matcher = pattern.matcher(coordinates);
         return matcher.matches();
-    }
-
-    /**
-     * This method resets the view.
-     * Useless???
-     */
-    protected void reset() {
-        this.username = "";
-        this.playersNumber = 0;
-        this.winner = "";
     }
 
     /**
@@ -142,6 +127,4 @@ public abstract class View {
     public abstract void stopWaiting();
 
     public abstract void showMessage(String message);
-
-
 }

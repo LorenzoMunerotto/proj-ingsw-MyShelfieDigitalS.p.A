@@ -14,13 +14,12 @@ public class SocketListener implements Runnable {
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
 
-
     public SocketListener(Client client) {
 
         this.client = client;
         try {
             System.out.println("I'm trying to connect to the server");
-            socketServer = new Socket("localhost", 1235);
+            socketServer = new Socket("192.168.1.50", 1235);
             System.out.println(CLIConstants.GREEN_BRIGHT + "Connection established" + CLIConstants.RESET);
 
             outputStream = new ObjectOutputStream(socketServer.getOutputStream());
@@ -32,12 +31,10 @@ public class SocketListener implements Runnable {
     }
 
     public synchronized void readFromStream() throws IOException, ClassNotFoundException {
-
         ServerMessage input = (ServerMessage) inputStream.readObject();
         //System.out.println("--> new message received from server: " + input);
 
         input.accept(client);
-
     }
 
     @Override
@@ -46,11 +43,8 @@ public class SocketListener implements Runnable {
             while (true) {
                 readFromStream();
             }
-
         } catch (IOException e) {
-
         } catch (ClassNotFoundException e) {
-
         }
     }
 

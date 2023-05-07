@@ -67,8 +67,7 @@ public class GameHandler {
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
     }
-
-
+    
     /**
      * This method set the PersonalGoalCard on each player in gameData
      */

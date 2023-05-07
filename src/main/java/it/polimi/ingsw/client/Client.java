@@ -173,7 +173,7 @@ public class Client implements ServerMessageHandler{
     @Override
     public void handle(EndTurnMessage endTurnMessage) {
         view.stopWaiting();
-        // view.showMessage(endTurnMessage.getMessage());
+        view.showMessage(endTurnMessage.getMessage());
     }
 
     @Override
@@ -185,7 +185,6 @@ public class Client implements ServerMessageHandler{
     @Override
     public void handle(FirstFullLibraryMessage firstFullLibraryMessage) {
         virtualModel.setFirstFullLibraryUsername(firstFullLibraryMessage.getUsername());
-
         view.showMessage(firstFullLibraryMessage.getMessage());
     }
 
