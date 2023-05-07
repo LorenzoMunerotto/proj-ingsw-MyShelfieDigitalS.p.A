@@ -26,7 +26,7 @@ public class GameData extends AbstractListenable {
     /**
      * It's the number of players chosen by the first player who connected to the server. read-only. Immutable
      */
-    private int numOfPlayers;
+    private int numberOfPlayers;
     /**
      * It's the index of the current player.
      */
@@ -42,7 +42,7 @@ public class GameData extends AbstractListenable {
     /**
      * Number of players
      */
-    private int currentNumOfPlayers;
+    private int currentNumberOfPlayers;
     /**
      * Username of the first player that has completed the library
      */
@@ -53,11 +53,11 @@ public class GameData extends AbstractListenable {
      */
     public GameData() {
         super();
-        this.numOfPlayers = 0;
+        this.numberOfPlayers = 0;
         this.bag = new Bag();
         this.board = null;
         this.currentPlayerIndex = null;
-        this.currentNumOfPlayers = 0;
+        this.currentNumberOfPlayers = 0;
         this.players = new ArrayList<>();
         this.firstFullLibraryUsername = Optional.empty();
     }
@@ -78,6 +78,7 @@ public class GameData extends AbstractListenable {
      */
     public void setBoard(Board board) {
         this.board = board;
+        notifyAllListeners(new BoardSetEvent(board));
     }
 
     /**
@@ -94,19 +95,19 @@ public class GameData extends AbstractListenable {
      *
      * @return the number of players
      */
-    public int getNumOfPlayers() {
-        return numOfPlayers;
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 
     /**
      * Set the number of players.
      *
-     * @param numOfPlayers number of player for the game
+     * @param numberOfPlayers number of player for the game
      * @throws IllegalNumOfPlayersException if the number of players is not between 2 and 4
      */
-    public void setNumOfPlayers(int numOfPlayers) throws IllegalNumOfPlayersException {
-        if (numOfPlayers < 2 || numOfPlayers > 4) throw new IllegalNumOfPlayersException();
-        this.numOfPlayers = numOfPlayers;
+    public void setNumberOfPlayers(int numberOfPlayers) throws IllegalNumOfPlayersException {
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) throw new IllegalNumOfPlayersException();
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     /**
@@ -116,7 +117,7 @@ public class GameData extends AbstractListenable {
      */
     public void addPlayer(Player newPlayer) {
         players.add(newPlayer);
-        currentNumOfPlayers++;
+        currentNumberOfPlayers++;
     }
 
     /**
@@ -134,6 +135,9 @@ public class GameData extends AbstractListenable {
      * @param commonGoalCardsList the list of common goal cards
      */
     public void setCommonGoalCardsList(List<CommonGoalCard> commonGoalCardsList) {
+        for(CommonGoalCard commonGoalCard : commonGoalCardsList) {
+            commonGoalCard.setPoints(numberOfPlayers);
+        }
         this.commonGoalCardsList = commonGoalCardsList;
         notifyAllListeners(new CommonCardsSetEvent(commonGoalCardsList));
     }
@@ -148,21 +152,12 @@ public class GameData extends AbstractListenable {
     }
 
     /**
-     * Get the current player's client ID.
-     *
-     * @return the current player's client ID
-     */
-    public Integer getCurrentPlayerClientID() {
-        return players.get(currentPlayerIndex).getClintID();
-    }
-
-    /**
      * Get the number of players that are currently playing.
      *
      * @return the number of players that are currently playing
      */
-    public int getCurrentNumOfPlayers() {
-        return currentNumOfPlayers;
+    public int getCurrentNumberOfPlayers() {
+        return currentNumberOfPlayers;
     }
 
     /**
@@ -211,31 +206,5 @@ public class GameData extends AbstractListenable {
      */
     public List<Player> getPlayers() {
         return players;
-    }
-
-    /**
-     * Get the player with the given index.
-     *
-     * @param index the index of the player
-     * @return the player with the given index
-     */
-    public Player getPlayer(int index) {
-        return players.get(index);
-    }
-
-    /**
-     * Get the player from his client ID.
-     *
-     * @param clientId the client ID of the player
-     * @return the player with the given client ID
-     */
-    public Player getPlayerByClientId(Integer clientId) {
-        for (Player player : players) {
-            if (player.getClintID() == clientId) {
-                return player;
-            }
-
-        }
-        return null;
     }
 }

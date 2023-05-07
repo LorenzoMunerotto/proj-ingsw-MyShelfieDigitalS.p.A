@@ -43,8 +43,8 @@ public class Player extends AbstractListenable {
     public Player(String username, Integer clintID) {
         this.username = username;
         this.chair = false;
-        this.totPoints =0;
-        this.clientID=clintID;
+        this.totPoints = 0;
+        this.clientID = clintID;
         this.library = new Library();
     }
 

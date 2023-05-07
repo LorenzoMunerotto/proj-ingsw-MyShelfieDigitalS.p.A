@@ -6,10 +6,20 @@ import it.polimi.ingsw.server.Server;
 
 import java.util.Scanner;
 
+/**
+ * Main class of the project.
+ */
 public class MyShelfie {
 
+    /**
+     * Scanner used to read the user input.
+     */
     private static final Scanner input = new Scanner(System.in);
 
+    /**
+     * Main method of the project, starts the program as a server or as a client.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         String choice = "";
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Choose if you want to start this as a server or as a client [%ss%s/%sc%s]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
@@ -26,6 +36,5 @@ public class MyShelfie {
                 choice = "";
             }
         }
-
     }
 }

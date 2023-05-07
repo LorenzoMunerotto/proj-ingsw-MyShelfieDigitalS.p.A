@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.gameMechanics;
 
-public class BreakRulesException extends Exception{
-
+public class BreakRulesException extends Exception {
 
     private final BreakRules type;
 

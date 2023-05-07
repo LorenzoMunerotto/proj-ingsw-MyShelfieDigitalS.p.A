@@ -51,7 +51,7 @@
 #
 # Used to test the case with 2 adjacent tiles
 """ 2 |
-    -----, -----, -----, --3--, --4--, -----, -----, -----, -----|
+    NULL, NULL, NULL, --3--, --4--, -----, -----, -----, -----|
     -----, -----, -----, EMPTY, EMPTY, --4--, -----, -----, -----|
     -----, -----, --3--, EMPTY, GAME,  EMPTY, --3--, -----, -----|
     -----, --4--, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, --3--|

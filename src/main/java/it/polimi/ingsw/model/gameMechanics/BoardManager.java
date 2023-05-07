@@ -1,39 +1,82 @@
 package it.polimi.ingsw.model.gameMechanics;
 
 import it.polimi.ingsw.listener.AbstractListenable;
-import it.polimi.ingsw.model.gameEntity.Board;
-import it.polimi.ingsw.model.gameEntity.Bag;
-import it.polimi.ingsw.model.gameEntity.Coordinate;
-import it.polimi.ingsw.model.gameEntity.ItemTile;
+import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.events.BoardRefillEvent;
 import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.zip.CRC32;
+
+import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.*;
 
 /**
  * Class that manages the board.
  */
 public class BoardManager extends AbstractListenable {
+
     /**
      * The board of the game.
      */
-    final Board board;
+    private final Board board;
     /**
      * The bag of the game.
      */
-    final Bag bag;
+    private final Bag bag;
+    /**
+     * The list of playable empty cells.
+     */
+    private final List<Coordinate> emptyCells;
+    /**
+     * The list of playable not empty cells.
+     */
+    private final List<Coordinate> notEmptyCells;
 
     /**
      * Constructor of the class.
      *
      * @param board the board of the game
-     * @param bag the bag of the game
+     * @param bag   the bag of the game
      */
-    public BoardManager( Board board, Bag bag) {
+    public BoardManager(Board board, Bag bag) {
         this.board = board;
+        int length = board.getBoardGrid().length;
         this.bag = bag;
+        emptyCells = new ArrayList<>();
+        IntStream.range(0, length).forEach(row -> IntStream.range(0, length).forEach(column -> {
+            if (board.getItemTile(row, column) == EMPTY) emptyCells.add(new Coordinate(row, column));
+        }));
+        notEmptyCells = new ArrayList<>();
+    }
+
+    /**
+     * This method returns the list of empty cells.
+     *
+     * @return the list of empty cells
+     */
+    public List<Coordinate> getEmptyCells() {
+        return emptyCells;
+    }
+
+    /**
+     * This method returns the list of not empty cells.
+     *
+     * @return the list of not empty cells
+     */
+    public List<Coordinate> getNotEmptyCells() {
+        return notEmptyCells;
+    }
+
+    /**
+     * Get the board.
+     *
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
     }
 
     /**
@@ -41,13 +84,11 @@ public class BoardManager extends AbstractListenable {
      *
      * @return true if the board is ready, false otherwise
      */
-    public boolean isRefillTime(){
-
-        for (int row = 0; row < board.getROWS(); row++) {
-            for (int col = 0; col < board.getCOLUMNS(); col++) {
-                if (!(board.getBoardCell(row,col).isPlayable())) continue;
-                if ((board.getBoardCell(row,col).getItemTile().getItemTileType()!=ItemTileType.EMPTY) && !(board.isAlone(row,col))) return false;
-            }
+    public boolean isRefillTime() {
+        for (Coordinate coordinate : notEmptyCells) {
+            int row = coordinate.getRow();
+            int col = coordinate.getColumn();
+            if (!(isAlone(row, col))) return false;
         }
         return true;
     }
@@ -57,16 +98,18 @@ public class BoardManager extends AbstractListenable {
      */
     public void refillBoard() {
         bag.shuffle();
+        for (int i = emptyCells.size() - 1; i >= 0; i--) {
+            Coordinate coordinate = emptyCells.get(i);
+            int row = coordinate.getRow();
+            int column = coordinate.getColumn();
 
-        for (int row = 0; row < board.getROWS(); row++) {
-            for (int col = 0; col < board.getCOLUMNS(); col++) {
-                if (!(board.getBoardCell(row,col).isPlayable())) continue;
-                if (board.getBoardCell(row,col).getItemTile().getItemTileType()==ItemTileType.EMPTY) {
-                    board.putItemTile(row,col, bag.getRandomItemTile());
-                }
-            }
+            board.setItemTile(row, column, bag.grabItemTile());
+            this.emptyCells.remove(coordinate);
+            this.notEmptyCells.add(coordinate);
         }
-        notifyAllListeners(new BoardUpdateEvent(board, true));
+        long checksum = calculateCRC();
+        notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
+
     }
 
     /**
@@ -75,49 +118,49 @@ public class BoardManager extends AbstractListenable {
      * @param coordinates the coordinates of the item tiles to grab
      * @return the item tiles grabbed
      */
-    public List<ItemTile> grabItemTiles(List<Coordinate> coordinates) throws BreakRulesException {
-
-        int size = coordinates.size();
-        if (size < 1 || size > 3) throw new BreakRulesException(BreakRules.TOO_MUCH_TILES_SELECTED);
-        if (new HashSet<>(coordinates).size()<size) throw new BreakRulesException(BreakRules.DUPLICATE_TILES_SELECTED);
-        if (!(isLined(coordinates))) throw new BreakRulesException(BreakRules.TILES_NOT_ALIGNED);
-
+    public List<ItemTileType> grabItemTiles(List<Coordinate> coordinates) {
+        List<ItemTileType> itemTileList = new ArrayList<>();
         for (Coordinate coordinate : coordinates) {
             int row = coordinate.getRow();
-            int col = coordinate.getCol();
+            int column = coordinate.getColumn();
 
-            if (!board.getBoardCell(row,col).isPlayable() ) throw new BreakRulesException(BreakRules.NOT_PLAYABLE_TILE);
-            if (board.getBoardCell(row,col).getItemTile().getItemTileType() == ItemTileType.EMPTY) throw new BreakRulesException(BreakRules.EMPTY_CELL);
-            if (!hasSideFree(row,col)) throw new BreakRulesException(BreakRules.SURROUNDED_TILE);
-            if (board.isAlone(row,col))throw new BreakRulesException(BreakRules.ALONE_TILE);
+            itemTileList.add(board.getItemTile(row, column));
+            board.setItemTile(row, column, EMPTY);
+            this.emptyCells.add(coordinate);
+            this.notEmptyCells.remove(coordinate);
         }
-
-        List<ItemTile> itemTileList = new ArrayList<>();
-        for (Coordinate coordinate : coordinates) {
-            int row = coordinate.getRow();
-            int col = coordinate.getCol();
-
-            itemTileList.add(board.takeItemTile(row,col));
-        }
-        notifyAllListeners(new BoardUpdateEvent(board, false));
+        long checksum = calculateCRC();
+        notifyAllListeners(new BoardUpdateEvent(coordinates, checksum));
         return itemTileList;
     }
 
     /**
      * This method checks if the cell has a side free.
      *
-     * @param row the row of the cell
-     * @param col the column of the cell
+     * @param row    the row of the cell
+     * @param column the column of the cell
      * @return true if the cell has a side free, false otherwise
      */
-    protected boolean hasSideFree( int row, int col){
-        if (!(Board.hasLeftBoardCell(row,col) && Board.hasUpperBoardCell(row,col) && Board.hasRightBoardCell(row,col) && Board.hasLowerBoardCell(row,col))){
-            return  true;
-        }
-        if (!(board.getLeftBoardCell(row,col).isPlayable() && board.getUpperBoardCell(row,col).isPlayable() && board.getRightBoardCell(row,col).isPlayable() && board.getLowerBoardCell(row,col).isPlayable())){
-            return true;
-        }
-        return !(board.getLeftBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY && board.getUpperBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY && board.getRightBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY && board.getLowerBoardCell(row, col).getItemTile().getItemTileType() != ItemTileType.EMPTY);
+    public boolean hasSideFree(int row, int column) {
+        return isUpperSideFree(row, column) ||
+                isLowerSideFree(row, column) ||
+                isRightSideFree(row, column) ||
+                isLeftSideFree(row, column);
+    }
+
+    /**
+     * This method tell if the boardCell in boardGrid[row][col] is alone.
+     * A BoardCell is alone if all 4 adjacent cells are empty.
+     *
+     * @param row is the row of the board grid
+     * @param col is the column of the board grid
+     * @return True if the boardCell in boardGrid[row][col] is alone
+     */
+    public boolean isAlone(int row, int col) {
+        return isUpperSideFree(row, col) &&
+                isLowerSideFree(row, col) &&
+                isRightSideFree(row, col) &&
+                isLeftSideFree(row, col);
     }
 
     /**
@@ -126,18 +169,88 @@ public class BoardManager extends AbstractListenable {
      * @param coordinates the coordinates to check
      * @return true if the coordinates are in line, false otherwise
      */
-    protected boolean isLined(List<Coordinate> coordinates) {
-        List<Coordinate> coordinatesCopy = new ArrayList<>(coordinates);
-        coordinatesCopy.sort(Comparator.comparingInt(Coordinate::getRow).thenComparingInt(Coordinate::getCol));
-        Set<Integer> uniqueRows = coordinatesCopy.stream().map(Coordinate::getRow).collect(Collectors.toSet());
-        Set<Integer> uniqueColumns = coordinatesCopy.stream().map(Coordinate::getCol).collect(Collectors.toSet());
+    public boolean isLined(List<Coordinate> coordinates) {
+        List<Coordinate> coordinatesCopy = coordinates.stream()
+                .sorted(Comparator.comparingInt(Coordinate::getRow).thenComparingInt(Coordinate::getColumn))
+                .collect(Collectors.toList());
         int number = coordinatesCopy.size();
 
-        boolean inRow = uniqueRows.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueColumns.contains(coordinatesCopy.get(0).getCol() + i));
-        boolean inColumn = uniqueColumns.size() == 1 && IntStream.rangeClosed(0, number - 1).allMatch(i -> uniqueRows.contains(coordinatesCopy.get(0).getRow() + i));
+        boolean inRow = coordinatesCopy.get(0).getRow() == coordinatesCopy.get(number - 1).getRow();
+        boolean inColumn = coordinatesCopy.get(0).getColumn() == coordinatesCopy.get(number - 1).getColumn();
 
-        return inRow || inColumn;
+        if (inRow) {
+            int firstColumn = coordinatesCopy.get(0).getColumn();
+            return IntStream.rangeClosed(0, number - 1).allMatch(i -> coordinatesCopy.get(i).getColumn() == firstColumn + i);
+        } else if (inColumn) {
+            int firstRow = coordinatesCopy.get(0).getRow();
+            return IntStream.rangeClosed(0, number - 1).allMatch(i -> coordinatesCopy.get(i).getRow() == firstRow + i);
+        }
+        return false;
     }
 
 
+    /**
+     * This method returns true if the cell is empty or null.
+     *
+     * @param row    is the row of the board grid
+     * @param column is the column of the board grid
+     * @return true if the cell is empty or null, false otherwise
+     */
+    private boolean isEmptyOrNull(int row, int column) {
+        return board.getItemTile(row, column) == EMPTY || board.getItemTile(row, column) == NULL;
+    }
+
+    /**
+     * This method returns true if the upper side is free.
+     *
+     * @param row    is the row of the board grid
+     * @param column is the column of the board grid
+     * @return the upper cell if it exists, false otherwise
+     */
+    private boolean isUpperSideFree(int row, int column) {
+        return row == 0 || isEmptyOrNull(row - 1, column);
+    }
+
+    /**
+     * This method returns true if the lower side is free.
+     *
+     * @param row    is the row of the board grid
+     * @param column is the column of the board grid
+     * @return the lower cell if it exists, false otherwise
+     */
+    private boolean isLowerSideFree(int row, int column) {
+        return row == board.getBoardGrid().length - 1 || isEmptyOrNull(row + 1, column);
+    }
+
+    /**
+     * This method returns true if the left side is free.
+     *
+     * @param row    is the row of the board grid
+     * @param column is the column of the board grid
+     * @return the left cell if it exists, false otherwise
+     */
+    private boolean isLeftSideFree(int row, int column) {
+        return column == 0 || isEmptyOrNull(row, column - 1);
+    }
+
+    /**
+     * This method returns true if the right side is free.
+     *
+     * @param row    is the row of the board grid
+     * @param column is the column of the board grid
+     * @return the right cell if it exists, false otherwise
+     */
+    private boolean isRightSideFree(int row, int column) {
+        return column == board.getBoardGrid()[0].length - 1 || isEmptyOrNull(row, column + 1);
+    }
+
+    public long calculateCRC() {
+        CRC32 crc = new CRC32();
+        for (int row = 0; row < board.getBoardGrid().length; row++) {
+            for (int col = 0; col < board.getBoardGrid()[0].length; col++) {
+                crc.update(board.getItemTile(row, col).toString().getBytes());
+            }
+        }
+        return crc.getValue();
+    }
 }

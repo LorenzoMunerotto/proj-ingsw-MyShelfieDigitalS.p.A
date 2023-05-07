@@ -1,14 +1,13 @@
 package it.polimi.ingsw.model.gameEntity.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.Library;
-import it.polimi.ingsw.model.gameEntity.Player;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-
+/**
+ * This abstract class is the superclass of the commonGoalCards.
+ */
 public abstract class CommonGoalCard implements Serializable {
 
     /**
@@ -19,70 +18,94 @@ public abstract class CommonGoalCard implements Serializable {
      * The description of the commonGoalCard.
      */
     private final String description;
-
     /**
      * The list of the usernames of the players who have reached the goal of
      * this commonGoalCard, in position 0 the first and then the others in order of achievement.
      */
-    private final List<String> smartPlayersTail;
+    private final Map<String, Integer> achievedGoalPlayersMap;
+    private Stack<Integer> points;
 
     /**
      * Constructor for the CommonGoalCard class, initializes the commonGoalCard with the given index and description.
      *
-     * @param index is the index of the CommonGoalCard
+     * @param index       is the index of the CommonGoalCard
      * @param description is the description of the CommonGoalCard
      */
     public CommonGoalCard(Integer index, String description) {
         this.index = index;
         this.description = description;
-        this.smartPlayersTail =  new ArrayList<>();
+        this.points = new Stack<>();
+        this.achievedGoalPlayersMap = new HashMap<>();
     }
 
     /**
-     * This method add the player's username to the smartPlayersTail.
+     * This method adds the player to the list of the players who have reached the goal of this commonGoalCard.
      *
-     * @param player is the player to add
+     * @param username is the username of the player
      */
-    public void addSmartPlayer(Player player){
-        if(!isSmartPlayer(player)) {
-            smartPlayersTail.add(player.getUsername());
+    public void addAchievedGoalPlayer(String username) {
+        if (!isAchievedGoalPlayer(username)) {
+            achievedGoalPlayersMap.put(username, popPoint());
         }
     }
 
     /**
-     * This method return true if the player has already reached the goal of this commonGoalCard.
+     * This method returns true if the player has achieved the goal of this commonGoalCard.
      *
-     * @param player is the player to check
+     * @param username is the username of the player
+     * @return true if the player has achieved the goal of this commonGoalCard, false otherwise
      */
-    public boolean isSmartPlayer(Player player){
-        return smartPlayersTail.contains(player.getUsername());
+    public boolean isAchievedGoalPlayer(String username) {
+        return achievedGoalPlayersMap.containsKey(username);
     }
 
     /**
-     * This method provides the points that a player, who has achieved the goal,
-     * has earned based on the order of achievement and the number of players in the game.
+     * Set the points of the CommonGoalCard based on the number of players.
      *
-     * @param pointsSource the list of integer with points, depends on numOfPlayers
-     * @param player is the player who has achieved the goal
-     * @return the points earned by the player based on the order of achievement of the goal
+     * @param numberOfPlayers is the number of players of the game
      */
-    public int getPoint(List<Integer> pointsSource, Player player){
-        return pointsSource.get(smartPlayersTail.indexOf(player.getUsername()));
+    public void setPoints(int numberOfPlayers){
+        switch (numberOfPlayers) {
+            case 2 -> {
+                this.points.push(4);
+                this.points.push(8);
+            }
+            case 3 -> {
+                this.points.push(4);
+                this.points.push(6);
+                this.points.push(8);
+            }
+            case 4 -> {
+                this.points.push(2);
+                this.points.push(4);
+                this.points.push(6);
+                this.points.push(8);
+            }
+            default -> this.points = new Stack<>();
+        }
     }
 
-    public int getCurrentPointAvailable(Integer numOfPlayers){
-        List<Integer> pointsSource = switch (numOfPlayers) {
-            case 2 -> Arrays.asList(8, 4);
-            case 3 -> Arrays.asList(8, 6, 4);
-            case 4 -> Arrays.asList(8, 6, 4, 2);
-            default -> new ArrayList<>();
-        };
-        if(smartPlayersTail.size()==numOfPlayers){
+    /**
+     * Pops the first element of the stack and returns it.
+     *
+     * @return the first element of the stack
+     */
+    public int popPoint(){
+        if(points.isEmpty()){
             return 0;
         }
-        else{
-            return pointsSource.get(smartPlayersTail.size());
+        else {
+            return points.pop();
         }
+    }
+
+    /**
+     * Get the map of the players who have reached the goal of this commonGoalCard.
+     *
+     * @return the map of the players who have reached the goal of this commonGoalCard
+     */
+    public Map<String, Integer> getAchievedGoalPlayersMap() {
+        return this.achievedGoalPlayersMap;
     }
 
     /**
@@ -90,7 +113,9 @@ public abstract class CommonGoalCard implements Serializable {
      *
      * @return the index of the CommonGoalCard
      */
-    public Integer getIndex()  {return index;}
+    public Integer getIndex() {
+        return index;
+    }
 
     /**
      * Get the description of the CommonGoalCard.

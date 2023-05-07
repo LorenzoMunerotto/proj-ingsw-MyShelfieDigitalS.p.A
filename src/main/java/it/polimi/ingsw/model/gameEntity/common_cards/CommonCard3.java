@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.gameMechanics.LibraryManager;
 import org.javatuples.Pair;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class representing the common goal card 3.
@@ -29,7 +28,8 @@ public class CommonCard3 extends CommonGoalCard {
      */
     @Override
     public boolean checkRules(Library library) {
-        LibraryManager libraryManager = new LibraryManager(library);
+        LibraryManager libraryManager = new LibraryManager();
+        libraryManager.setLibrary(library);
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
         int counter = 0;
 

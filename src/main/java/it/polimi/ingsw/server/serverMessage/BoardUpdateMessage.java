@@ -1,18 +1,19 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameEntity.Coordinate;
+
+import java.util.List;
 
 public class BoardUpdateMessage implements ServerMessage {
 
     private final String message;
-    private final ItemTileType[][] gridBoard;
+    private final List<Coordinate> coordinates;
+    private final long checksum;
 
-    private final boolean[][] playableGrid;
-
-    public BoardUpdateMessage(String message, ItemTileType[][] gridBoard, boolean[][] playableGrid) {
+    public BoardUpdateMessage(String message, List<Coordinate> coordinates, long checksum) {
         this.message = message;
-        this.gridBoard = gridBoard;
-        this.playableGrid = playableGrid;
+        this.coordinates = coordinates;
+        this.checksum = checksum;
     }
 
     @Override
@@ -20,12 +21,12 @@ public class BoardUpdateMessage implements ServerMessage {
         return message;
     }
 
-    public ItemTileType[][] getGridBoard() {
-        return gridBoard;
+    public List<Coordinate> getCoordinates() {
+        return coordinates;
     }
 
-    public boolean[][] getPlayableGrid() {
-        return playableGrid;
+    public long getChecksum() {
+        return checksum;
     }
 
     @Override

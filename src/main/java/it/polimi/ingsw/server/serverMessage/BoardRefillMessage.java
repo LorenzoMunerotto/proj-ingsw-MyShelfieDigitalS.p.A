@@ -6,12 +6,12 @@ public class BoardRefillMessage implements ServerMessage {
 
     private final String message;
     private final ItemTileType[][] gridBoard;
-    private final boolean[][] playableGrid;
+    private final long checksum;
 
-    public BoardRefillMessage(ItemTileType[][] gridBoard, boolean[][] playableGrid) {
-        this.message = "Board refilled";
+    public BoardRefillMessage(String message, ItemTileType[][] gridBoard, long checksum) {
+        this.message = message;
         this.gridBoard = gridBoard;
-        this.playableGrid=playableGrid;
+        this.checksum = checksum;
     }
 
     @Override
@@ -23,12 +23,12 @@ public class BoardRefillMessage implements ServerMessage {
         return gridBoard;
     }
 
-    public boolean[][] getPlayableGrid() {
-        return playableGrid;
-    }
-
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);
+    }
+
+    public long getChecksum() {
+        return checksum;
     }
 }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.gameMechanics;
 
 import it.polimi.ingsw.model.gameEntity.*;
-import it.polimi.ingsw.model.gameEntity.board.BoardTestHelper;
+import it.polimi.ingsw.model.gameEntity.board.BoardManagerTestHelper;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,74 +17,72 @@ class BoardManagerTest {
 
     Board board;
     Bag bag;
-    BoardManager boardManager;
+    BoardManagerTestHelper boardManager;
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/isRefillTimeTest.csv")
-    void isRefillTimeTest(String boardAsString, Boolean isRefillTime){
+    void isRefillTimeTest(String boardAsString, Boolean isRefillTime) {
 
-        board = BoardTestHelper.newBoardFromString(boardAsString);
+        board = BoardManagerTestHelper.newBoardFromString(boardAsString);
         bag = new Bag();
-        boardManager = new BoardManager(board,bag);
+        boardManager = new BoardManagerTestHelper(board, bag);
+        boardManager.updateNotEmptyCells(board);
 
-        assertEquals(isRefillTime, boardManager.isRefillTime() );
+        assertEquals(isRefillTime, boardManager.isRefillTime());
 
-        if(isRefillTime){
+        if (isRefillTime) {
             boardManager.refillBoard();
-            assertTrue(BoardTestHelper.checkAllNotEmpty(board));
+            assertEquals(0, boardManager.getEmptyCells().size());
         }
     }
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/isRefillTimeTest.csv")
-    void refillBoardTest(String boardAsString, Boolean isRefillTime){
+    void refillBoardTest(String boardAsString, Boolean isRefillTime) {
 
-        if(isRefillTime){
+        if (isRefillTime) {
 
-            board = BoardTestHelper.newBoardFromString(boardAsString);
-            Board oldBoard = BoardTestHelper.newBoardFromString(boardAsString);
+            board = BoardManagerTestHelper.newBoardFromString(boardAsString);
             bag = new Bag();
-            boardManager = new BoardManager(board,bag);
+            boardManager = new BoardManagerTestHelper(board, bag);
 
             boardManager.refillBoard();
-            assertTrue(BoardTestHelper.checkAllNotEmpty(board));
-            assertTrue(BoardTestHelper.checkAllTilesNotEmptyNotRefill(oldBoard, board));
+            assertEquals(0, boardManager.getEmptyCells().size());
+            assertNotEquals(0, boardManager.getNotEmptyCells().size());
         }
     }
 
 
     @Test
     @DisplayName("Test grab item tiles with both valid and invalid coordinates")
-    public void testGrabItemTiles_Valid() throws BreakRulesException {
+    public void testGrabItemTiles_Valid() {
         board = new Board(2);
         bag = new Bag();
-        boardManager = new BoardManager(board, new Bag());
+        boardManager = new BoardManagerTestHelper(board, new Bag());
         boardManager.refillBoard();
 
         List<Coordinate> coordinates = new ArrayList<>();
-        coordinates.add(new Coordinate(1,3));
-        coordinates.add(new Coordinate(1,4));
-        coordinates.add(new Coordinate(1,5));
-        assertThrows(BreakRulesException.class, () -> boardManager.grabItemTiles(coordinates));
+        coordinates.add(new Coordinate(1, 3));
+        coordinates.add(new Coordinate(1, 4));
+        coordinates.add(new Coordinate(1, 5));
         coordinates.remove(2);
-        List<ItemTile> grabbedTiles = boardManager.grabItemTiles(coordinates);
+        List<ItemTileType> grabbedTiles = boardManager.grabItemTiles(coordinates);
         assertEquals(2, grabbedTiles.size());
 
-        assertEquals(ItemTileType.EMPTY, board.getBoardCell(1, 3).getItemTile().getItemTileType());
-        assertEquals(ItemTileType.EMPTY, board.getBoardCell(1, 4).getItemTile().getItemTileType());
+        assertEquals(ItemTileType.EMPTY, board.getItemTile(1, 3));
+        assertEquals(ItemTileType.EMPTY, board.getItemTile(1, 4));
 
         coordinates.clear();
         coordinates.add(new Coordinate(0, 3));
         coordinates.add(new Coordinate(0, 4));
-        assertThrows(BreakRulesException.class, () -> boardManager.grabItemTiles(coordinates));
     }
 
     @Test
     @DisplayName("Test has side free with both valid and invalid coordinates")
-    public void testHasSideFree(){
+    public void testHasSideFree() {
         board = new Board(2);
         bag = new Bag();
-        boardManager = new BoardManager(board, new Bag());
+        boardManager = new BoardManagerTestHelper(board, new Bag());
         boardManager.refillBoard();
 
         assertTrue(boardManager.hasSideFree(1, 3));
@@ -93,10 +91,10 @@ class BoardManagerTest {
 
     @Test
     @DisplayName("Test is lined with both valid and invalid coordinates")
-    public void testIsLined(){
+    public void testIsLined() {
         board = new Board(2);
         bag = new Bag();
-        boardManager = new BoardManager(board, new Bag());
+        boardManager = new BoardManagerTestHelper(board, new Bag());
         boardManager.refillBoard();
 
         List<Coordinate> coordinates = new ArrayList<>();

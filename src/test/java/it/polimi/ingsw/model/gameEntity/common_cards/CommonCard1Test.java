@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.gameEntity.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
-import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -27,25 +26,25 @@ class CommonCard1Test {
     @DisplayName("Test check rules for card 1")
     void checkRules() {
         assertFalse(card1.checkRules(libraryTestHelper));
-        for(int i = libraryTestHelper.getROWS() - 1; i >= 3; i--){
-            libraryTestHelper.setItemTile(i, 0, new ItemTile(ItemTileType.values()[i]));
-            libraryTestHelper.setItemTile(i, 1, new ItemTile(ItemTileType.values()[i]));
+        for (int i = libraryTestHelper.getLibraryGrid().length - 1; i >= 3; i--) {
+            libraryTestHelper.setItemTile(i, 0, ItemTileType.values()[i]);
+            libraryTestHelper.setItemTile(i, 1, ItemTileType.values()[i]);
         }
-        for(int i = libraryTestHelper.getROWS() - 1; i >= 3; i--){
-            libraryTestHelper.setItemTile(i, libraryTestHelper.getCOLUMNS() - 2, new ItemTile(ItemTileType.values()[i]));
-            libraryTestHelper.setItemTile(i, libraryTestHelper.getCOLUMNS() - 1, new ItemTile(ItemTileType.values()[i]));
+        for (int i = libraryTestHelper.getLibraryGrid().length - 1; i >= 3; i--) {
+            libraryTestHelper.setItemTile(i, libraryTestHelper.getLibraryGrid()[0].length - 2, ItemTileType.values()[i]);
+            libraryTestHelper.setItemTile(i, libraryTestHelper.getLibraryGrid()[0].length - 1, ItemTileType.values()[i]);
         }
         assertTrue(card1.checkRules(libraryTestHelper));
 
-        libraryTestHelper.setItemTile(3, 4, new ItemTile(ItemTileType.values()[1]));
+        libraryTestHelper.setItemTile(3, 4, ItemTileType.values()[1]);
         assertFalse(card1.checkRules(libraryTestHelper));
 
-        libraryTestHelper.setItemTile(2, 0, new ItemTile(ItemTileType.values()[2]));
+        libraryTestHelper.setItemTile(2, 0, ItemTileType.values()[2]);
         assertFalse(card1.checkRules(libraryTestHelper));
     }
 
     @Test
-    void checkRulesWithSetLibraryMethod(){
+    void checkRulesWithSetLibraryMethod() {
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
                 {ItemTileType.EMPTY, ItemTileType.GAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -69,9 +68,10 @@ class CommonCard1Test {
         assertFalse(card1.checkRules(libraryTestHelper));
 
     }
+
     @Test
     @DisplayName("A group of 7 Cat count for 1 group")
-    void checkSideCase(){
+    void checkSideCase() {
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
                 {ItemTileType.EMPTY, ItemTileType.GAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -84,12 +84,11 @@ class CommonCard1Test {
         assertFalse(card1.checkRules(libraryTestHelper));
 
 
-
     }
 
     @Test
     @DisplayName("A group of 4 CAT in a specific disposition 'L'")
-    void checkSideCase2(){
+    void checkSideCase2() {
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -104,12 +103,9 @@ class CommonCard1Test {
     }
 
 
-
-
-
     @Test
     @DisplayName("A group of 3 BOOK recognised as 1 group of 2 BOOK ")
-    void checkSideCase4(){
+    void checkSideCase4() {
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},

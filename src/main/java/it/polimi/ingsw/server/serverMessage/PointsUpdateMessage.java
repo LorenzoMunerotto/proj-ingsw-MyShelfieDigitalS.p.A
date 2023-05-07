@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.serverMessage;
 
 public class PointsUpdateMessage implements ServerMessage {
 
-
     private final String message;
     private final String username;
     private final Integer points;

@@ -1,17 +1,14 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.clientEntity.ClientCommonCard;
 import it.polimi.ingsw.client.clientMessage.Move;
 import it.polimi.ingsw.client.clientMessage.NumOfPlayerChoice;
 import it.polimi.ingsw.client.clientMessage.UsernameChoice;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
-import it.polimi.ingsw.client.clientEntity.ClientLibrary;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -106,15 +103,25 @@ public class Client implements ServerMessageHandler{
         view.startGame();
     }
 
+    public void handle(BoardSetMessage boardSetMessage){
+        virtualModel.setBoard(boardSetMessage.getGridBoard());
+    }
     /**
      * This method handles the board update message.
      *
      * @param boardUpdateMessage the board update message
      */
     public void handle(BoardUpdateMessage boardUpdateMessage) {
-        virtualModel.updateBoard(boardUpdateMessage.getGridBoard(), boardUpdateMessage.getPlayableGrid());
+        virtualModel.updateBoard(boardUpdateMessage.getCoordinates(), boardUpdateMessage.getChecksum());
     }
 
+    @Override
+    public void handle(BoardRefillMessage boardRefillMessage) {
+        virtualModel.updateBoard(boardRefillMessage.getGridBoard(), boardRefillMessage.getChecksum());
+
+        // this shouldn't be there
+        view.showMessage(boardRefillMessage.getMessage());
+    }
 
     public void handle(StartTurnMessage startTurnMessage){
         virtualModel.updateCurrentPlayerUsername(startTurnMessage.getUsername());
@@ -129,24 +136,16 @@ public class Client implements ServerMessageHandler{
         }
     }
 
+    public void handle(LibrarySetMessage librarySetMessage) {
+        virtualModel.setLibrary(librarySetMessage.getLibraryOwnerUsername(), librarySetMessage.getLibraryGrid());
+    }
+
     public void handle(LibraryUpdateMessage libraryUpdateMessage){
-        ClientLibrary library = new ClientLibrary(libraryUpdateMessage.getLibraryGrid());
-        virtualModel.updateLibraryByUsername(libraryUpdateMessage.getLibraryOwnerUsername(), library);
+        virtualModel.updateLibraryByUsername(libraryUpdateMessage.getLibraryOwnerUsername(), libraryUpdateMessage.getItemTileTypeList(), libraryUpdateMessage.getColumn(), libraryUpdateMessage.getChecksum());
     }
 
     public void handle(CommonCardsSetMessage commonCardsSetMessage){
-        List<ClientCommonCard> clientCommonCards = new ArrayList<>();
-        clientCommonCards.add(new ClientCommonCard(commonCardsSetMessage.getCommonCard1Index(), commonCardsSetMessage.getCommonCard1PointsAvailable(), commonCardsSetMessage.getCommonCard1Description()));
-        clientCommonCards.add(new ClientCommonCard(commonCardsSetMessage.getCommonCard2Index(), commonCardsSetMessage.getCommonCard2PointsAvailable(), commonCardsSetMessage.getCommonCard2Description()));
-        virtualModel.setCommonGoalCards(clientCommonCards);
-    }
-
-    @Override
-    public void handle(BoardRefillMessage boardRefillMessage) {
-        virtualModel.updateBoard(boardRefillMessage.getGridBoard(), boardRefillMessage.getPlayableGrid());
-
-        // this shouldn't be there
-        view.showMessage(boardRefillMessage.getMessage());
+        virtualModel.setCommonGoalCards(commonCardsSetMessage.getCommonGoalCardList());
     }
 
     @Override
@@ -161,7 +160,7 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(CommonCardReachMessage commonCardReachMessage) {
-        virtualModel.updateCommonCardByIndex(commonCardReachMessage.getCommonCardIndex(),commonCardReachMessage.getPointsAvailable());
+        virtualModel.updateCommonCardPoints(commonCardReachMessage.getCommonCardIndex(), commonCardReachMessage.getPoint());
         view.showMessage(commonCardReachMessage.getMessage());
     }
 
@@ -192,8 +191,7 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(PersonalCardSetMessage personalCardSetMessage) {
-        ClientLibrary library = new ClientLibrary(personalCardSetMessage.getLibraryGrid());
-        virtualModel.setPersonalGoalCard(library);
+        virtualModel.setPersonalGoalCard(personalCardSetMessage.getLibraryGrid());
     }
 
     @Override

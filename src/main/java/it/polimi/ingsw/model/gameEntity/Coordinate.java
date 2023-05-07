@@ -1,9 +1,10 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
- * This class represents the couple (row,col) which identifies a boardCell.
+ * This class represents the couple (row,column) which identifies a cell in the board.
  */
 public class Coordinate implements Serializable {
 
@@ -14,23 +15,23 @@ public class Coordinate implements Serializable {
     /**
      * the number which identifies the column
      */
-    private final int col;
+    private final int column;
 
     /**
      * Constructor of the Coordinate.
      *
      * @param row is the row
-     * @param col is the column
+     * @param column is the column
      */
-    public Coordinate(int row, int col) {
+    public Coordinate(int row, int column) {
         this.row = row;
-        this.col = col;
+        this.column = column;
     }
 
     /**
      * Get the row.
      *
-     * @return row
+     * @return the row
      */
     public int getRow() {
         return row;
@@ -39,9 +40,34 @@ public class Coordinate implements Serializable {
     /**
      * Get the column.
      *
-     * @return col
+     * @return the column
      */
-    public int getCol() {
-        return col;
+    public int getColumn() {
+        return column;
+    }
+
+    /**
+     * Compares this Coordinate with the specified object for equality.
+     * Two Coordinates are considered equal if both their row and column values are the same.
+     *
+     * @param obj the object to be compared for equality with this Coordinate
+     * @return true if the specified object is equal to this Coordinate, false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj == null || getClass() != obj.getClass()) return false;
+        Coordinate that = (Coordinate) obj;
+        return row == that.row && column == that.column;
+    }
+
+    /**
+     * Returns the hash code of the object.
+     *
+     * @return a hash code value for this Coordinate
+     */
+    @Override
+    public int hashCode(){
+        return Objects.hash(row, column);
     }
 }

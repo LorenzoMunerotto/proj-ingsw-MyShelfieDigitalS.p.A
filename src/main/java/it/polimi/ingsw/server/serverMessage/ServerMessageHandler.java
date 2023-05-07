@@ -1,11 +1,8 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import it.polimi.ingsw.model.gameState.events.PersonalCardSetEvent;
-import org.sonatype.guice.plexus.config.Strategies;
-
 public interface ServerMessageHandler {
 
-
+    void handle(BoardSetMessage boardSetMessage);
     void handle(BoardRefillMessage boardRefillMessage);
     void handle(BoardUpdateMessage boardUpdateMessage);
     void handle(BreakRulesMessage breakRulesMessage);
@@ -26,5 +23,5 @@ public interface ServerMessageHandler {
     void handle(StartGameMessage startGameMessage);
     void handle(StartTurnMessage startTurnMessage);
     void handle(UsernameRequest usernameRequest);
-
+    void handle(LibrarySetMessage librarySetMessage);
 }

@@ -37,15 +37,16 @@ class PointsManagerTest {
     }
 
     @Test
-    void commonPoints1()  {
+    void commonPoints1() {
 
         List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
         commonGoalCardList.add(new CommonCard4());
         commonGoalCardList.add(new CommonCard11());
-        Player player2;
-        player2 = new Player("anna", 1);
-        commonGoalCardList.get(0).addSmartPlayer(player2);
-        Integer numOfPlayers = 3;
+        Player player2 = new Player("anna", 1);
+        int numOfPlayers = 3;
+        for(CommonGoalCard commonGoalCard : commonGoalCardList)
+            commonGoalCard.setPoints(numOfPlayers);
+        commonGoalCardList.get(0).addAchievedGoalPlayer(player2.getUsername());
 
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -56,7 +57,9 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.PLANT, ItemTileType.GAME, ItemTileType.PLANT},
         };
         library.setLibrary(libraryGrid);
-        pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList);
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(commonGoalCardList);
 
         assertEquals(14, pointsManager.commonPoints());
     }
@@ -71,10 +74,12 @@ class PointsManagerTest {
         Player player3;
         player2 = new Player("anna", 1);
         player3 = new Player("sara", 1);
-        commonGoalCardList.get(0).addSmartPlayer(player2);
-        commonGoalCardList.get(0).addSmartPlayer(player3);
-        commonGoalCardList.get(1).addSmartPlayer(player);
-        Integer numOfPlayers = 3;
+        int numOfPlayers = 3;
+        for(CommonGoalCard commonGoalCard : commonGoalCardList)
+            commonGoalCard.setPoints(numOfPlayers);
+        commonGoalCardList.get(0).addAchievedGoalPlayer(player2.getUsername());
+        commonGoalCardList.get(0).addAchievedGoalPlayer(player3.getUsername());
+        commonGoalCardList.get(1).addAchievedGoalPlayer(player.getUsername());
 
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -85,8 +90,9 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.TROPHY, ItemTileType.FRAME},
         };
         library.setLibrary(libraryGrid);
-        pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList);
-
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(commonGoalCardList);
         assertEquals(12, pointsManager.commonPoints());
     }
 
@@ -96,8 +102,10 @@ class PointsManagerTest {
         List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
         commonGoalCardList.add(new CommonCard1());
         commonGoalCardList.add(new CommonCard12());
-        commonGoalCardList.get(1).addSmartPlayer(player);
-        Integer numOfPlayers = 3;
+        int numOfPlayers = 3;
+        for(CommonGoalCard commonGoalCard : commonGoalCardList)
+            commonGoalCard.setPoints(numOfPlayers);
+        commonGoalCardList.get(1).addAchievedGoalPlayer(player.getUsername());
 
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -108,19 +116,21 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.TROPHY, ItemTileType.FRAME},
         };
         library.setLibrary(libraryGrid);
-        pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList);
-
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(commonGoalCardList);
         assertEquals(16, pointsManager.commonPoints());
     }
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/adjacentPointTest.csv")
-    void adjacentPoints( String libraryAsString, Integer expectedPoints) {
+    void adjacentPoints(String libraryAsString, Integer expectedPoints) {
 
         library.setLibraryFromString(libraryAsString);
 
-        pointsManager = new PointsManager(player, 3, new ArrayList<>());
-        assertEquals(expectedPoints,pointsManager.adjacentPoints());
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        assertEquals(expectedPoints, pointsManager.adjacentPoints());
     }
 
     @ParameterizedTest(name = "{displayName} - {index}")
@@ -129,7 +139,8 @@ class PointsManagerTest {
         library.setLibraryFromString(libraryAsString);
         player.setPersonalGoalCard(personalGoalCardList.get(cardIndex));
 
-        pointsManager = new PointsManager(player, 3, new ArrayList<>());
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
         assertEquals(expectedPoints, pointsManager.personalPoints());
     }
 
@@ -142,10 +153,13 @@ class PointsManagerTest {
         List<CommonGoalCard> twoCardsList = new ArrayList<>();
         twoCardsList.add(commonGoalCardList.get(commonCardIndex - 1));
         twoCardsList.add(commonGoalCardList.get(commonCardIndex2 - 1));
+        for(CommonGoalCard commonGoalCard : twoCardsList)
+            commonGoalCard.setPoints(3);
 
-        pointsManager = new PointsManager(player, 3, twoCardsList);
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(twoCardsList);
         pointsManager.updateTotalPoints();
         assertEquals(expectedPoints, player.getTotPoints());
-
     }
 }

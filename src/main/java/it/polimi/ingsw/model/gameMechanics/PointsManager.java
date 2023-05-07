@@ -10,8 +10,6 @@ import it.polimi.ingsw.model.gameState.events.FirstFullLibraryEvent;
 import it.polimi.ingsw.model.gameState.events.PointsUpdateEvent;
 import org.javatuples.Pair;
 
-import java.util.Arrays;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -21,14 +19,11 @@ import java.util.function.Predicate;
  * Class that manages the points of the game.
  */
 public class PointsManager extends AbstractListenable {
+
     /**
      * The player of the game.
      */
-    private  Player player;
-    /**
-     * The number of players of the game.
-     */
-    private final Integer numOfPlayers;
+    private Player player;
     /**
      * The list of the common goal cards of the game.
      */
@@ -36,26 +31,13 @@ public class PointsManager extends AbstractListenable {
     /**
      * The username of the first player that has completed the library.
      */
-    private  Optional<String> firstFullLibraryUsername;
-    private  boolean isPresentFirstFullLibraryUsername;
-
+    private Optional<String> firstFullLibraryUsername;
     /**
-     * Constructor of the class.
-     *
-     * @param currentPlayer the player of the game
-     * @param numOfPlayers the number of players of the game
-     * @param commonGoalCardList the list of the common goal cards of the game
+     * True if the first player that has completed the library is present, false otherwise.
      */
-    public PointsManager(Player currentPlayer, Integer numOfPlayers, List<CommonGoalCard> commonGoalCardList) {
-        this.player = currentPlayer;
-        this.numOfPlayers = numOfPlayers;
-        this.commonGoalCardList = commonGoalCardList;
-        this.firstFullLibraryUsername = Optional.empty();
-        this.isPresentFirstFullLibraryUsername = false;
-    }
+    private boolean isPresentFirstFullLibraryUsername;
 
-    public PointsManager(Integer numOfPlayers) {
-        this.numOfPlayers = numOfPlayers;
+    public PointsManager() {
         this.firstFullLibraryUsername = Optional.empty();
         this.isPresentFirstFullLibraryUsername = false;
     }
@@ -66,44 +48,33 @@ public class PointsManager extends AbstractListenable {
      * @return total points achieved related to Common Cards
      */
     public int commonPoints() {
-        int commonPoints =0;
-
-        List<Integer> pointsSource = switch (numOfPlayers) {
-            case 2 -> Arrays.asList(8, 4);
-            case 3 -> Arrays.asList(8, 6, 4);
-            case 4 -> Arrays.asList(8, 6, 4, 2);
-            default -> new ArrayList<>();
-        };
-
-        for (CommonGoalCard commonGoalCard : commonGoalCardList){
-            if(!commonGoalCard.isSmartPlayer(player) && commonGoalCard.checkRules(player.getLibrary())){
-                commonGoalCard.addSmartPlayer(player);
-
-                notifyAllListeners(new CommonCardReachEvent(player.getUsername(),commonGoalCard.getPoint(pointsSource, player),commonGoalCard.getCurrentPointAvailable(numOfPlayers),commonGoalCard.getIndex()));
-            }
-            if(commonGoalCard.isSmartPlayer(player)){
-                commonPoints+= commonGoalCard.getPoint(pointsSource, player);
+        int commonPoints = 0;
+        for (CommonGoalCard commonGoalCard : commonGoalCardList) {
+            if(commonGoalCard.isAchievedGoalPlayer(player.getUsername())) commonPoints += commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername());
+            else if(!commonGoalCard.isAchievedGoalPlayer(player.getUsername()) && commonGoalCard.checkRules(player.getLibrary())){
+                commonGoalCard.addAchievedGoalPlayer(player.getUsername());
+                commonPoints += commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername());
+                notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername()), commonGoalCard.getIndex()));
             }
         }
         return commonPoints;
     }
-
 
     /**
      * Get the total points of the player, related to the personal card.
      *
      * @return total points achieved related to Common Cards
      */
-    public int personalPoints(){
+    public int personalPoints() {
+
+        int counter = 0;
 
         List<Goal> goals = player.getPersonalGoalCard().getGoals();
-
-        int counter =0;
         for (Goal goal : goals) {
             int row = goal.getRow();
             int col = goal.getColumn();
 
-            if (player.getLibrary().getItemTile(row, col).getItemTileType() == goal.getItemTileType()) {
+            if (player.getLibrary().getItemTile(row, col) == goal.getItemTileType()) {
                 counter++;
             }
         }
@@ -123,24 +94,21 @@ public class PointsManager extends AbstractListenable {
      *
      * @return total points achieved related to adjacent Groups
      */
-    public int adjacentPoints(){
-        Predicate<Pair<ItemTileType,Integer>> filterGroup =
-                (group) -> (group.getValue0()!=ItemTileType.EMPTY && group.getValue1()>2);
-        Function<Pair<ItemTileType,Integer>,Integer> calculateCommonPoints =
-                (group)->{
+    public int adjacentPoints() {
+        Predicate<Pair<ItemTileType, Integer>> filterGroup =
+                (group) -> (group.getValue0() != ItemTileType.EMPTY && group.getValue1() > 2);
+        Function<Pair<ItemTileType, Integer>, Integer> calculateCommonPoints =
+                (group) -> {
                     int numberOfTile = group.getValue1();
-                    if (numberOfTile==3) return 2;
-                    else if (numberOfTile==4) return 3;
-                    else if (numberOfTile==5) return 5;
+                    if (numberOfTile == 3) return 2;
+                    else if (numberOfTile == 4) return 3;
+                    else if (numberOfTile == 5) return 5;
                     else return 8;
                 };
-        LibraryManager libraryManager = new LibraryManager(player.getLibrary());
+        LibraryManager libraryManager = new LibraryManager();
+        libraryManager.setLibrary(player.getLibrary());
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
 
-         /* To help the debugging
-        System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).collect(Collectors.toList()));
-        System.out.println(listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).collect(Collectors.toList()));
-         */
         return listGroupsAdjacentTiles.stream().filter(filterGroup).map(calculateCommonPoints).reduce(0, Integer::sum);
     }
 
@@ -149,8 +117,8 @@ public class PointsManager extends AbstractListenable {
      *
      * @return the additional point to the first player to the first finisher
      */
-    public int finalPoint(){
-        if (firstFullLibraryUsername.isPresent()){
+    public int finalPoint() {
+        if (firstFullLibraryUsername.isPresent()) {
             if (firstFullLibraryUsername.get().equals(player.getUsername())) {
                 return 1;
             }
@@ -170,12 +138,12 @@ public class PointsManager extends AbstractListenable {
         }
     }
 
-    public Optional<String> getFirstFullLibraryUsername() {
-        return firstFullLibraryUsername;
-    }
-
     public boolean isPresentFirstFullLibraryUsername() {
         return isPresentFirstFullLibraryUsername;
+    }
+
+    public void setPresentFirstFullLibraryUsername(boolean presentFirstFullLibraryUsername) {
+        isPresentFirstFullLibraryUsername = presentFirstFullLibraryUsername;
     }
 
     public void setPlayer(Player player) {
@@ -188,10 +156,6 @@ public class PointsManager extends AbstractListenable {
 
     public void setFirstFullLibraryUsername(Optional<String> firstFullLibraryUsername) {
         this.firstFullLibraryUsername = firstFullLibraryUsername;
-        notifyAllListeners(new FirstFullLibraryEvent(firstFullLibraryUsername.get()));
-    }
-
-    public void setPresentFirstFullLibraryUsername(boolean presentFirstFullLibraryUsername) {
-        isPresentFirstFullLibraryUsername = presentFirstFullLibraryUsername;
+        firstFullLibraryUsername.ifPresent(s -> notifyAllListeners(new FirstFullLibraryEvent(s)));
     }
 }

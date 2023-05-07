@@ -22,9 +22,9 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     public VirtualClient(SocketClientConnection socketClientConnection, String username, Integer clientID, GameHandler gameHandler) {
         this.socketClientConnection = socketClientConnection;
-        this.username=username;
+        this.username = username;
         this.clientID = clientID;
-        this.gameHandler= gameHandler;
+        this.gameHandler = gameHandler;
     }
 
     public SocketClientConnection getSocketClientConnection() {
@@ -39,7 +39,7 @@ public class VirtualClient implements ModelChangeEventHandler {
         return username;
     }
 
-    public void send(ServerMessage serverMessage){
+    public void send(ServerMessage serverMessage) {
         socketClientConnection.send(serverMessage);
     }
 
@@ -53,23 +53,28 @@ public class VirtualClient implements ModelChangeEventHandler {
     }
 
     @Override
+    public void handle(BoardSetEvent boardSetEvent) {
+        socketClientConnection.send(new BoardSetMessage("setting the board", boardSetEvent.getBoardGrid()));
+    }
+
+    @Override
     public void handle(BoardUpdateEvent boardUpdateEvent) {
-        if (!boardUpdateEvent.isRefill()) {
-            socketClientConnection.send(new BoardUpdateMessage("updating the board", boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
-        }
-        else{
-            socketClientConnection.send(new BoardRefillMessage(boardUpdateEvent.getBoardGrid(), boardUpdateEvent.getPlayableGrid()));
-        }
+        socketClientConnection.send(new BoardUpdateMessage("updating the board", boardUpdateEvent.getCoordinates(), boardUpdateEvent.getChecksum()));
+    }
+
+    @Override
+    public void handle(BoardRefillEvent boardRefillEvent) {
+        socketClientConnection.send(new BoardRefillMessage("board refilled", boardRefillEvent.getBoardGrid(), boardRefillEvent.getChecksum()));
     }
 
     @Override
     public void handle(LibraryUpdateEvent libraryUpdateEvent) {
-        if (libraryUpdateEvent.getUsername()==null) {
-            socketClientConnection.send(new LibraryUpdateMessage("updating the library", gameHandler.getCurrentPlayerUsername(), libraryUpdateEvent.getLibraryGrid()));
-        }
-        else{
-            socketClientConnection.send(new LibraryUpdateMessage("initial library setup", libraryUpdateEvent.getUsername(), libraryUpdateEvent.getLibraryGrid()));
-        }
+        socketClientConnection.send(new LibraryUpdateMessage("updating the library", gameHandler.getCurrentPlayerUsername(), libraryUpdateEvent.getItemTileTypeList(), libraryUpdateEvent.getColumn(), libraryUpdateEvent.getChecksum()));
+    }
+
+    @Override
+    public void handle(LibrarySetEvent librarySetEvent) {
+        socketClientConnection.send(new LibrarySetMessage("initial library setup", librarySetEvent.getUsername(), librarySetEvent.getLibraryGrid()));
     }
 
     @Override
@@ -81,7 +86,7 @@ public class VirtualClient implements ModelChangeEventHandler {
     @Override
     public void handle(CurrentPlayerUpdateEvent currentPlayerUpdateEvent) {
         socketClientConnection.send(new StartTurnMessage(currentPlayerUpdateEvent.getUsername()));
-        if(Objects.equals(currentPlayerUpdateEvent.getUsername(), username)){
+        if (Objects.equals(currentPlayerUpdateEvent.getUsername(), username)) {
             socketClientConnection.send(new MoveRequest());
         }
     }
@@ -92,7 +97,7 @@ public class VirtualClient implements ModelChangeEventHandler {
     }
 
     @Override
-    public void handle(CommonCardsSetEvent commonCardsSetEvent){
+    public void handle(CommonCardsSetEvent commonCardsSetEvent) {
         socketClientConnection.send(new CommonCardsSetMessage(commonCardsSetEvent));
     }
 

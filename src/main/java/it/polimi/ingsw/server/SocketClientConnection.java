@@ -155,7 +155,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
                 if (input instanceof NumOfPlayerChoice){
                     try {
                         int num = (((NumOfPlayerChoice) input).getNumOfPlayer());
-                        server.getGameHandlerByClientId(clientID).setNumOfPlayers(num);
+                        server.getGameHandlerByClientId(clientID).setNumberOfPlayers(num);
                         server.setNumOfPlayers(num);
                         send(new CustomMessage("Number of players correctly set to: " + CLIConstants.CYAN_BRIGHT + num + CLIConstants.RESET));
                         break;

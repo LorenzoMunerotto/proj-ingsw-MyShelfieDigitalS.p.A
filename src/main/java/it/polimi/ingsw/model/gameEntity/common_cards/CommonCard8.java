@@ -31,11 +31,11 @@ public class CommonCard8 extends CommonGoalCard {
     public boolean checkRules(Library library) {
         int counter = 0;
 
-        for (int row=0; row< library.getROWS(); row++) {
+        for (int row = 0; row < library.getLibraryGrid().length; row++) {
             Set<ItemTileType> uniqueItemTileTypes = new HashSet<>();
             int validItemTiles = 0;
-            for (int col=0; col< library.getCOLUMNS(); col++) {
-                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
+            for (int column = 0; column < library.getLibraryGrid()[0].length; column++) {
+                ItemTileType currentItemTileType = library.getItemTile(row, column);
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     uniqueItemTileTypes.add(currentItemTileType);
                     validItemTiles++;

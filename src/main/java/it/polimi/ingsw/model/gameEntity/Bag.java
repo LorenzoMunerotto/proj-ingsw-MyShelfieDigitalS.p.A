@@ -14,7 +14,7 @@ public class Bag {
     /**
      * List of the item tiles im the bag.
      */
-    private final List<ItemTile> itemTiles;
+    private final List<ItemTileType> itemTiles;
 
     /**
      * Constructor for bag, initializes the bag with 22 item tile of each type, except for the empty type.
@@ -22,14 +22,13 @@ public class Bag {
     public Bag() {
         this.itemTiles = new ArrayList<>();
         for (ItemTileType type : ItemTileType.values()) {
-            if (type == ItemTileType.EMPTY) {
+            if (type == ItemTileType.EMPTY || type == ItemTileType.NULL) {
                 continue;
             }
             for (int i = 0; i < 22; i++) {
-                itemTiles.add(new ItemTile(type));
+                itemTiles.add(type);
             }
         }
-        Collections.shuffle(itemTiles);
     }
 
     /**
@@ -37,7 +36,7 @@ public class Bag {
      *
      * @return list of item tiles in the bag
      */
-    public List<ItemTile> getItemTiles() {
+    public List<ItemTileType> getItemTiles() {
         return this.itemTiles;
     }
 
@@ -46,9 +45,8 @@ public class Bag {
      *
      * @return a random item tile from the bag
      */
-    public ItemTile grabItemTile() {
-
-        if (itemTiles.size()==0) {
+    public ItemTileType grabItemTile() {
+        if (itemTiles.size() == 0) {
             throw new IllegalArgumentException("The bag is empty");
         }
         return itemTiles.remove(0);
@@ -57,7 +55,7 @@ public class Bag {
     /**
      * This method shuffles the item tiles in the bag.
      */
-    public void shuffle(){
+    public void shuffle() {
         Collections.shuffle(itemTiles);
     }
 }

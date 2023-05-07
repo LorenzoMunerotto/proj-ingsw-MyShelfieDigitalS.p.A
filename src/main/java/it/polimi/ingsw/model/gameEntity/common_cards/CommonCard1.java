@@ -30,7 +30,8 @@ public class CommonCard1 extends CommonGoalCard {
     @Override
     public boolean checkRules(Library library) {
 
-        LibraryManager libraryManager = new LibraryManager(library);
+        LibraryManager libraryManager = new LibraryManager();
+        libraryManager.setLibrary(library);
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
         int counter = 0;
         for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles) {

@@ -26,8 +26,8 @@ class GameDataTest {
     void testConstructor() {
         assertNotNull(gameData.getBag());
         assertNull(gameData.getBoard());
-        assertEquals(0, gameData.getNumOfPlayers());
-        assertEquals(0, gameData.getCurrentNumOfPlayers());
+        assertEquals(0, gameData.getNumberOfPlayers());
+        assertEquals(0, gameData.getCurrentNumberOfPlayers());
         assertTrue(gameData.getPlayers().isEmpty());
         assertFalse(gameData.getFirstFullLibraryUsername().isPresent());
     }
@@ -35,19 +35,19 @@ class GameDataTest {
     @Test
     @DisplayName("Test setNumOfPlayers")
     void testSetNumOfPlayers() {
-        assertDoesNotThrow(() -> gameData.setNumOfPlayers(2));
-        assertDoesNotThrow(() -> gameData.setNumOfPlayers(4));
-        assertThrows(IllegalNumOfPlayersException.class, () -> gameData.setNumOfPlayers(1));
-        assertThrows(IllegalNumOfPlayersException.class, () -> gameData.setNumOfPlayers(5));
+        assertDoesNotThrow(() -> gameData.setNumberOfPlayers(2));
+        assertDoesNotThrow(() -> gameData.setNumberOfPlayers(4));
+        assertThrows(IllegalNumOfPlayersException.class, () -> gameData.setNumberOfPlayers(1));
+        assertThrows(IllegalNumOfPlayersException.class, () -> gameData.setNumberOfPlayers(5));
     }
 
     @Test
     @DisplayName("Test addPlayer")
     void testAddPlayer() {
-        int initialNumOfPlayers = gameData.getCurrentNumOfPlayers();
+        int initialNumOfPlayers = gameData.getCurrentNumberOfPlayers();
         Player player = new Player("TestPlayer", 0);
         gameData.addPlayer(player);
-        assertEquals(initialNumOfPlayers + 1, gameData.getCurrentNumOfPlayers());
+        assertEquals(initialNumOfPlayers + 1, gameData.getCurrentNumberOfPlayers());
     }
 
     @Test

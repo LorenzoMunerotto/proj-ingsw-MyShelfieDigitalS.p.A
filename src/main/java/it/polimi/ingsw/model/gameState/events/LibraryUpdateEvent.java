@@ -1,40 +1,36 @@
 package it.polimi.ingsw.model.gameState.events;
 
-import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
+import java.util.List;
+
 public class LibraryUpdateEvent implements ModelEvent {
-    private final ItemTileType[][] libraryGrid;
-   private final String username;
+    private final List<ItemTileType> itemTileTypeList;
+    private final int column;
+    private final String username;
+    private final long checksum;
 
-    public LibraryUpdateEvent(Library library) {
-        this.libraryGrid = new ItemTileType[library.getROWS()][library.getCOLUMNS()];
-
-        for (int row = 0; row < library.getROWS(); row++) {
-            for (int col = 0; col < library.getCOLUMNS(); col++) {
-                this.libraryGrid[row][col] = library.getItemTile(row, col).getItemTileType();
-            }
-        }
-        this.username= null;
-
-    }
-    public LibraryUpdateEvent(Library library, String username) {
-        this.libraryGrid = new ItemTileType[library.getROWS()][library.getCOLUMNS()];
-
-        for (int row = 0; row < library.getROWS(); row++) {
-            for (int col = 0; col < library.getCOLUMNS(); col++) {
-                this.libraryGrid[row][col] = library.getItemTile(row, col).getItemTileType();
-            }
-        }
-        this.username=username;
+    public LibraryUpdateEvent(List<ItemTileType> itemTileTypeList, int column, String username, long checksum) {
+        this.itemTileTypeList = itemTileTypeList;
+        this.column = column;
+        this.username = username;
+        this.checksum = checksum;
     }
 
-    public ItemTileType[][] getLibraryGrid() {
-        return libraryGrid;
+    public List<ItemTileType> getItemTileTypeList() {
+        return itemTileTypeList;
+    }
+
+    public int getColumn() {
+        return column;
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public long getChecksum() {
+        return checksum;
     }
 
     public void accept(ModelChangeEventHandler modelChangeEventHandler) {

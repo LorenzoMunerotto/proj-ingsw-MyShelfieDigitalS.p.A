@@ -10,7 +10,7 @@ public interface ModelEvent extends Event {
         if (listener instanceof ModelChangeEventHandler){
             accept((ModelChangeEventHandler) listener);
         }else{
-            System.out.println("Errore nella gestione degli eventi");
+            System.out.println("Error in event handling");
         }
     }
 

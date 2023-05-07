@@ -15,9 +15,9 @@ public class CommonCard6 extends CommonGoalCard {
      * Creates a new CommonCard6.
      */
     public CommonCard6() {
-       super(6, """
-               Eight tiles of the same type.
-               There’s no restriction about the position of these tiles.""");
+        super(6, """
+                Eight tiles of the same type.
+                There’s no restriction about the position of these tiles.""");
     }
 
     /**
@@ -30,9 +30,9 @@ public class CommonCard6 extends CommonGoalCard {
     public boolean checkRules(Library library) {
         Map<ItemTileType, Integer> itemTileTypeCounter = new HashMap<>();
 
-        for (int row=0; row< library.getROWS(); row++) {
-            for (int col = 0; col < library.getCOLUMNS(); col++) {
-                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
+        for (int row = 0; row < library.getLibraryGrid().length; row++) {
+            for (int column = 0; column < library.getLibraryGrid()[0].length; column++) {
+                ItemTileType currentItemTileType = library.getItemTile(row, column);
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     itemTileTypeCounter.put(currentItemTileType, itemTileTypeCounter.getOrDefault(currentItemTileType, 0) + 1);
                     if (itemTileTypeCounter.get(currentItemTileType) >= 8) {
