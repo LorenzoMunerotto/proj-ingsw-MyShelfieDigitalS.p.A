@@ -5,7 +5,8 @@ import it.polimi.ingsw.model.gameEntity.common_cards.*;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
 
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
+import it.polimi.ingsw.model.gameEntity.personal_cards.CardsContainer;
+import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +14,6 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,34 +21,32 @@ class PointsManagerTest {
 
     Player player;
     PointsManager pointsManager;
-    LibraryTestHelper libraryTestHelper;
-
-    //private Logger logger = Logger.getLogger(LibraryManagerTest.class.getName());
+    LibraryTestHelper library;
+    CardsContainer cardsContainer;
+    List<PersonalGoalCard> personalGoalCardList;
 
     @BeforeEach
-    void setUp() throws IllegalUsernameException {
+    void setUp() {
 
-        player = new Player("giacomo");
-        libraryTestHelper = new LibraryTestHelper();
-        //sostituisco la libreria originale con il sottotipo che serve per fare i test
-        player.setLibrary(libraryTestHelper);
+        player = new Player("giacomo", 1);
+        library = new LibraryTestHelper();
+        player.setLibrary(library);
+        cardsContainer = new CardsContainer();
+        cardsContainer.createDeck();
+        personalGoalCardList = cardsContainer.getAllPersonalGoalCards();
     }
 
     @Test
-    void commonPoints1()  {
+    void commonPoints1() {
 
         List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
         commonGoalCardList.add(new CommonCard4());
         commonGoalCardList.add(new CommonCard11());
-        Player player2;
-        try {
-            player2 = new Player("anna");
-        } catch (IllegalUsernameException e) {
-            throw new RuntimeException(e);
-        }
-        commonGoalCardList.get(0).addSmartPlayer(player2);
-        Optional<String> firstFullLibraryUsername = Optional.empty();
-        Integer numOfPlayers = 3;
+        Player player2 = new Player("anna", 1);
+        int numOfPlayers = 3;
+        for(CommonGoalCard commonGoalCard : commonGoalCardList)
+            commonGoalCard.setPoints(numOfPlayers);
+        commonGoalCardList.get(0).addAchievedGoalPlayer(player2.getUsername());
 
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -58,8 +56,10 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.PLANT},
                 {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.PLANT, ItemTileType.GAME, ItemTileType.PLANT},
         };
-        libraryTestHelper.setLibrary(libraryGrid);
-        pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
+        library.setLibrary(libraryGrid);
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(commonGoalCardList);
 
         assertEquals(14, pointsManager.commonPoints());
     }
@@ -72,17 +72,14 @@ class PointsManagerTest {
         commonGoalCardList.add(new CommonCard12());
         Player player2;
         Player player3;
-        try {
-            player2 = new Player("anna");
-            player3 = new Player("sara");
-        } catch (IllegalUsernameException e) {
-            throw new RuntimeException(e);
-        }
-        commonGoalCardList.get(0).addSmartPlayer(player2);
-        commonGoalCardList.get(0).addSmartPlayer(player3);
-        commonGoalCardList.get(1).addSmartPlayer(player);
-        Optional<String> firstFullLibraryUsername = Optional.empty();
-        Integer numOfPlayers = 3;
+        player2 = new Player("anna", 1);
+        player3 = new Player("sara", 1);
+        int numOfPlayers = 3;
+        for(CommonGoalCard commonGoalCard : commonGoalCardList)
+            commonGoalCard.setPoints(numOfPlayers);
+        commonGoalCardList.get(0).addAchievedGoalPlayer(player2.getUsername());
+        commonGoalCardList.get(0).addAchievedGoalPlayer(player3.getUsername());
+        commonGoalCardList.get(1).addAchievedGoalPlayer(player.getUsername());
 
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -92,13 +89,11 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.GAME, ItemTileType.PLANT, ItemTileType.EMPTY},
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.TROPHY, ItemTileType.FRAME},
         };
-        libraryTestHelper.setLibrary(libraryGrid);
-        pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
-
+        library.setLibrary(libraryGrid);
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(commonGoalCardList);
         assertEquals(12, pointsManager.commonPoints());
-
-
-
     }
 
     @Test
@@ -107,9 +102,10 @@ class PointsManagerTest {
         List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
         commonGoalCardList.add(new CommonCard1());
         commonGoalCardList.add(new CommonCard12());
-        commonGoalCardList.get(1).addSmartPlayer(player);
-        Optional<String> firstFullLibraryUsername = Optional.empty();
-        Integer numOfPlayers = 3;
+        int numOfPlayers = 3;
+        for(CommonGoalCard commonGoalCard : commonGoalCardList)
+            commonGoalCard.setPoints(numOfPlayers);
+        commonGoalCardList.get(1).addAchievedGoalPlayer(player.getUsername());
 
         ItemTileType[][] libraryGrid = {
                 {ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
@@ -119,27 +115,51 @@ class PointsManagerTest {
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.GAME, ItemTileType.PLANT, ItemTileType.EMPTY},
                 {ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.PLANT, ItemTileType.TROPHY, ItemTileType.FRAME},
         };
-        libraryTestHelper.setLibrary(libraryGrid);
-        pointsManager = new PointsManager(player,numOfPlayers,commonGoalCardList,firstFullLibraryUsername);
-
+        library.setLibrary(libraryGrid);
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(commonGoalCardList);
         assertEquals(16, pointsManager.commonPoints());
-
     }
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/adjacentPointTest.csv")
-    void adjacentPoints( String libraryAsString, Integer expectedPoints) {
+    void adjacentPoints(String libraryAsString, Integer expectedPoints) {
 
-        libraryTestHelper.setLibraryFromString(libraryAsString);
+        library.setLibraryFromString(libraryAsString);
 
-        /* It helps the debugging
-        logger.info("Adjacent Item Tile Group List: "+libraryManager.getListGroupsAdjacentTiles().toString());
-         */
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        assertEquals(expectedPoints, pointsManager.adjacentPoints());
+    }
 
-        List<CommonGoalCard> commonGoalCardList = new ArrayList<>();
-        Optional<String> firstFullLibraryUsername = Optional.empty();
-        Integer numOfPlayers = 3;
-        pointsManager = new PointsManager(player, numOfPlayers, commonGoalCardList, firstFullLibraryUsername);
-        assertEquals(expectedPoints,pointsManager.adjacentPoints());
+    @ParameterizedTest(name = "{displayName} - {index}")
+    @CsvFileSource(resources = "/personalGoalCardsPointsTest.csv")
+    public void personalGoalCardsPoints(String libraryAsString, Integer expectedPoints, Integer cardIndex) {
+        library.setLibraryFromString(libraryAsString);
+        player.setPersonalGoalCard(personalGoalCardList.get(cardIndex));
+
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        assertEquals(expectedPoints, pointsManager.personalPoints());
+    }
+
+    @ParameterizedTest(name = "{displayName} - {index}")
+    @CsvFileSource(resources = "/totalPointsTest.csv")
+    public void allPoints(String libraryAsString, Integer expectedPoints, Integer personalCardIndex, Integer commonCardIndex, Integer commonCardIndex2) {
+        library.setLibraryFromString(libraryAsString);
+        player.setPersonalGoalCard(personalGoalCardList.get(personalCardIndex));
+        List<CommonGoalCard> commonGoalCardList = CommonCardFactory.getAllCommonCards();
+        List<CommonGoalCard> twoCardsList = new ArrayList<>();
+        twoCardsList.add(commonGoalCardList.get(commonCardIndex - 1));
+        twoCardsList.add(commonGoalCardList.get(commonCardIndex2 - 1));
+        for(CommonGoalCard commonGoalCard : twoCardsList)
+            commonGoalCard.setPoints(3);
+
+        pointsManager = new PointsManager();
+        pointsManager.setPlayer(player);
+        pointsManager.setCommonGoalCardList(twoCardsList);
+        pointsManager.updateTotalPoints();
+        assertEquals(expectedPoints, player.getTotPoints());
     }
 }

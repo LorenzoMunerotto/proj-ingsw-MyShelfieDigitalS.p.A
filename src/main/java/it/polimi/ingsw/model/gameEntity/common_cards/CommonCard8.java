@@ -15,10 +15,9 @@ public class CommonCard8 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard8() {
-        super(8, "Four lines each formed by 5 tiles of\n" +
-                "maximum three different types. One\n" +
-                "line can show the same or a different\n" +
-                "combination of another line.");
+        super(8, """
+                Four lines each formed by 5 tiles of maximum three different types.
+                One line can show the same or a different combination of another line.""");
     }
 
 
@@ -32,11 +31,11 @@ public class CommonCard8 extends CommonGoalCard {
     public boolean checkRules(Library library) {
         int counter = 0;
 
-        for (int row=0; row< library.getROWS(); row++) {
+        for (int row = 0; row < library.getLibraryGrid().length; row++) {
             Set<ItemTileType> uniqueItemTileTypes = new HashSet<>();
             int validItemTiles = 0;
-            for (int col=0; col< library.getCOLUMNS(); col++) {
-                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
+            for (int column = 0; column < library.getLibraryGrid()[0].length; column++) {
+                ItemTileType currentItemTileType = library.getItemTile(row, column);
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     uniqueItemTileTypes.add(currentItemTileType);
                     validItemTiles++;

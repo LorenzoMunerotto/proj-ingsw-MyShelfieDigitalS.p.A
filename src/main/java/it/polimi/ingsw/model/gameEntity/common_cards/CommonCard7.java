@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.gameEntity.common_cards;
 
-import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
@@ -13,8 +12,8 @@ public class CommonCard7 extends CommonGoalCard {
      * Creates a new CommonCard7.
      */
     public CommonCard7() {
-        super(7, "Five tiles of the same type forming a\n" +
-                "diagonal.");
+        super(7, """
+                Five tiles of the same type forming a diagonal.""");
     }
 
 
@@ -27,42 +26,42 @@ public class CommonCard7 extends CommonGoalCard {
     @Override
     public boolean checkRules(Library library) {
 
-        for (int row = 0; row <=1; row++) {
-            int col = 0;
-            ItemTile currentItemTile = library.getItemTile(row,col);
-            if (currentItemTile.getItemTileType() == ItemTileType.EMPTY) {
+        for (int row = 0; row <= 1; row++) {
+            int column = 0;
+            ItemTileType currentItemTile = library.getItemTile(row, column);
+            if (currentItemTile == ItemTileType.EMPTY) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+1,col+1).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 1, column + 1)) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+2,col+2).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 2, column + 2)) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+3,col+3).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 3, column + 3)) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+4,col+4).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 4, column + 4)) {
                 continue;
             }
             return true;
         }
         for (int row = 0; row <= 1; row++) {
             int col = 4;
-            ItemTile currentItemTile = library.getItemTile(row,col);
-            if (currentItemTile.getItemTileType() == ItemTileType.EMPTY) {
+            ItemTileType currentItemTile = library.getItemTile(row, col);
+            if (currentItemTile == ItemTileType.EMPTY) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+1,col-1).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 1, col - 1)) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+2,col-2).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 2, col - 2)) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+3,col-3).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 3, col - 3)) {
                 continue;
             }
-            if (currentItemTile.getItemTileType() != library.getItemTile(row+4, 0).getItemTileType()) {
+            if (currentItemTile != library.getItemTile(row + 4, 0)) {
                 continue;
             }
             return true;

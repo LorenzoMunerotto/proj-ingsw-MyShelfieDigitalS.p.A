@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.gameEntity.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
-import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonCard7;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,19 +28,19 @@ class CommonCard7Test {
         assertFalse(card7.checkRules(libraryTestHelper));
 
         for (int i = 0; i < 5; i++) {
-            libraryTestHelper.setItemTile(i, i, new ItemTile(ItemTileType.CAT));
+            libraryTestHelper.setItemTile(i, i, ItemTileType.CAT);
         }
         assertTrue(card7.checkRules(libraryTestHelper));
 
-        libraryTestHelper.setItemTile(4, 4, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(4, 4, ItemTileType.PLANT);
         assertFalse(card7.checkRules(libraryTestHelper));
 
         for (int i = 1; i < 6; i++) {
-            libraryTestHelper.setItemTile(i, i - 1, new ItemTile(ItemTileType.TROPHY));
+            libraryTestHelper.setItemTile(i, i - 1, ItemTileType.TROPHY);
         }
         assertTrue(card7.checkRules(libraryTestHelper));
 
-        libraryTestHelper.setItemTile(5, 4, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(5, 4, ItemTileType.PLANT);
         assertFalse(card7.checkRules(libraryTestHelper));
     }
 
@@ -52,19 +49,19 @@ class CommonCard7Test {
     void checkRulesFromRight() {
         assertFalse(card7.checkRules(libraryTestHelper));
         for(int i = 0; i < 5; i++) {
-            libraryTestHelper.setItemTile(i, 4 - i, new ItemTile(ItemTileType.CAT));
+            libraryTestHelper.setItemTile(i, 4 - i, ItemTileType.CAT);
         }
         assertTrue(card7.checkRules(libraryTestHelper));
 
-        libraryTestHelper.setItemTile(4, 0, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(4, 0, ItemTileType.PLANT);
         assertFalse(card7.checkRules(libraryTestHelper));
 
         for (int i = 1; i < 6; i++) {
-            libraryTestHelper.setItemTile(i, 5 - i, new ItemTile(ItemTileType.TROPHY));
+            libraryTestHelper.setItemTile(i, 5 - i, ItemTileType.TROPHY);
         }
         assertTrue(card7.checkRules(libraryTestHelper));
 
-        libraryTestHelper.setItemTile(5, 0, new ItemTile(ItemTileType.PLANT));
+        libraryTestHelper.setItemTile(5, 0, ItemTileType.PLANT);
         assertFalse(card7.checkRules(libraryTestHelper));
     }
 }

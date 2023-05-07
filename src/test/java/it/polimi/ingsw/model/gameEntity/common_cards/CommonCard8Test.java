@@ -1,10 +1,7 @@
 package it.polimi.ingsw.model.gameEntity.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
-import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonCard8;
-import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,23 +29,23 @@ class CommonCard8Test {
 
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 5; col++) {
-                libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+                libraryTestHelper.setItemTile(row, col, ItemTileType.CAT);
             }
         }
         assertTrue(card8.checkRules(libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
-            libraryTestHelper.setItemTile(row, 1, new ItemTile(ItemTileType.PLANT));
+            libraryTestHelper.setItemTile(row, 1, ItemTileType.PLANT);
         }
         assertTrue(card8.checkRules(libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
-            libraryTestHelper.setItemTile(row, 2, new ItemTile(ItemTileType.TROPHY));
+            libraryTestHelper.setItemTile(row, 2, ItemTileType.TROPHY);
         }
         assertTrue(card8.checkRules(libraryTestHelper));
 
         for (int row = 0; row < 4; row++) {
-            libraryTestHelper.setItemTile(row, 3, new ItemTile(ItemTileType.GAME));
+            libraryTestHelper.setItemTile(row, 3, ItemTileType.GAME);
         }
         assertFalse(card8.checkRules(libraryTestHelper));
     }
@@ -58,7 +55,7 @@ class CommonCard8Test {
     void testCheckRulesLessThan5Tiles(){
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 4; col++) {
-                libraryTestHelper.setItemTile(row, col, new ItemTile(ItemTileType.CAT));
+                libraryTestHelper.setItemTile(row, col, ItemTileType.CAT);
             }
         }
         assertFalse(card8.checkRules(libraryTestHelper));

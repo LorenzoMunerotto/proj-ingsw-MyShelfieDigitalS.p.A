@@ -15,8 +15,8 @@ public class CommonCard9 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard9() {
-       super(9, "Two columns each formed by 6\n" +
-               "different types of tiles. ");
+        super(9, """
+                Two columns each formed by 6 different types of tiles.""");
     }
 
     /**
@@ -30,17 +30,17 @@ public class CommonCard9 extends CommonGoalCard {
         int counter = 0;
 
         firstLoop:
-        for (int col=0; col< library.getCOLUMNS(); col++) {
+        for (int col = 0; col < library.getLibraryGrid()[0].length; col++) {
             Set<ItemTileType> distinctTypes = new HashSet<>();
 
-            for (int row=0; row< library.getROWS(); row++) {
-                ItemTileType currentType = library.getItemTile(row,col).getItemTileType();
+            for (int row = 0; row < library.getLibraryGrid().length; row++) {
+                ItemTileType currentType = library.getItemTile(row, col);
                 if (currentType == ItemTileType.EMPTY) {
                     continue firstLoop;
                 }
                 distinctTypes.add(currentType);
             }
-            if (distinctTypes.size() == library.getROWS()) {
+            if (distinctTypes.size() == library.getLibraryGrid().length) {
                 counter++;
             }
             if (counter == 2) {

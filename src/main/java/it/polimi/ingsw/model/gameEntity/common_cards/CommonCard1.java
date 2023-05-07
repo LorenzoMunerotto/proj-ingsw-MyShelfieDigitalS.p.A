@@ -16,11 +16,9 @@ public class CommonCard1 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard1() {
-        super(1, "Six groups each containing at least\n" +
-                "2 tiles of the same type (not necessarily\n" +
-                "in the depicted shape).\n" +
-                "The tiles of one group can be different\n" +
-                "from those of another group.");
+        super(1, """
+                Six groups each containing at least 2 tiles of the same type.
+                The tiles of one group can be different from those of another group.""");
     }
 
     /**
@@ -32,7 +30,8 @@ public class CommonCard1 extends CommonGoalCard {
     @Override
     public boolean checkRules(Library library) {
 
-        LibraryManager libraryManager = new LibraryManager(library);
+        LibraryManager libraryManager = new LibraryManager();
+        libraryManager.setLibrary(library);
         List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
         int counter = 0;
         for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles) {

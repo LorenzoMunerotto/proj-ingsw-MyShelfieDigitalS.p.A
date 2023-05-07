@@ -12,11 +12,9 @@ public class CommonCard12 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard12() {
-        super(12, "Five columns of increasing or decreasing\n" +
-                "height. Starting from the first column on\n" +
-                "the left or on the right, each next column\n" +
-                "must be made of exactly one more tile.\n" +
-                "Tiles can be of any type. ");
+        super(12, """
+                Five columns of increasing or decreasing height. Starting from the first column on the left or on the right,
+                each next column must be made of exactly one more tile. Tiles can be of any type.""");
     }
 
     /**
@@ -29,8 +27,8 @@ public class CommonCard12 extends CommonGoalCard {
     public boolean checkRules(Library library) {
         int counter = 0;
 
-        for (int row=1; row< library.getROWS(); row++) {
-            if (library.getItemTile(row-1,row-1).getItemTileType() != ItemTileType.EMPTY || library.getItemTile(row,row-1).getItemTileType() == ItemTileType.EMPTY) {
+        for (int row = 1; row < library.getLibraryGrid().length; row++) {
+            if (library.getItemTile(row - 1, row - 1) != ItemTileType.EMPTY || library.getItemTile(row, row - 1) == ItemTileType.EMPTY) {
                 break;
             }
             counter++;
@@ -38,9 +36,9 @@ public class CommonCard12 extends CommonGoalCard {
                 return true;
             }
         }
-        counter  = 0;
-        for (int row = 1; row < library.getROWS(); row++) {
-            if (library.getItemTile(row-1,5-row).getItemTileType() != ItemTileType.EMPTY || library.getItemTile(row,5-row).getItemTileType() == ItemTileType.EMPTY) {
+        counter = 0;
+        for (int row = 1; row < library.getLibraryGrid().length; row++) {
+            if (library.getItemTile(row - 1, 5 - row) != ItemTileType.EMPTY || library.getItemTile(row, 5 - row) == ItemTileType.EMPTY) {
                 break;
             }
             counter++;

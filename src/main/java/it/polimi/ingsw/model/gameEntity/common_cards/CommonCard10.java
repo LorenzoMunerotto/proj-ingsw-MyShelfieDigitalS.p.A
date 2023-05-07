@@ -15,10 +15,9 @@ public class CommonCard10 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard10() {
-        super(10, "Two lines each formed by 5 different\n" +
-                "types of tiles. One line can show the\n" +
-                "same or a different combination of the\n" +
-                "other line.");
+        super(10, """
+                Two lines each formed by 5 different types of tiles.
+                One line can show the same or a different combination of the other line.""");
     }
 
     /**
@@ -32,16 +31,16 @@ public class CommonCard10 extends CommonGoalCard {
         int counter = 0;
 
         firstLoop:
-        for (int row=0; row< library.getROWS(); row++) {
+        for (int row = 0; row < library.getLibraryGrid().length; row++) {
             Set<ItemTileType> distinctTypes = new HashSet<>();
-            for (int col=0; col< library.getCOLUMNS(); col++) {
-                ItemTileType currentType = library.getItemTile(row,col).getItemTileType();
+            for (int col = 0; col < library.getLibraryGrid()[0].length; col++) {
+                ItemTileType currentType = library.getItemTile(row, col);
                 if (currentType == ItemTileType.EMPTY) {
                     continue firstLoop;
                 }
                 distinctTypes.add(currentType);
             }
-            if (distinctTypes.size() == library.getCOLUMNS()) {
+            if (distinctTypes.size() == library.getLibraryGrid()[0].length) {
                 counter++;
             }
             if (counter == 2) {

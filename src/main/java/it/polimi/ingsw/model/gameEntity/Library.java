@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
+import java.util.stream.IntStream;
+
 /**
  * Class representing the Library owned by each player.
  */
@@ -18,7 +20,7 @@ public class Library {
     /**
      * The data structure for the library.
      */
-    private final ItemTile[][] grid;
+    private final ItemTileType[][] grid;
 
     /**
      * Index of the cell of the library [row][column].
@@ -34,30 +36,8 @@ public class Library {
      * Constructor for library, initializing the library grid with empty item tiles.
      */
     public Library() {
-        this.grid = new ItemTile[ROWS][COLUMNS];
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
-                grid[i][j] = new ItemTile(ItemTileType.EMPTY);
-            }
-        }
-    }
-
-    /**
-     * Get the number of rows of the library.
-     *
-     * @return the number of rows of the library
-     */
-    public int getROWS() {
-        return ROWS;
-    }
-
-    /**
-     * Get the number of columns of the library.
-     *
-     * @return the number of columns of the library
-     */
-    public int getCOLUMNS() {
-        return COLUMNS;
+        this.grid = new ItemTileType[ROWS][COLUMNS];
+        IntStream.range(0, ROWS).forEach(row -> IntStream.range(0, COLUMNS).forEach(column -> grid[row][column] = ItemTileType.EMPTY));
     }
 
     /**
@@ -65,7 +45,7 @@ public class Library {
      *
      * @return the gird of the library
      */
-    public ItemTile[][] getGrid() {
+    public ItemTileType[][] getLibraryGrid() {
         return this.grid;
     }
 
@@ -76,10 +56,7 @@ public class Library {
      * @param column   the column of the grid
      * @param itemTile the new item tile
      */
-    public void setItemTile(int row, int column, ItemTile itemTile) {
-        if (row < 0 || row >= grid.length || column < 0 || column >= grid[row].length) {
-            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
-        }
+    public void setItemTile(int row, int column, ItemTileType itemTile) {
         this.grid[row][column] = itemTile;
     }
 
@@ -90,31 +67,7 @@ public class Library {
      * @param column the column of the grid
      * @return the item tile
      */
-    public ItemTile getItemTile(int row, int column) {
-        if (row < 0 || row >= ROWS || column < 0 || column >= COLUMNS) {
-            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
-        }
-        return grid[row][column];
-    }
-
-    /**
-     * Insert an item tile in the given column.
-     *
-     * @param col      is the column of the grid
-     * @param itemTile is the item tile to insert
-     */
-    public void insertItemTile(Integer col, ItemTile itemTile) {
-        if (col < 0 || col >= COLUMNS) {
-            throw new IllegalArgumentException("Row or column parameter is out of bounds.");
-        }
-        if (grid[0][col].getItemTileType() != ItemTileType.EMPTY)
-            throw new IllegalArgumentException("The column is full");
-
-        for (int row = ROWS - 1; row >= 0; row--) {
-            if (grid[row][col].getItemTileType() == ItemTileType.EMPTY) {
-                grid[row][col] = itemTile;
-                break;
-            }
-        }
+    public ItemTileType getItemTile(int row, int column) {
+        return this.grid[row][column];
     }
 }

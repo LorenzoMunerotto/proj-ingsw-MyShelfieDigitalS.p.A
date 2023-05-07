@@ -14,11 +14,10 @@ public class CommonCard5 extends CommonGoalCard {
     /**
      * Constructor of the class.
      */
-    public CommonCard5(){
-        super(5, "Three columns each formed by 6 tiles Five tiles of the same type forming an X.\n" +
-                "of maximum three different types. One\n" +
-                "column can show the same or a different\n" +
-                "combination of another column.");
+    public CommonCard5() {
+        super(5, """
+                Three columns each formed by 6 tiles of maximum three different types.
+                One column can show the same or a different combination of another column.""");
     }
 
 
@@ -32,11 +31,11 @@ public class CommonCard5 extends CommonGoalCard {
     public boolean checkRules(Library library) {
         int counter = 0;
 
-        for (int col = 0; col < library.getCOLUMNS(); col++) {
+        for (int column = 0; column < library.getLibraryGrid()[0].length; column++) {
             Set<ItemTileType> uniqueItemTileTypes = new HashSet<>();
             int validItemTiles = 0;
-            for (int row = 0; row < library.getROWS(); row++) {
-                ItemTileType currentItemTileType = library.getItemTile(row,col).getItemTileType();
+            for (int row = 0; row < library.getLibraryGrid().length; row++) {
+                ItemTileType currentItemTileType = library.getItemTile(row, column);
                 if (currentItemTileType != ItemTileType.EMPTY) {
                     uniqueItemTileTypes.add(currentItemTileType);
                     validItemTiles++;

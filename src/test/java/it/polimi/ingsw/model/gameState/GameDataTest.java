@@ -1,101 +1,77 @@
 package it.polimi.ingsw.model.gameState;
 
+import it.polimi.ingsw.model.gameEntity.Board;
 import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.model.gameState.Exceptions.GameStartedException;
-import it.polimi.ingsw.model.gameState.Exceptions.IllegalUsernameException;
-import it.polimi.ingsw.model.gameState.Exceptions.InvalidNumOfPlayers;
-import it.polimi.ingsw.model.gameState.Exceptions.UsernameAlreadyExistsException;
+import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
+import it.polimi.ingsw.model.gameEntity.common_cards.CommonGoalCard;
+import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GameDataTest {
-
+class GameDataTest {
     private GameData gameData;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         gameData = new GameData();
     }
 
     @Test
     @DisplayName("Test constructor")
-    public void testConstructor() {
-        assertEquals(0, gameData.getNumOfPlayers());
-        assertEquals(0, gameData.getCurrentNumOfPlayers());
-        assertFalse(gameData.isStarted());
+    void testConstructor() {
+        assertNotNull(gameData.getBag());
+        assertNull(gameData.getBoard());
+        assertEquals(0, gameData.getNumberOfPlayers());
+        assertEquals(0, gameData.getCurrentNumberOfPlayers());
+        assertTrue(gameData.getPlayers().isEmpty());
         assertFalse(gameData.getFirstFullLibraryUsername().isPresent());
-        assertEquals(2, gameData.getCommonGoalCardsList().size());
-        assertNotEquals(gameData.getCommonGoalCardsList().get(0), gameData.getCommonGoalCardsList().get(1));
     }
 
     @Test
-    @DisplayName("Test set number of players")
-    public void testSetNumOfPlayers() throws InvalidNumOfPlayers {
-        gameData.setNumOfPlayers(2);
-        assertEquals(2, gameData.getNumOfPlayers());
-        assertDoesNotThrow(() -> gameData.setNumOfPlayers(2));
-        assertThrows(InvalidNumOfPlayers.class, () -> gameData.setNumOfPlayers(5));
-        assertThrows(InvalidNumOfPlayers.class, () -> gameData.setNumOfPlayers(1));
+    @DisplayName("Test setNumOfPlayers")
+    void testSetNumOfPlayers() {
+        assertDoesNotThrow(() -> gameData.setNumberOfPlayers(2));
+        assertDoesNotThrow(() -> gameData.setNumberOfPlayers(4));
+        assertThrows(IllegalNumOfPlayersException.class, () -> gameData.setNumberOfPlayers(1));
+        assertThrows(IllegalNumOfPlayersException.class, () -> gameData.setNumberOfPlayers(5));
     }
 
     @Test
-    @DisplayName("Test add player")
-    public void testAddPlayer() throws InvalidNumOfPlayers, IllegalUsernameException {
-        gameData.setNumOfPlayers(3);
-
-        Player player1 = new Player("Pippo");
-        Player player2 = new Player("Paperino");
-        Player player3 = new Player("Pluto");
-        Player player4 = new Player("Topolino");
-
-        assertDoesNotThrow(() -> gameData.addPlayer(player1));
-        assertThrows(UsernameAlreadyExistsException.class, () -> gameData.addPlayer(new Player("Pippo")));
-
-        assertDoesNotThrow(() -> gameData.addPlayer(player2));
-        assertDoesNotThrow(() -> gameData.addPlayer(player3));
-
-        assertTrue(gameData.getPlayers().contains(player1));
-        assertTrue(gameData.getPlayers().contains(player2));
-        assertTrue(gameData.getPlayers().contains(player3));
-
-        assertEquals(3, gameData.getCurrentNumOfPlayers());
-        assertThrows(GameStartedException.class, () -> gameData.addPlayer(player4));
+    @DisplayName("Test addPlayer")
+    void testAddPlayer() {
+        int initialNumOfPlayers = gameData.getCurrentNumberOfPlayers();
+        Player player = new Player("TestPlayer", 0);
+        gameData.addPlayer(player);
+        assertEquals(initialNumOfPlayers + 1, gameData.getCurrentNumberOfPlayers());
     }
 
     @Test
-    @DisplayName("Test change the current player")
-    public void testNextPlayer() throws InvalidNumOfPlayers, UsernameAlreadyExistsException, GameStartedException, IllegalUsernameException {
-        gameData.setNumOfPlayers(3);
-
-        Player player1 = new Player("Pippo");
-        Player player2 = new Player("Paperino");
-        Player player3 = new Player("Pluto");
-
-        gameData.addPlayer(player1);
-        gameData.addPlayer(player2);
-        gameData.addPlayer(player3);
-
-        Integer initialPlayerIndex = gameData.getCurrentPlayerIndex();
-
-        gameData.nextPlayer();
-        assertNotEquals(initialPlayerIndex, gameData.getCurrentPlayerIndex());
-
-        gameData.nextPlayer();
-        assertNotEquals(initialPlayerIndex, gameData.getCurrentPlayerIndex());
-
-        gameData.nextPlayer();
-        assertEquals(initialPlayerIndex, gameData.getCurrentPlayerIndex());
+    @DisplayName("Test setBoard based on the number of players")
+    void testSetBoard() {
+        Board board = new Board(2);
+        gameData.setBoard(board);
+        assertNotNull(gameData.getBoard());
     }
 
     @Test
-    @DisplayName("Test set first full library username")
-    public void testSetFirstFullLibraryUsername() {
-        assertFalse(gameData.getFirstFullLibraryUsername().isPresent());
-        gameData.setFirstFullLibraryUsername("Pippo");
+    @DisplayName("Test setCommonGoalCardsList")
+    void testSetCommonGoalCardsList() {
+        List<CommonGoalCard> commonGoalCardsList = CommonCardFactory.createCards();
+        gameData.setCommonGoalCardsList(commonGoalCardsList);
+        assertEquals(commonGoalCardsList, gameData.getCommonGoalCardsList());
+    }
+
+    @Test
+    @DisplayName("Test setFirstFullLibraryUsername")
+    void testSetFirstFullLibraryUsername() {
+        String username = "TestPlayer";
+        gameData.setFirstFullLibraryUsername(username);
         assertTrue(gameData.getFirstFullLibraryUsername().isPresent());
-        assertEquals("Pippo", gameData.getFirstFullLibraryUsername().get());
+        assertEquals(username, gameData.getFirstFullLibraryUsername().get());
     }
 }

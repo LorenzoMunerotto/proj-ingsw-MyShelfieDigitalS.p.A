@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.gameMechanics;
 
-import it.polimi.ingsw.model.gameEntity.ItemTile;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
 
@@ -20,38 +19,38 @@ class LibraryManagerTest {
     @BeforeEach
     public void setUp() {
         library = new LibraryTestHelper();
-        libraryManager = new LibraryManager(library);
+        libraryManager = new LibraryManager();
+        libraryManager.setLibrary(library);
     }
 
     @Test
     @DisplayName("Test the insertion of item tiles in the library")
     public void testInsertItemTiles() {
-        List<ItemTile> itemTileList = Arrays.asList(
-                new ItemTile(ItemTileType.CAT),
-                new ItemTile(ItemTileType.PLANT)
+        List<ItemTileType> itemTileList = Arrays.asList(
+                ItemTileType.CAT,
+                ItemTileType.PLANT,
+                ItemTileType.CAT,
+                ItemTileType.FRAME
         );
 
         libraryManager.insertItemTiles(0, itemTileList);
-        assertEquals(ItemTileType.CAT, library.getItemTile(5, 0).getItemTileType());
-        assertEquals(ItemTileType.PLANT, library.getItemTile(4, 0).getItemTileType());
-
-        assertThrows(IllegalArgumentException.class, () -> libraryManager.insertItemTiles(5, itemTileList));
+        assertEquals(ItemTileType.CAT, library.getItemTile(5, 0));
+        assertEquals(ItemTileType.PLANT, library.getItemTile(4, 0));
+        assertEquals(ItemTileType.CAT, library.getItemTile(3, 0));
     }
 
     @Test
-    @DisplayName("Test the exception thrown when there is not enough space in the library")
-    public void testHasEnoughSpace() {
-        libraryManager.hasEnoughSpace(0, 3);
-
-        List<ItemTile> itemTileList = Arrays.asList(
-                new ItemTile(ItemTileType.CAT),
-                new ItemTile(ItemTileType.PLANT),
-                new ItemTile(ItemTileType.BOOK),
-                new ItemTile(ItemTileType.CAT)
+    @DisplayName("Test that the method that returns the number of empty tiles in a column works correctly")
+    public void testEmptyTilesCounter() {
+        assertEquals(6, libraryManager.emptyTilesCounter(0));
+        List<ItemTileType> itemTileList = Arrays.asList(
+                ItemTileType.CAT,
+                ItemTileType.PLANT,
+                ItemTileType.CAT
         );
 
         libraryManager.insertItemTiles(0, itemTileList);
-        assertThrows(IllegalArgumentException.class, () -> libraryManager.hasEnoughSpace(0, 3));
+        assertEquals(3, libraryManager.emptyTilesCounter(0));
     }
 
     @Test
@@ -77,7 +76,8 @@ class LibraryManagerTest {
         expectedLargestGroups.put(ItemTileType.GAME, 4);
         expectedLargestGroups.put(ItemTileType.PLANT, 3);
 
-        LibraryManager libraryManager = new LibraryManager(library);
+        LibraryManager libraryManager = new LibraryManager();
+        libraryManager.setLibrary(library);
         Map<ItemTileType, Integer> largestGroupsMap = libraryManager.getLargestGroupsMap(listGroupsAdjacentTiles);
 
         for (Map.Entry<ItemTileType, Integer> entry : largestGroupsMap.entrySet()) {
@@ -124,10 +124,10 @@ class LibraryManagerTest {
     public void testIsFull() {
         assertFalse(libraryManager.isFull());
 
-        for (int col = 0; col < library.getCOLUMNS(); col++) {
-            List<ItemTile> itemTileList = new ArrayList<>();
-            for (int row = 0; row < library.getROWS(); row++) {
-                itemTileList.add(new ItemTile(ItemTileType.CAT));
+        for (int col = 0; col < library.getLibraryGrid()[0].length; col++) {
+            List<ItemTileType> itemTileList = new ArrayList<>();
+            for (int row = 0; row < library.getLibraryGrid().length; row++) {
+                itemTileList.add(ItemTileType.CAT);
             }
             libraryManager.insertItemTiles(col, itemTileList);
         }
