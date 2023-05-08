@@ -19,8 +19,7 @@ public class CommonCard4 extends CommonGoalCard {
      */
     public CommonCard4() {
         super(4, """
-                Two groups each containing 4 tiles of the same type in a 2x2 square.
-                The tiles of one square can be different from those of the other square.""");
+                Two groups, each with a 2x2 square of 4 same-type tiles. Squares may have different tiles.""");
     }
 
     /**

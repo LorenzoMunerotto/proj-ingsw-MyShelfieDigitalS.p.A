@@ -17,8 +17,7 @@ public class CommonCard1 extends CommonGoalCard {
      */
     public CommonCard1() {
         super(1, """
-                Six groups each containing at least 2 tiles of the same type.
-                The tiles of one group can be different from those of another group.""");
+                Six groups, each with at least 2 same-type tiles. Groups may have different tiles.""");
     }
 
     /**

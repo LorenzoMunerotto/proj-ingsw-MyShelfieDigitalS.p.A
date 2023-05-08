@@ -2,9 +2,8 @@ package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class representing the bag which contains all the itemTiles.
@@ -47,9 +46,21 @@ public class Bag {
      */
     public ItemTileType grabItemTile() {
         if (itemTiles.size() == 0) {
-            throw new IllegalArgumentException("The bag is empty");
+            // throw new IllegalArgumentException("The bag is empty"); we can use maybe with a try catch
+            // return ItemTileType.EMPTY;
+            return generateRandomItemTile();
         }
         return itemTiles.remove(0);
+    }
+
+    private ItemTileType generateRandomItemTile() {
+        List<ItemTileType> validItemTileTypes = Arrays.stream(ItemTileType.values())
+                .filter(itemTileType -> itemTileType != ItemTileType.NULL && itemTileType != ItemTileType.EMPTY)
+                .collect(Collectors.toList());
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(validItemTileTypes.size());
+        return validItemTileTypes.get(randomIndex);
     }
 
     /**

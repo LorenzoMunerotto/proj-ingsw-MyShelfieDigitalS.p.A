@@ -29,11 +29,6 @@ public class VirtualModel {
      */
     private ItemTileType[][] personalGoalCard;
     /**
-     * The number of tiles in the bag.
-     */
-    private int numOfTilesInBag;
-
-    /**
      * Map of the username and the library.
      */
     private final Map<String, ItemTileType[][]> clientUsernameLibrary = new HashMap<>();
@@ -48,7 +43,7 @@ public class VirtualModel {
     /**
      * The current player username.
      */
-    private String currentPlayerUsername;
+    private Pair<String, Integer> currentPlayerUsernameIndex;
     /**
      * The index of the first player.
      */
@@ -157,6 +152,7 @@ public class VirtualModel {
      */
     public void setLibrary(String username, ItemTileType[][] library) {
         clientUsernameLibrary.put(username, library);
+        clientUsernamePoints.put(username, 0);
     }
 
     /**
@@ -254,28 +250,6 @@ public class VirtualModel {
     }
 
     /**************************************************************************
-     *                                    Bag                                 *
-     **************************************************************************/
-
-    /**
-     * Get the bag.
-     *
-     * @return the bag.
-     */
-    public int getBag() {
-        return this.numOfTilesInBag;
-    }
-
-    /**
-     * Update the bag.
-     *
-     * @param numOfTilesInBag the number of tiles in the bag.
-     */
-    public void updateBag(int numOfTilesInBag) {
-        this.numOfTilesInBag = numOfTilesInBag;
-    }
-
-    /**************************************************************************
      *                               Current Player                           *
      **************************************************************************/
 
@@ -284,17 +258,17 @@ public class VirtualModel {
      *
      * @return the current player.
      */
-    public String getCurrentPlayerUsername() {
-        return this.currentPlayerUsername;
+    public Pair<String, Integer> getCurrentPlayerUsernameIndex() {
+        return this.currentPlayerUsernameIndex;
     }
 
     /**
      * Update the current player.
      *
-     * @param currentPlayerUsername the current player username.
+     * @param currentPlayerUsernameIndex the current player username and index.
      */
-    public void updateCurrentPlayerUsername(String currentPlayerUsername) {
-        this.currentPlayerUsername = currentPlayerUsername;
+    public void updateCurrentPlayerUsernameIndex(Pair<String, Integer> currentPlayerUsernameIndex) {
+        this.currentPlayerUsernameIndex = currentPlayerUsernameIndex;
     }
 
     /**************************************************************************
@@ -318,6 +292,10 @@ public class VirtualModel {
         this.myUsername = myUsername;
     }
 
+    public Map<String, ItemTileType[][]> getClientUsernameLibrary() {
+        return this.clientUsernameLibrary;
+    }
+
     /**************************************************************************
      *                                   Others                               *
      **************************************************************************/
@@ -329,12 +307,7 @@ public class VirtualModel {
      * @param points   are the points of the player
      */
     public void updatePointsByUsername(String username, Integer points) {
-
-        if (clientUsernamePoints.containsKey(username)) {
-            clientUsernamePoints.replace(username, points);
-        } else {
-            clientUsernamePoints.put(username, points);
-        }
+        this.clientUsernamePoints.replace(username, points);
     }
 
     /**
@@ -347,6 +320,10 @@ public class VirtualModel {
         clientUsernamePoints.forEach((username, points) -> leaderBoards.add(new Pair<>(username, points)));
 
         return leaderBoards.stream().sorted(Comparator.comparingInt(Pair<String, Integer>::getValue1).reversed()).collect(Collectors.toList());
+    }
+
+    public String getFirstFullLibraryUsername() {
+        return firstFullLibraryUsername;
     }
 
     public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
@@ -373,5 +350,17 @@ public class VirtualModel {
      */
     public void setServerMessage(ServerMessage serverMessage) {
         this.serverMessage = serverMessage;
+    }
+
+    public int getFirstPlayerIndex() {
+        return this.firstPlayerIndex;
+    }
+
+    public void setFirstPlayerIndex(int firstPlayerIndex) {
+        this.firstPlayerIndex = firstPlayerIndex;
+    }
+
+    public Map<String, Integer> getClientUsernamePoints() {
+        return clientUsernamePoints;
     }
 }

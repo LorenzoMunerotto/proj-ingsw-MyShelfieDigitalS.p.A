@@ -13,8 +13,7 @@ public class CommonCard12 extends CommonGoalCard {
      */
     public CommonCard12() {
         super(12, """
-                Five columns of increasing or decreasing height. Starting from the first column on the left or on the right,
-                each next column must be made of exactly one more tile. Tiles can be of any type.""");
+                Five columns with increasing/decreasing height. Next column must be exactly one tile higher/lower.""");
     }
 
     /**

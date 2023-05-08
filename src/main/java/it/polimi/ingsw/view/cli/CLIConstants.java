@@ -11,24 +11,6 @@ public class CLIConstants {
     /**
      * It is the title of the game.
      */
-    public static final String MYSHELFIE_WELCOME = ("""
-                 ██╗    ██╗███████╗██╗      ██████╗ ██████╗ ███╗   ███╗███████╗        \s
-                 ██║    ██║██╔════╝██║     ██╔════╝██╔═══██╗████╗ ████║██╔════╝        \s
-                 ██║ █╗ ██║█████╗  ██║     ██║     ██║   ██║██╔████╔██║█████╗          \s
-                 ██║███╗██║██╔══╝  ██║     ██║     ██║   ██║██║╚██╔╝██║██╔══╝          \s
-                 ╚███╔███╔╝███████╗███████╗╚██████╗╚██████╔╝██║ ╚═╝ ██║███████╗        \s
-                  ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝        \s
-                                                                              """)
-            .replaceAll("█", CLIConstants.YELLOW_BRIGHT + "█" + CLIConstants.RESET)
-            .replaceAll("([╔╗║╝═╚╣╩╦])", CLIConstants.RED_BRIGHT + "$1" + CLIConstants.RESET);
-    public static final String MYSHELFIE_TO = ("""
-                                          ╔═╗
-                                       ╔══╝ ╚══╗ ╔══════╗
-                                       ╚══╗ ╔══╝ ║ ╔══╗ ║
-                                          ║ ║    ║ ║  ║ ║
-                                          ║ ╚══╗ ║ ╚══╝ ║
-                                          ╚════╝ ╚══════╝      \s
-                                                                              """);
     public static final String MYSHELFIE_TITLE = ("""
             ███╗   ███╗██╗   ██╗    ███████╗██╗  ██╗███████╗██╗     ███████╗██╗███████╗
             ████╗ ████║╚██╗ ██╔╝    ██╔════╝██║  ██║██╔════╝██║     ██╔════╝██║██╔════╝
@@ -36,9 +18,25 @@ public class CLIConstants {
             ██║╚██╔╝██║  ╚██╔╝      ╚════██║██╔══██║██╔══╝  ██║     ██╔══╝  ██║██╔══╝  \s
             ██║ ╚═╝ ██║   ██║       ███████║██║  ██║███████╗███████╗██║     ██║███████╗
             ╚═╝     ╚═╝   ╚═╝       ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚══════╝""")
-            .replaceAll("█", CLIConstants.YELLOW_BRIGHT + "█" + CLIConstants.RESET)
+            .replaceAll("█", CLIConstants.YELLOW + "█" + CLIConstants.RESET)
             .replaceAll("([╔╗║╝═╚╣╩╦])", CLIConstants.RED_BRIGHT + "$1" + CLIConstants.RESET);
-    public static final String MYSHELFIE_START = MYSHELFIE_WELCOME + CLIConstants.CYAN_BRIGHT + MYSHELFIE_TO + CLIConstants.RESET + MYSHELFIE_TITLE;
+    public static final String MYSHELFIE_WINNER = ("""
+            ░██╗░░░░░░░██╗██╗███╗░░██╗███╗░░██╗███████╗██████╗░
+            ░██║░░██╗░░██║██║████╗░██║████╗░██║██╔════╝██╔══██╗
+            ░╚██╗████╗██╔╝██║██╔██╗██║██╔██╗██║█████╗░░██████╔╝
+            ░░████╔═████║░██║██║╚████║██║╚████║██╔══╝░░██╔══██╗
+            ░░╚██╔╝░╚██╔╝░██║██║░╚███║██║░╚███║███████╗██║░░██║
+            ░░░╚═╝░░░╚═╝░░╚═╝╚═╝░░╚══╝╚═╝░░╚══╝╚══════╝╚═╝░░╚═╝""")
+            .replaceAll("░", CLIConstants.GREEN_BRIGHT + "░" + CLIConstants.RESET)
+            .replaceAll("([╔╗║╝═╚╣╩╦])", CLIConstants.YELLOW_BOLD + "$1" + CLIConstants.RESET)
+            .replaceAll("█", CLIConstants.RED_BRIGHT + "█" + CLIConstants.RESET);
+    public static final String MYSHELFIE_LOOSER = ("""
+            ███████████████████████████████████
+            █▄─▄███─▄▄─█─▄▄─█─▄▄▄▄█▄─▄▄─█▄─▄▄▀█
+            ██─██▀█─██─█─██─█▄▄▄▄─██─▄█▀██─▄─▄█
+            ▀▄▄▄▄▄▀▄▄▄▄▀▄▄▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▄▄▀▄▄▀""")
+            .replaceAll("█", CLIConstants.BLUE_BOLD + "█" + CLIConstants.RESET)
+            .replaceAll("([▄─▀])", CLIConstants.PURPLE_BOLD + "$1" + CLIConstants.RESET);
     /**
      * It is the regex used to check the validity of the username.
      */
@@ -49,21 +47,46 @@ public class CLIConstants {
     public static final String COORDINATES_REGEX = "([A-I][1-9](-[A-I][1-9]){0,2})";
 
     /**
-     * It is the title of the print objects method in the drawer.
-     */
-    public static final String PRINT_OBJECTS_TITLE = "                             Board                                              Library                          Personal Card";
-    /**
      * It is a map that contains the association between the item tile type and the color used to print it.
      */
     protected static final Map<ItemTileType, String> ITEM_TILES_TYPES_CLI_COLORS = Map.of(
-            ItemTileType.CAT, CLIConstants.GREEN_BRIGHT + " CAT " + CLIConstants.RESET,
-            ItemTileType.BOOK, CLIConstants.WHITE_BRIGHT + " BOO " + CLIConstants.RESET,
-            ItemTileType.GAME, CLIConstants.YELLOW_BRIGHT + " GAM " + CLIConstants.RESET,
-            ItemTileType.FRAME, CLIConstants.BLUE_BRIGHT + " FRA " + CLIConstants.RESET,
-            ItemTileType.TROPHY, CLIConstants.CYAN_BRIGHT + " TRO " + CLIConstants.RESET,
-            ItemTileType.PLANT, CLIConstants.PURPLE_BRIGHT + " PLA " + CLIConstants.RESET,
-            ItemTileType.EMPTY, "     "
+            ItemTileType.CAT, CLIConstants.BLACK_TEXT_GREEN_BACKGROUND_BRIGHT + " CAT " + CLIConstants.RESET,
+            ItemTileType.BOOK, CLIConstants.BLACK_TEXT_WHITE_BACKGROUND_BRIGHT + " BOO " + CLIConstants.RESET,
+            ItemTileType.GAME, CLIConstants.BLACK_TEXT_YELLOW_BACKGROUND_BRIGHT + " GAM " + CLIConstants.RESET,
+            ItemTileType.FRAME, CLIConstants.BLACK_TEXT_BLUE_BACKGROUND_BRIGHT + " FRA " + CLIConstants.RESET,
+            ItemTileType.TROPHY, CLIConstants.BLACK_TEXT_CYAN_BACKGROUND_BRIGHT + " TRO " + CLIConstants.RESET,
+            ItemTileType.PLANT, CLIConstants.BLACK_TEXT_PURPLE_BACKGROUND_BRIGHT + " PLA " + CLIConstants.RESET,
+            ItemTileType.EMPTY, "     ",
+            ItemTileType.NULL,  CLIConstants.RED_BACKGROUND_BRIGHT + "     " + CLIConstants.RESET
     );
+
+    protected static final Map<ItemTileType, String> ITEM_TILES_TYPES_CLI_COLORS_SMALL = Map.of(
+            ItemTileType.CAT, CLIConstants.BLACK_TEXT_GREEN_BACKGROUND_BRIGHT + " C " + CLIConstants.RESET,
+            ItemTileType.BOOK, CLIConstants.BLACK_TEXT_WHITE_BACKGROUND_BRIGHT + " B " + CLIConstants.RESET,
+            ItemTileType.GAME, CLIConstants.BLACK_TEXT_YELLOW_BACKGROUND_BRIGHT + " G " + CLIConstants.RESET,
+            ItemTileType.FRAME, CLIConstants.BLACK_TEXT_BLUE_BACKGROUND_BRIGHT + " F " + CLIConstants.RESET,
+            ItemTileType.TROPHY, CLIConstants.BLACK_TEXT_CYAN_BACKGROUND_BRIGHT + " T " + CLIConstants.RESET,
+            ItemTileType.PLANT, CLIConstants.BLACK_TEXT_PURPLE_BACKGROUND_BRIGHT + " P " + CLIConstants.RESET,
+            ItemTileType.EMPTY, "   ",
+            ItemTileType.NULL,  CLIConstants.RED_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET
+    );
+
+    public static final String ITEM_TILES_TYPE_COLOR_LEGEND = "Legend:\n" + "\n" +
+            CLIConstants.GREEN_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = CAT\n" +
+            CLIConstants.WHITE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = BOOK\n" +
+            CLIConstants.YELLOW_BACKGROUND + "   " + CLIConstants.RESET + " = GAME\n" +
+            CLIConstants.BLUE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = FRAME\n" +
+            CLIConstants.CYAN_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = TROPHY\n" +
+            CLIConstants.PURPLE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = PLANT\n" +
+            CLIConstants.RED_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = NULL\n";
+
+    public static final String BLACK_TEXT_GREEN_BACKGROUND_BRIGHT = "\u001B[30;102m";
+    public static final String BLACK_TEXT_WHITE_BACKGROUND_BRIGHT = "\u001B[30;107m";
+    public static final String BLACK_TEXT_YELLOW_BACKGROUND_BRIGHT = "\u001B[30;43m";
+    public static final String BLACK_TEXT_BLUE_BACKGROUND_BRIGHT = "\u001B[30;104m";
+    public static final String BLACK_TEXT_CYAN_BACKGROUND_BRIGHT = "\u001B[30;106m";
+    public static final String BLACK_TEXT_PURPLE_BACKGROUND_BRIGHT = "\u001B[30;105m";
+
     /**
      * It is a basic string used before each message from the console.
      */
@@ -71,17 +94,9 @@ public class CLIConstants {
     /**
      * An array that contains the characters used to print the clock for the thread.
      */
-    public static final char[] clockChars = {'◴', '◷', '◶', '◵'};
+    public static final char[] LOADING_ANIMATIONS = {'◷', '◶', '◵', '◴'};
     /**
-     * Board and Library constants format.
-     */
-    public static final String BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT_FIRST = CLIConstants.YELLOW_BOLD + CLIConstants.T_RIGHT + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.RESET;
-    public static final String BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT = CLIConstants.YELLOW_BOLD + CLIConstants.CROSS + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.RESET;
-    public static final String LIBRARY_BOTTOM_FRAME_FORMAT = CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_LEFT + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.RESET;
-    public static final String BOARD_LONG_DISTANCE_SEPARATOR_FRAME_FORMAT = CLIConstants.YELLOW_BOLD + CLIConstants.T_LEFT + " ".repeat(9) + CLIConstants.RESET;
-    public static final String BOARD_SHORT_DISTANCE_SEPARATOR_FRAME_FORMAT = CLIConstants.YELLOW_BOLD + CLIConstants.T_LEFT + " ".repeat(6) + CLIConstants.RESET;
-    /**
-     * Leaderboard constants format.
+     *  * Leaderboard constants format.
      */
     public static final String LEADERBOARD_HEADER_FORMAT = CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.CYAN + " %-4s " + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.CYAN + " %-20s " + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.CYAN + " %-5s " + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET;
     public static final String LEADERBOARD_TOP_FRAME_FORMAT = CLIConstants.GREEN + CLIConstants.CORNER_TOP_LEFT_DOUBLE + CLIConstants.HORIZONTAL_LINE_DOUBLE.repeat(6) + CLIConstants.T_DOWN_DOUBLE + CLIConstants.HORIZONTAL_LINE_DOUBLE.repeat(22) + CLIConstants.T_DOWN_DOUBLE + CLIConstants.HORIZONTAL_LINE_DOUBLE.repeat(8) + CLIConstants.CORNER_TOP_RIGHT_DOUBLE + CLIConstants.RESET;

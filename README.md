@@ -8,6 +8,6 @@ ___
 * [Simone Girardi](https://github.com/girardisimone)
 ___
 ### Current status of the game:
-* The game is playable locally, from the Main class
-* Working on the network version ⏳
+* Game working from the terminal from different devices with the CLI
+* Working on the GUI
 ___

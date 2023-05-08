@@ -16,10 +16,8 @@ public class CommonCard8 extends CommonGoalCard {
      */
     public CommonCard8() {
         super(8, """
-                Four lines each formed by 5 tiles of maximum three different types.
-                One line can show the same or a different combination of another line.""");
+                Four lines, each with 5 tiles, max 3 different types. Lines may have different combinations.""");
     }
-
 
     /**
      * Check if the rules of the card are respected.

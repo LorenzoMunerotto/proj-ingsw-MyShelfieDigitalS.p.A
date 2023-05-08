@@ -124,15 +124,15 @@ public class Client implements ServerMessageHandler{
     }
 
     public void handle(StartTurnMessage startTurnMessage){
-        virtualModel.updateCurrentPlayerUsername(startTurnMessage.getUsername());
+        virtualModel.updateCurrentPlayerUsernameIndex(startTurnMessage.getCurrentPlayer());
 
         // this shouldn't be there, the cli should do it based on the previous message
-        if (virtualModel.getCurrentPlayerUsername().equals(virtualModel.getMyUsername())){
+        if (virtualModel.getCurrentPlayerUsernameIndex().getValue0().equals(virtualModel.getMyUsername())){
             view.playTurn();
             view.showGame();
         }else{
             view.showGame();
-            view.waitForTurn(virtualModel.getCurrentPlayerUsername());
+            view.waitForTurn(virtualModel.getCurrentPlayerUsernameIndex().getValue0());
         }
     }
 

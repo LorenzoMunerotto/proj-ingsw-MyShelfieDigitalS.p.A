@@ -176,7 +176,7 @@ public class GameData extends AbstractListenable {
      */
     public void setCurrentPlayerIndex(Integer currentPlayerIndex) {
         this.currentPlayerIndex = currentPlayerIndex;
-        notifyAllListeners(new CurrentPlayerUpdateEvent(getCurrentPlayer().getUsername()));
+        notifyAllListeners(new CurrentPlayerUpdateEvent(getCurrentPlayer().getUsername(), currentPlayerIndex));
     }
 
     /**

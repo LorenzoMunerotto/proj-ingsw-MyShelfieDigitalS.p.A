@@ -85,8 +85,8 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     @Override
     public void handle(CurrentPlayerUpdateEvent currentPlayerUpdateEvent) {
-        socketClientConnection.send(new StartTurnMessage(currentPlayerUpdateEvent.getUsername()));
-        if (Objects.equals(currentPlayerUpdateEvent.getUsername(), username)) {
+        socketClientConnection.send(new StartTurnMessage(currentPlayerUpdateEvent.getCurrentPlayer()));
+        if (Objects.equals(currentPlayerUpdateEvent.getCurrentPlayer().getValue0(), username)) {
             socketClientConnection.send(new MoveRequest());
         }
     }

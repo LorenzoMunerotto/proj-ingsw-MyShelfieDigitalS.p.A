@@ -130,9 +130,9 @@ public class PointsManager extends AbstractListenable {
      * This method updates the Total Points adding Points related to: Common and Personal Card, adjacent Items, (optional) final point
      */
     public void updateTotalPoints() {
-        Integer oldPoints = player.getTotPoints();
-        Integer updatedPoints = commonPoints() + personalPoints() + adjacentPoints() + finalPoint();
-        if (!oldPoints.equals(updatedPoints)) {
+        int oldPoints = player.getTotPoints();
+        int updatedPoints = commonPoints() + personalPoints() + adjacentPoints() + finalPoint();
+        if (oldPoints != updatedPoints) {
             player.setTotPoints(updatedPoints);
             notifyAllListeners(new PointsUpdateEvent(updatedPoints, player.getUsername()));
         }

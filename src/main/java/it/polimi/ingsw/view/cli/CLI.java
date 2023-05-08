@@ -149,8 +149,8 @@ public class CLI extends View {
             int index = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
-                System.out.print("\rWaiting for " + CLIConstants.CYAN_BRIGHT + username + CLIConstants.RESET + " to play the turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.clockChars[index] + CLIConstants.RESET);
-                index = (index + 1) % CLIConstants.clockChars.length;
+                System.out.print("\rWaiting for " + CLIConstants.CYAN_BRIGHT + username + CLIConstants.RESET + " to play the turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.LOADING_ANIMATIONS[index] + CLIConstants.RESET);
+                index = (index + 1) % CLIConstants.LOADING_ANIMATIONS.length;
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -179,7 +179,6 @@ public class CLI extends View {
         this.stopWaiting();
         CLI.clear();
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
-        System.out.println(CLIConstants.MYSHELFIE_START);
     }
 
     /**
@@ -189,7 +188,7 @@ public class CLI extends View {
     public void showGame(){
         this.stopWaiting();
         CLI.clear();
-        System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
+        //System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
         try{
             this.drawer.printGame();
         } catch (Exception e) {
@@ -211,8 +210,7 @@ public class CLI extends View {
      */
     @Override
     public void endGame(Boolean isWinner) {
-        this.drawer.printLeaderBoard(isWinner);
-
+        System.out.println(this.drawer.getLeaderboardAsString(isWinner));
     }
 
     /**

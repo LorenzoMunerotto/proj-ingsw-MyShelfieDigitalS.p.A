@@ -19,7 +19,7 @@ public class SocketListener implements Runnable {
         this.client = client;
         try {
             System.out.println("I'm trying to connect to the server");
-            socketServer = new Socket("192.168.1.50", 1235);
+            socketServer = new Socket("localhost", 1235);
             System.out.println(CLIConstants.GREEN_BRIGHT + "Connection established" + CLIConstants.RESET);
 
             outputStream = new ObjectOutputStream(socketServer.getOutputStream());
