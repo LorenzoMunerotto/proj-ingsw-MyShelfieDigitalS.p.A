@@ -91,6 +91,7 @@ public class Client implements ServerMessageHandler{
      * @param customMessage the custom message
      */
     public void handle(CustomMessage customMessage){
+        virtualModel.setServerMessage(customMessage.getMessage());
         view.showMessage(customMessage.getMessage());
     }
 
@@ -120,7 +121,8 @@ public class Client implements ServerMessageHandler{
         virtualModel.updateBoard(boardRefillMessage.getGridBoard(), boardRefillMessage.getChecksum());
 
         // this shouldn't be there
-        view.showMessage(boardRefillMessage.getMessage());
+        virtualModel.setServerMessage(boardRefillMessage.getMessage());
+        //view.showMessage(boardRefillMessage.getMessage());
     }
 
     public void handle(StartTurnMessage startTurnMessage){
@@ -161,31 +163,34 @@ public class Client implements ServerMessageHandler{
     @Override
     public void handle(CommonCardReachMessage commonCardReachMessage) {
         virtualModel.updateCommonCardPoints(commonCardReachMessage.getCommonCardIndex(), commonCardReachMessage.getPoint());
-        view.showMessage(commonCardReachMessage.getMessage());
+        virtualModel.setServerMessage(commonCardReachMessage.getMessage());
+        //view.showMessage(commonCardReachMessage.getMessage());
     }
 
     @Override
     public void handle(EndGameMessage endGameMessage) {
-        boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getLeaderBoard().get(0).getValue0());
+        boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getClientUsernamePoints().get(0).getValue0());
         view.endGame(isWinner);
     }
 
     @Override
     public void handle(EndTurnMessage endTurnMessage) {
         view.stopWaiting();
-        view.showMessage(endTurnMessage.getMessage());
+        virtualModel.setServerMessage(endTurnMessage.getMessage());
+        //view.showMessage(endTurnMessage.getMessage());
     }
 
     @Override
     public void handle(DisconnectionMessage disconnectionMessage) {
         view.stopWaiting();
-        view.showMessage(disconnectionMessage.getMessage());
+        virtualModel.setServerMessage(disconnectionMessage.getMessage());
+        //view.showMessage(disconnectionMessage.getMessage());
     }
 
     @Override
     public void handle(FirstFullLibraryMessage firstFullLibraryMessage) {
-        virtualModel.setFirstFullLibraryUsername(firstFullLibraryMessage.getUsername());
-        view.showMessage(firstFullLibraryMessage.getMessage());
+        virtualModel.setServerMessage(firstFullLibraryMessage.getMessage());
+        //view.showMessage(firstFullLibraryMessage.getMessage());
     }
 
     @Override

@@ -63,13 +63,13 @@ public class CLI extends View {
     @Override
     public String chooseUsername() {
         this.username = "";
-        System.out.print(CLIConstants.CONSOLE_ARROW + "Please insert your username: ");
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (this.username.isBlank()) {
             this.username = CLI.scanner.nextLine().strip();
             if (!isUsernameValid(this.username)) {
                 this.username = "";
-                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again: ",
-                        CLIConstants.RED_BRIGHT, CLIConstants.RESET);
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
+                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
         return this.username;
@@ -175,7 +175,7 @@ public class CLI extends View {
      * Starts the game and prints the objects of the game.
      */
     @Override
-    public void startGame(){
+    public void startGame() {
         this.stopWaiting();
         CLI.clear();
         System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
@@ -185,11 +185,11 @@ public class CLI extends View {
      * Shows the updated game.
      */
     @Override
-    public void showGame(){
+    public void showGame() {
         this.stopWaiting();
         CLI.clear();
         //System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
-        try{
+        try {
             this.drawer.printGame();
         } catch (Exception e) {
             System.out.println("Error while showing game");
@@ -221,6 +221,13 @@ public class CLI extends View {
         System.out.printf("%s%sInvalid input!%s %s%n", CLIConstants.CONSOLE_ARROW, CLIConstants.RED_BRIGHT, CLIConstants.RESET, errorMessage);
     }
 
+    @Override
+    public void showMessage(String message) {
+        if (message != null) {
+            System.out.println(message);
+        }
+    }
+
     /**
      * Main method of the cli.
      *
@@ -229,28 +236,5 @@ public class CLI extends View {
     @Override
     public void main(String[] args) {
         CLI.clear();
-        /*
-        String input = "";
-        System.out.printf(CLIAssets.output + "Do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
-                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (input.isEmpty()) {
-            input = CLI.scanner.nextLine().strip().toUpperCase();
-            switch (input) {
-                case "C" -> this.createGame();
-                case "J" -> this.joinGame();
-                default -> {
-                    System.out.printf(CLIAssets.output + "%sInvalid input%s, do you want to create a new game or join an already created one? [%sc%s/%sj%s]: ",
-                            CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-                    input = "";
-                }
-            }
-        }*/
-    }
-
-    @Override
-    public void showMessage(String message) {
-        if (message!=null) {
-            System.out.println(message);
-        }
     }
 }

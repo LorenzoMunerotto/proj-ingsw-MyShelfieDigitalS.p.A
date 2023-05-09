@@ -2,12 +2,10 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.server.serverMessage.ServerMessage;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 
 /**
@@ -35,7 +33,7 @@ public class VirtualModel {
     /**
      * Map of the username and the points.
      */
-    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
+    private final List<Pair<String, Integer>> clientUsernamePoints = new ArrayList<>();
     /**
      * The username of the client.
      */
@@ -45,17 +43,9 @@ public class VirtualModel {
      */
     private Pair<String, Integer> currentPlayerUsernameIndex;
     /**
-     * The index of the first player.
-     */
-    private int firstPlayerIndex;
-    /**
-     * The username of the first player that has the full library.
-     */
-    private String firstFullLibraryUsername;
-    /**
      * Is the last message received from the server.
      */
-    private ServerMessage serverMessage;
+    private String serverMessage;
 
     /**
      * Default constructor.
@@ -152,7 +142,7 @@ public class VirtualModel {
      */
     public void setLibrary(String username, ItemTileType[][] library) {
         clientUsernameLibrary.put(username, library);
-        clientUsernamePoints.put(username, 0);
+        clientUsernamePoints.add(new Pair<>(username, 0));
     }
 
     /**
@@ -297,8 +287,31 @@ public class VirtualModel {
     }
 
     /**************************************************************************
-     *                                   Others                               *
+     *                                   Points                               *
      **************************************************************************/
+
+    /**
+     * Get a map that associates the username of the player with his points.
+     *
+     * @return the points of the player.
+     */
+    public List<Pair<String, Integer>> getClientUsernamePoints() {
+        return this.clientUsernamePoints;
+    }
+
+    /**
+     * Get the points of the player.
+     *
+     * @param username is the username of the player
+     * @return the points of the player
+     */
+    public Integer getPointsByUsername(String username) {
+        return clientUsernamePoints.stream()
+                .filter(pair -> pair.getValue0().equals(username))
+                .map(Pair::getValue1)
+                .findFirst()
+                .orElse(null);
+    }
 
     /**
      * Updated the points in the ClientUsername-Points Map.
@@ -307,27 +320,14 @@ public class VirtualModel {
      * @param points   are the points of the player
      */
     public void updatePointsByUsername(String username, Integer points) {
-        this.clientUsernamePoints.replace(username, points);
-    }
-
-    /**
-     * Get the current leader board of the game.
-     *
-     * @return the current leader board of the game.
-     */
-    public List<Pair<String, Integer>> getLeaderBoard() {
-        List<Pair<String, Integer>> leaderBoards = new ArrayList<>();
-        clientUsernamePoints.forEach((username, points) -> leaderBoards.add(new Pair<>(username, points)));
-
-        return leaderBoards.stream().sorted(Comparator.comparingInt(Pair<String, Integer>::getValue1).reversed()).collect(Collectors.toList());
-    }
-
-    public String getFirstFullLibraryUsername() {
-        return firstFullLibraryUsername;
-    }
-
-    public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
-        this.firstFullLibraryUsername = firstFullLibraryUsername;
+        for (int i = 0; i < clientUsernamePoints.size(); i++) {
+            Pair<String, Integer> currentPair = clientUsernamePoints.get(i);
+            if (currentPair.getValue0().equals(username)) {
+                clientUsernamePoints.set(i, new Pair<>(username, points));
+                break;
+            }
+        }
+        this.clientUsernamePoints.sort((pair1, pair2) -> pair2.getValue1().compareTo(pair1.getValue1()));
     }
 
     /**************************************************************************
@@ -339,7 +339,7 @@ public class VirtualModel {
      *
      * @return the server message.
      */
-    public ServerMessage getServerMessage() {
+    public String getServerMessage() {
         return serverMessage;
     }
 
@@ -348,19 +348,7 @@ public class VirtualModel {
      *
      * @param serverMessage the server message.
      */
-    public void setServerMessage(ServerMessage serverMessage) {
+    public void setServerMessage(String serverMessage) {
         this.serverMessage = serverMessage;
-    }
-
-    public int getFirstPlayerIndex() {
-        return this.firstPlayerIndex;
-    }
-
-    public void setFirstPlayerIndex(int firstPlayerIndex) {
-        this.firstPlayerIndex = firstPlayerIndex;
-    }
-
-    public Map<String, Integer> getClientUsernamePoints() {
-        return clientUsernamePoints;
     }
 }

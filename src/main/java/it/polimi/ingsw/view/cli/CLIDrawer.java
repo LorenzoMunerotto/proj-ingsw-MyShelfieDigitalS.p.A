@@ -111,7 +111,7 @@ public class CLIDrawer {
      * Prints a basic separator.
      */
     protected void printSeparator() {
-        System.out.printf("%s%s%s%n", WHITE_BRIGHT, HORIZONTAL_LINE.repeat(200), RESET);
+        System.out.printf("%s%s%s%n", WHITE_BRIGHT, HORIZONTAL_LINE.repeat(150), RESET);
     }
 
     /**
@@ -145,8 +145,8 @@ public class CLIDrawer {
     /**
      * This method converts a board grid into a string.
      *
-     * @param grid  is the grid to convert
-     * @param title is the title of the grid
+     * @param grid     is the grid to convert
+     * @param title    is the title of the grid
      * @param position is the position of the grid (not suer to keep it)
      * @return the string representation of the grid
      */
@@ -238,8 +238,7 @@ public class CLIDrawer {
             String cardDescription = card.getValue2();
 
             commonCardsString.append(cardIndex)
-                    .append(card.getValue0() > 9 ? " " : "")
-                    .append(String.format(" %s ", VERTICAL_LINE))
+                    .append(card.getValue0() > 9 ? " " : "  ")
                     .append(cardToken)
                     .append(String.format(" %s ", VERTICAL_LINE))
                     .append(cardDescription)
@@ -256,13 +255,15 @@ public class CLIDrawer {
     private String getGameInfoAsString() {
         StringBuilder gameInfoAsString = new StringBuilder();
         String[] gameInfoLines = {
-                " Game info:",
-                "",
-                " Username: " + GREEN_BRIGHT + virtualModel.getMyUsername() + RESET,
+                " " + WHITE_UNDERLINED + "Game info:" + RESET,
+                " Username: " + CYAN_BRIGHT + virtualModel.getMyUsername() + RESET,
                 " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsernameIndex().getValue0() + RESET,
-                " Points: " + RED_BRIGHT + virtualModel.getClientUsernamePoints().get(virtualModel.getMyUsername()) + RESET,
-                " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerUsernameIndex().getValue1()) + RESET + "/" + GREEN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
-                " Last message: still working on it!",
+                " Points: " + RED_BRIGHT + virtualModel.getPointsByUsername(virtualModel.getMyUsername()) + RESET,
+                " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerUsernameIndex().getValue1()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
+                " Chair: " + (virtualModel.getCurrentPlayerUsernameIndex().getValue1() == 1 ? GREEN_BRIGHT + "true" + RESET : RED_BRIGHT + "false" + RESET),
+                " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET,
+                "",
+                ""
         };
 
         int maxLength = 0;
@@ -279,12 +280,12 @@ public class CLIDrawer {
 
     /**
      * This method returns the string representation of the leader board.
-     * 
+     *
      * @param isWinner is true if the player is the winner
      * @return the string representation of the leader board
      */
     protected String getLeaderboardAsString(boolean isWinner) {
-        List<Pair<String, Integer>> leaderboard = virtualModel.getLeaderBoard();
+        List<Pair<String, Integer>> leaderboard = virtualModel.getClientUsernamePoints();
 
         String[] colors = {YELLOW_BRIGHT, RED_BRIGHT, PURPLE_BRIGHT, BLUE_BRIGHT};
 
@@ -294,15 +295,16 @@ public class CLIDrawer {
                 .orElse(0);
 
         StringBuilder leaderboardAsString = new StringBuilder();
-        leaderboardAsString.append(String.format("%4s  %-" + maxNameLength + "s  %6s%n", "Rank", "Leaderboard", "Points"));
+        String format = "%s%-4s  %-" + maxNameLength + "s  %7s%s%n";
+        leaderboardAsString.append(String.format(format, RESET, "Rank", "Leaderboard", "Points", ""));
 
         for (int i = 0; i < leaderboard.size(); i++) {
             String rank = String.valueOf(i + 1);
-            String name = leaderboard.get(i).getValue0();
-            String points = String.valueOf(leaderboard.get(i).getValue1());
-            String color = colors[i % colors.length];
+            String playerName = leaderboard.get(i).getValue0();
+            String playerPoints = String.valueOf(leaderboard.get(i).getValue1());
+            String playerColor = colors[i % colors.length];
 
-            leaderboardAsString.append(String.format("%s%-4s  %-" + maxNameLength + "s  %6s%s%n", color, rank, name, points, RESET));
+            leaderboardAsString.append(String.format(format, playerColor, rank, playerName, playerPoints, RESET));
         }
         if (isWinner) {
             leaderboardAsString.append(MYSHELFIE_WINNER);
