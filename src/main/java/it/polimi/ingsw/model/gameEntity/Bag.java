@@ -46,21 +46,9 @@ public class Bag {
      */
     public ItemTileType grabItemTile() {
         if (itemTiles.size() == 0) {
-            // throw new IllegalArgumentException("The bag is empty"); we can use maybe with a try catch
-            // return ItemTileType.EMPTY;
-            return generateRandomItemTile();
+            throw new IllegalArgumentException("The bag is empty");
         }
         return itemTiles.remove(0);
-    }
-
-    private ItemTileType generateRandomItemTile() {
-        List<ItemTileType> validItemTileTypes = Arrays.stream(ItemTileType.values())
-                .filter(itemTileType -> itemTileType != ItemTileType.NULL && itemTileType != ItemTileType.EMPTY)
-                .collect(Collectors.toList());
-
-        Random random = new Random();
-        int randomIndex = random.nextInt(validItemTileTypes.size());
-        return validItemTileTypes.get(randomIndex);
     }
 
     /**

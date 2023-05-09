@@ -197,7 +197,7 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(PersonalCardSetMessage personalCardSetMessage) {
-        virtualModel.setPersonalGoalCard(personalCardSetMessage.getLibraryGrid());
+        virtualModel.setPersonalGoalCard(personalCardSetMessage.getLibraryGrid(), personalCardSetMessage.getIndex());
     }
 
     @Override

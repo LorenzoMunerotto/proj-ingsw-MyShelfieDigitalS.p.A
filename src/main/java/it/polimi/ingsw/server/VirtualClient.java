@@ -108,6 +108,6 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     @Override
     public void handle(PersonalCardSetEvent personalCardSetEvent) {
-        socketClientConnection.send(new PersonalCardSetMessage(personalCardSetEvent.getPersonalGoalCard()));
+        socketClientConnection.send(new PersonalCardSetMessage(personalCardSetEvent.getPersonalGoalCard(), personalCardSetEvent.getIndex()));
     }
 }

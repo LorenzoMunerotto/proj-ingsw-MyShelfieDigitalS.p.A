@@ -102,8 +102,13 @@ public class BoardManager extends AbstractListenable {
             Coordinate coordinate = emptyCells.get(i);
             int row = coordinate.getRow();
             int column = coordinate.getColumn();
+            ItemTileType itemTileType = EMPTY;
+            try {
+                itemTileType = bag.grabItemTile();
+            } catch (IllegalArgumentException e) {
 
-            board.setItemTile(row, column, bag.grabItemTile());
+            }
+            board.setItemTile(row, column, itemTileType);
             this.emptyCells.remove(coordinate);
             this.notEmptyCells.add(coordinate);
         }

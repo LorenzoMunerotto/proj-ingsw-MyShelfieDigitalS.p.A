@@ -99,9 +99,10 @@ public abstract class CommonGoalCard implements Serializable {
     }
 
     /**
-     * Get the top of the points stack, the first
-     * available points earns by the next player who achieve the Goal
-     * @return
+     * Get the top of the points stack.
+     * The first available points earns by the next player who achieve the Goal
+     *
+     * @return the first element of the stack
      */
     public int topPoint(){
         try{

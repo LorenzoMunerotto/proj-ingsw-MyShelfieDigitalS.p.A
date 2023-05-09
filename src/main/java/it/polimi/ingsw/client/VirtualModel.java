@@ -26,6 +26,7 @@ public class VirtualModel {
      * A new data structure that represents the personal goal card.
      */
     private ItemTileType[][] personalGoalCard;
+    private int indexPersonalGoalCard;
     /**
      * Map of the username and the library.
      */
@@ -198,13 +199,18 @@ public class VirtualModel {
         return this.personalGoalCard;
     }
 
+    public int getIndexPersonalGoalCard() {
+        return this.indexPersonalGoalCard;
+    }
+
     /**
      * Set the personal goal card as a new data structure.
      *
      * @param personalGoalCard the personal goal card.
      */
-    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard) {
+    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard, int index) {
         this.personalGoalCard = personalGoalCard;
+        this.indexPersonalGoalCard = index;
     }
 
     /**************************************************************************
