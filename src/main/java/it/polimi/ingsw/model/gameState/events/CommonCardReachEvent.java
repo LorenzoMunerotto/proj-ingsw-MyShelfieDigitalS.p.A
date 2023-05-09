@@ -3,12 +3,14 @@ package it.polimi.ingsw.model.gameState.events;
 public class CommonCardReachEvent implements ModelEvent {
 
     private final String username;
-    private final int points;
+    private final int pointsEarned;
+    private final int pointsAvailable;
     private final Integer commonCardIndex;
 
-    public CommonCardReachEvent(String username, int points, int commonCardIndex) {
+    public CommonCardReachEvent(String username, int pointsEarned, int pointsAvailable, int commonCardIndex) {
         this.username = username;
-        this.points = points;
+        this.pointsAvailable = pointsAvailable;
+        this.pointsEarned = pointsEarned;
         this.commonCardIndex = commonCardIndex;
     }
 
@@ -16,8 +18,12 @@ public class CommonCardReachEvent implements ModelEvent {
         return username;
     }
 
-    public int getPoint() {
-        return points;
+    public int getPointsEarned() {
+        return pointsEarned;
+    }
+
+    public int getPointsAvailable() {
+        return pointsAvailable;
     }
 
     public int getCommonCardIndex() {

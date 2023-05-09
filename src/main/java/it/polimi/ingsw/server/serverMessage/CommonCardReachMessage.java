@@ -12,11 +12,11 @@ public class CommonCardReachMessage implements ServerMessage {
         this.message = commonCardReachEvent.getUsername() +
                 " has achieved the goal of Common Card number " +
                 commonCardReachEvent.getCommonCardIndex() +
-                ", earns " + commonCardReachEvent.getPoint() +
+                ", earns " + commonCardReachEvent.getPointsEarned() +
                 " points! ";
 
         this.commonCardIndex = commonCardReachEvent.getCommonCardIndex();
-        this.points = commonCardReachEvent.getPoint();
+        this.points = commonCardReachEvent.getPointsAvailable();
     }
 
     public int getCommonCardIndex() {

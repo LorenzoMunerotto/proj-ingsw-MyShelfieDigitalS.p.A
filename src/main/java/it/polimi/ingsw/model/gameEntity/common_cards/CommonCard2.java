@@ -12,8 +12,8 @@ public class CommonCard2 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard2() {
-        super(2, """
-                Four groups, each with at least 4 same-type tiles. Groups may have different tiles.""");
+          super(2, """
+                Four tiles of the same type in the four corners of the bookshelf.""");
     }
 
     /**
