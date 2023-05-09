@@ -168,6 +168,7 @@ public class Client implements ServerMessageHandler{
     public void handle(EndGameMessage endGameMessage) {
         boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getLeaderBoard().get(0).getValue0());
         view.endGame(isWinner);
+        System.exit(0);
     }
 
     @Override
@@ -180,6 +181,7 @@ public class Client implements ServerMessageHandler{
     public void handle(DisconnectionMessage disconnectionMessage) {
         view.stopWaiting();
         view.showMessage(disconnectionMessage.getMessage());
+        System.exit(0);
     }
 
     @Override
