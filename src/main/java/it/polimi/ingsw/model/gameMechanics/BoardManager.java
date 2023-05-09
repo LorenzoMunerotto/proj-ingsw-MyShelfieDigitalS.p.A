@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameState.events.BoardRefillEvent;
 import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public class BoardManager extends AbstractListenable {
     /**
      * Refills the board with new random item tiles from the bag
      */
-    public void refillBoard() {
+    public void refillBoard() throws EmptyBagException {
         bag.shuffle();
         for (int i = emptyCells.size() - 1; i >= 0; i--) {
             Coordinate coordinate = emptyCells.get(i);

@@ -40,6 +40,8 @@ public class Client implements ServerMessageHandler{
      * The available view type.
      */
     private static final List<String> availableViewType = Arrays.asList("c", "g");
+    private static String serverIp = "127.0.0.1";
+    private static int serverPort = 1235;
 
     /**
      * Default constructor, initialize the socket listener and the view.
@@ -47,7 +49,7 @@ public class Client implements ServerMessageHandler{
      * @param view the view
      */
     public Client(View view) {
-        this.socketListener= new SocketListener(this);
+        this.socketListener= new SocketListener(this, serverIp, serverPort);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
         this.view = view;
@@ -207,7 +209,6 @@ public class Client implements ServerMessageHandler{
 
     @Override
     public void handle(ConnectionMessage connectionMessage) {
-
     }
 
     /**
@@ -228,6 +229,32 @@ public class Client implements ServerMessageHandler{
         return viewType;
     }
 
+    private static void chooseServerIP(){
+        System.out.print(CLIConstants.CONSOLE_ARROW + "Please, insert server IP address: ");
+        String serverAddress = Client.input.nextLine().strip();
+        if(!serverAddress.isEmpty()){
+            serverIp = serverAddress;
+        } else{
+            System.out.println(CLIConstants.CONSOLE_ARROW + "Using the default server ip address " + CLIConstants.CYAN_BRIGHT + serverIp + CLIConstants.RESET);
+        }
+    }
+
+    private static void chooseServerPort(){
+        String serverPortString;
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please, specify server port: ");
+         try {
+                serverPortString = Client.input.nextLine().strip();
+                int currentPort = Integer.parseInt(serverPortString);
+                if (currentPort < 1024 || currentPort > 65535){
+                    serverPort = currentPort;
+                } else{
+                    System.out.println(CLIConstants.CONSOLE_ARROW + "Using the default server server port " + CLIConstants.CYAN_BRIGHT + serverPort + CLIConstants.RESET);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(CLIConstants.CONSOLE_ARROW + "Using the default server server port " + CLIConstants.CYAN_BRIGHT + serverPort + CLIConstants.RESET);
+            }
+    }
+
     /**
      * Get the view.
      *
@@ -239,6 +266,8 @@ public class Client implements ServerMessageHandler{
 
     public static void main(String[] Args){
         Client client;
+        chooseServerIP();
+        chooseServerPort();
         String viewType = chooseViewType();
         if(viewType.equals("c")){
             System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");

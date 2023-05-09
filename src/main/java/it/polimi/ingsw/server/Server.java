@@ -215,6 +215,8 @@ public class Server {
      *
      * @param args are the arguments of the main method
      */
+
+
     public static void main(String[] args) {
         Server server = new Server();
         System.out.println(CLIConstants.GREEN_BRIGHT + "Server started" + CLIConstants.RESET);

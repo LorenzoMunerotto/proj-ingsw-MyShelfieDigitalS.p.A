@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,9 +45,10 @@ public class Bag {
      *
      * @return a random item tile from the bag
      */
-    public ItemTileType grabItemTile() {
+    public ItemTileType grabItemTile() throws EmptyBagException {
         if (itemTiles.size() == 0) {
-            throw new IllegalArgumentException("The bag is empty");
+             throw new EmptyBagException();
+
         }
         return itemTiles.remove(0);
     }
