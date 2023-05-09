@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.gameMechanics;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.board.BoardManagerTestHelper;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,7 @@ class BoardManagerTest {
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/isRefillTimeTest.csv")
-    void isRefillTimeTest(String boardAsString, Boolean isRefillTime) {
+    void isRefillTimeTest(String boardAsString, Boolean isRefillTime) throws EmptyBagException {
 
         board = BoardManagerTestHelper.newBoardFromString(boardAsString);
         bag = new Bag();
@@ -38,7 +39,7 @@ class BoardManagerTest {
 
     @ParameterizedTest(name = "{displayName} - {index}")
     @CsvFileSource(resources = "/isRefillTimeTest.csv")
-    void refillBoardTest(String boardAsString, Boolean isRefillTime) {
+    void refillBoardTest(String boardAsString, Boolean isRefillTime) throws EmptyBagException {
 
         if (isRefillTime) {
 
@@ -55,7 +56,7 @@ class BoardManagerTest {
 
     @Test
     @DisplayName("Test grab item tiles with both valid and invalid coordinates")
-    public void testGrabItemTiles_Valid() {
+    public void testGrabItemTiles_Valid() throws EmptyBagException {
         board = new Board(2);
         bag = new Bag();
         boardManager = new BoardManagerTestHelper(board, new Bag());
@@ -79,7 +80,7 @@ class BoardManagerTest {
 
     @Test
     @DisplayName("Test has side free with both valid and invalid coordinates")
-    public void testHasSideFree() {
+    public void testHasSideFree() throws EmptyBagException {
         board = new Board(2);
         bag = new Bag();
         boardManager = new BoardManagerTestHelper(board, new Bag());
@@ -91,7 +92,7 @@ class BoardManagerTest {
 
     @Test
     @DisplayName("Test is lined with both valid and invalid coordinates")
-    public void testIsLined() {
+    public void testIsLined() throws EmptyBagException {
         board = new Board(2);
         bag = new Bag();
         boardManager = new BoardManagerTestHelper(board, new Bag());
