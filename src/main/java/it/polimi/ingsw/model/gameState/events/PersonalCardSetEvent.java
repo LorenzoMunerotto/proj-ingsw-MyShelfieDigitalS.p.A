@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.gameEntity.personal_cards.PersonalGoalCard;
 public class PersonalCardSetEvent implements ModelEvent {
 
     private final ItemTileType[][] libraryGrid;
+    private final int index;
 
     public PersonalCardSetEvent(PersonalGoalCard personalGoalCard) {
         libraryGrid = new ItemTileType[6][5];
@@ -19,6 +20,11 @@ public class PersonalCardSetEvent implements ModelEvent {
         for(Goal goal : personalGoalCard.getGoals()){
             libraryGrid[goal.getRow()][goal.getColumn()]=goal.getItemTileType();
         }
+        this.index=personalGoalCard.getNumber();
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public ItemTileType[][] getPersonalGoalCard() {

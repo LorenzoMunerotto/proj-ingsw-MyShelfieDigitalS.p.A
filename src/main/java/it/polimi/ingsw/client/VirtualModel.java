@@ -49,6 +49,14 @@ public class VirtualModel {
      * The current player username.
      */
     private String currentPlayerUsername;
+
+    private int numberPersonalCard;
+
+
+    public int getNumberPersonalCard() {
+        return numberPersonalCard;
+    }
+
     /**
      * The index of the first player.
      */
@@ -212,18 +220,24 @@ public class VirtualModel {
         return this.personalGoalCard;
     }
 
+
     /**
      * Set the personal goal card as a new data structure.
      *
      * @param personalGoalCard the personal goal card.
      */
-    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard) {
+    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard, int numberPersonalCard) {
         this.personalGoalCard = personalGoalCard;
+        this.numberPersonalCard = numberPersonalCard;
     }
 
     /**************************************************************************
      *                                 Common Card                            *
      **************************************************************************/
+
+    public Map<String, ItemTileType[][]> getClientUsernameLibrary() {
+        return clientUsernameLibrary;
+    }
 
     /**
      * Get the common goal cards.
