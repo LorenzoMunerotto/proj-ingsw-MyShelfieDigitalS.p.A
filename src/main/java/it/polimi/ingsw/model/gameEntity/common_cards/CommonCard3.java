@@ -17,7 +17,7 @@ public class CommonCard3 extends CommonGoalCard {
      */
     public CommonCard3() {
         super(3, """
-                Four tiles of the same type in the four corners of the bookshelf.""");
+                Four groups, each with at least 4 same-type tiles. Groups may have different tiles.""");
     }
 
     /**

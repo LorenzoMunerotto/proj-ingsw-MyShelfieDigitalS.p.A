@@ -91,11 +91,23 @@ public abstract class CommonGoalCard implements Serializable {
      * @return the first element of the stack
      */
     public int popPoint(){
-        if(points.isEmpty()){
+        try{
+            return points.pop();
+        }catch (EmptyStackException e){
             return 0;
         }
-        else {
-            return points.pop();
+    }
+
+    /**
+     * Get the top of the points stack, the first
+     * available points earns by the next player who achieve the Goal
+     * @return
+     */
+    public int topPoint(){
+        try{
+            return points.peek();
+        }catch (EmptyStackException e){
+            return 0;
         }
     }
 

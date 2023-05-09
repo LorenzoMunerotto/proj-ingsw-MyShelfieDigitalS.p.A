@@ -54,7 +54,7 @@ public class PointsManager extends AbstractListenable {
             else if(!commonGoalCard.isAchievedGoalPlayer(player.getUsername()) && commonGoalCard.checkRules(player.getLibrary())){
                 commonGoalCard.addAchievedGoalPlayer(player.getUsername());
                 commonPoints += commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername());
-                notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername()), commonGoalCard.getIndex()));
+                notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername()), commonGoalCard.topPoint(), commonGoalCard.getIndex()));
             }
         }
         return commonPoints;
