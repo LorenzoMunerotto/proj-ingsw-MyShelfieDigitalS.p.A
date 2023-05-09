@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
+import it.polimi.ingsw.view.gui.GUI;
 
 import java.util.Arrays;
 import java.util.List;
@@ -235,11 +236,13 @@ public class Client implements ServerMessageHandler{
         String viewType = chooseViewType();
         if(viewType.equals("c")){
             System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
+            client = new Client(new CLI());
+            client.view.main(Args);
         }
         else{
+            GUI.main(null);
             System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
         }
-        client = new Client(new CLI());
-        client.view.main(Args);
+
     }
 }

@@ -1,17 +1,12 @@
-package com.example.demo2;
+package it.polimi.ingsw.view.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-
-import static javafx.application.Application.launch;
 
 public class GUI extends Application {
     private static double minX;
@@ -33,7 +28,7 @@ public class GUI extends Application {
         maxY=screenBounds.getMaxY();
         width=screenBounds.getWidth();
         height=screenBounds.getHeight();
-        Parent root = FXMLLoader.load(getClass().getResource("loginView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginView.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

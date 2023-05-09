@@ -1,5 +1,6 @@
-package com.example.demo2;
+package it.polimi.ingsw.view.gui.controllers;
 
+import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,16 +9,15 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 
 public class GameViewController implements Initializable {
 
@@ -75,7 +75,7 @@ public class GameViewController implements Initializable {
     public void fullLibrary(){
         for(int c=0; c<5; c++){
             for(int r=0; r<6; r++){
-                aImgLibrary.add(new Image(getClass().getResourceAsStream("Cornici1.2.png")));
+                aImgLibrary.add(new Image(getClass().getResourceAsStream("/fxml/Cornici1.2.png")));
                 aImgViewLibrary.add(new ImageView(aImgLibrary.get(c*6+r)));
                 aImgViewLibrary.get(c*6+r).setX(90);
                 aImgViewLibrary.get(c*6+r).setY(90);
