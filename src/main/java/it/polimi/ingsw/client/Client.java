@@ -268,8 +268,5 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     }
 
-    @Override
-    public void update(Event event) {
 
-    }
 }
