@@ -1,7 +1,10 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +13,9 @@ import java.util.Scanner;
 /**
  * This class represents the CLI view of the game.
  */
-public class CLI extends View {
+public class CLI implements View {
+
+    private Client client;
     /**
      * It is the scanner used to read the user input.
      */
@@ -28,13 +33,16 @@ public class CLI extends View {
      */
     private Thread waitingThread;
 
+    private VirtualModel virtualModel;
+
     /**
      * Default constructor, initializes the drawer.
      */
-    public CLI() {
-        super();
-        drawer = new CLIDrawer(this.virtualModel);
+    public CLI(Client client) {
+        this.client=client;
+        drawer = new CLIDrawer(client.getVirtualModel());
         parser = new CLIParser();
+        client.setView(this);
     }
 
     /**
@@ -73,7 +81,7 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET);
             }
         }
-        super.setUsername(username);
+        setUsername(username);
 
     }
 
@@ -97,7 +105,7 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        super.setPlayersNumber(playersNumber);
+        setPlayersNumber(playersNumber);
     }
 
 
@@ -105,13 +113,13 @@ public class CLI extends View {
      * Asks the user to choose the item tiles to grab from the board.
      */
     public List<Coordinate> chooseTiles() {
-        this.coordinates = "";
+        String coordinates = "";
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.coordinates.isBlank()) {
+        while (coordinates.isBlank()) {
             coordinates = CLI.scanner.nextLine().strip().toUpperCase();
             if (!isCoordinatesValid(coordinates)) {
-                this.coordinates = "";
+                coordinates = "";
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
@@ -123,22 +131,22 @@ public class CLI extends View {
      * Asks the user to choose the column of the library where to place the tiles.
      */
     public Integer chooseColumn() {
-        this.column = 0;
+        Integer column = 0;
         String columnString;
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.column < 1 || this.column > 5) {
+        while (column < 1 || column > 5) {
             try {
                 columnString = CLI.scanner.nextLine().strip();
-                this.column = Integer.parseInt(columnString);
-                if (this.column < 1 || this.column > 5)
+                column = Integer.parseInt(columnString);
+                if (column < 1 || column > 5)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        return parser.getColumnKey(this.column);
+        return parser.getColumnKey(column);
     }
 
     /**
@@ -256,5 +264,21 @@ public class CLI extends View {
         if (message!=null) {
             System.out.println(message);
         }
+    }
+
+
+    @Override
+    public void setVirtualModel(VirtualModel virtualModel) {
+        this.virtualModel=virtualModel;
+    }
+
+    @Override
+    public void setUsername(String username) {
+            client.handle(new UsernameChoice(username));
+    }
+
+    @Override
+    public void setPlayersNumber(int playersNumber) {
+
     }
 }

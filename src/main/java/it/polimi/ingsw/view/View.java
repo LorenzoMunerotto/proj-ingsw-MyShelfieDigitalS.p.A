@@ -15,64 +15,24 @@ import java.util.regex.Pattern;
 /**
  * This class is the abstract class for the view.
  */
-public abstract class View extends AbstractListenable {
+public interface View  {
 
-    /**
-     * It is the username of the player.
-     */
-    private String username;
-    /**
-     * It is the number of players in the game chosen by the first player.
-     */
-    private int playersNumber;
-    /**
-     * It is the coordinates of the tile chosen by the player.
-     */
-    protected String coordinates;
-    /**
-     * It is the column of the library chosen by the player.
-     */
-    protected int column;
-    /**
-     * It is the minimum number of players in the game.
-     */
-    protected int MIN_PLAYERS_NUMBER = 2;
+
+     int MIN_PLAYERS_NUMBER = 2;
     /**
      * It is the maximum number of players in the game.
      */
-    protected int MAX_PLAYERS_NUMBER = 4;
-    /**
-     * It is the username of the winner of the game.
-     */
-    protected String winner;
-    /**
-     * It is the virtual model.
-     * Still don't know when and where to initialize it.
-     */
-    protected VirtualModel virtualModel;
+     int MAX_PLAYERS_NUMBER = 4;
 
-    /**
-     * This constructor initializes the virtual model and the controller.
-     * Maybe.
-     */
-    public View() {
-        super();
-        this.virtualModel= new VirtualModel();
-    }
 
-    public VirtualModel getVirtualModel() {
-        return virtualModel;
-    }
 
-    public void setUsername(String username) {
-        this.username = username;
-        notifyAllListeners(new UsernameChoice(username));
-    }
 
-    public void setPlayersNumber(int playersNumber) {
-        this.playersNumber = playersNumber;
-        notifyAllListeners(new NumOfPlayerChoice(playersNumber));
-    }
+    void setVirtualModel(VirtualModel virtualModel);
+
+    void setUsername(String username);
+
+
+    void setPlayersNumber(int playersNumber);
 
     /**
      * This method checks if the username is valid.
@@ -80,7 +40,7 @@ public abstract class View extends AbstractListenable {
      * @param username is the username of the player
      * @return true if the username is valid, false otherwise
      */
-    protected static boolean isUsernameValid(String username) {
+    default boolean isUsernameValid(String username) {
         Pattern pattern = Pattern.compile(CLIConstants.USERNAME_REGEX);
         Matcher matcher = pattern.matcher(username);
         return matcher.matches();
@@ -92,7 +52,7 @@ public abstract class View extends AbstractListenable {
      * @param coordinates are the coordinates of the tile chosen by the player
      * @return true if the coordinates are valid, false otherwise
      */
-    protected static boolean isCoordinatesValid(String coordinates) {
+    default boolean isCoordinatesValid(String coordinates) {
         Pattern pattern = Pattern.compile(CLIConstants.COORDINATES_REGEX);
         Matcher matcher = pattern.matcher(coordinates);
         return matcher.matches();

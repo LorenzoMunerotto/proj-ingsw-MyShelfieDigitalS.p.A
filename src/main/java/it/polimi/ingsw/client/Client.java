@@ -29,7 +29,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     /**
      * The view.
      */
-    private final View view;
+    private View view;
     /**
      * The virtual model.
      */
@@ -46,17 +46,23 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     /**
      * Default constructor, initialize the socket listener and the view.
      *
-     * @param view the view
+     *
      */
-    public Client(View view) {
+    public Client() {
+        this.virtualModel = new VirtualModel();
         this.socketListener= new SocketListener(this);
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.submit(socketListener);
-        this.view = view;
-        view.addListener(this);
-        this.virtualModel = this.view.getVirtualModel();
     }
 
+    public void setView(View view){
+        this.view = view;
+        view.setVirtualModel(virtualModel);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(socketListener);
+    }
+
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
+    }
 
     @Override
     public void update(ViewEvent viewEvent) {
@@ -254,16 +260,17 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     }
 
     public static void main(String[] Args){
+
         Client client;
         String viewType = chooseViewType();
         if(viewType.equals("c")){
             System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
-            client = new Client(new CLI());
-            client.view.main(Args);
+
+            new CLI(new Client()).main(Args);
         }
         else{
-            GUI.main(null);
-            System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
+            System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected gui interface%n");
+            //client.setView(new GUI());
         }
 
     }
