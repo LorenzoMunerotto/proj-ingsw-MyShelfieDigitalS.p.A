@@ -25,10 +25,10 @@ import java.util.List;
 import static javafx.application.Application.launch;
 
 public class GUI extends Application implements View {
-    private LoginController loginController;
-    private GameViewController gameViewController;
-    private Client client;
-    private VirtualModel virtualModel;
+    private static LoginController loginController;
+    private static GameViewController gameViewController;
+    private static Client client;
+    private static VirtualModel virtualModel;
     private static double minX;
     private static double minY;
     private static double maxX;
@@ -37,6 +37,7 @@ public class GUI extends Application implements View {
     private static double width;
     private static double height;
 
+    private static FXMLLoader loader;
 
 
     public GUI(){
@@ -55,15 +56,20 @@ public class GUI extends Application implements View {
         width=screenBounds.getWidth();
         height=screenBounds.getHeight();
         System.out.println("preFXML");
-        FXMLLoader loader= new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
+        loader= new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
         Parent root = loader.load();
-        loginController = loader.getController();
+
+
+        System.out.println(loginController);
+        setLoginController(loader.getController());
+        System.out.println(loginController);
         loginController.setGui(this);
         System.out.println("postController");
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
         System.out.println("postFXML");
+
     }
 
     public static double getWidth() {
@@ -145,7 +151,9 @@ public class GUI extends Application implements View {
     @Override
     public void chooseUsername() {
         System.out.println("chooseUsername");
-        loginController.chooseUsernameView();
+        System.out.println(loginController);
+        getLoginController().chooseUsernameView();
+        System.out.println(loginController);
     }
 
     @Override
@@ -165,7 +173,8 @@ public class GUI extends Application implements View {
 
     @Override
     public void startGame() throws IOException {
-        FXMLLoader loader = FXMLLoader.load(getClass().getResource("/fxml/GameView.fxml"));
+        System.out.println("StartGAme mesage");
+        loader= new FXMLLoader(getClass().getResource("/fxml/GameView.fxml"));
         Parent root = loader.load();
         gameViewController = loader.getController();
         Scene scene=new Scene(root);
@@ -212,5 +221,13 @@ public class GUI extends Application implements View {
     @Override
     public void showMessage(String message) {
 
+    }
+
+    public LoginController getLoginController() {
+        return loginController;
+    }
+
+    public void setLoginController(LoginController loginController) {
+        this.loginController = loginController;
     }
 }
