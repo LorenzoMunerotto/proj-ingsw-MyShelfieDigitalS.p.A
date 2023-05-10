@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.serverMessage;
 
+import java.io.IOException;
+
 public class StartGameMessage implements ServerMessage {
 
     private final String message;
@@ -13,7 +15,7 @@ public class StartGameMessage implements ServerMessage {
         return message;
     }
     @Override
-    public void accept(ServerMessageHandler serverMessageHandler) {
+    public void accept(ServerMessageHandler serverMessageHandler) throws IOException {
         serverMessageHandler.handle(this);
     }
 }

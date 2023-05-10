@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.clientMessage.*;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.cli.CLIConstants;
+import it.polimi.ingsw.view.events.Move;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

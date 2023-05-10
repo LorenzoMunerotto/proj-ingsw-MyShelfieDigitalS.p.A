@@ -1,9 +1,13 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.VirtualModel;
+import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.cli.CLIConstants;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,16 +15,16 @@ import java.util.regex.Pattern;
 /**
  * This class is the abstract class for the view.
  */
-public abstract class View {
+public abstract class View extends AbstractListenable {
 
     /**
      * It is the username of the player.
      */
-    protected String username;
+    private String username;
     /**
      * It is the number of players in the game chosen by the first player.
      */
-    protected int playersNumber;
+    private int playersNumber;
     /**
      * It is the coordinates of the tile chosen by the player.
      */
@@ -52,11 +56,22 @@ public abstract class View {
      * Maybe.
      */
     public View() {
+        super();
         this.virtualModel= new VirtualModel();
     }
 
     public VirtualModel getVirtualModel() {
         return virtualModel;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        notifyAllListeners(new UsernameChoice(username));
+    }
+
+    public void setPlayersNumber(int playersNumber) {
+        this.playersNumber = playersNumber;
+        notifyAllListeners(new NumOfPlayerChoice(playersNumber));
     }
 
     /**
@@ -89,15 +104,15 @@ public abstract class View {
      */
     public abstract void main(String[] args);
 
-    public abstract String chooseUsername();
+    public abstract void chooseUsername();
 
-    public abstract Integer choosePlayersNumber();
+    public abstract void choosePlayersNumber();
 
     public abstract List<Coordinate> chooseTiles();
 
     public abstract Integer chooseColumn();
 
-    public abstract void startGame();
+    public abstract void startGame() throws IOException;
 
     /**
      * This method is the method that shows the game.
@@ -127,4 +142,6 @@ public abstract class View {
     public abstract void stopWaiting();
 
     public abstract void showMessage(String message);
+
+
 }

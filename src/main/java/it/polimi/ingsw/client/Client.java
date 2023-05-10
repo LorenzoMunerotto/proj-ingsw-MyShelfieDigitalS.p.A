@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.clientMessage.Move;
-import it.polimi.ingsw.client.clientMessage.NumOfPlayerChoice;
-import it.polimi.ingsw.client.clientMessage.UsernameChoice;
+import it.polimi.ingsw.listener.Event;
+import it.polimi.ingsw.listener.Listener;
+import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
@@ -10,6 +10,7 @@ import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.gui.GUI;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -19,7 +20,7 @@ import java.util.concurrent.Executors;
 /**
  * This class represents the client.
  */
-public class Client implements ServerMessageHandler{
+public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * The socket listener.
@@ -52,7 +53,14 @@ public class Client implements ServerMessageHandler{
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
         this.view = view;
+        view.addListener(this);
         this.virtualModel = this.view.getVirtualModel();
+    }
+
+
+    @Override
+    public void update(ViewEvent viewEvent) {
+        viewEvent.accept(this);
     }
 
     /**
@@ -61,9 +69,12 @@ public class Client implements ServerMessageHandler{
      * @param usernameRequest the username request
      */
     public void handle(UsernameRequest usernameRequest){
-        String username = view.chooseUsername();
-        virtualModel.setMyUsername(username);
-        socketListener.send(new UsernameChoice(username));
+        view.chooseUsername();
+    }
+
+    public void handle(UsernameChoice usernameChoice){
+        virtualModel.setMyUsername(usernameChoice.getUsername());
+        socketListener.send(usernameChoice);
     }
 
     /**
@@ -72,7 +83,13 @@ public class Client implements ServerMessageHandler{
      * @param numOfPlayerRequest the number of player request
      */
     public void handle(NumOfPlayerRequest numOfPlayerRequest) {
-        socketListener.send(new NumOfPlayerChoice(view.choosePlayersNumber()));
+        view.choosePlayersNumber();
+
+    }
+
+    @Override
+    public void handle(NumOfPlayerChoice numOfPlayerChoice) {
+        socketListener.send(numOfPlayerChoice);
     }
 
     /**
@@ -84,6 +101,11 @@ public class Client implements ServerMessageHandler{
         List<Coordinate> coordinates = view.chooseTiles();
         Integer column = view.chooseColumn();
         socketListener.send(new Move(coordinates,column));
+    }
+
+    @Override
+    public void handle(Move move) {
+
     }
 
     /**
@@ -100,7 +122,7 @@ public class Client implements ServerMessageHandler{
      *
      * @param startGameMessage the start game message
      */
-    public void handle(StartGameMessage startGameMessage){
+    public void handle(StartGameMessage startGameMessage) throws IOException {
         view.startGame();
     }
 
@@ -243,6 +265,11 @@ public class Client implements ServerMessageHandler{
             GUI.main(null);
             System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
         }
+
+    }
+
+    @Override
+    public void update(Event event) {
 
     }
 }

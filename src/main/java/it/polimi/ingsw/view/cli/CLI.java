@@ -32,6 +32,7 @@ public class CLI extends View {
      * Default constructor, initializes the drawer.
      */
     public CLI() {
+        super();
         drawer = new CLIDrawer(this.virtualModel);
         parser = new CLIParser();
     }
@@ -61,33 +62,34 @@ public class CLI extends View {
      * Asks the user to choose his username.
      */
     @Override
-    public String chooseUsername() {
-        this.username = "";
+    public void chooseUsername() {
+        String username = "";
         System.out.print(CLIConstants.CONSOLE_ARROW + "Please insert your username: ");
-        while (this.username.isBlank()) {
-            this.username = CLI.scanner.nextLine().strip();
-            if (!isUsernameValid(this.username)) {
-                this.username = "";
+        while (username.isBlank()) {
+            username = CLI.scanner.nextLine().strip();
+            if (!isUsernameValid(username)) {
+                username = "";
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET);
             }
         }
-        return this.username;
+        super.setUsername(username);
+
     }
 
     /**
      * Asks the user to choose the number of players for the game.
      */
     @Override
-    public Integer choosePlayersNumber() {
-        this.playersNumber = 0;
+    public void choosePlayersNumber() {
+        Integer playersNumber = 0;
         String playersNumberString;
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.playersNumber < MIN_PLAYERS_NUMBER || this.playersNumber > MAX_PLAYERS_NUMBER) {
+        while (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER) {
             try {
                 playersNumberString = CLI.scanner.nextLine().strip();
-                this.playersNumber = Integer.parseInt(playersNumberString);
+                playersNumber = Integer.parseInt(playersNumberString);
                 if (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
@@ -95,7 +97,7 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        return this.playersNumber;
+        super.setPlayersNumber(playersNumber);
     }
 
 

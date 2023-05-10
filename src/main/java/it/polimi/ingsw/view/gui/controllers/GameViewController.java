@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.gui.controllers;
 
+import it.polimi.ingsw.client.VirtualModel;
+import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,7 +22,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class GameViewController implements Initializable {
-
     @FXML
     public GridPane libraryID;
     @FXML
@@ -48,8 +49,9 @@ public class GameViewController implements Initializable {
     @FXML
     private ChoiceBox<String> librarySelectionID;
 
+    private final VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
-    private String personalCardFile =new String("ItemNull.png");
+    private String personalCardFile =new String("EMPTY.png");
     private String commonCard1File =new String("CC1.jpg");
     private String commonCard2File =new String("CC2.jpg");
     private boolean youTurn=true;
@@ -65,6 +67,7 @@ public class GameViewController implements Initializable {
     EventHandler mouseHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
+            //personal card index needed
             if(youTurn==true){
                 ImageView imageView = (ImageView) t.getSource();
                 imageView.setImage(new Image(getClass().getResourceAsStream(personalCardFile)));
@@ -72,10 +75,16 @@ public class GameViewController implements Initializable {
             }
         }
     };
+
+    public GameViewController(VirtualModel virtualModel) {
+        this.virtualModel = virtualModel;
+    }
+
     public void fullLibrary(){
         for(int c=0; c<5; c++){
             for(int r=0; r<6; r++){
-                aImgLibrary.add(new Image(getClass().getResourceAsStream("/fxml/Cornici1.2.png")));
+                String fileName = virtualModel.getBoard()[r][c].toString();
+                aImgLibrary.add(new Image(getClass().getResourceAsStream("/fxml/" + fileName + ".png")));
                 aImgViewLibrary.add(new ImageView(aImgLibrary.get(c*6+r)));
                 aImgViewLibrary.get(c*6+r).setX(90);
                 aImgViewLibrary.get(c*6+r).setY(90);
@@ -143,6 +152,11 @@ public class GameViewController implements Initializable {
         vBoxCommonlID.setLayoutX(GUI.getMaxX()*0.05);
     }
 
+    public void fillLibrarySelectionID(){
+        for(String i : virtualModel.getClientUsernameLibrary().keySet() ){
+            librarySelectionID.getItems().add(i);
+        }
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //libraryID dovrebbe numerare verticalmente
@@ -150,10 +164,10 @@ public class GameViewController implements Initializable {
         commonCardInizializzer();
         fullBoard();
         fullLibrary();
-        librarySelectionID.getItems().add("Uno");
-        librarySelectionID.getItems().add("Due");
-        librarySelectionID.getItems().add("...");
-
+        fillLibrarySelectionID();
+        ItemTileType[][] board = virtualModel.getBoard();
+        ItemTileType[][] currentLibrary = virtualModel.getLibrary();
+        ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
         //boardID.setPadding(new Insets(5,5,5,5));
 
 

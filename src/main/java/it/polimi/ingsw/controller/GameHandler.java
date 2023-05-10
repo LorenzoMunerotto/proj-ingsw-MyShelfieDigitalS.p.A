@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.client.clientMessage.Move;
+import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.personal_cards.*;
