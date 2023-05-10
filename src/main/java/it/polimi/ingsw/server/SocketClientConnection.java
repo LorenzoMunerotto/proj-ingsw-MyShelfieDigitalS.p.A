@@ -66,10 +66,13 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
         try {
             outputStream.reset();
+            Thread.sleep(5000);
             outputStream.writeObject(new UsernameRequest());
             outputStream.flush();
         } catch (IOException e) {
             System.out.println("Send failed");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
     }

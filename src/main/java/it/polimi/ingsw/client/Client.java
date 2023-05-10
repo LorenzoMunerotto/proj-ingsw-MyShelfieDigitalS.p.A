@@ -48,17 +48,15 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      *
      *
      */
-    public Client() {
-        this.virtualModel = new VirtualModel();
-        this.socketListener= new SocketListener(this);
-    }
-
-    public void setView(View view){
+    public Client(View view) {
         this.view = view;
-        view.setVirtualModel(virtualModel);
+        this.virtualModel = view.getVirtualModel();
+        view.setClient(this);
+        this.socketListener= new SocketListener(this);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
     }
+
 
     public VirtualModel getVirtualModel() {
         return virtualModel;
@@ -266,13 +264,18 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         if(viewType.equals("c")){
             System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
 
-            new CLI(new Client()).main(Args);
+            new Client(new CLI()).main();
+
         }
         else{
             System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected gui interface%n");
-            //client.setView(new GUI());
+            new Client(new GUI()).main();
         }
 
+    }
+
+    public void main(){
+        view.main(null);
     }
 
 

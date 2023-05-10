@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.Scanner;
  */
 public class CLI implements View {
 
+    private VirtualModel virtualModel;
     private Client client;
     /**
      * It is the scanner used to read the user input.
@@ -33,16 +35,20 @@ public class CLI implements View {
      */
     private Thread waitingThread;
 
-    private VirtualModel virtualModel;
+
 
     /**
      * Default constructor, initializes the drawer.
      */
-    public CLI(Client client) {
-        this.client=client;
-        drawer = new CLIDrawer(client.getVirtualModel());
+    public CLI() {
+        this.virtualModel = new VirtualModel();
+        drawer = new CLIDrawer(virtualModel);
         parser = new CLIParser();
-        client.setView(this);
+    }
+
+    @Override
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
     }
 
     /**
@@ -266,10 +272,9 @@ public class CLI implements View {
         }
     }
 
-
     @Override
-    public void setVirtualModel(VirtualModel virtualModel) {
-        this.virtualModel=virtualModel;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     @Override
@@ -279,6 +284,6 @@ public class CLI implements View {
 
     @Override
     public void setPlayersNumber(int playersNumber) {
-
+        client.handle(new NumOfPlayerChoice(playersNumber));
     }
 }

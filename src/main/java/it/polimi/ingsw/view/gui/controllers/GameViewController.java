@@ -48,7 +48,7 @@ public class GameViewController implements Initializable {
     private Circle turnCircleID;
     @FXML
     private ChoiceBox<String> librarySelectionID;
-
+    private GUI gui;
     private final VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
     private String personalCardFile =new String("EMPTY.png");
@@ -60,7 +60,10 @@ public class GameViewController implements Initializable {
     private ArrayList<ImageView> aImgViewLibrary =new ArrayList<ImageView>();
     private ArrayList<Image> aImgLibrary =new ArrayList<Image>();
 
-
+    public GameViewController(GUI gui) {
+        this.gui = gui;
+        this.virtualModel=gui.getClient().getVirtualModel();
+    }
 
     private static String fileName ="Cornici1.1.png";
 
@@ -75,10 +78,6 @@ public class GameViewController implements Initializable {
             }
         }
     };
-
-    public GameViewController(VirtualModel virtualModel) {
-        this.virtualModel = virtualModel;
-    }
 
     public void fullLibrary(){
         for(int c=0; c<5; c++){

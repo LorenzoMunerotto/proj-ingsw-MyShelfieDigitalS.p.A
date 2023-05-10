@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
@@ -24,10 +25,10 @@ public interface View  {
      */
      int MAX_PLAYERS_NUMBER = 4;
 
+     void setClient(Client client);
 
+     VirtualModel getVirtualModel();
 
-
-    void setVirtualModel(VirtualModel virtualModel);
 
     void setUsername(String username);
 
@@ -62,7 +63,7 @@ public interface View  {
      * This method is the main method of the view.
      * @param args are the arguments of the main method
      */
-    public abstract void main(String[] args);
+     void main(String[] args);
 
     public abstract void chooseUsername();
 

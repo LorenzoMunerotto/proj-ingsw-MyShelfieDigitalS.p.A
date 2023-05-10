@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class LoginController extends View implements Initializable  {
+public class LoginController implements Initializable  {
 
     @FXML
     private Button loginButtonID;
@@ -48,6 +49,7 @@ public class LoginController extends View implements Initializable  {
     @FXML
     private ImageView backGroundID;
     private boolean usernamePress=false;
+    private GUI gui;
 
     private Integer[] numbers ={2,3,4};
 
@@ -58,15 +60,19 @@ public class LoginController extends View implements Initializable  {
     private Scene scene;
     private Parent root;
 
+
+    public void setGui(GUI gui) {
+        this.gui = gui;
+    }
+
     public void userNameSubmit(ActionEvent actionEvent) {
-        if(isUsernameValid(textNameInputID.getText())){
-            usernamePress=true;
+        if(gui.isUsernameValid(textNameInputID.getText())){
             errorsLabelID.setText(null);
-            super.setUsername(textNameInputID.getText());
+            gui.setUsername(textNameInputID.getText());
             textNameInputID.setVisible(false);
             userNameButtonID.setVisible(false);
         }
-        else if(!isUsernameValid(textNameInputID.getText())){
+        else if(!gui.isUsernameValid(textNameInputID.getText())){
             usernamePress=false;
             errorsLabelID.setText("Invalid username, please try again");
             textNameInputID.clear();
@@ -79,7 +85,7 @@ public class LoginController extends View implements Initializable  {
         }
         else if(numberBoxID.getValue()!=null){
             errorsLabelID.setText(null);
-            super.setPlayersNumber(numberBoxID.getValue());
+            gui.setPlayersNumber(numberBoxID.getValue());
             numberBoxID.setVisible(false);
             numberLabelID.setVisible(false);
             loginButtonID.setVisible(false);
@@ -87,37 +93,23 @@ public class LoginController extends View implements Initializable  {
 
     }
 
-    @Override
-    public void main(String[] args) {
-
-    }
-
-    @Override
-    public void chooseUsername() {
+    public void chooseUsernameView() {
         textNameInputID.setVisible(true);
-        numberLabelID.setVisible(true);
+        nameLabelID.setVisible(true);
         userNameButtonID.setVisible(true);
+        System.out.println("chooseUsernameView");
     }
 
-    @Override
-    public void choosePlayersNumber() {
+
+    public void choosePlayersNumberView() {
         numberBoxID.getItems().addAll(numbers);
         numberBoxID.setVisible(true);
         numberLabelID.setVisible(true);
         loginButtonID.setVisible(true);
     }
 
-    @Override
-    public List<Coordinate> chooseTiles() {
-        return null;
-    }
 
-    @Override
-    public Integer chooseColumn() {
-        return null;
-    }
 
-    @Override
     public void startGame() throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/GameView.fxml"));
         scene=new Scene(root);
@@ -127,52 +119,19 @@ public class LoginController extends View implements Initializable  {
         stage.setFullScreen(true);
     }
 
-    @Override
-    public void showGame() {
-
-    }
-
-    @Override
-    public void waitForTurn(String username) {
-
-    }
-
-    @Override
-    public void playTurn() {
-
-    }
-
-    @Override
-    public void endGame(Boolean isWinner) {
-
-    }
-
-    @Override
-    public void showErrorMessage(String errorMessage) {
-
-    }
-
-    @Override
-    public void stopWaiting() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //backGroundID.setImage(new Image(getClass().getResourceAsStream("/images/BackgroundImage.jpg")));
+        System.out.println("initialize");
         numberLabelID.setVisible(false);
-        errorsLabelID.setVisible(false);
+        errorsLabelID.setVisible(true);
         numberBoxID.setVisible(false);
         numberLabelID.setVisible(false);
         loginButtonID.setVisible(false);
         textNameInputID.setVisible(false);
         userNameButtonID.setVisible(false);
+        nameLabelID.setVisible(false);
     }
 
 }
