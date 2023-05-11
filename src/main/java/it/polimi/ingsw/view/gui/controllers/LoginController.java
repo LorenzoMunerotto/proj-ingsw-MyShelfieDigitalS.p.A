@@ -71,6 +71,7 @@ public class LoginController implements Initializable  {
             gui.setUsername(textNameInputID.getText());
             textNameInputID.setVisible(false);
             userNameButtonID.setVisible(false);
+            nameLabelID.setVisible(false);
         }
         else if(!gui.isUsernameValid(textNameInputID.getText())){
             usernamePress=false;
@@ -106,17 +107,6 @@ public class LoginController implements Initializable  {
         numberBoxID.setVisible(true);
         numberLabelID.setVisible(true);
         loginButtonID.setVisible(true);
-    }
-
-
-
-    public void startGame() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/GameView.fxml"));
-        scene=new Scene(root);
-        Stage stage =new Stage();
-        stage.setScene(scene);
-        stage.show();
-        stage.setFullScreen(true);
     }
 
 
