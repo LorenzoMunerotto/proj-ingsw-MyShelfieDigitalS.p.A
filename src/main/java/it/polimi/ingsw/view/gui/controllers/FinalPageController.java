@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.javatuples.Pair;
 
 import java.net.URL;
@@ -46,8 +47,10 @@ public class FinalPageController implements Initializable {
     private void compilePointsTable(){
         List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
         for (int i = 0; i < leaderBoards.size(); i++) {
-            nameColumnID.getColumns().add(leaderBoards.get(i).getValue0());
-            pointsColumnID.getColumns().add(leaderBoards.get(i).getValue1());
+            nameColumnID.setCellValueFactory(new PropertyValueFactory<>(leaderBoards.get(i).getValue0()));
+            //nameColumnID.getColumns().add(leaderBoards.get(i).getValue0());
+            pointsColumnID.setCellValueFactory(new PropertyValueFactory<>(String.valueOf(leaderBoards.get(i).getValue1())));
+            //pointsColumnID.getColumns().add(leaderBoards.get(i).getValue1());
         }
         tableResultID.setVisible(true);
         nameColumnID.setVisible(true);
