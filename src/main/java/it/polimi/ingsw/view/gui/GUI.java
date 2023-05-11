@@ -104,7 +104,7 @@ public class GUI extends Application implements View {
             throw new RuntimeException(e);
         }
         setFinalPageController(loader.getController());
-        loginController.setGui(this);
+        finalPageController.setGui(this);
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

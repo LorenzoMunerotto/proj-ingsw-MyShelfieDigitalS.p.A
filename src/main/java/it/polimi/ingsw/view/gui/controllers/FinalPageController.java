@@ -29,6 +29,10 @@ public class FinalPageController implements Initializable {
     private GUI gui;
     private final VirtualModel virtualModel;
 
+    public void setGui(GUI gui) {
+        this.gui = gui;
+    }
+
     public FinalPageController(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
