@@ -6,23 +6,19 @@ import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
+import it.polimi.ingsw.view.gui.controllers.FinalPageController;
 import it.polimi.ingsw.view.gui.controllers.GameViewController;
 import it.polimi.ingsw.view.gui.controllers.LoginController;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
 
-import javax.sound.midi.Soundbank;
 import java.io.IOException;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
 import static javafx.application.Application.launch;
@@ -30,6 +26,7 @@ import static javafx.application.Application.launch;
 public class GUI extends Application implements View {
     private static LoginController loginController;
     private static GameViewController gameViewController;
+    private static FinalPageController finalPageController;
     private static Client client;
     private static VirtualModel virtualModel;
     private static double minX;
@@ -65,7 +62,7 @@ public class GUI extends Application implements View {
         width=screenBounds.getWidth();
         height=screenBounds.getHeight();
         System.out.println("preFXML");
-        loader= new FXMLLoader(getClass().getResource("/fxml/loginView.fxml"));
+        loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
         Parent root = null;
         try {
             root = loader.load();
@@ -91,12 +88,27 @@ public class GUI extends Application implements View {
             throw new RuntimeException(e);
         }
         setGameViewController(loaderGame.getController());
+        gameViewController.setGui(this);
         Scene scene=new Scene(root);
         stage.setScene(scene);
         stage.setFullScreen(true);
         stage.show();
     }
 
+    public void loadFinalPage(){
+        loader= new FXMLLoader(getClass().getResource("/fxml/FinalPage.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        setFinalPageController(loader.getController());
+        loginController.setGui(this);
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
     public static double getWidth() {
         return width;
     }
@@ -118,11 +130,11 @@ public class GUI extends Application implements View {
     public void start(Stage stage)  {
         //per far partire da un file FXML:
         //Parent root =FXMLLoader.load(HelloApplication.class.getResource("Main.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("loginView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
         Scene scene = new Scene(root);
         //stage.setFullScreen(true);
         stage.setScene(scene);
-        //FXMLLoader loader =new FXMLLoader(getClass().getResource("loginView.fxml"));
+        //FXMLLoader loader =new FXMLLoader(getClass().getResource("LoginView.fxml"));
         //AnchorPane loginPane= loader.load();
         //stage.setFullScreen(true);
         stage.show();
@@ -219,17 +231,16 @@ public class GUI extends Application implements View {
 
     @Override
     public void playTurn() {
-
     }
 
     @Override
     public void endGame(Boolean isWinner) {
-
+        loadFinalPage();
     }
 
     @Override
     public void showErrorMessage(String errorMessage) {
-
+        gameViewController.printError(errorMessage);
     }
 
     @Override
@@ -239,7 +250,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showMessage(String message) {
-
+        gameViewController.printError(message);
     }
 
     public LoginController getLoginController() {
@@ -255,5 +266,13 @@ public class GUI extends Application implements View {
 
     public static void setGameViewController(GameViewController gameViewController) {
         GUI.gameViewController = gameViewController;
+    }
+
+    public static void setFinalPageController(FinalPageController finalPageController) {
+        GUI.finalPageController = finalPageController;
+    }
+
+    public static FinalPageController getFinalPageController() {
+        return finalPageController;
     }
 }

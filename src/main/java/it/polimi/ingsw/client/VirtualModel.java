@@ -41,6 +41,8 @@ public class VirtualModel {
      * Map of the username and the points.
      */
     private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
+
+
     /**
      * The username of the client.
      */
@@ -352,6 +354,13 @@ public class VirtualModel {
     }
 
     /**
+     * Return the map of the username and the points
+     */
+    public Map<String, Integer> getClientUsernamePoints() {
+        return clientUsernamePoints;
+    }
+
+    /**
      * Get the current leader board of the game.
      *
      * @return the current leader board of the game.
@@ -388,4 +397,5 @@ public class VirtualModel {
     public void setServerMessage(ServerMessage serverMessage) {
         this.serverMessage = serverMessage;
     }
+
 }

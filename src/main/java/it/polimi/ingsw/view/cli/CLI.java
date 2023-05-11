@@ -55,7 +55,6 @@ public class CLI implements View {
      * Clears the console.
      */
     public static void clear() {
-
         try {
             String os = System.getProperty("os.name");
             ProcessBuilder processBuilder;
@@ -228,7 +227,6 @@ public class CLI implements View {
     @Override
     public void endGame(Boolean isWinner) {
         this.drawer.printLeaderBoard(isWinner);
-
     }
 
     /**

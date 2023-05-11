@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -48,12 +49,16 @@ public class GameViewController implements Initializable {
     private Circle turnCircleID;
     @FXML
     private ChoiceBox<String> librarySelectionID;
+
+    @FXML
+    private TextField errorsTextID;
     private GUI gui;
     private final VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
     private String personalCardFile =new String("EMPTY.png");
     private String commonCard1File =new String("CC1.jpg");
     private String commonCard2File =new String("CC2.jpg");
+
     private boolean youTurn=true;
     private ArrayList<ImageView> aImgViewBoard =new ArrayList<ImageView>();
     private ArrayList<Image> aImgBoard =new ArrayList<Image>();
@@ -63,6 +68,10 @@ public class GameViewController implements Initializable {
     public GameViewController(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
+    }
+
+    public void setGui(GUI gui) {
+        this.gui = gui;
     }
 
     private static String fileName ="Cornici1.1.png";
@@ -119,6 +128,10 @@ public class GameViewController implements Initializable {
         boardID.setLayoutY(GUI.getMaxY()*0.10);
         boardID.setHgap(2);
         boardID.setVgap(2);
+    }
+    public void printError (String error){
+        errorsTextID.setText(error);
+
     }
 
     public void personalCardInizializer(){
