@@ -33,7 +33,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 
-public class LoginController implements Initializable  {
+public class LoginController implements Controller  {
 
     @FXML
     private Button loginButtonID;
@@ -71,6 +71,7 @@ public class LoginController implements Initializable  {
     private String errorString;
     @FXML
     private Button startGameButtonID;
+    @Override
     public void setGui(GUI gui) {
         this.gui = gui;
     }
@@ -123,6 +124,7 @@ public class LoginController implements Initializable  {
 
 
     public void enterTheGame(ActionEvent event) throws IOException {
+        gui.changeStage("/fxml/GameView.fxml");
         /*
             //System.out.println("preLoadGameView");
         root = FXMLLoader.load(getClass().getResource("/fxml/GameView.fxml"));
@@ -161,6 +163,24 @@ public class LoginController implements Initializable  {
         loginButtonID.setVisible(true);
     }
 
+    public void setUp(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("initialize");
+                numberLabelID.setVisible(false);
+                errorsTextID.setVisible(true);
+                numberBoxID.setVisible(false);
+                numberLabelID.setVisible(false);
+                loginButtonID.setVisible(false);
+                textNameInputID.setVisible(false);
+                userNameButtonID.setVisible(false);
+                startGameButtonID.setVisible(false);
+                nameLabelID.setVisible(false);
+            }
+        });
+    }
+    /*
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -176,5 +196,7 @@ public class LoginController implements Initializable  {
         startGameButtonID.setVisible(false);
         nameLabelID.setVisible(false);
     }
+
+     */
 
 }

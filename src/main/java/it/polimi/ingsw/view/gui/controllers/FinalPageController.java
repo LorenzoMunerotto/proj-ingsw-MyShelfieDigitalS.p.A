@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.view.gui.GUI;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -18,7 +19,7 @@ import static it.polimi.ingsw.view.cli.CLIConstants.LEADERBOARD_BOTTOM_FRAME_FOR
 import static it.polimi.ingsw.view.cli.CLIConstants.LEADERBOARD_MIDDLE_FRAME_FORMAT;
 
 
-public class FinalPageController implements Initializable {
+public class FinalPageController implements Controller{
     @FXML
     private TableView tableResultID;
     @FXML
@@ -28,20 +29,31 @@ public class FinalPageController implements Initializable {
     private TableColumn pointsColumnID;
 
     private GUI gui;
-    private final VirtualModel virtualModel;
-
+    private  VirtualModel virtualModel;
+    @Override
     public void setGui(GUI gui) {
         this.gui = gui;
+        this.virtualModel=gui.getVirtualModel();
     }
-
+/*
     public FinalPageController(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
     }
-
+    /*
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         compilePointsTable();
+    }
+     */
+    public void setUp(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                compilePointsTable();
+            }
+        });
+
     }
 
     private void compilePointsTable(){

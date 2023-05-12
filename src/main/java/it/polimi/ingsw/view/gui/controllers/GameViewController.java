@@ -1,4 +1,5 @@
 package it.polimi.ingsw.view.gui.controllers;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
@@ -20,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class GameViewController implements Initializable {
+public class GameViewController implements Controller {
     @FXML
     public GridPane libraryID;
     @FXML
@@ -51,7 +52,7 @@ public class GameViewController implements Initializable {
     @FXML
     private TextFlow errorsTextID;
     private GUI gui;
-    private final VirtualModel virtualModel;
+    private  VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
     private String personalCardFile =new String("EMPTY.png");
     private String commonCard1File =new String("CC1.jpg");
@@ -63,13 +64,14 @@ public class GameViewController implements Initializable {
     private ArrayList<ImageView> aImgViewLibrary =new ArrayList<ImageView>();
     private ArrayList<Image> aImgLibrary =new ArrayList<Image>();
 
-    public GameViewController(GUI gui) {
+    /*public GameViewController(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
-    }
-
+    }*/
+    @Override
     public void setGui(GUI gui) {
         this.gui = gui;
+        this.virtualModel=gui.getClient().getVirtualModel();
     }
 
     private static String fileName ="Cornici1.1.png";
@@ -216,6 +218,24 @@ public class GameViewController implements Initializable {
             librarySelectionID.getItems().add(i);
         }
     }
+
+    public void setUp() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                personalCardInizializer();
+                commonCardInizializzer();
+                fullBoard();
+                fullLibrary();
+                fillLibrarySelectionID();
+                ItemTileType[][] board = virtualModel.getBoard();
+                ItemTileType[][] currentLibrary = virtualModel.getLibrary();
+                ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
+            }
+        });
+
+
+    /*
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //libraryID dovrebbe numerare verticalmente
@@ -330,7 +350,7 @@ public class GameViewController implements Initializable {
                 libraryID.getChildren().add(imageView);
 
             }
-        }*/
+        } */
 
 
     }
