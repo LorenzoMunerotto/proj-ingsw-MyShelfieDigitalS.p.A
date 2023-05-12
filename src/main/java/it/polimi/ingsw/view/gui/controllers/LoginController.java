@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.text.Text;
@@ -28,8 +30,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.logging.Level;
 
 public class LoginController implements Initializable  {
 
@@ -54,6 +56,7 @@ public class LoginController implements Initializable  {
     private TextFlow errorsTextID;
     @FXML
     private ImageView backGroundID;
+
     private boolean usernamePress=false;
     private GUI gui;
 
@@ -61,12 +64,13 @@ public class LoginController implements Initializable  {
 
     private int numberOfPlayers;
     private String userName;
-
     private Stage stage;
     private Scene scene;
     private Parent root;
 
     private String errorString;
+    @FXML
+    private Button startGameButtonID;
     public void setGui(GUI gui) {
         this.gui = gui;
     }
@@ -117,6 +121,31 @@ public class LoginController implements Initializable  {
 
     }
 
+
+    public void enterTheGame(ActionEvent event) throws IOException {
+        /*
+            //System.out.println("preLoadGameView");
+        root = FXMLLoader.load(getClass().getResource("/fxml/GameView.fxml"));
+        scene=new Scene(root);
+        Stage stage =(Stage) ((Node)event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+        System.out.println("stage.show();");
+
+         */
+    }
+
+
+    public void preGame(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                startGameButtonID.setText("Enter the Game");
+                startGameButtonID.setVisible(true);
+            }
+        });
+
+    }
     public void chooseUsernameView() {
         textNameInputID.setVisible(true);
         nameLabelID.setVisible(true);
@@ -144,10 +173,8 @@ public class LoginController implements Initializable  {
         loginButtonID.setVisible(false);
         textNameInputID.setVisible(false);
         userNameButtonID.setVisible(false);
+        startGameButtonID.setVisible(false);
         nameLabelID.setVisible(false);
     }
 
-    public void setErrorString(String errorString) {
-        this.errorString = errorString;
-    }
 }

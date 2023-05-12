@@ -198,6 +198,18 @@ public class GameViewController implements Initializable {
         vBoxCommonlID.setLayoutX(GUI.getMaxX()*0.05);
         vBoxCommonlID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
     }
+    /*
+    public void prova(){
+        personalCardInizializer();
+        commonCardInizializzer();
+        fullBoard();
+        fullLibrary();
+        fillLibrarySelectionID();
+        ItemTileType[][] board = virtualModel.getBoard();
+        ItemTileType[][] currentLibrary = virtualModel.getLibrary();
+        ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
+    }
+     */
 
     public void fillLibrarySelectionID(){
         for(String i : virtualModel.getClientUsernameLibrary().keySet() ){
@@ -207,14 +219,17 @@ public class GameViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //libraryID dovrebbe numerare verticalmente
+
         personalCardInizializer();
         commonCardInizializzer();
         fullBoard();
         fullLibrary();
         fillLibrarySelectionID();
+        /*
         ItemTileType[][] board = virtualModel.getBoard();
         ItemTileType[][] currentLibrary = virtualModel.getLibrary();
         ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
+
         //boardID.setPadding(new Insets(5,5,5,5));
 
 

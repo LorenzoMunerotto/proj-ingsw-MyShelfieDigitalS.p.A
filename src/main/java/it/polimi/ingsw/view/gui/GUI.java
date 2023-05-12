@@ -14,16 +14,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 
 import static javafx.application.Application.launch;
 
 public class GUI extends Application implements View {
     private static LoginController loginController;
+    private static Scene sceneGame;
     private static GameViewController gameViewController;
     private static FinalPageController finalPageController;
     private static Client client;
@@ -38,8 +44,11 @@ public class GUI extends Application implements View {
 
     private static FXMLLoader loader;
     private static FXMLLoader loaderGame;
+    private Scene currentScene;
     private Stage stage;
-
+    private static Parent root = null;
+    private static Parent rootGame = null;
+    private final HashMap<String, Scene> nameMapScene = new HashMap<>();
     public GUI(){
        this.virtualModel= new VirtualModel();
     }
@@ -49,56 +58,49 @@ public class GUI extends Application implements View {
         return virtualModel;
     }
 
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
         System.out.println("postFXML");
-        this.stage = stage;
+        this.stage = primaryStage;
         loadLoginView();
     }
-    private void loadLoginView(){
+    private void screenInfo(){
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         maxX=screenBounds.getMaxX();
         maxY=screenBounds.getMaxY();
         width=screenBounds.getWidth();
         height=screenBounds.getHeight();
-        System.out.println("preFXML");
+    }
+    private void loadLoginView(){
+        screenInfo();
+        stage.setTitle("MyShelfieDigitals S.p.A.");
+        //System.out.println("preFXML");
         loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
-        Parent root = null;
         try {
             root = loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(loginController);
+        //System.out.println(loginController);
         setLoginController(loader.getController());
-        System.out.println(loginController);
+        //System.out.println(loginController);
         loginController.setGui(this);
-        System.out.println("postController");
+        //System.out.println("postController");
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
-
-    public void loadGameView(){
-        System.out.println("preLoadGameView");
-        loaderGame= new FXMLLoader(getClass().getResource("/fxml/GameView.fxml"));
-        Parent root = null;
-        try {
-            root = loaderGame.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        setGameViewController(loaderGame.getController());
-        System.out.println("postLoadGameView");
-        gameViewController.setGui(this);
-        Scene scene=new Scene(root);
-        stage.setScene(scene);
-        stage.setFullScreen(true);
-        stage.show();
+    public void setController(){
+        loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
+        //System.out.println(loginController);
+        setLoginController(loader.getController());
+        //System.out.println(loginController);
+        loginController.setGui(this);
     }
+    
 
     public void loadFinalPage(){
+        /*
         loader= new FXMLLoader(getClass().getResource("/fxml/FinalPage.fxml"));
-        Parent root = null;
         try {
             root = loader.load();
         } catch (IOException e) {
@@ -109,6 +111,8 @@ public class GUI extends Application implements View {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+         */
     }
     public static double getWidth() {
         return width;
@@ -211,8 +215,10 @@ public class GUI extends Application implements View {
 
     @Override
     public void startGame()  {
+        setController();
+        getGameViewController().setGui(this);
+        getLoginController().preGame();
         System.out.println("StartGAme mesage");
-
     }
 
     public Client getClient() {
@@ -222,6 +228,7 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         //loadGameView();
+        getLoginController().preGame();
         System.out.println("showGame");
     }
 
@@ -244,7 +251,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showErrorMessage(String errorMessage) {
-        gameViewController.printError(errorMessage);
+        getLoginController().setErrorsLabelIDText(errorMessage);
     }
 
     @Override
@@ -265,6 +272,7 @@ public class GUI extends Application implements View {
     public void setLoginController(LoginController loginController) {
         this.loginController = loginController;
     }
+
     public static GameViewController getGameViewController() {
         return gameViewController;
     }
