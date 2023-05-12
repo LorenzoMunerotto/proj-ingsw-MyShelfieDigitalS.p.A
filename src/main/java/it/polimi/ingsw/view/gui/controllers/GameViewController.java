@@ -74,7 +74,7 @@ public class GameViewController implements Controller {
         this.virtualModel=gui.getClient().getVirtualModel();
     }
 
-    private static String fileName ="Cornici1.1.png";
+    private static String fileName ="FRAME.png";
 
     EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -122,7 +122,7 @@ public class GameViewController implements Controller {
     public void fullBoard(){
         for(int c=0; c<9; c++){
             for(int r=0; r<9; r++){
-                aImgBoard.add(new Image(getClass().getResourceAsStream("/images/"+virtualModel.getBoard()[r][c].toString()+".png")));
+                aImgBoard.add(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
                 //ImageView imageView = new ImageView(aImgBoard.get(c*9+r));
                 aImgViewBoard.add(new ImageView(aImgBoard.get(c*9+r)));
                 aImgViewBoard.get(c*9+r).setX(90);
@@ -171,21 +171,21 @@ public class GameViewController implements Controller {
     }
 
     public void personalCardInizializer(){
-        personalCardImgID.setImage(new Image(getClass().getResourceAsStream("Personal_Goals"+virtualModel.getNumberPersonalCard() +".jpg")));
-        vBoxPersonalID.setLayoutX(GUI.getMaxX()*0.35);
-        vBoxPersonalID.setLayoutY(GUI.getMaxY()*0.60);
+        personalCardImgID.setImage(new Image(getClass().getResourceAsStream("/images/Personal_Goals"+ virtualModel.getNumberPersonalCard() +".png")));
+        vBoxPersonalID.setLayoutX(gui.getMaxX()*0.35);
+        vBoxPersonalID.setLayoutY(gui.getMaxY()*0.60);
         vBoxPersonalID.setFillWidth(true);
         //vBoxPersonalID.maxWidth(GUI.getMaxX()*0.17);
-        vBoxPersonalID.setMaxWidth(GUI.getMaxX()*0.17);
-        vBoxPersonalID.setMinWidth(GUI.getMaxX()*0.17);
+        vBoxPersonalID.setMaxWidth(gui.getMaxX()*0.17);
+        vBoxPersonalID.setMinWidth(gui.getMaxX()*0.17);
         personalCardImgID.setPreserveRatio(true);
         personalCardImgID.setFitWidth(GUI.getMaxX()*0.15);
         personalCardImgID.setFitHeight(GUI.getMaxX()*0.15*(756*1110));
     }
 
     public void commonCardInizializzer(){
-        commonCard1ID.setImage(new Image(getClass().getResourceAsStream("CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".png")));
-        commonCard2ID.setImage(new Image(getClass().getResourceAsStream("CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".png")));
+        commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
+        commonCard2ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
         commonCard1ID.setPreserveRatio(true);
         commonCard2ID.setPreserveRatio(true);
         vBoxCommonlID.setMaxHeight(GUI.getMaxY()*0.25);
@@ -257,7 +257,7 @@ public class GameViewController implements Controller {
         /*
         for(int c=0; c<9; c++){
             for(int r=0; r<9; r++){
-                Image image= new Image(getClass().getResourceAsStream("Cornici1.1.png"));
+                Image image= new Image(getClass().getResourceAsStream("FRAME.png"));
                 aImg.add(image);
                 ImageView imageView = new ImageView(aImg.get(c*9+r));
                 aImgView.add(imageView);
@@ -294,7 +294,7 @@ public class GameViewController implements Controller {
         libraryID.setMaxWidth(GUI.getMaxX()*0.4);
         libraryID.snapPositionY(GUI.getMaxY()*0.05);
         libraryID.snapPositionX(GUI.getMaxX()*0.55); /*
-        Image image= new Image(getClass().getResourceAsStream("Cornici1.1.png"));
+        Image image= new Image(getClass().getResourceAsStream("FRAME.png"));
         img1.setImage(image);
         img1.setFitHeight(GUI.getMaxY()*(0.4/9));
         img1.setFitWidth(GUI.getMaxX()*(0.4/9));

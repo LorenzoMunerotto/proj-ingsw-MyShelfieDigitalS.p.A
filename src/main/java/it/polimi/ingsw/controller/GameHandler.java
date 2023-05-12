@@ -64,6 +64,7 @@ public class GameHandler {
         pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
         boardManager.refillBoard();
         Collections.shuffle(gameData.getPlayers(), new Random());
+        sendAll( new StartGameMessage());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
     }

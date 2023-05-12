@@ -122,6 +122,16 @@ public class LoginController implements Controller  {
 
     }
 
+    public void caricaGame(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gui.changeStage("/fxml/GameView.fxml");
+
+            }
+        });
+
+    }
 
     public void enterTheGame(ActionEvent event) throws IOException {
         gui.changeStage("/fxml/GameView.fxml");

@@ -32,7 +32,7 @@ public class SocketListener implements Runnable {
 
     public synchronized void readFromStream() throws IOException, ClassNotFoundException {
         ServerMessage input = (ServerMessage) inputStream.readObject();
-        //System.out.println("--> new message received from server: " + input);
+        System.out.println("--> new message received from server: " + input);
 
         input.accept(client);
     }

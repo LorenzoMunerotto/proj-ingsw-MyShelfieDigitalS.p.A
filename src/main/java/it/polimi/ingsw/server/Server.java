@@ -186,7 +186,6 @@ public class Server {
         } else if (waiting.size() == numOfPlayers) {
             currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached. The game is starting..."));
             currentGameHandler.startGame();
-            currentGameHandler.sendAll( new StartGameMessage());
             waiting.clear();
 
         } else {

@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.gui.controllers.FinalPageController;
 import it.polimi.ingsw.view.gui.controllers.GameViewController;
 import it.polimi.ingsw.view.gui.controllers.LoginController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -69,6 +70,7 @@ public class GUI extends Application implements View {
         //loadLoginView();
     }
     public void setup() {
+        screenInfo();
         List<String> fxmList = new ArrayList<>(Arrays.asList(LOGIN, GAME, FINAL));
         try {
             for (String path : fxmList) {
@@ -105,6 +107,7 @@ public class GUI extends Application implements View {
     public void changeStage(String newScene) {
         currentScene = nameMapScene.get(newScene);
         stage.setScene(currentScene);
+        nameMapController.get(newScene).setUp();
         stage.show();
         stage.setFullScreen(true);
     }
@@ -262,12 +265,14 @@ public class GUI extends Application implements View {
 
     @Override
     public void startGame()  {
-        changeStage(GAME);
+        getLoginController().caricaGame();
+        System.out.println("StartGAme mesage");
         //setController();
         //getGameViewController().setGui(this);
         //getLoginController().preGame();
-        getGameViewController().setUp();
-        System.out.println("StartGAme mesage");
+        //getLoginController().preGame();
+        //getGameViewController().setUp();
+
     }
 
     public Client getClient() {
@@ -277,7 +282,7 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         //loadGameView();
-        getLoginController().preGame();
+
         System.out.println("showGame");
     }
 
