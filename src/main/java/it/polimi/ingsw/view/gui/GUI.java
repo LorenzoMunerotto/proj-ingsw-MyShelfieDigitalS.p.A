@@ -254,6 +254,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showMessage(String message) {
+        System.out.println(message);
         loginController.setErrorsLabelIDText(message);
     }
 

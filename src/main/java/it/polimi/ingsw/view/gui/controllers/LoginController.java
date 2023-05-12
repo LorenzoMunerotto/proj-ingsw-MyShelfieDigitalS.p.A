@@ -67,8 +67,8 @@ public class LoginController implements Initializable  {
 
     public void setErrorsLabelIDText(String message){
         errorsLabelID.setText(null);
-        errorsLabelID.setVisible(true);
         errorsLabelID.setText(message);
+        errorsLabelID.setVisible(true);
     }
 
     public void userNameSubmit(ActionEvent actionEvent) {

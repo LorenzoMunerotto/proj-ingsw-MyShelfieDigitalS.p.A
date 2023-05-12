@@ -185,9 +185,9 @@ public class Server {
             socketClientConnection.setUpNumOfPlayers();
         } else if (waiting.size() == numOfPlayers) {
             currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached. The game is starting..."));
+            currentGameHandler.startGame();
             currentGameHandler.sendAll( new StartGameMessage());
             waiting.clear();
-            currentGameHandler.startGame();
 
         } else {
             currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + CLIConstants.CYAN_BRIGHT + (numOfPlayers - waiting.size()) + CLIConstants.RESET + " players left"));
