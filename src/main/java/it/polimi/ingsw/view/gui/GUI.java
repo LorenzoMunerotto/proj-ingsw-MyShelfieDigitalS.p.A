@@ -18,7 +18,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.security.cert.X509Certificate;
 import java.util.List;
 
 import static javafx.application.Application.launch;
@@ -80,6 +79,7 @@ public class GUI extends Application implements View {
     }
 
     public void loadGameView(){
+        System.out.println("preLoadGameView");
         loaderGame= new FXMLLoader(getClass().getResource("/fxml/GameView.fxml"));
         Parent root = null;
         try {
@@ -88,6 +88,7 @@ public class GUI extends Application implements View {
             throw new RuntimeException(e);
         }
         setGameViewController(loaderGame.getController());
+        System.out.println("postLoadGameView");
         gameViewController.setGui(this);
         Scene scene=new Scene(root);
         stage.setScene(scene);
@@ -210,8 +211,8 @@ public class GUI extends Application implements View {
 
     @Override
     public void startGame()  {
-        loadGameView();
         System.out.println("StartGAme mesage");
+        loadGameView();
     }
 
     public Client getClient() {
@@ -220,17 +221,20 @@ public class GUI extends Application implements View {
 
     @Override
     public void showGame() {
-        loadGameView();
+        //loadGameView();
         System.out.println("showGame");
     }
 
     @Override
     public void waitForTurn(String username) {
+        gameViewController.printError("Waiting for " + username + " to play the turn...");
         //gameViewController.
     }
 
     @Override
     public void playTurn() {
+        gameViewController.printError("It is your turn!");
+        gameViewController.yourTurn();
     }
 
     @Override
@@ -245,12 +249,12 @@ public class GUI extends Application implements View {
 
     @Override
     public void stopWaiting() {
-
+        gameViewController.notYourTurn();
     }
 
     @Override
     public void showMessage(String message) {
-        gameViewController.printError(message);
+        loginController.setErrorsLabelIDText(message);
     }
 
     public LoginController getLoginController() {

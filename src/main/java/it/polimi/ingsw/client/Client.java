@@ -127,6 +127,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      * @param startGameMessage the start game message
      */
     public void handle(StartGameMessage startGameMessage) throws IOException {
+        System.out.println("view.startGame();");
         view.startGame();
     }
 

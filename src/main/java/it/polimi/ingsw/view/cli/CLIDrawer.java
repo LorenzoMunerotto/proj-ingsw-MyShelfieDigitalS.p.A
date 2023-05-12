@@ -274,7 +274,7 @@ public class CLIDrawer {
         System.out.println();
 
         for (Triplet<Integer, Integer, String> card : commonGoalCards) {
-            String commonCard = " Common Card: " + CLIConstants.PURPLE_BRIGHT + card.getValue0() + CLIConstants.RESET;
+            String commonCard = " Common Card: " + CLIConstants.PURPLE_BRIGHT + virtualModel.getCommonGoalCards() + CLIConstants.RESET;
             String points = " Points:" + CLIConstants.PURPLE_BRIGHT + card.getValue1() + CLIConstants.RESET;
             int commonCardLength = commonCard.replaceAll("\\x1B\\[[;\\d]*m", "").length();
             int pointsLength = points.replaceAll("\\x1B\\[[;\\d]*m", "").length();

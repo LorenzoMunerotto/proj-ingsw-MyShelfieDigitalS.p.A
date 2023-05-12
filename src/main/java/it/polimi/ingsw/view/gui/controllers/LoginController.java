@@ -65,6 +65,12 @@ public class LoginController implements Initializable  {
         this.gui = gui;
     }
 
+    public void setErrorsLabelIDText(String message){
+        errorsLabelID.setText(null);
+        errorsLabelID.setVisible(true);
+        errorsLabelID.setText(message);
+    }
+
     public void userNameSubmit(ActionEvent actionEvent) {
         if(gui.isUsernameValid(textNameInputID.getText())){
             errorsLabelID.setText(null);

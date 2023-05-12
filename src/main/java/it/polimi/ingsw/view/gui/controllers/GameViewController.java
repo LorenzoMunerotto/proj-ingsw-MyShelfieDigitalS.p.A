@@ -1,5 +1,5 @@
 package it.polimi.ingsw.view.gui.controllers;
-
+import javafx.scene.Node;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.view.gui.GUI;
@@ -12,10 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 
 import java.net.URL;
@@ -76,14 +73,26 @@ public class GameViewController implements Initializable {
 
     private static String fileName ="Cornici1.1.png";
 
-    EventHandler mouseHandler = new EventHandler<MouseEvent>() {
+    EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
             //personal card index needed
             if(youTurn==true){
+                Node node = (Node) t.getTarget();
+                int row = GridPane.getRowIndex(node);
+                int column = GridPane.getColumnIndex(node);
                 ImageView imageView = (ImageView) t.getSource();
-                imageView.setImage(new Image(getClass().getResourceAsStream(personalCardFile)));
+                imageView.setImage(new Image(getClass().getResourceAsStream("EMPTY.png")));
                 System.out.println("You clicked " + imageView.getImage());
+            }
+        }
+    };
+    EventHandler clickItemTileLibraryHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent t) {
+            //personal card index needed
+            if(youTurn==true){
+
             }
         }
     };
@@ -91,19 +100,18 @@ public class GameViewController implements Initializable {
     public void fullLibrary(){
         for(int c=0; c<5; c++){
             for(int r=0; r<6; r++){
-                String fileName = virtualModel.getBoard()[r][c].toString();
-                aImgLibrary.add(new Image(getClass().getResourceAsStream("/fxml/" + fileName + ".png")));
+                aImgLibrary.add(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getLibrary()[r][c].toString() + ".png")));
                 aImgViewLibrary.add(new ImageView(aImgLibrary.get(c*6+r)));
                 aImgViewLibrary.get(c*6+r).setX(90);
                 aImgViewLibrary.get(c*6+r).setY(90);
                 aImgViewLibrary.get(c*6+r).setPreserveRatio(true);
-                aImgViewLibrary.get(c*6+r).setFitHeight(GUI.getMaxX()*(0.05));
-                aImgViewLibrary.get(c*6+r).setFitWidth(GUI.getMaxX()*(0.05));
+                aImgViewLibrary.get(c*6+r).setFitHeight(GUI.getMaxX()*(0.045));
+                aImgViewLibrary.get(c*6+r).setFitWidth(GUI.getMaxX()*(0.045));
                 libraryID.add(aImgViewLibrary.get(c*6+r),c,r);
             }
         }
         libraryID.setLayoutX(GUI.getMaxX()*0.05);
-        libraryID.setLayoutY(GUI.getMaxY()*0.50);
+        libraryID.setLayoutY(GUI.getMaxY()*0.55);
         libraryID.setHgap(2);
         libraryID.setVgap(2);
     }
@@ -111,31 +119,56 @@ public class GameViewController implements Initializable {
     public void fullBoard(){
         for(int c=0; c<9; c++){
             for(int r=0; r<9; r++){
-                //Image image= new Image(getClass().getResourceAsStream("Cornici1.1.png"));
-                aImgBoard.add(new Image(getClass().getResourceAsStream("Cornici1.1.png")));
+                aImgBoard.add(new Image(getClass().getResourceAsStream("/images/"+virtualModel.getBoard()[r][c].toString()+".png")));
                 //ImageView imageView = new ImageView(aImgBoard.get(c*9+r));
                 aImgViewBoard.add(new ImageView(aImgBoard.get(c*9+r)));
                 aImgViewBoard.get(c*9+r).setX(90);
                 aImgViewBoard.get(c*9+r).setY(90);
                 aImgViewBoard.get(c*9+r).setPreserveRatio(true);
-                aImgViewBoard.get(c*9+r).setFitHeight(GUI.getMaxX()*(0.05));
-                aImgViewBoard.get(c*9+r).setFitWidth(GUI.getMaxX()*(0.05));
+                aImgViewBoard.get(c*9+r).setFitHeight(GUI.getMaxX()*(0.045));
+                aImgViewBoard.get(c*9+r).setFitWidth(GUI.getMaxX()*(0.045));
                 boardID.add(aImgViewBoard.get(c*9+r),c,r);
-                boardID.getChildren().get(c*9+r).setOnMouseClicked(mouseHandler);
+                boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
             }
         }
-        boardID.setLayoutX(GUI.getMaxX()*0.50);
+        boardID.setLayoutX(GUI.getMaxX()*0.55);
         boardID.setLayoutY(GUI.getMaxY()*0.10);
         boardID.setHgap(2);
         boardID.setVgap(2);
     }
-    public void printError (String error){
-        errorsTextID.setText(error);
+    public void notYourTurn(){
+        for(int c=0; c<9; c++) {
+            for (int r = 0; r < 9; r++) {
+                boardID.getChildren().get(c*9+r).setOnMouseClicked(null);
+            }
+        }
+        for(int c=0; c<5; c++){
+            for(int r=0; r<6; r++) {
+                libraryID.getChildren().get(c*6+r).setOnMouseClicked(null);
+            }
+        }
+    }
 
+    public void yourTurn(){
+        for(int c=0; c<9; c++) {
+            for (int r = 0; r < 9; r++) {
+                boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
+            }
+        }
+        for(int c=0; c<5; c++){
+            for(int r=0; r<6; r++) {
+                libraryID.getChildren().get(c*6+r).setOnMouseClicked(clickItemTileLibraryHandler);
+            }
+        }
+    }
+    public void printError (String error){
+        errorsTextID.setText(null);
+        errorsTextID.setText(error);
+        errorsTextID.setVisible(true);
     }
 
     public void personalCardInizializer(){
-        personalCardImgID.setImage(new Image(getClass().getResourceAsStream("front_EMPTY.jpg")));
+        personalCardImgID.setImage(new Image(getClass().getResourceAsStream("Personal_Goals"+virtualModel.getNumberPersonalCard() +".jpg")));
         vBoxPersonalID.setLayoutX(GUI.getMaxX()*0.35);
         vBoxPersonalID.setLayoutY(GUI.getMaxY()*0.60);
         vBoxPersonalID.setFillWidth(true);
@@ -148,8 +181,8 @@ public class GameViewController implements Initializable {
     }
 
     public void commonCardInizializzer(){
-        commonCard1ID.setImage(new Image(getClass().getResourceAsStream(commonCard1File)));
-        commonCard2ID.setImage(new Image(getClass().getResourceAsStream(commonCard2File)));
+        commonCard1ID.setImage(new Image(getClass().getResourceAsStream("CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".png")));
+        commonCard2ID.setImage(new Image(getClass().getResourceAsStream("CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".png")));
         commonCard1ID.setPreserveRatio(true);
         commonCard2ID.setPreserveRatio(true);
         vBoxCommonlID.setMaxHeight(GUI.getMaxY()*0.25);
@@ -162,6 +195,7 @@ public class GameViewController implements Initializable {
         commonCard2ID.setFitHeight(GUI.getMaxX()*0.15*(913/1365));
         vBoxCommonlID.setLayoutY(GUI.getMaxY()*0.10);
         vBoxCommonlID.setLayoutX(GUI.getMaxX()*0.05);
+        vBoxCommonlID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
     }
 
     public void fillLibrarySelectionID(){
