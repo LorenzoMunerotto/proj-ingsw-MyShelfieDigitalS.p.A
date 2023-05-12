@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.TextFlow;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class GameViewController implements Initializable {
     private ChoiceBox<String> librarySelectionID;
 
     @FXML
-    private TextField errorsTextID;
+    private TextFlow errorsTextID;
     private GUI gui;
     private final VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
@@ -162,8 +163,8 @@ public class GameViewController implements Initializable {
         }
     }
     public void printError (String error){
-        errorsTextID.setText(null);
-        errorsTextID.setText(error);
+        //errorsTextID.setText(null);
+        //errorsTextID.setText(error);
         errorsTextID.setVisible(true);
     }
 

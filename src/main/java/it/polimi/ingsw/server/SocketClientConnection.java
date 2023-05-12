@@ -66,7 +66,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
         try {
             outputStream.reset();
-            Thread.sleep(2500);
+            Thread.sleep(4000);
             outputStream.writeObject(new UsernameRequest());
             outputStream.flush();
         } catch (IOException e) {

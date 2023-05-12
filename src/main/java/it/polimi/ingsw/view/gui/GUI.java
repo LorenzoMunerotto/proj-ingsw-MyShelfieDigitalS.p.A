@@ -212,7 +212,7 @@ public class GUI extends Application implements View {
     @Override
     public void startGame()  {
         System.out.println("StartGAme mesage");
-        loadGameView();
+
     }
 
     public Client getClient() {
@@ -254,8 +254,8 @@ public class GUI extends Application implements View {
 
     @Override
     public void showMessage(String message) {
+        getLoginController().setErrorsLabelIDText(message);
         System.out.println(message);
-        loginController.setErrorsLabelIDText(message);
     }
 
     public LoginController getLoginController() {

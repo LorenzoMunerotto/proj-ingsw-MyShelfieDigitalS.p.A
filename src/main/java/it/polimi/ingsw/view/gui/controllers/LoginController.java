@@ -1,8 +1,12 @@
 package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.model.gameEntity.Player;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.GUI;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +22,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -45,7 +51,7 @@ public class LoginController implements Initializable  {
     private ChoiceBox<Integer> numberBoxID;
 
     @FXML
-    private Label errorsLabelID;
+    private TextFlow errorsTextID;
     @FXML
     private ImageView backGroundID;
     private boolean usernamePress=false;
@@ -60,20 +66,26 @@ public class LoginController implements Initializable  {
     private Scene scene;
     private Parent root;
 
-
+    private String errorString;
     public void setGui(GUI gui) {
         this.gui = gui;
     }
 
-    public void setErrorsLabelIDText(String message){
-        errorsLabelID.setText(null);
-        errorsLabelID.setText(message);
-        errorsLabelID.setVisible(true);
+    public void setErrorsLabelIDText(String error){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                errorsTextID.getChildren().clear();
+                Text text = new Text(error);
+                errorsTextID.getChildren().add(text);
+                errorsTextID.setVisible(true);
+            }
+        });
     }
 
     public void userNameSubmit(ActionEvent actionEvent) {
         if(gui.isUsernameValid(textNameInputID.getText())){
-            errorsLabelID.setText(null);
+            errorsTextID.getChildren().clear();
             gui.setUsername(textNameInputID.getText());
             textNameInputID.setVisible(false);
             userNameButtonID.setVisible(false);
@@ -81,17 +93,22 @@ public class LoginController implements Initializable  {
         }
         else if(!gui.isUsernameValid(textNameInputID.getText())){
             usernamePress=false;
-            errorsLabelID.setText("Invalid username, please try again");
+            errorsTextID.getChildren().clear();
+            Text text = new Text("Invalid username, please try again");
+            errorsTextID.getChildren().add(text);
+            errorsTextID.setVisible(true);
             textNameInputID.clear();
         }
     }
     public void submitNumberOfPlayer(ActionEvent event)  {
         if(numberBoxID.getValue()==null){
-            textNameInputID.clear();
-            errorsLabelID.setText("Please, select the exact number of players for the game");
+            textNameInputID.clear();errorsTextID.getChildren().clear();
+            Text text = new Text("Please, select the exact number of players for the game");
+            errorsTextID.getChildren().add(text);
+            errorsTextID.setVisible(true);
         }
         else if(numberBoxID.getValue()!=null){
-            errorsLabelID.setText(null);
+            errorsTextID.getChildren().clear();
             gui.setPlayersNumber(numberBoxID.getValue());
             numberBoxID.setVisible(false);
             numberLabelID.setVisible(false);
@@ -121,7 +138,7 @@ public class LoginController implements Initializable  {
         //backGroundID.setImage(new Image(getClass().getResourceAsStream("/images/BackgroundImage.jpg")));
         System.out.println("initialize");
         numberLabelID.setVisible(false);
-        errorsLabelID.setVisible(true);
+        errorsTextID.setVisible(true);
         numberBoxID.setVisible(false);
         numberLabelID.setVisible(false);
         loginButtonID.setVisible(false);
@@ -130,4 +147,7 @@ public class LoginController implements Initializable  {
         nameLabelID.setVisible(false);
     }
 
+    public void setErrorString(String errorString) {
+        this.errorString = errorString;
+    }
 }
