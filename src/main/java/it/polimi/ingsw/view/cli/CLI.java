@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -144,17 +146,33 @@ public class CLI extends View {
      * maybe we can use it also while a client wait to other to connect to the server
      */
     @Override
-    public void waitForTurn(String username) {
+    public void waitForTurn() {
         this.waitingThread = new Thread(() -> {
-            int index = 0;
+            Terminal terminal = null;
+            try {
+                terminal = TerminalBuilder.terminal();
+                terminal.enterRawMode();
 
-            while (!Thread.currentThread().isInterrupted()) {
-                System.out.print("\rWaiting for " + CLIConstants.CYAN_BRIGHT + username + CLIConstants.RESET + " to play the turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.LOADING_ANIMATIONS[index] + CLIConstants.RESET);
-                index = (index + 1) % CLIConstants.LOADING_ANIMATIONS.length;
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                int index = 0;
+
+                while (!Thread.currentThread().isInterrupted()) {
+                    System.out.print("\rWaiting for your turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.LOADING_ANIMATIONS[index] + CLIConstants.RESET);
+                    index = (index + 1) % CLIConstants.LOADING_ANIMATIONS.length;
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (terminal != null) {
+                    try {
+                        terminal.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -188,7 +206,6 @@ public class CLI extends View {
     public void showGame() {
         this.stopWaiting();
         CLI.clear();
-        //System.out.printf(CLIConstants.GREEN_BRIGHT + "The game was updated!%n" + CLIConstants.RESET);
         try {
             this.drawer.printGame();
         } catch (Exception e) {
@@ -228,6 +245,15 @@ public class CLI extends View {
         }
     }
 
+    @Override
+    public void showChatMessage(String sender, String content) {
+        if (sender.equals(virtualModel.getMyUsername())) {
+            System.out.printf("%s%n", content);
+        } else {
+            System.out.printf("%s%s:%s %s%n", CLIConstants.CYAN_BRIGHT, sender, CLIConstants.RESET, content);
+        }
+    }
+
     /**
      * Main method of the cli.
      *
@@ -235,6 +261,6 @@ public class CLI extends View {
      */
     @Override
     public void main(String[] args) {
-        CLI.clear();
+
     }
 }

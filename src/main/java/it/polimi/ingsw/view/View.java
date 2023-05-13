@@ -107,7 +107,7 @@ public abstract class View {
     /**
      * This method is the method that waits for the turn of the player.
      */
-    public abstract void waitForTurn(String username);
+    public abstract void waitForTurn();
 
     /**
      * This method is the method that plays the turn of the player.
@@ -127,4 +127,5 @@ public abstract class View {
     public abstract void stopWaiting();
 
     public abstract void showMessage(String message);
+    public abstract void showChatMessage(String sender, String content);
 }

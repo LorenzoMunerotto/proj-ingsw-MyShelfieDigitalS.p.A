@@ -26,6 +26,10 @@ public class VirtualModel {
      * A new data structure that represents the personal goal card.
      */
     private ItemTileType[][] personalGoalCard;
+    /**
+     * It is index of the personal goal card.
+     * Used for the GUI, to know which personal goal card to show.
+     */
     private int indexPersonalGoalCard;
     /**
      * Map of the username and the library.

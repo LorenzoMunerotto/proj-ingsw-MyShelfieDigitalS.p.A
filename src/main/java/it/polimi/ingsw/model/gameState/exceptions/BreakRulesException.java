@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.gameMechanics;
+package it.polimi.ingsw.model.gameState.exceptions;
 
 public class BreakRulesException extends Exception {
 

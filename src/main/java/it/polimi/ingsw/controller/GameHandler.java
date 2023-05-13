@@ -6,7 +6,8 @@ import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.personal_cards.*;
 import it.polimi.ingsw.model.gameMechanics.*;
 import it.polimi.ingsw.model.gameState.events.LibrarySetEvent;
-import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
+import it.polimi.ingsw.model.gameState.exceptions.BreakRules;
+import it.polimi.ingsw.model.gameState.exceptions.BreakRulesException;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.server.VirtualClient;
@@ -64,16 +65,12 @@ public class GameHandler {
         assignCommonGoalCards();
         pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
 
-        try {
-            boardManager.refillBoard();
-        } catch (EmptyBagException e) {
-            throw new RuntimeException(e);
-        }
+        boardManager.refillBoard();
         Collections.shuffle(gameData.getPlayers(), new Random());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
     }
-    
+
     /**
      * This method set the PersonalGoalCard on each player in gameData
      */
@@ -110,11 +107,7 @@ public class GameHandler {
             }
             pointsManager.updateTotalPoints();
             if (boardManager.isRefillTime()) {
-                try {
-                    boardManager.refillBoard();
-                } catch (EmptyBagException e) {
-                    sendAll(new CustomMessage("The bag is empty!"));
-                }
+                boardManager.refillBoard();
             }
             sendAll(new EndTurnMessage("The turn is over!"));
             nextPlayer();

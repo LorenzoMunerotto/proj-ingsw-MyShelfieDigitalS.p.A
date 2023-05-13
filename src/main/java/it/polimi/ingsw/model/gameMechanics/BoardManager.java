@@ -97,25 +97,33 @@ public class BoardManager extends AbstractListenable {
     /**
      * Refills the board with new random item tiles from the bag
      */
-    public void refillBoard() throws EmptyBagException {
+    public void refillBoard() {
         bag.shuffle();
-        for (int i = emptyCells.size() - 1; i >= 0; i--) {
+        int i;
+        for (i = emptyCells.size() - 1; i >= 0; i--) {
             Coordinate coordinate = emptyCells.get(i);
             int row = coordinate.getRow();
             int column = coordinate.getColumn();
-            ItemTileType itemTileType = EMPTY;
             try {
-                itemTileType = bag.grabItemTile();
-            } catch (IllegalArgumentException e) {
-
+                board.setItemTile(row, column, bag.grabItemTile());
+                this.emptyCells.remove(coordinate);
+                this.notEmptyCells.add(coordinate);
+            } catch (EmptyBagException e) {
+                System.out.println(e.getMessage());
+                break;
             }
-            board.setItemTile(row, column, itemTileType);
-            this.emptyCells.remove(coordinate);
-            this.notEmptyCells.add(coordinate);
+        }
+        try {
+            for (; i >= 0; i--) {
+                Coordinate coordinate = emptyCells.get(i);
+                emptyCells.remove(i);
+                notEmptyCells.add(coordinate);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         long checksum = calculateCRC();
         notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
-
     }
 
     /**

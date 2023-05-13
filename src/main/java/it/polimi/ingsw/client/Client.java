@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.chat.ChatMessage;
 import it.polimi.ingsw.client.clientMessage.Move;
 import it.polimi.ingsw.client.clientMessage.NumOfPlayerChoice;
 import it.polimi.ingsw.client.clientMessage.UsernameChoice;
@@ -9,6 +10,7 @@ import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -94,7 +96,6 @@ public class Client implements ServerMessageHandler{
      */
     public void handle(CustomMessage customMessage){
         virtualModel.setServerMessage(customMessage.getMessage());
-        view.showMessage(customMessage.getMessage());
     }
 
     /**
@@ -136,7 +137,7 @@ public class Client implements ServerMessageHandler{
             view.showGame();
         }else{
             view.showGame();
-            view.waitForTurn(virtualModel.getCurrentPlayerUsernameIndex().getValue0());
+            view.waitForTurn();
         }
     }
 
@@ -211,6 +212,11 @@ public class Client implements ServerMessageHandler{
     public void handle(ConnectionMessage connectionMessage) {
     }
 
+    @Override
+    public void handle(ChatMessage chatMessage) {
+        view.showChatMessage(chatMessage.getSender(), chatMessage.getContent());
+    }
+
     /**
      * Choose view type between cli and gui.
      *
@@ -271,11 +277,32 @@ public class Client implements ServerMessageHandler{
         String viewType = chooseViewType();
         if(viewType.equals("c")){
             System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
+            /*try {
+                launchChat();
+            } catch (IOException e) {
+                System.err.println("Error launching chat client terminal: " + e.getMessage());
+            }*/
         }
         else{
             System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
         }
         client = new Client(new CLI());
         client.view.main(Args);
+    }
+
+    private static void launchChat() throws IOException {
+        String command;
+        String[] array;
+
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            command = "cmd.exe";
+            array = new String[]{command, "/c", "start", "java", "-cp", System.getProperty("java.class.path"), "it.polimi.ingsw.chat.Chat"};
+        } else {
+            command = "/bin/bash";
+            array = new String[]{command, "-c", "gnome-terminal", "--", "java", "-cp", System.getProperty("java.class.path"), "it.polimi.ingsw.chat.Chat"};
+        }
+        ProcessBuilder processBuilder = new ProcessBuilder(array);
+        processBuilder.start();
     }
 }

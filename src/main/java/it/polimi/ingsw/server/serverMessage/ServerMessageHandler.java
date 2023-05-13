@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.serverMessage;
 
+import it.polimi.ingsw.chat.ChatMessage;
+
 public interface ServerMessageHandler {
 
     void handle(BoardSetMessage boardSetMessage);
@@ -24,4 +26,6 @@ public interface ServerMessageHandler {
     void handle(StartTurnMessage startTurnMessage);
     void handle(UsernameRequest usernameRequest);
     void handle(LibrarySetMessage librarySetMessage);
+    void handle(ChatMessage chatMessage);
+
 }

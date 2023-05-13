@@ -16,6 +16,10 @@ import java.util.concurrent.Executors;
 public class Server {
 
     /**
+     * The port of the server.
+     */
+    private static final int PORT = 1235;
+    /**
      * The socket server.
      */
     private final SocketServer socketServer;
@@ -51,10 +55,6 @@ public class Server {
      * The number of players.
      */
     private Integer numOfPlayers;
-    /**
-     * The port of the server.
-     */
-    private static final int PORT = 1235;
 
     /**
      * This is the constructor of the class.
@@ -67,6 +67,20 @@ public class Server {
         UsernameMapClientID = new HashMap<>();
         VirtualClientMapSocketClientConnection = new HashMap<>();
         waiting = new ArrayList<>();
+    }
+
+    /**
+     * This method is used to start the server.
+     *
+     * @param args are the arguments of the main method
+     */
+
+
+    public static void main(String[] args) {
+        Server server = new Server();
+        System.out.println(CLIConstants.GREEN_BRIGHT + "Server started" + CLIConstants.RESET);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(server.socketServer);
     }
 
     /**
@@ -141,7 +155,7 @@ public class Server {
     /**
      * This method register the client on the server based on the username.
      *
-     * @param username is the username of the client
+     * @param username               is the username of the client
      * @param socketClientConnection is the socketClientConnection of the client
      * @return the clientId of the client
      */
@@ -185,7 +199,7 @@ public class Server {
             socketClientConnection.setUpNumOfPlayers();
         } else if (waiting.size() == numOfPlayers) {
             currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached. The game is starting..."));
-            currentGameHandler.sendAll( new StartGameMessage());
+            currentGameHandler.sendAll(new StartGameMessage());
             waiting.clear();
             currentGameHandler.startGame();
 
@@ -208,19 +222,5 @@ public class Server {
         ClientIdMapUsername.remove(client.getClientID());
         VirtualClientMapSocketClientConnection.remove(client);
         System.out.println("Client has been successfully unregistered.");
-    }
-
-    /**
-     * This method is used to start the server.
-     *
-     * @param args are the arguments of the main method
-     */
-
-
-    public static void main(String[] args) {
-        Server server = new Server();
-        System.out.println(CLIConstants.GREEN_BRIGHT + "Server started" + CLIConstants.RESET);
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.submit(server.socketServer);
     }
 }

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.model.gameMechanics;
+package it.polimi.ingsw.model.gameState.exceptions;
 
 /**
  * Enum that contains all the possible break rules.

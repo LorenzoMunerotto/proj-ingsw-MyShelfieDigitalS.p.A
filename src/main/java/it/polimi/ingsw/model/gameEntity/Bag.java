@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Class representing the bag which contains all the itemTiles.
@@ -48,7 +47,6 @@ public class Bag {
     public ItemTileType grabItemTile() throws EmptyBagException {
         if (itemTiles.size() == 0) {
              throw new EmptyBagException();
-
         }
         return itemTiles.remove(0);
     }
