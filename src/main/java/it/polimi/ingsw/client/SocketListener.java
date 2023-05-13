@@ -7,13 +7,35 @@ import it.polimi.ingsw.server.serverMessage.*;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * This class is the socket listener of the client.
+ */
 public class SocketListener implements Runnable {
 
+    /**
+     * It is the client.
+     */
     Client client;
+    /**
+     * It is the socket of the server.
+     */
     Socket socketServer;
+    /**
+     * It is the input stream of the socket.
+     */
     ObjectInputStream inputStream;
+    /**
+     * It is the output stream of the socket.
+     */
     ObjectOutputStream outputStream;
 
+    /**
+     * Default constructor, initialize the client and the socket.
+     *
+     * @param client   is the client
+     * @param serverIp is the ip of the server
+     * @param port     is the port of the server
+     */
     public SocketListener(Client client, String serverIp, int port) {
 
         this.client = client;
@@ -30,11 +52,20 @@ public class SocketListener implements Runnable {
         }
     }
 
+    /**
+     * This method read a message from the socket and call the accept method of the message.
+     *
+     * @throws IOException            if there is a problem with the socket
+     * @throws ClassNotFoundException if the class of the object received from the socket cannot be found
+     */
     public synchronized void readFromStream() throws IOException, ClassNotFoundException {
         ServerMessage input = (ServerMessage) inputStream.readObject();
         input.accept(client);
     }
 
+    /**
+     * This method is the run method of the thread.
+     */
     @Override
     public void run() {
         try {

@@ -38,10 +38,6 @@ public abstract class View {
      */
     protected int MAX_PLAYERS_NUMBER = 4;
     /**
-     * It is the username of the winner of the game.
-     */
-    protected String winner;
-    /**
      * It is the virtual model.
      * Still don't know when and where to initialize it.
      */
@@ -52,11 +48,7 @@ public abstract class View {
      * Maybe.
      */
     public View() {
-        this.virtualModel= new VirtualModel();
-    }
-
-    public VirtualModel getVirtualModel() {
-        return virtualModel;
+        this.virtualModel = new VirtualModel();
     }
 
     /**
@@ -83,49 +75,74 @@ public abstract class View {
         return matcher.matches();
     }
 
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
+    }
+
     /**
      * This method is the main method of the view.
+     *
      * @param args are the arguments of the main method
      */
     public abstract void main(String[] args);
-
+    /**
+     * Asks the user to choose his username.
+     *
+     * @return the username of the player
+     */
     public abstract String chooseUsername();
-
+    /**
+     * Asks the user to choose the number of players for the game.
+     *
+     * @return the number of players chosen by the user
+     */
     public abstract Integer choosePlayersNumber();
-
+    /**
+     * Asks the user to choose the item tiles to grab from the board.
+     *
+     * @return the list of the item tiles chosen by the user
+     */
     public abstract List<Coordinate> chooseTiles();
-
+    /**
+     * Asks the user to choose the column of the library where to place the tiles.
+     *
+     * @return the column chosen by the user
+     */
     public abstract Integer chooseColumn();
-
+    /**
+     * Starts the game and prints the objects of the game.
+     */
     public abstract void startGame();
-
     /**
      * This method is the method that shows the game.
      */
     public abstract void showGame();
-
     /**
      * This method is the method that waits for the turn of the player.
      */
     public abstract void waitForTurn();
-
     /**
      * This method is the method that plays the turn of the player.
      */
     public abstract void playTurn();
-
     /**
      * This method is the method that ends the game.
      */
     public abstract void endGame(Boolean isWinner);
-
     /**
      * This method is the method that manages the turn of the player.
      */
     public abstract void showErrorMessage(String errorMessage);
-
+    /**
+     * Stops the waiting thread.
+     */
     public abstract void stopWaiting();
-
+    /**
+     * Shows a message.
+     */
     public abstract void showMessage(String message);
+    /**
+     * Shows a chat message.
+     */
     public abstract void showChatMessage(String sender, String content);
 }

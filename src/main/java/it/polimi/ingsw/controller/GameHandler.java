@@ -19,16 +19,35 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.EMPTY;
 import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.NULL;
 
+/**
+ * This class represents the GameHandler of the game.
+ * It is the controller of the game, it is responsible for the game logic.
+ */
 public class GameHandler {
 
+    /**
+     * It is the list of the VirtualClients in the game.
+     */
     private final List<VirtualClient> virtualClients;
+    /**
+     * It is the GameData of the game.
+     */
     private final GameData gameData;
+    /**
+     * It is the LibraryManager of the game.
+     */
     private LibraryManager libraryManager;
+    /**
+     * It is the BoardManager of the game.
+     */
     private BoardManager boardManager;
+    /**
+     * It is the PointsManager of the game.
+     */
     private PointsManager pointsManager;
 
     /**
-     * Constructor of GameHandler
+     * Default constructor, initialize the GameData and the VirtualClients list.
      */
     public GameHandler() {
         this.gameData = new GameData();
@@ -79,7 +98,6 @@ public class GameHandler {
         List<PersonalGoalCard> personalGoalCards = allPersonalGoalCards.getPersonalGoalCards(gameData.getNumberOfPlayers());
         for (Player player : gameData.getPlayers()) {
             player.setPersonalGoalCard(personalGoalCards.remove(0));
-            // personal card set event
         }
     }
 
@@ -88,6 +106,15 @@ public class GameHandler {
      */
     public void assignCommonGoalCards() {
         gameData.setCommonGoalCardsList(CommonCardFactory.createCards());
+    }
+
+    /**
+     * This method set the managers in order to work on the current Player/library
+     */
+    public void setUpManagers() {
+        libraryManager.setLibrary(gameData.getCurrentPlayer().getLibrary());
+        libraryManager.setUsername(gameData.getCurrentPlayer().getUsername());
+        pointsManager.setPlayer(gameData.getCurrentPlayer());
     }
 
     /**
@@ -109,7 +136,6 @@ public class GameHandler {
             if (boardManager.isRefillTime()) {
                 boardManager.refillBoard();
             }
-            sendAll(new EndTurnMessage("The turn is over!"));
             nextPlayer();
         } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
@@ -149,15 +175,6 @@ public class GameHandler {
             throw new BreakRulesException(BreakRules.COLUMN_OUT_OF_BOUNDS);
         if (size > libraryManager.emptyTilesCounter(move.getColumn()))
             throw new BreakRulesException(BreakRules.COLUMN_OUT_OF_SPACE);
-    }
-
-    /**
-     * This method set the managers in order to work on the current Player/library
-     */
-    public void setUpManagers() {
-        libraryManager.setLibrary(gameData.getCurrentPlayer().getLibrary());
-        libraryManager.setUsername(gameData.getCurrentPlayer().getUsername());
-        pointsManager.setPlayer(gameData.getCurrentPlayer());
     }
 
     /**
@@ -245,7 +262,7 @@ public class GameHandler {
     }
 
     /**
-     * This method manage the game ending
+     * This method manage the game ending.
      */
     private void endGame() {
         sendAll(new EndGameMessage());
@@ -255,7 +272,7 @@ public class GameHandler {
     }
 
     /**
-     * This method stop the game when a client disconnected from the server
+     * This method stop the game when a client disconnected from the server.
      *
      * @param username username of the player who lost the connection
      */

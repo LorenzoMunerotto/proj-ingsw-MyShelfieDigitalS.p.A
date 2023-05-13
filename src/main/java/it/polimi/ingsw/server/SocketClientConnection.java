@@ -57,10 +57,9 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
             clientID = -1;
             active = true;
         } catch (IOException e) {
-            System.err.println( "Error during initialization of the client!");
+            System.err.println("Error during initialization of the client!");
             System.err.println(e.getMessage());
         }
-
         try {
             outputStream.reset();
             outputStream.writeObject(new UsernameRequest());
@@ -68,34 +67,22 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         } catch (IOException e) {
             System.out.println("Send failed");
         }
-
     }
 
     /**
      * This method reads the inputStream of the socket according to the type of message handle.
      *
-     * @throws IOException           the io exception
+     * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
     public synchronized void readFromStream() throws IOException, ClassNotFoundException {
-
         ClientMessage input = (ClientMessage) inputStream.readObject();
 
-        if (input instanceof Move){
+        if (input instanceof Move) {
             handle((Move) input);
-        }
-        else if (input instanceof UsernameChoice){
+        } else if (input instanceof UsernameChoice) {
             handle((UsernameChoice) input);
         }
-    }
-
-    /**
-     * This method sets the boolean that indicates if the server is active.
-     *
-     * @param active the boolean that indicates if the server is active
-     */
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     /**
@@ -108,11 +95,20 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     }
 
     /**
+     * This method sets the boolean that indicates if the server is active.
+     *
+     * @param active the boolean that indicates if the server is active
+     */
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    /**
      * This method send a message to the client writing it on the outputStream of the socket.
      *
      * @param serverMessage the server message
      */
-    public void send(ServerMessage serverMessage){
+    public void send(ServerMessage serverMessage) {
         try {
             outputStream.reset();
             outputStream.writeObject(serverMessage);
@@ -129,12 +125,11 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void handle(UsernameChoice usernameChoice) {
-
         try {
             clientID = server.registerConnection(usernameChoice.getUsername(), this);
             if (clientID == null) {
                 send(new UsernameRequest());
-            }else{
+            } else {
                 server.lobby(this);
             }
         } catch (InterruptedException e) {
@@ -146,22 +141,22 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     /**
      * This method sets up the number of players.
      */
-    public void setUpNumOfPlayers(){
+    public void setUpNumberOfPlayers() {
         send(new NumOfPlayerRequest());
-        while(true){
+        while (true) {
             try {
                 ClientMessage input = (ClientMessage) inputStream.readObject();
 
-                if (input instanceof NumOfPlayerChoice){
+                if (input instanceof NumberOfPLayerChoice) {
                     try {
-                        int num = (((NumOfPlayerChoice) input).getNumOfPlayer());
+                        int num = (((NumberOfPLayerChoice) input).getNumOfPlayer());
                         server.getGameHandlerByClientId(clientID).setNumberOfPlayers(num);
                         server.setNumOfPlayers(num);
                         send(new CustomMessage("Number of players correctly set to: " + CLIConstants.CYAN_BRIGHT + num + CLIConstants.RESET));
                         break;
                     } catch (IllegalNumOfPlayersException e) {
                         send(new ErrorMessage(GameCreationErrors.ILLEGAL_NUM_OF_PLAYER));
-                        setUpNumOfPlayers();
+                        setUpNumberOfPlayers();
                     }
                 }
             } catch (ClassNotFoundException | IOException e) {
@@ -195,11 +190,11 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     /**
      * This method handles the number of players choice.
      *
-     * @param numOfPlayerChoice the number of players choice
+     * @param numberOfPLayerChoice the number of players choice
      */
     @Override
-    public void handle(NumOfPlayerChoice numOfPlayerChoice) {
-        server.setNumOfPlayers(numOfPlayerChoice.getNumOfPlayer());
+    public void handle(NumberOfPLayerChoice numberOfPLayerChoice) {
+        server.setNumOfPlayers(numberOfPLayerChoice.getNumOfPlayer());
     }
 
     /**

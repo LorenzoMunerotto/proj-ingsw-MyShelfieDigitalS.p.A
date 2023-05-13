@@ -14,7 +14,6 @@ public interface ServerMessageHandler {
     void handle(CustomMessage customMessage);
     void handle(DisconnectionMessage disconnectionMessage);
     void handle(EndGameMessage endGameMessage);
-    void handle(EndTurnMessage endTurnMessage);
     void handle(ErrorMessage errorMessage);
     void handle(FirstFullLibraryMessage firstFullLibraryMessage);
     void handle(LibraryUpdateMessage libraryUpdateMessage);
@@ -27,5 +26,4 @@ public interface ServerMessageHandler {
     void handle(UsernameRequest usernameRequest);
     void handle(LibrarySetMessage librarySetMessage);
     void handle(ChatMessage chatMessage);
-
 }

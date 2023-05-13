@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.server.Server;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -18,9 +19,10 @@ public class MyShelfie {
 
     /**
      * Main method of the project, starts the program as a server or as a client.
+     *
      * @param args command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String choice = "";
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Choose if you want to start this as a server or as a client [%ss%s/%sc%s]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
         while (choice.isEmpty()) {

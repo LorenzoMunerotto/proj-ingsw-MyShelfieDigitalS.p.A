@@ -10,6 +10,7 @@ import java.util.*;
  */
 public class Bag {
 
+    private final static int ITEM_TILE_FOR_TYPE = 22;
     /**
      * List of the item tiles im the bag.
      */
@@ -24,7 +25,7 @@ public class Bag {
             if (type == ItemTileType.EMPTY || type == ItemTileType.NULL) {
                 continue;
             }
-            for (int i = 0; i < 22; i++) {
+            for (int i = 0; i < ITEM_TILE_FOR_TYPE; i++) {
                 itemTiles.add(type);
             }
         }
@@ -46,7 +47,7 @@ public class Bag {
      */
     public ItemTileType grabItemTile() throws EmptyBagException {
         if (itemTiles.size() == 0) {
-             throw new EmptyBagException();
+            throw new EmptyBagException();
         }
         return itemTiles.remove(0);
     }

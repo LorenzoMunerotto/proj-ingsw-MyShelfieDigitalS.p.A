@@ -57,11 +57,6 @@
             <artifactId>javatuples</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>3.22.0</version>
-        </dependency>
 
         <!-- Packaging Dependencies -->
         <dependency>

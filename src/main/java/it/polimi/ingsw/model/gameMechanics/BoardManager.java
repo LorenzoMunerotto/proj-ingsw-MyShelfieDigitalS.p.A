@@ -258,6 +258,12 @@ public class BoardManager extends AbstractListenable {
         return column == board.getBoardGrid()[0].length - 1 || isEmptyOrNull(row, column + 1);
     }
 
+    /**
+     * This method calculates the checksum of the board.
+     * It is used to check if the board has been modified.
+     *
+     * @return the checksum of the board
+     */
     public long calculateCRC() {
         CRC32 crc = new CRC32();
         for (int row = 0; row < board.getBoardGrid().length; row++) {

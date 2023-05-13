@@ -48,16 +48,16 @@ public class Board {
         boolean createCell3 = (numPlayers == 3 || numPlayers == 4);
         boolean createCell4 = (numPlayers == 4);
 
-        this.boardGrid = new ItemTileType[][] {
-                { ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL },
-                { ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL },
-                { ItemTileType.NULL, ItemTileType.NULL, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL },
-                { ItemTileType.NULL, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL) },
-                { (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL) },
-                { (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL },
-                { ItemTileType.NULL, ItemTileType.NULL, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL },
-                { ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL },
-                { ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL },
+        this.boardGrid = new ItemTileType[][]{
+                {ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL},
+                {ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL},
+                {ItemTileType.NULL, ItemTileType.NULL, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL},
+                {ItemTileType.NULL, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL)},
+                {(createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL)},
+                {(createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL},
+                {ItemTileType.NULL, ItemTileType.NULL, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL},
+                {ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL},
+                {ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL, (createCell4 ? ItemTileType.EMPTY : ItemTileType.NULL), (createCell3 ? ItemTileType.EMPTY : ItemTileType.NULL), ItemTileType.NULL, ItemTileType.NULL, ItemTileType.NULL},
         };
     }
 
@@ -73,22 +73,22 @@ public class Board {
     /**
      * Get the itemTile in the grid.
      *
-     * @param row is the row of the grid
+     * @param row    is the row of the grid
      * @param column is the column of the grid
      * @return the itemTile in the grid
      */
-    public ItemTileType getItemTile(int row, int column){
+    public ItemTileType getItemTile(int row, int column) {
         return this.boardGrid[row][column];
     }
 
     /**
      * Set the new itemTile in the grid.
      *
-     * @param row is the row of the grid
-     * @param column is the column of the grid
+     * @param row      is the row of the grid
+     * @param column   is the column of the grid
      * @param itemTile is the new itemTile to set
      */
-    public void setItemTile(int row, int column, ItemTileType itemTile){
+    public void setItemTile(int row, int column, ItemTileType itemTile) {
         this.boardGrid[row][column] = itemTile;
     }
 }

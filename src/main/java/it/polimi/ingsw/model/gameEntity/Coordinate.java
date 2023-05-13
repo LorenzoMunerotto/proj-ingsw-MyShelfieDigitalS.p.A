@@ -9,18 +9,18 @@ import java.util.Objects;
 public class Coordinate implements Serializable {
 
     /**
-     * the number which identifies the row
+     * The number which identifies the row
      */
     private final int row;
     /**
-     * the number which identifies the column
+     * The number which identifies the column
      */
     private final int column;
 
     /**
-     * Constructor of the Coordinate.
+     * Default constructor.
      *
-     * @param row is the row
+     * @param row    is the row
      * @param column is the column
      */
     public Coordinate(int row, int column) {
@@ -55,8 +55,8 @@ public class Coordinate implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) return true;
-        if(obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
         Coordinate that = (Coordinate) obj;
         return row == that.row && column == that.column;
     }
@@ -67,7 +67,7 @@ public class Coordinate implements Serializable {
      * @return a hash code value for this Coordinate
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(row, column);
     }
 }

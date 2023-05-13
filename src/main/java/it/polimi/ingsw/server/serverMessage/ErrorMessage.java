@@ -6,7 +6,6 @@ public class ErrorMessage implements ServerMessage {
 
     private final GameCreationErrors type;
 
-
     public ErrorMessage(GameCreationErrors type) {
         this.type = type;
     }

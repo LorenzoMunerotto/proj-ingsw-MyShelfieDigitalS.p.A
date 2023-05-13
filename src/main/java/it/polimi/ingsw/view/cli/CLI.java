@@ -2,8 +2,6 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,8 +32,8 @@ public class CLI extends View {
      * Default constructor, initializes the drawer.
      */
     public CLI() {
-        drawer = new CLIDrawer(this.virtualModel);
-        parser = new CLIParser();
+        this.drawer = new CLIDrawer(this.virtualModel);
+        this.parser = new CLIParser();
     }
 
     /**
@@ -61,6 +59,8 @@ public class CLI extends View {
 
     /**
      * Asks the user to choose his username.
+     *
+     * @return the username chosen by the user
      */
     @Override
     public String chooseUsername() {
@@ -79,6 +79,8 @@ public class CLI extends View {
 
     /**
      * Asks the user to choose the number of players for the game.
+     *
+     * @return the number of players chosen by the user
      */
     @Override
     public Integer choosePlayersNumber() {
@@ -103,6 +105,8 @@ public class CLI extends View {
 
     /**
      * Asks the user to choose the item tiles to grab from the board.
+     *
+     * @return the list of the item tiles chosen by the user
      */
     public List<Coordinate> chooseTiles() {
         this.coordinates = "";
@@ -121,6 +125,8 @@ public class CLI extends View {
 
     /**
      * Asks the user to choose the column of the library where to place the tiles.
+     *
+     * @return the column chosen by the user
      */
     public Integer chooseColumn() {
         this.column = 0;
@@ -148,31 +154,15 @@ public class CLI extends View {
     @Override
     public void waitForTurn() {
         this.waitingThread = new Thread(() -> {
-            Terminal terminal = null;
-            try {
-                terminal = TerminalBuilder.terminal();
-                terminal.enterRawMode();
+            int index = 0;
 
-                int index = 0;
-
-                while (!Thread.currentThread().isInterrupted()) {
-                    System.out.print("\rWaiting for your turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.LOADING_ANIMATIONS[index] + CLIConstants.RESET);
-                    index = (index + 1) % CLIConstants.LOADING_ANIMATIONS.length;
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (terminal != null) {
-                    try {
-                        terminal.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            while (!Thread.currentThread().isInterrupted()) {
+                System.out.print("\rWaiting for your turn..." + CLIConstants.BLUE_BRIGHT + CLIConstants.LOADING_ANIMATIONS[index] + CLIConstants.RESET);
+                index = (index + 1) % CLIConstants.LOADING_ANIMATIONS.length;
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
         });
@@ -238,13 +228,19 @@ public class CLI extends View {
         System.out.printf("%s%sInvalid input!%s %s%n", CLIConstants.CONSOLE_ARROW, CLIConstants.RED_BRIGHT, CLIConstants.RESET, errorMessage);
     }
 
+    /**
+     * Shows a message.
+     */
     @Override
     public void showMessage(String message) {
         if (message != null) {
-            System.out.println(message);
+            System.out.println(CLIConstants.GREEN_BRIGHT + "SERVER MESSAGE: " + CLIConstants.RESET + message);
         }
     }
 
+    /**
+     * Shows a chat message.
+     */
     @Override
     public void showChatMessage(String sender, String content) {
         if (sender.equals(virtualModel.getMyUsername())) {
@@ -261,6 +257,5 @@ public class CLI extends View {
      */
     @Override
     public void main(String[] args) {
-
     }
 }

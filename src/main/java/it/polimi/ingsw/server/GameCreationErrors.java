@@ -15,6 +15,7 @@ public enum GameCreationErrors {
 
     /**
      * This constructor initializes the error message.
+     *
      * @param description is the message of the error.
      */
     GameCreationErrors(String description) {

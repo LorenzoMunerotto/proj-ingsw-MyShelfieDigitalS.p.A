@@ -1,20 +1,14 @@
 package it.polimi.ingsw.listener;
 
-
 /**
- * This is the interface used for implementing visitor pattern,
- * every object that represent an event in mvc pattern must implement this interface
+ * This is the interface used for implementing visitor pattern.
  */
-
 public interface Event {
 
     /**
-     * This method is a part of the implementation of Visitor pattern applied to Observe-Observable pattern
-     * @param
+     * This method is used for accepting a listener.
+     *
+     * @param listener is the listener to be accepted.
      */
     void accept(Listener listener);
-
-
-
-
 }

@@ -8,7 +8,7 @@ public enum BreakRules {
     ALONE_TILE("One of the selected tiles has no adjacent tile"),
     SURROUNDED_TILE("One of the selected tiles doesn't have a free side"),
     EMPTY_CELL("One of the selected cells is empty"),
-    TOO_MUCH_TILES_SELECTED ("More than 3 tiles have been selected"),
+    TOO_MUCH_TILES_SELECTED("More than 3 tiles have been selected"),
     TOO_FEW_TILES_SELECTED("Less than 1 tile has been selected"),
     DUPLICATE_TILES_SELECTED("A cell can be selected only once"),
     NOT_PLAYABLE_TILE("One of the selected cells does not exist"),
@@ -26,8 +26,8 @@ public enum BreakRules {
      *
      * @param description the description of the break rule
      */
-    BreakRules(String description){
-        this.description=description;
+    BreakRules(String description) {
+        this.description = description;
     }
 
     /**

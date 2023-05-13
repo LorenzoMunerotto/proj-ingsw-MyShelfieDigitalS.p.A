@@ -35,10 +35,7 @@ public class Server {
      * The map of the clients' id and their username.
      */
     private final Map<Integer, String> ClientIdMapUsername;
-    /**
-     * The map of the clients' username and their id.
-     */
-    private final Map<String, Integer> UsernameMapClientID;
+
     /**
      * The map of the virtual clients and their socket client connection.
      */
@@ -57,39 +54,28 @@ public class Server {
     private Integer numOfPlayers;
 
     /**
-     * This is the constructor of the class.
+     * Default constructor.
      */
     public Server() {
         this.socketServer = new SocketServer(PORT, this);
         nextClientId = 1;
         ClientIdMapVirtualClient = new HashMap<>();
         ClientIdMapUsername = new HashMap<>();
-        UsernameMapClientID = new HashMap<>();
         VirtualClientMapSocketClientConnection = new HashMap<>();
         waiting = new ArrayList<>();
     }
 
     /**
-     * This method is used to start the server.
+     * Main method.
+     * Used to start the server.
      *
      * @param args are the arguments of the main method
      */
-
-
     public static void main(String[] args) {
         Server server = new Server();
         System.out.println(CLIConstants.GREEN_BRIGHT + "Server started" + CLIConstants.RESET);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(server.socketServer);
-    }
-
-    /**
-     * Get the socket server.
-     *
-     * @return the socket server
-     */
-    public synchronized SocketServer getSocketServer() {
-        return socketServer;
     }
 
     /**
@@ -103,16 +89,6 @@ public class Server {
     }
 
     /**
-     * Get the virtual client by client id.
-     *
-     * @param clientId is the client id
-     * @return the virtual client
-     */
-    public VirtualClient getVirtualClientByClientId(int clientId) {
-        return ClientIdMapVirtualClient.get(clientId);
-    }
-
-    /**
      * Get the username by client id.
      *
      * @param clientId is the client id
@@ -120,16 +96,6 @@ public class Server {
      */
     public String getUsernameByClientId(Integer clientId) {
         return ClientIdMapUsername.get(clientId);
-    }
-
-    /**
-     * Get the client id by username.
-     *
-     * @param username is the username
-     * @return the client id
-     */
-    public Integer getClientIdByUsername(String username) {
-        return UsernameMapClientID.get(username);
     }
 
     /**
@@ -178,10 +144,9 @@ public class Server {
         currentGameHandler.addVirtualClient(virtualClient);
         currentGameHandler.addPlayer(username, clientId);
         ClientIdMapVirtualClient.put(clientId, virtualClient);
-        UsernameMapClientID.put(username, clientId);
         ClientIdMapUsername.put(clientId, username);
         VirtualClientMapSocketClientConnection.put(virtualClient, socketClientConnection);
-        System.out.println(virtualClient.getUsername() + " connected with clientId: " + virtualClient.getClientID());
+        System.out.println(virtualClient.getUsername() + " connected with client Id: " + virtualClient.getClientID());
 
         return clientId;
     }
@@ -196,7 +161,7 @@ public class Server {
 
         waiting.add(socketClientConnection);
         if (waiting.size() == 1) {
-            socketClientConnection.setUpNumOfPlayers();
+            socketClientConnection.setUpNumberOfPlayers();
         } else if (waiting.size() == numOfPlayers) {
             currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached. The game is starting..."));
             currentGameHandler.sendAll(new StartGameMessage());
@@ -217,7 +182,6 @@ public class Server {
         VirtualClient client = ClientIdMapVirtualClient.get(clientID);
         System.out.printf("Unregistering client %s with client id: %d...", client.getUsername(), client.getClientID());
         ClientIdMapVirtualClient.remove(clientID);
-        UsernameMapClientID.remove(client.getUsername());
         waiting.remove(VirtualClientMapSocketClientConnection.get(client));
         ClientIdMapUsername.remove(client.getClientID());
         VirtualClientMapSocketClientConnection.remove(client);

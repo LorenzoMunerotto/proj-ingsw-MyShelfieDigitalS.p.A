@@ -257,11 +257,11 @@ public class CLIDrawer {
         String[] gameInfoLines = {
                 " " + WHITE_UNDERLINED + "Game info:" + RESET,
                 " Username: " + CYAN_BRIGHT + virtualModel.getMyUsername() + RESET,
-                " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsernameIndex().getValue0() + RESET,
+                " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsername() + RESET,
                 " Points: " + RED_BRIGHT + virtualModel.getPointsByUsername(virtualModel.getMyUsername()) + RESET,
-                " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerUsernameIndex().getValue1()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
-                " Chair: " + (virtualModel.getCurrentPlayerUsernameIndex().getValue1() == 1 ? GREEN_BRIGHT + "true" + RESET : RED_BRIGHT + "false" + RESET),
+                " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerIndex()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
                 " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET,
+                "",
                 "",
                 ""
         };
