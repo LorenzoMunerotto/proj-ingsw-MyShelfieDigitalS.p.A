@@ -594,6 +594,14 @@ public class GameViewController implements Controller {
 
 
     }
+    public void loadFinalPage(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gui.changeStage("/fxml/FinalPage.fxml");
+            }
+        });
+    }
 
     public void setYouTurn(boolean youTurn) {
         this.youTurn = youTurn;

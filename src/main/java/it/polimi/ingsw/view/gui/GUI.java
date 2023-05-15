@@ -11,16 +11,12 @@ import it.polimi.ingsw.view.gui.controllers.FinalPageController;
 import it.polimi.ingsw.view.gui.controllers.GameViewController;
 import it.polimi.ingsw.view.gui.controllers.LoginController;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.*;
@@ -266,7 +262,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void startGame()  {
-        getLoginController().caricaGame();
+        getLoginController().loadGameView();
         System.out.println("StartGAme mesage");
         scene=1;
         //setController();
@@ -305,7 +301,8 @@ public class GUI extends Application implements View {
 
     @Override
     public void endGame(Boolean isWinner) {
-        loadFinalPage();
+        getGameViewController().loadFinalPage();
+        getFinalPageController().compilePointsTable();
     }
 
     @Override

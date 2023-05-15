@@ -1,37 +1,21 @@
 package it.polimi.ingsw.view.gui.controllers;
 
-import it.polimi.ingsw.model.gameEntity.Coordinate;
-import it.polimi.ingsw.model.gameEntity.Player;
-import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.*;
-import java.util.logging.Level;
 
 public class LoginController implements Controller  {
 
@@ -122,7 +106,7 @@ public class LoginController implements Controller  {
 
     }
 
-    public void caricaGame(){
+    public void loadGameView(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -130,7 +114,6 @@ public class LoginController implements Controller  {
 
             }
         });
-
     }
 
     public void enterTheGame(ActionEvent event) throws IOException {

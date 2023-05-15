@@ -56,7 +56,7 @@ public class FinalPageController implements Controller{
 
     }
 
-    private void compilePointsTable(){
+    public void compilePointsTable(){
         List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
         for (int i = 0; i < leaderBoards.size(); i++) {
             nameColumnID.setCellValueFactory(new PropertyValueFactory<>(leaderBoards.get(i).getValue0()));
