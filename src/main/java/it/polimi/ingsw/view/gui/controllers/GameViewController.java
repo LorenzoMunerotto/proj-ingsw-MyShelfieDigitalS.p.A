@@ -194,13 +194,14 @@ public class GameViewController implements Controller {
                         imageView.setFitHeight(gui.getMaxX()*(0.030));
                         imageView.setFitWidth(gui.getMaxX()*(0.030));
                         libraryID.add(imageView,c,r);
-                        libraryID.getChildren().get(r+6*c).setOnMouseClicked(clickItemTileLibraryHandler);
+                        //libraryID.getChildren().get(r+6*c).setOnMouseClicked(clickItemTileLibraryHandler);
                     }
                 }
                 libraryID.setLayoutX(gui.getMaxX()*0.05);
                 libraryID.setLayoutY(gui.getMaxY()*0.55);
                 libraryID.setHgap(2);
                 libraryID.setVgap(2);
+                libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
                 libraryID.setVisible(true);
             }
         });
@@ -220,7 +221,7 @@ public class GameViewController implements Controller {
                         imageView.setFitHeight(gui.getMaxX()*(0.040));
                         imageView.setFitWidth(gui.getMaxX()*(0.040));
                         boardID.add(imageView,c,r);
-                        boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
+                        //boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
                         //boardOwID.add(aImgViewBoard.get(c*9+r),c,r);
                     }
                 }
@@ -228,11 +229,14 @@ public class GameViewController implements Controller {
                 boardID.setLayoutY(gui.getMaxY()*0.35);
                 boardID.setHgap(2);
                 boardID.setVgap(2);
+                boardID.setOnMouseClicked(clickItemTileBoardHandler);
                 boardID.setVisible(true);
             }
         });
 
     }
+
+
     public void printBoardOw(){
         for(int c=0; c<9; c++){
             for(int r=0; r<9; r++){
@@ -411,6 +415,8 @@ public class GameViewController implements Controller {
                 printAllLibrary();
                 printBoardOw();
                 fullLibrary();
+                boardID.setOnMouseClicked(clickItemTileBoardHandler);
+                libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
             }
         });
     }
@@ -459,6 +465,7 @@ public class GameViewController implements Controller {
                 fullLibrary();
                 fullBoard();
                 printBoardOw();
+                libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
                 itemTileBoxID.setLayoutX(gui.getMaxX()*0.60);
                 itemTileBoxID.setMaxHeight(gui.getMaxY()*0.7);
                 ItemTileType[][] board = virtualModel.getBoard();
