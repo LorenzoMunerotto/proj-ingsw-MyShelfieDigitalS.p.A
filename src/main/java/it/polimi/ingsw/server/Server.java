@@ -146,7 +146,8 @@ public class Server {
         ClientIdMapVirtualClient.put(clientId, virtualClient);
         ClientIdMapUsername.put(clientId, username);
         VirtualClientMapSocketClientConnection.put(virtualClient, socketClientConnection);
-        System.out.println(virtualClient.getUsername() + " connected with client Id: " + virtualClient.getClientID());
+        System.out.printf("%s%s connected%s with client Id: %s%d%s%n",
+                CLIConstants.GREEN_BRIGHT, virtualClient.getUsername(), CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, virtualClient.getClientID(), CLIConstants.RESET);
 
         return clientId;
     }

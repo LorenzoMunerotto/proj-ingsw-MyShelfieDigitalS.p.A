@@ -86,12 +86,16 @@ public class Client implements ServerMessageHandler {
      * Choose the server ip.
      */
     private static void chooseServerIP() {
-        System.out.print(CLIConstants.CONSOLE_ARROW + "Please, insert server IP address: ");
+        System.out.print(CLIConstants.CONSOLE_ARROW + "Please, insert server IP address (press enter to use default): ");
         String serverAddress = Client.input.nextLine().strip();
         if (!serverAddress.isEmpty()) {
-            serverIp = serverAddress;
+            if (isValidIPAddress(serverAddress)) {
+                serverIp = serverAddress;
+            } else {
+                System.out.printf("%sInvalid IP address%s, using the default server ip address: %s%n", CLIConstants.RED_BRIGHT, CLIConstants.RESET, serverIp);
+            }
         } else {
-            System.out.println(CLIConstants.CONSOLE_ARROW + "Using the default server ip address " + CLIConstants.CYAN_BRIGHT + serverIp + CLIConstants.RESET);
+            System.out.println("Using the default server ip address: " + CLIConstants.CYAN_BRIGHT + serverIp + CLIConstants.RESET);
         }
     }
 
@@ -100,17 +104,41 @@ public class Client implements ServerMessageHandler {
      */
     private static void chooseServerPort() {
         String serverPortString;
-        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please, specify server port: ");
+        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please, insert server port (press enter to use default): ");
         try {
             serverPortString = Client.input.nextLine().strip();
             int currentPort = Integer.parseInt(serverPortString);
             if (currentPort < 1024 || currentPort > 65535) {
                 serverPort = currentPort;
             } else {
-                System.out.println(CLIConstants.CONSOLE_ARROW + "Using the default server server port " + CLIConstants.CYAN_BRIGHT + serverPort + CLIConstants.RESET);
+                System.out.printf("%sInvalid port%s, using the default server port: %d%n", CLIConstants.RED_BRIGHT, CLIConstants.RESET, serverPort);
             }
         } catch (NumberFormatException e) {
-            System.out.println(CLIConstants.CONSOLE_ARROW + "Using the default server server port " + CLIConstants.CYAN_BRIGHT + serverPort + CLIConstants.RESET);
+            System.out.println("Using the default server port: " + CLIConstants.CYAN_BRIGHT + serverPort + CLIConstants.RESET);
+        }
+    }
+
+    /**
+     * This method is used to check if the server ip address is valid.
+     *
+     * @param ipAddress the ip address
+     * @return true if the ip address is valid, false otherwise
+     */
+    private static boolean isValidIPAddress(String ipAddress) {
+        try {
+            String[] sections = ipAddress.split("\\.");
+            if (sections.length != 4) {
+                return false;
+            }
+            for (String section : sections) {
+                int i = Integer.parseInt(section);
+                if ((i < 0) || (i > 255)) {
+                    return false;
+                }
+            }
+            return !ipAddress.endsWith(".");
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 

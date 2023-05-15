@@ -77,24 +77,12 @@ public class SocketServer implements Runnable {
     }
 
     /**
-     * This method creates a new server socket.
-     *
-     * @return the server socket
-     * @throws IOException if an I/O error occurs when opening the socket
-     */
-    private ServerSocket createServerSocket() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Server socket created");
-        return serverSocket;
-    }
-
-    /**
      * This method runs the server.
      */
     @Override
     public void run() {
         try {
-            ServerSocket serverSocket = createServerSocket();
+            ServerSocket serverSocket = new ServerSocket(port);
             acceptConnection(serverSocket);
         } catch (IOException e) {
             throw new RuntimeException(e);
