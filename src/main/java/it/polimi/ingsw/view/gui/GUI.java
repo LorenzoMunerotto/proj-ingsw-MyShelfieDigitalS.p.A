@@ -54,6 +54,7 @@ public class GUI extends Application implements View {
     private static Parent rootGame = null;
     private final HashMap<String, Scene> nameMapScene = new HashMap<>();
     private final Logger logger = Logger.getLogger(getClass().getName());
+    private int scene;
     public GUI(){
        this.virtualModel= new VirtualModel();
     }
@@ -172,11 +173,11 @@ public class GUI extends Application implements View {
         return height;
     }
 
-    public static double getMaxX() {
+    public double getMaxX() {
         return maxX;
     }
 
-    public static double getMaxY() {
+    public double getMaxY() {
         return maxY;
     }
 
@@ -267,12 +268,12 @@ public class GUI extends Application implements View {
     public void startGame()  {
         getLoginController().caricaGame();
         System.out.println("StartGAme mesage");
+        scene++;
         //setController();
         //getGameViewController().setGui(this);
         //getLoginController().preGame();
         //getLoginController().preGame();
         //getGameViewController().setUp();
-
     }
 
     public Client getClient() {
@@ -288,14 +289,17 @@ public class GUI extends Application implements View {
 
     @Override
     public void waitForTurn(String username) {
-        gameViewController.printError("Waiting for " + username + " to play the turn...");
-        //gameViewController.
+        gameViewController.setErrorsTextIDText("Waiting for " + username + " to play the turn...");
+        //gameViewController.notYourTurn();
+        getGameViewController().setYouTurn(false);
     }
 
     @Override
     public void playTurn() {
-        gameViewController.printError("It is your turn!");
-        gameViewController.yourTurn();
+        getGameViewController().setErrorsTextIDText("It is your turn!");
+        //getGameViewController().yourTurn();
+        getGameViewController().setYouTurn(true);
+
     }
 
     @Override
@@ -310,12 +314,17 @@ public class GUI extends Application implements View {
 
     @Override
     public void stopWaiting() {
-        gameViewController.notYourTurn();
+        //getGameViewController().notYourTurn();
     }
 
     @Override
     public void showMessage(String message) {
-        getLoginController().setErrorsLabelIDText(message);
+        if(scene==0){
+            getLoginController().setErrorsLabelIDText(message);
+        }
+        else if(scene==1){
+            getGameViewController().setErrorsTextIDText(message);
+        }
         System.out.println(message);
     }
 

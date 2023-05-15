@@ -1,4 +1,5 @@
 package it.polimi.ingsw.view.gui.controllers;
+import it.polimi.ingsw.model.gameEntity.Coordinate;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import it.polimi.ingsw.client.VirtualModel;
@@ -6,20 +7,19 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.util.List;
+import java.util.Map;
 
 public class GameViewController implements Controller {
     @FXML
@@ -41,29 +41,50 @@ public class GameViewController implements Controller {
     @FXML
     private VBox vBoxPersonalID;
     @FXML
-    private VBox vBoxCommonlID;
+    private VBox vBoxCommonID;
     @FXML
     private HBox hBoxCommonID;
     @FXML
-    private Circle turnCircleID;
+    private VBox vBoxCommonOwID;
     @FXML
-    private ChoiceBox<String> librarySelectionID;
+    private HBox hBoxCommonOwID;
+    @FXML ImageView commonCard1OwID;
+    @FXML ImageView commonCard2OwID;
+    @FXML
+    private Circle turnCircleID;
 
     @FXML
     private TextFlow errorsTextID;
+    private List<Coordinate> coordinates=new ArrayList<>();
     private GUI gui;
     private  VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
     private String personalCardFile =new String("EMPTY.png");
     private String commonCard1File =new String("CC1.jpg");
     private String commonCard2File =new String("CC2.jpg");
-
+    private Integer[] Coordinate= new Integer[2];
     private boolean youTurn=true;
     private ArrayList<ImageView> aImgViewBoard =new ArrayList<ImageView>();
     private ArrayList<Image> aImgBoard =new ArrayList<Image>();
     private ArrayList<ImageView> aImgViewLibrary =new ArrayList<ImageView>();
     private ArrayList<Image> aImgLibrary =new ArrayList<Image>();
+    private ArrayList<GridPane> aLibraryGridsOw = new ArrayList<GridPane>();
+    private ArrayList<Label> aLabelLib =new ArrayList<Label>();
 
+
+    @FXML private Label itemTileLabelID;
+    @FXML private ImageView itemTile1ID;
+    @FXML private ImageView itemTile2ID;
+    @FXML private ImageView itemTile3ID;
+    @FXML private GridPane boardOwID;
+    @FXML private Label labelOwL1ID;
+    @FXML private Label labelOwL2ID;
+    @FXML private Label labelOwL3ID;
+    @FXML private Label labelOwL4ID;
+    @FXML private GridPane library1ID;
+    @FXML private GridPane library2ID;
+    @FXML private GridPane library3ID;
+    @FXML private GridPane library4ID;
     /*public GameViewController(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
@@ -72,21 +93,50 @@ public class GameViewController implements Controller {
     public void setGui(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
+        this.aLibraryGridsOw.add(library1ID);
+        this.aLibraryGridsOw.add(library2ID);
+        this.aLibraryGridsOw.add(library3ID);
+        this.aLibraryGridsOw.add(library4ID);
+        this.aLabelLib.add(labelOwL1ID);
+        this.aLabelLib.add(labelOwL2ID);
+        this.aLabelLib.add(labelOwL3ID);
+        this.aLabelLib.add(labelOwL4ID);
+        labelOwL3ID.setVisible(false);
+        labelOwL4ID.setVisible(false);
     }
-
-    private static String fileName ="FRAME.png";
 
     EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
             //personal card index needed
             if(youTurn==true){
-                Node node = (Node) t.getTarget();
-                int row = GridPane.getRowIndex(node);
-                int column = GridPane.getColumnIndex(node);
-                ImageView imageView = (ImageView) t.getSource();
-                imageView.setImage(new Image(getClass().getResourceAsStream("EMPTY.png")));
-                System.out.println("You clicked " + imageView.getImage());
+                if(coordinates.size()<3){
+                    Node node = (Node) t.getTarget();
+                    int row = GridPane.getRowIndex(node);
+                    int column = GridPane.getColumnIndex(node);
+                    System.out.println(row +" " +column);
+                    coordinates.add(new Coordinate(row, column));
+                    if(coordinates.size()==1){
+                        itemTile1ID.setImage(aImgBoard.get(column*9+row));
+                    }
+                    else if(coordinates.size()==2){
+                        itemTile2ID.setImage(aImgBoard.get(column*9+row));
+                    }
+                    else if(coordinates.size()==3){
+                        itemTile3ID.setImage(aImgBoard.get(column*9+row));
+                    }
+                    ImageView imageView = (ImageView) t.getSource();
+                    imageView.setImage(new Image(getClass().getResourceAsStream("EMPTY.png")));
+                    System.out.println("You clicked " + imageView.getImage());
+                }
+                else{
+                    for(int c=0; c<9; c++) {
+                        for (int r = 0; r < 9; r++) {
+                            boardID.getChildren().get(c*9+r).setOnMouseClicked(null);
+                        }
+                    }
+                    setErrorsTextIDText("You can pic Max 3 Item Tiles");
+                }
             }
         }
     };
@@ -95,10 +145,29 @@ public class GameViewController implements Controller {
         public void handle(MouseEvent t) {
             //personal card index needed
             if(youTurn==true){
+                Node node = (Node) t.getTarget();
+                int column = GridPane.getColumnIndex(node);
+                //inviare al server colonna scelta
 
             }
         }
     };
+
+    public void setItemTileHBox(){
+        itemTileLabelID.setText("Item Tile selected [Max 3]:");
+
+    }
+    public void setErrorsTextIDText(String error){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Text text = new Text(error);
+                errorsTextID.getChildren().add(text);
+                errorsTextID.setVisible(true);
+            }
+        });
+    }
+
 
     public void fullLibrary(){
         for(int c=0; c<5; c++){
@@ -108,61 +177,78 @@ public class GameViewController implements Controller {
                 aImgViewLibrary.get(c*6+r).setX(90);
                 aImgViewLibrary.get(c*6+r).setY(90);
                 aImgViewLibrary.get(c*6+r).setPreserveRatio(true);
-                aImgViewLibrary.get(c*6+r).setFitHeight(GUI.getMaxX()*(0.045));
-                aImgViewLibrary.get(c*6+r).setFitWidth(GUI.getMaxX()*(0.045));
+                aImgViewLibrary.get(c*6+r).setFitHeight(gui.getMaxX()*(0.040));
+                aImgViewLibrary.get(c*6+r).setFitWidth(gui.getMaxX()*(0.040));
                 libraryID.add(aImgViewLibrary.get(c*6+r),c,r);
             }
         }
-        libraryID.setLayoutX(GUI.getMaxX()*0.05);
-        libraryID.setLayoutY(GUI.getMaxY()*0.55);
+        libraryID.setLayoutX(gui.getMaxX()*0.05);
+        libraryID.setLayoutY(gui.getMaxY()*0.55);
         libraryID.setHgap(2);
         libraryID.setVgap(2);
     }
 
     public void fullBoard(){
-        for(int c=0; c<9; c++){
-            for(int r=0; r<9; r++){
-                aImgBoard.add(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
-                //ImageView imageView = new ImageView(aImgBoard.get(c*9+r));
-                aImgViewBoard.add(new ImageView(aImgBoard.get(c*9+r)));
-                aImgViewBoard.get(c*9+r).setX(90);
-                aImgViewBoard.get(c*9+r).setY(90);
-                aImgViewBoard.get(c*9+r).setPreserveRatio(true);
-                aImgViewBoard.get(c*9+r).setFitHeight(GUI.getMaxX()*(0.045));
-                aImgViewBoard.get(c*9+r).setFitWidth(GUI.getMaxX()*(0.045));
-                boardID.add(aImgViewBoard.get(c*9+r),c,r);
-                boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
-            }
-        }
-        boardID.setLayoutX(GUI.getMaxX()*0.55);
-        boardID.setLayoutY(GUI.getMaxY()*0.10);
-        boardID.setHgap(2);
-        boardID.setVgap(2);
+                for(int c=0; c<9; c++){
+                    for(int r=0; r<9; r++){
+                        aImgBoard.add(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
+                        //ImageView imageView = new ImageView(aImgBoard.get(c*9+r));
+                        aImgViewBoard.add(new ImageView(aImgBoard.get(c*9+r)));
+                        aImgViewBoard.get(c*9+r).setX(90);
+                        aImgViewBoard.get(c*9+r).setY(90);
+                        aImgViewBoard.get(c*9+r).setPreserveRatio(true);
+                        aImgViewBoard.get(c*9+r).setFitHeight(gui.getMaxX()*(0.040));
+                        aImgViewBoard.get(c*9+r).setFitWidth(gui.getMaxX()*(0.040));
+                        boardID.add(aImgViewBoard.get(c*9+r),c,r);
+                        boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
+                        boardOwID.add(aImgViewBoard.get(c*9+r),c,r);
+                    }
+                }
+                boardID.setLayoutX(gui.getMaxX()*0.55);
+                boardID.setLayoutY(gui.getMaxY()*0.35);
+                boardID.setHgap(2);
+                boardID.setVgap(2);
+                boardOwID.setLayoutX(gui.getMaxX()*0.55);
+                boardOwID.setLayoutY(gui.getMaxY()*0.35);
+                boardOwID.setHgap(2);
+                boardOwID.setVgap(2);
+                boardID.setVisible(true);
     }
     public void notYourTurn(){
-        for(int c=0; c<9; c++) {
-            for (int r = 0; r < 9; r++) {
-                boardID.getChildren().get(c*9+r).setOnMouseClicked(null);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for(int c=0; c<9; c++) {
+                    for (int r = 0; r < 9; r++) {
+                        boardID.getChildren().get(c*9+r).setOnMouseClicked(null);
+                    }
+                }
+                for(int c=0; c<5; c++){
+                    for(int r=0; r<6; r++) {
+                        libraryID.getChildren().get(c*6+r).setOnMouseClicked(null);
+                    }
+                }
             }
-        }
-        for(int c=0; c<5; c++){
-            for(int r=0; r<6; r++) {
-                libraryID.getChildren().get(c*6+r).setOnMouseClicked(null);
-            }
-        }
+        });
     }
 
     public void yourTurn(){
-        for(int c=0; c<9; c++) {
-            for (int r = 0; r < 9; r++) {
-                boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                errorsTextID.getChildren().clear();
+                for(int c=0; c<9; c++) {
+                    for (int r = 0; r < 9; r++) {
+                        boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
+                    }
+                }
+                for(int c=0; c<5; c++){
+                    for(int r=0; r<6; r++) {
+                        libraryID.getChildren().get(c*6+r).setOnMouseClicked(clickItemTileLibraryHandler);
+                    }
+                }
             }
-        }
-        for(int c=0; c<5; c++){
-            for(int r=0; r<6; r++) {
-                libraryID.getChildren().get(c*6+r).setOnMouseClicked(clickItemTileLibraryHandler);
-            }
-        }
+        });
     }
     public void printError (String error){
         //errorsTextID.setText(null);
@@ -179,26 +265,41 @@ public class GameViewController implements Controller {
         vBoxPersonalID.setMaxWidth(gui.getMaxX()*0.17);
         vBoxPersonalID.setMinWidth(gui.getMaxX()*0.17);
         personalCardImgID.setPreserveRatio(true);
-        personalCardImgID.setFitWidth(GUI.getMaxX()*0.15);
-        personalCardImgID.setFitHeight(GUI.getMaxX()*0.15*(756*1110));
+        personalCardImgID.setFitWidth(gui.getMaxX()*0.10);
+        personalCardImgID.setFitHeight(gui.getMaxX()*0.10*(756*1110));
     }
 
     public void commonCardInizializzer(){
         commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
+        commonCard1OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
         commonCard2ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
+        commonCard2OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
         commonCard1ID.setPreserveRatio(true);
+        commonCard1OwID.setPreserveRatio(true);
         commonCard2ID.setPreserveRatio(true);
-        vBoxCommonlID.setMaxHeight(GUI.getMaxY()*0.25);
-        vBoxCommonlID.setMaxWidth(GUI.getMaxX()*0.35);
-        hBoxCommonID.setMaxHeight(GUI.getMaxX()*0.35*(1385/913));
-        hBoxCommonID.setMaxWidth(GUI.getMaxX()*0.35);
-        commonCard1ID.setFitWidth(GUI.getMaxX()*0.15);
-        commonCard1ID.setFitHeight(GUI.getMaxX()*0.15*(913/1365));
-        commonCard2ID.setFitWidth(GUI.getMaxX()*0.15);
-        commonCard2ID.setFitHeight(GUI.getMaxX()*0.15*(913/1365));
-        vBoxCommonlID.setLayoutY(GUI.getMaxY()*0.10);
-        vBoxCommonlID.setLayoutX(GUI.getMaxX()*0.05);
-        vBoxCommonlID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
+        commonCard2OwID.setPreserveRatio(true);
+        vBoxCommonID.setMaxHeight(gui.getMaxY()*0.25);
+        vBoxCommonOwID.setMaxHeight(gui.getMaxY()*0.25);
+        vBoxCommonID.setMaxWidth(gui.getMaxX()*0.35);
+        vBoxCommonOwID.setMaxWidth(gui.getMaxX()*0.35);
+        hBoxCommonID.setMaxHeight(gui.getMaxX()*0.35*(1385/913));
+        hBoxCommonOwID.setMaxHeight(gui.getMaxX()*0.35*(1385/913));
+        hBoxCommonID.setMaxWidth(gui.getMaxX()*0.35);
+        hBoxCommonOwID.setMaxWidth(gui.getMaxX()*0.35);
+        commonCard1ID.setFitWidth(gui.getMaxX()*0.15);
+        commonCard1OwID.setFitWidth(gui.getMaxX()*0.15);
+        commonCard1ID.setFitHeight(gui.getMaxX()*0.15*(913/1365));
+        commonCard1OwID.setFitHeight(gui.getMaxX()*0.15*(913/1365));
+        commonCard2ID.setFitWidth(gui.getMaxX()*0.15);
+        commonCard2OwID.setFitWidth(gui.getMaxX()*0.15);
+        commonCard2ID.setFitHeight(gui.getMaxX()*0.15*(913/1365));
+        commonCard2OwID.setFitHeight(gui.getMaxX()*0.15*(913/1365));
+        vBoxCommonID.setLayoutY(gui.getMaxY()*0.05);
+        vBoxCommonOwID.setLayoutY(gui.getMaxY()*0.05);
+        vBoxCommonID.setLayoutX(gui.getMaxX()*0.05);
+        vBoxCommonOwID.setLayoutX(gui.getMaxX()*0.55);
+        vBoxCommonID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
+        vBoxCommonOwID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
     }
     /*
     public void prova(){
@@ -213,21 +314,66 @@ public class GameViewController implements Controller {
     }
      */
 
-    public void fillLibrarySelectionID(){
-        for(String i : virtualModel.getClientUsernameLibrary().keySet() ){
-            librarySelectionID.getItems().add(i);
-        }
+
+    public void setErrorBox(){
+        errorsTextID.setMaxWidth(gui.getMaxX()*0.14);
+        errorsTextID.setMaxHeight(gui.getMaxY()*0.14);
+        errorsTextID.setLayoutX(gui.getMaxX()*0.43);
+        errorsTextID.setLayoutY(gui.getMaxY()*0.10);
     }
+
+    public void printAllLibrary(){
+        int i=0;
+                for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
+                    for(int c=0; c<5; c++){
+                        for(int r=0; r<6; r++){
+                            ImageView imageViewLibOw = new ImageView(new Image(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[r][c].toString() + ".png")));
+                            imageViewLibOw.setX(90);
+                            imageViewLibOw.setY(90);
+                            imageViewLibOw.setPreserveRatio(true);
+                            imageViewLibOw.setFitHeight(gui.getMaxX()*(0.040));
+                            imageViewLibOw.setFitWidth(gui.getMaxX()*(0.040));
+                            aLibraryGridsOw.get(i).add(imageViewLibOw,c,r);
+                        }
+                    }
+                    aLibraryGridsOw.get(i).setLayoutX(gui.getMaxX()*0.05);
+                    aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY()*0.55);
+                    aLibraryGridsOw.get(i).setHgap(2);
+                    aLibraryGridsOw.get(i).setVgap(2);
+                    aLabelLib.get(i).setText(libraryMap.getKey());
+                    aLabelLib.get(i).setVisible(true);
+                    i++;
+                }
+        library1ID.setLayoutX(gui.getMaxX()*0.01);
+        library1ID.setLayoutY(gui.getMaxY()*0.10);
+        library2ID.setLayoutX(gui.getMaxX()*0.27);
+        library2ID.setLayoutY(gui.getMaxY()*0.10);
+        library3ID.setLayoutX(gui.getMaxX()*0.01);
+        library3ID.setLayoutY(gui.getMaxY()*0.60);
+        library4ID.setLayoutX(gui.getMaxX()*0.27);
+        library4ID.setLayoutY(gui.getMaxY()*0.6);
+        labelOwL1ID.setLayoutX(gui.getMaxX()*0.01);
+        labelOwL1ID.setLayoutY(gui.getMaxY()*0.05);
+        labelOwL2ID.setLayoutX(gui.getMaxX()*0.27);
+        labelOwL2ID.setLayoutY(gui.getMaxY()*0.05);
+        labelOwL3ID.setLayoutX(gui.getMaxX()*0.05);
+        labelOwL3ID.setLayoutY(gui.getMaxY()*0.50);
+        labelOwL4ID.setLayoutX(gui.getMaxX()*0.27);
+        labelOwL4ID.setLayoutY(gui.getMaxY()*0.50);
+    }
+
+
 
     public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                setErrorBox();
+                printAllLibrary();
                 personalCardInizializer();
                 commonCardInizializzer();
-                fullBoard();
                 fullLibrary();
-                fillLibrarySelectionID();
+                fullBoard();
                 ItemTileType[][] board = virtualModel.getBoard();
                 ItemTileType[][] currentLibrary = virtualModel.getLibrary();
                 ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
@@ -355,4 +501,7 @@ public class GameViewController implements Controller {
 
     }
 
+    public void setYouTurn(boolean youTurn) {
+        this.youTurn = youTurn;
+    }
 }

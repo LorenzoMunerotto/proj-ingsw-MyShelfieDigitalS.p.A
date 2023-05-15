@@ -64,7 +64,7 @@ public class VirtualModel {
      */
     private int firstPlayerIndex;
     /**
-     * The username of the first player that has the full library.
+     * The username of the first player that has the full librarylibrary.
      */
     private String firstFullLibraryUsername;
     /**
