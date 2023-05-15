@@ -43,6 +43,8 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     private boolean active;
 
+    private Thread checkConnectionThread;
+
     /**
      * This is the constructor of the class.
      *
@@ -74,6 +76,24 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        checkConnectionThread = new Thread(()->{
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    outputStream.reset();
+                    Thread.sleep(1000);
+                    outputStream.writeObject(new CheckConnectionMessage());
+                    outputStream.flush();
+                } catch (IOException e) {
+                    server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+                    setActive(false);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+        });
+        checkConnectionThread.start();
 
     }
 
@@ -119,14 +139,37 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      * @param serverMessage the server message
      */
     public void send(ServerMessage serverMessage){
+        checkConnectionThread.interrupt();
         try {
             outputStream.reset();
             outputStream.writeObject(serverMessage);
             outputStream.flush();
         } catch (IOException e) {
             System.out.println("Send failed");
+            server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+            setActive(false);
         }
+
+        checkConnectionThread = new Thread(()->{
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    outputStream.reset();
+                    Thread.sleep(1000);
+                    outputStream.writeObject(new CheckConnectionMessage());
+                    outputStream.flush();
+                } catch (IOException e) {
+                    server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+                    setActive(false);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+        });
+        checkConnectionThread.start();
     }
+
+
 
     /**
      * This method handles the username choice.
