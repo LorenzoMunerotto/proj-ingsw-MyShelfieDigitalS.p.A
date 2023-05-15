@@ -118,6 +118,10 @@ public class GameViewController implements Controller {
                     int column = GridPane.getColumnIndex(node);
                     System.out.println(row +" " +column);
                     coordinates.add(new Coordinate(row, column));
+                    ImageView imageViewBlack=new ImageView(new Image(getClass().getResourceAsStream("/images/Black.png")));
+                    imageViewBlack.setFitHeight(gui.getMaxX()*(0.040));
+                    imageViewBlack.setFitWidth(gui.getMaxX()*(0.040));
+                    boardID.getChildren().set(column*9+row,imageViewBlack);
                     if(coordinates.size()==1){
                         itemTile1ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile1ID);
@@ -156,6 +160,9 @@ public class GameViewController implements Controller {
                 gui.getClient().handle(new Move(coordinates,column));
                 System.out.println("handle Library Clicl Pre");
                 coordinates.clear();
+                itemTile1ID.setImage(null);
+                itemTile2ID.setImage(null);
+                itemTile3ID.setImage(null);
             }
         }
     };
@@ -168,6 +175,7 @@ public class GameViewController implements Controller {
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(gui.getMaxX()*(0.030));
         imageView.setFitWidth(gui.getMaxX()*(0.030));
+        imageView.setVisible(true);
     }
     public void setErrorsTextIDText(String error){
         Platform.runLater(new Runnable() {

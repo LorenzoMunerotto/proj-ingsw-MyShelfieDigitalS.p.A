@@ -57,16 +57,21 @@ public class FinalPageController implements Controller{
     }
 
     public void compilePointsTable(){
-        List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
-        for (int i = 0; i < leaderBoards.size(); i++) {
-            nameColumnID.setCellValueFactory(new PropertyValueFactory<>(leaderBoards.get(i).getValue0()));
-            //nameColumnID.getColumns().add(leaderBoards.get(i).getValue0());
-            pointsColumnID.setCellValueFactory(new PropertyValueFactory<>(String.valueOf(leaderBoards.get(i).getValue1())));
-            //pointsColumnID.getColumns().add(leaderBoards.get(i).getValue1());
-        }
-        tableResultID.setVisible(true);
-        nameColumnID.setVisible(true);
-        pointsColumnID.setVisible(true);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
+                for (int i = 0; i < leaderBoards.size(); i++) {
+                    nameColumnID.setCellValueFactory(new PropertyValueFactory<>(leaderBoards.get(i).getValue0()));
+                    //nameColumnID.getColumns().add(leaderBoards.get(i).getValue0());
+                    pointsColumnID.setCellValueFactory(new PropertyValueFactory<>(String.valueOf(leaderBoards.get(i).getValue1())));
+                    //pointsColumnID.getColumns().add(leaderBoards.get(i).getValue1());
+                }
+                tableResultID.setVisible(true);
+                nameColumnID.setVisible(true);
+                pointsColumnID.setVisible(true);
+            }
+        });
     }
 
 }
