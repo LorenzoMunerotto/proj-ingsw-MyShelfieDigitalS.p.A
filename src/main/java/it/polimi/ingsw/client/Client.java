@@ -102,14 +102,19 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      * @param moveRequest the move request
      */
     public void handle(MoveRequest moveRequest){
-        List<Coordinate> coordinates = view.chooseTiles();
-        Integer column = view.chooseColumn();
-        socketListener.send(new Move(coordinates,column));
+        if(view instanceof CLI){
+            List<Coordinate> coordinates = view.chooseTiles();
+            Integer column = view.chooseColumn();
+            socketListener.send(new Move(coordinates,column));
+        }
+        if(view instanceof GUI){
+            view.showGame();
+        }
     }
 
     @Override
     public void handle(Move move) {
-
+        socketListener.send(move);
     }
 
     /**

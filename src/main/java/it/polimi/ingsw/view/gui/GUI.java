@@ -54,7 +54,7 @@ public class GUI extends Application implements View {
     private static Parent rootGame = null;
     private final HashMap<String, Scene> nameMapScene = new HashMap<>();
     private final Logger logger = Logger.getLogger(getClass().getName());
-    private int scene;
+    private int scene=0;
     public GUI(){
        this.virtualModel= new VirtualModel();
     }
@@ -268,7 +268,7 @@ public class GUI extends Application implements View {
     public void startGame()  {
         getLoginController().caricaGame();
         System.out.println("StartGAme mesage");
-        scene++;
+        scene=1;
         //setController();
         //getGameViewController().setGui(this);
         //getLoginController().preGame();
@@ -283,7 +283,7 @@ public class GUI extends Application implements View {
     @Override
     public void showGame() {
         //loadGameView();
-
+        getGameViewController().rePrintAll();
         System.out.println("showGame");
     }
 
@@ -296,9 +296,10 @@ public class GUI extends Application implements View {
 
     @Override
     public void playTurn() {
+        getGameViewController().setYouTurn(true);
         getGameViewController().setErrorsTextIDText("It is your turn!");
         //getGameViewController().yourTurn();
-        getGameViewController().setYouTurn(true);
+
 
     }
 
@@ -309,7 +310,12 @@ public class GUI extends Application implements View {
 
     @Override
     public void showErrorMessage(String errorMessage) {
-        getLoginController().setErrorsLabelIDText(errorMessage);
+        if(scene==0){
+            getLoginController().setErrorsLabelIDText(errorMessage);
+        }
+        else if (scene==1){
+            getGameViewController().setErrorsTextIDText(errorMessage);
+        }
     }
 
     @Override

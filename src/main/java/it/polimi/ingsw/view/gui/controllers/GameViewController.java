@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.view.events.Move;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import it.polimi.ingsw.client.VirtualModel;
@@ -7,7 +8,6 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -63,7 +63,7 @@ public class GameViewController implements Controller {
     private String commonCard1File =new String("CC1.jpg");
     private String commonCard2File =new String("CC2.jpg");
     private Integer[] Coordinate= new Integer[2];
-    private boolean youTurn=true;
+    private boolean youTurn=false;
     private ArrayList<ImageView> aImgViewBoard =new ArrayList<ImageView>();
     private ArrayList<Image> aImgBoard =new ArrayList<Image>();
     private ArrayList<ImageView> aImgViewLibrary =new ArrayList<ImageView>();
@@ -85,6 +85,7 @@ public class GameViewController implements Controller {
     @FXML private GridPane library2ID;
     @FXML private GridPane library3ID;
     @FXML private GridPane library4ID;
+    @FXML private HBox itemTileBoxID;
     /*public GameViewController(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
@@ -108,6 +109,7 @@ public class GameViewController implements Controller {
     EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
+            System.out.println("pre click board");
             //personal card index needed
             if(youTurn==true){
                 if(coordinates.size()<3){
@@ -117,24 +119,25 @@ public class GameViewController implements Controller {
                     System.out.println(row +" " +column);
                     coordinates.add(new Coordinate(row, column));
                     if(coordinates.size()==1){
-                        itemTile1ID.setImage(aImgBoard.get(column*9+row));
+                        itemTile1ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
+                        setItemTileClicked(itemTile1ID);
+                        System.out.println("Board 1");
                     }
                     else if(coordinates.size()==2){
-                        itemTile2ID.setImage(aImgBoard.get(column*9+row));
+                        itemTile2ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
+                        setItemTileClicked(itemTile2ID);
+                        System.out.println("Board 2");
                     }
                     else if(coordinates.size()==3){
-                        itemTile3ID.setImage(aImgBoard.get(column*9+row));
+                        itemTile3ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
+                        setItemTileClicked(itemTile3ID);
+                        System.out.println("Board 3");
                     }
                     ImageView imageView = (ImageView) t.getSource();
-                    imageView.setImage(new Image(getClass().getResourceAsStream("EMPTY.png")));
+                    imageView.setImage(new Image(getClass().getResourceAsStream("/images/EMPTY.png")));
                     System.out.println("You clicked " + imageView.getImage());
                 }
                 else{
-                    for(int c=0; c<9; c++) {
-                        for (int r = 0; r < 9; r++) {
-                            boardID.getChildren().get(c*9+r).setOnMouseClicked(null);
-                        }
-                    }
                     setErrorsTextIDText("You can pic Max 3 Item Tiles");
                 }
             }
@@ -143,12 +146,16 @@ public class GameViewController implements Controller {
     EventHandler clickItemTileLibraryHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
+            System.out.println("handle Library Clicl Pre E PRE CICLO");
             //personal card index needed
-            if(youTurn==true){
+            if(youTurn==true&&coordinates.size()>0){
                 Node node = (Node) t.getTarget();
                 int column = GridPane.getColumnIndex(node);
                 //inviare al server colonna scelta
-
+                System.out.println("handle Library Clicl Pre");
+                gui.getClient().handle(new Move(coordinates,column));
+                System.out.println("handle Library Clicl Pre");
+                coordinates.clear();
             }
         }
     };
@@ -156,6 +163,11 @@ public class GameViewController implements Controller {
     public void setItemTileHBox(){
         itemTileLabelID.setText("Item Tile selected [Max 3]:");
 
+    }
+    public void setItemTileClicked(ImageView imageView){
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(gui.getMaxX()*(0.030));
+        imageView.setFitWidth(gui.getMaxX()*(0.030));
     }
     public void setErrorsTextIDText(String error){
         Platform.runLater(new Runnable() {
@@ -170,49 +182,114 @@ public class GameViewController implements Controller {
 
 
     public void fullLibrary(){
-        for(int c=0; c<5; c++){
-            for(int r=0; r<6; r++){
-                aImgLibrary.add(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getLibrary()[r][c].toString() + ".png")));
-                aImgViewLibrary.add(new ImageView(aImgLibrary.get(c*6+r)));
-                aImgViewLibrary.get(c*6+r).setX(90);
-                aImgViewLibrary.get(c*6+r).setY(90);
-                aImgViewLibrary.get(c*6+r).setPreserveRatio(true);
-                aImgViewLibrary.get(c*6+r).setFitHeight(gui.getMaxX()*(0.040));
-                aImgViewLibrary.get(c*6+r).setFitWidth(gui.getMaxX()*(0.040));
-                libraryID.add(aImgViewLibrary.get(c*6+r),c,r);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                for(int c=0; c<5; c++){
+                    for(int r=0; r<6; r++){
+                        ImageView imageView= new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getLibrary()[r][c].toString() + ".png")));
+                        imageView.setX(90);
+                        imageView.setY(90);
+                        imageView.setPreserveRatio(true);
+                        imageView.setFitHeight(gui.getMaxX()*(0.030));
+                        imageView.setFitWidth(gui.getMaxX()*(0.030));
+                        libraryID.add(imageView,c,r);
+                        libraryID.getChildren().get(r+6*c).setOnMouseClicked(clickItemTileLibraryHandler);
+                    }
+                }
+                libraryID.setLayoutX(gui.getMaxX()*0.05);
+                libraryID.setLayoutY(gui.getMaxY()*0.55);
+                libraryID.setHgap(2);
+                libraryID.setVgap(2);
+                libraryID.setVisible(true);
             }
-        }
-        libraryID.setLayoutX(gui.getMaxX()*0.05);
-        libraryID.setLayoutY(gui.getMaxY()*0.55);
-        libraryID.setHgap(2);
-        libraryID.setVgap(2);
+        });
+
     }
 
     public void fullBoard(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
                 for(int c=0; c<9; c++){
-                    for(int r=0; r<9; r++){
-                        aImgBoard.add(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
-                        //ImageView imageView = new ImageView(aImgBoard.get(c*9+r));
-                        aImgViewBoard.add(new ImageView(aImgBoard.get(c*9+r)));
-                        aImgViewBoard.get(c*9+r).setX(90);
-                        aImgViewBoard.get(c*9+r).setY(90);
-                        aImgViewBoard.get(c*9+r).setPreserveRatio(true);
-                        aImgViewBoard.get(c*9+r).setFitHeight(gui.getMaxX()*(0.040));
-                        aImgViewBoard.get(c*9+r).setFitWidth(gui.getMaxX()*(0.040));
-                        boardID.add(aImgViewBoard.get(c*9+r),c,r);
+                    for(int r=0; r<9; r++ ){
+                        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
+                        imageView.setX(90);
+                        imageView.setY(90);
+                        imageView.setPreserveRatio(true);
+                        imageView.setFitHeight(gui.getMaxX()*(0.040));
+                        imageView.setFitWidth(gui.getMaxX()*(0.040));
+                        boardID.add(imageView,c,r);
                         boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
-                        boardOwID.add(aImgViewBoard.get(c*9+r),c,r);
+                        //boardOwID.add(aImgViewBoard.get(c*9+r),c,r);
                     }
                 }
                 boardID.setLayoutX(gui.getMaxX()*0.55);
                 boardID.setLayoutY(gui.getMaxY()*0.35);
                 boardID.setHgap(2);
                 boardID.setVgap(2);
-                boardOwID.setLayoutX(gui.getMaxX()*0.55);
-                boardOwID.setLayoutY(gui.getMaxY()*0.35);
-                boardOwID.setHgap(2);
-                boardOwID.setVgap(2);
                 boardID.setVisible(true);
+            }
+        });
+
+    }
+    public void printBoardOw(){
+        for(int c=0; c<9; c++){
+            for(int r=0; r<9; r++){
+                ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
+                imageView.setX(90);
+                imageView.setY(90);
+                imageView.setPreserveRatio(true);
+                imageView.setFitHeight(gui.getMaxX()*(0.040));
+                imageView.setFitWidth(gui.getMaxX()*(0.040));
+                boardOwID.add(imageView,c,r);
+            }
+        }
+        boardOwID.setLayoutX(gui.getMaxX()*0.55);
+        boardOwID.setLayoutY(gui.getMaxY()*0.35);
+        boardOwID.setHgap(2);
+        boardOwID.setVgap(2);
+        boardOwID.setVisible(true);
+    }
+    public void printAllLibrary(){
+        int i=0;
+        for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
+            for(int c=0; c<5; c++){
+                for(int r=0; r<6; r++){
+                    ImageView imageViewLibOw = new ImageView(new Image(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[r][c].toString() + ".png")));
+                    imageViewLibOw.setX(90);
+                    imageViewLibOw.setY(90);
+                    imageViewLibOw.setPreserveRatio(true);
+                    imageViewLibOw.setFitHeight(gui.getMaxX()*(0.040));
+                    imageViewLibOw.setFitWidth(gui.getMaxX()*(0.040));
+                    aLibraryGridsOw.get(i).add(imageViewLibOw,c,r);
+                }
+            }
+            aLibraryGridsOw.get(i).setLayoutX(gui.getMaxX()*0.05);
+            aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY()*0.55);
+            aLibraryGridsOw.get(i).setHgap(2);
+            aLibraryGridsOw.get(i).setVgap(2);
+            aLibraryGridsOw.get(i).setVisible(true);
+            aLabelLib.get(i).setText(libraryMap.getKey());
+            aLabelLib.get(i).setVisible(true);
+            i++;
+        }
+        library1ID.setLayoutX(gui.getMaxX()*0.01);
+        library1ID.setLayoutY(gui.getMaxY()*0.10);
+        library2ID.setLayoutX(gui.getMaxX()*0.27);
+        library2ID.setLayoutY(gui.getMaxY()*0.10);
+        library3ID.setLayoutX(gui.getMaxX()*0.01);
+        library3ID.setLayoutY(gui.getMaxY()*0.60);
+        library4ID.setLayoutX(gui.getMaxX()*0.27);
+        library4ID.setLayoutY(gui.getMaxY()*0.6);
+        labelOwL1ID.setLayoutX(gui.getMaxX()*0.01);
+        labelOwL1ID.setLayoutY(gui.getMaxY()*0.05);
+        labelOwL2ID.setLayoutX(gui.getMaxX()*0.27);
+        labelOwL2ID.setLayoutY(gui.getMaxY()*0.05);
+        labelOwL3ID.setLayoutX(gui.getMaxX()*0.05);
+        labelOwL3ID.setLayoutY(gui.getMaxY()*0.50);
+        labelOwL4ID.setLayoutX(gui.getMaxX()*0.27);
+        labelOwL4ID.setLayoutY(gui.getMaxY()*0.50);
     }
     public void notYourTurn(){
         Platform.runLater(new Runnable() {
@@ -322,48 +399,55 @@ public class GameViewController implements Controller {
         errorsTextID.setLayoutY(gui.getMaxY()*0.10);
     }
 
-    public void printAllLibrary(){
-        int i=0;
-                for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
-                    for(int c=0; c<5; c++){
-                        for(int r=0; r<6; r++){
-                            ImageView imageViewLibOw = new ImageView(new Image(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[r][c].toString() + ".png")));
-                            imageViewLibOw.setX(90);
-                            imageViewLibOw.setY(90);
-                            imageViewLibOw.setPreserveRatio(true);
-                            imageViewLibOw.setFitHeight(gui.getMaxX()*(0.040));
-                            imageViewLibOw.setFitWidth(gui.getMaxX()*(0.040));
-                            aLibraryGridsOw.get(i).add(imageViewLibOw,c,r);
-                        }
-                    }
-                    aLibraryGridsOw.get(i).setLayoutX(gui.getMaxX()*0.05);
-                    aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY()*0.55);
-                    aLibraryGridsOw.get(i).setHgap(2);
-                    aLibraryGridsOw.get(i).setVgap(2);
-                    aLabelLib.get(i).setText(libraryMap.getKey());
-                    aLabelLib.get(i).setVisible(true);
-                    i++;
-                }
-        library1ID.setLayoutX(gui.getMaxX()*0.01);
-        library1ID.setLayoutY(gui.getMaxY()*0.10);
-        library2ID.setLayoutX(gui.getMaxX()*0.27);
-        library2ID.setLayoutY(gui.getMaxY()*0.10);
-        library3ID.setLayoutX(gui.getMaxX()*0.01);
-        library3ID.setLayoutY(gui.getMaxY()*0.60);
-        library4ID.setLayoutX(gui.getMaxX()*0.27);
-        library4ID.setLayoutY(gui.getMaxY()*0.6);
-        labelOwL1ID.setLayoutX(gui.getMaxX()*0.01);
-        labelOwL1ID.setLayoutY(gui.getMaxY()*0.05);
-        labelOwL2ID.setLayoutX(gui.getMaxX()*0.27);
-        labelOwL2ID.setLayoutY(gui.getMaxY()*0.05);
-        labelOwL3ID.setLayoutX(gui.getMaxX()*0.05);
-        labelOwL3ID.setLayoutY(gui.getMaxY()*0.50);
-        labelOwL4ID.setLayoutX(gui.getMaxX()*0.27);
-        labelOwL4ID.setLayoutY(gui.getMaxY()*0.50);
+
+
+
+    public void rePrintAll(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                resetPrint();
+                fullBoard();
+                printAllLibrary();
+                printBoardOw();
+                fullLibrary();
+            }
+        });
     }
 
+    public void resetPrint(){
+        libraryID.setVisible(false);
+        boardOwID.setVisible(false);
+        boardID.setVisible(false);
+        libraryID.getChildren().clear();
+        boardOwID.getChildren().clear();
+        boardID.getChildren().clear();
+        int i=0;
+        for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
+            aLibraryGridsOw.get(i).setVisible(false);
+            aLibraryGridsOw.get(i).getChildren().clear();
+            //aLibraryGridsOw.get(i).getChildren().remove(r+6*c);
+            i++;
+        }
+        /*
+        for(int c=0; c<5; c++){
+            for(int r=0; r<6; r++) {
+                //libraryID.getChildren().remove(r+6*c);
+                libraryID.getChildren().clear();
+
+            }
+        }
 
 
+        for(int c=0; c<9; c++) {
+            for (int r = 0; r < 9; r++) {
+                boardID.getChildren().remove(c*9+r);
+                boardOwID.getChildren().remove(c*9+r);
+            }
+        }
+
+         */
+    }
     public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
@@ -374,6 +458,9 @@ public class GameViewController implements Controller {
                 commonCardInizializzer();
                 fullLibrary();
                 fullBoard();
+                printBoardOw();
+                itemTileBoxID.setLayoutX(gui.getMaxX()*0.60);
+                itemTileBoxID.setMaxHeight(gui.getMaxY()*0.7);
                 ItemTileType[][] board = virtualModel.getBoard();
                 ItemTileType[][] currentLibrary = virtualModel.getLibrary();
                 ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
@@ -503,5 +590,9 @@ public class GameViewController implements Controller {
 
     public void setYouTurn(boolean youTurn) {
         this.youTurn = youTurn;
+    }
+
+    public boolean isYouTurn() {
+        return youTurn;
     }
 }
