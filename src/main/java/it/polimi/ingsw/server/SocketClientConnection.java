@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.clientMessage.*;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.cli.CLIConstants;
+import it.polimi.ingsw.view.events.Move;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -40,6 +43,8 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     private boolean active;
 
+    private Thread checkConnectionThread;
+
     /**
      * This is the constructor of the class.
      *
@@ -62,10 +67,13 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         }
         try {
             outputStream.reset();
+            Thread.sleep(4000);
             outputStream.writeObject(new UsernameRequest());
             outputStream.flush();
         } catch (IOException e) {
             System.out.println("Send failed");
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -115,8 +123,30 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
             outputStream.flush();
         } catch (IOException e) {
             System.out.println("Send failed");
+            server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+            setActive(false);
         }
+
+        checkConnectionThread = new Thread(()->{
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    outputStream.reset();
+                    Thread.sleep(1000);
+                    outputStream.writeObject(new CheckConnectionMessage());
+                    outputStream.flush();
+                } catch (IOException e) {
+                    server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+                    setActive(false);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
+        });
+        checkConnectionThread.start();
     }
+
+
 
     /**
      * This method handles the username choice.

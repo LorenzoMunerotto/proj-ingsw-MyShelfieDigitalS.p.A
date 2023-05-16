@@ -1,7 +1,11 @@
 package it.polimi.ingsw.view.cli;
 
+import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +14,10 @@ import java.util.Scanner;
 /**
  * This class represents the CLI view of the game.
  */
-public class CLI extends View {
+public class CLI implements View {
+
+    private VirtualModel virtualModel;
+    private Client client;
     /**
      * It is the scanner used to read the user input.
      */
@@ -28,19 +35,26 @@ public class CLI extends View {
      */
     private Thread waitingThread;
 
+
+
     /**
      * Default constructor, initializes the drawer.
      */
     public CLI() {
-        this.drawer = new CLIDrawer(this.virtualModel);
-        this.parser = new CLIParser();
+        this.virtualModel = new VirtualModel();
+        drawer = new CLIDrawer(virtualModel);
+        parser = new CLIParser();
+    }
+
+    @Override
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
     }
 
     /**
      * Clears the console.
      */
     public static void clear() {
-
         try {
             String os = System.getProperty("os.name");
             ProcessBuilder processBuilder;
@@ -74,7 +88,8 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        return this.username;
+        setUsername(username);
+
     }
 
     /**
@@ -83,15 +98,15 @@ public class CLI extends View {
      * @return the number of players chosen by the user
      */
     @Override
-    public Integer choosePlayersNumber() {
-        this.playersNumber = 0;
+    public void choosePlayersNumber() {
+        Integer playersNumber = 0;
         String playersNumberString;
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.playersNumber < MIN_PLAYERS_NUMBER || this.playersNumber > MAX_PLAYERS_NUMBER) {
+        while (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER) {
             try {
                 playersNumberString = CLI.scanner.nextLine().strip();
-                this.playersNumber = Integer.parseInt(playersNumberString);
+                playersNumber = Integer.parseInt(playersNumberString);
                 if (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
@@ -99,7 +114,7 @@ public class CLI extends View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        return this.playersNumber;
+        setPlayersNumber(playersNumber);
     }
 
 
@@ -109,13 +124,13 @@ public class CLI extends View {
      * @return the list of the item tiles chosen by the user
      */
     public List<Coordinate> chooseTiles() {
-        this.coordinates = "";
+        String coordinates = "";
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.coordinates.isBlank()) {
+        while (coordinates.isBlank()) {
             coordinates = CLI.scanner.nextLine().strip().toUpperCase();
             if (!isCoordinatesValid(coordinates)) {
-                this.coordinates = "";
+                coordinates = "";
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
@@ -129,22 +144,22 @@ public class CLI extends View {
      * @return the column chosen by the user
      */
     public Integer chooseColumn() {
-        this.column = 0;
+        Integer column = 0;
         String columnString;
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.column < 1 || this.column > 5) {
+        while (column < 1 || column > 5) {
             try {
                 columnString = CLI.scanner.nextLine().strip();
-                this.column = Integer.parseInt(columnString);
-                if (this.column < 1 || this.column > 5)
+                column = Integer.parseInt(columnString);
+                if (column < 1 || column > 5)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        return parser.getColumnKey(this.column);
+        return parser.getColumnKey(column);
     }
 
     /**
@@ -257,5 +272,27 @@ public class CLI extends View {
      */
     @Override
     public void main(String[] args) {
+    }
+
+    @Override
+    public void showMessage(String message) {
+        if (message!=null) {
+            System.out.println(message);
+        }
+    }
+
+    @Override
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    @Override
+    public void setUsername(String username) {
+            client.handle(new UsernameChoice(username));
+    }
+
+    @Override
+    public void setPlayersNumber(int playersNumber) {
+        client.handle(new NumOfPlayerChoice(playersNumber));
     }
 }

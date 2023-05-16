@@ -1,9 +1,14 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
+import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.cli.CLIConstants;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -11,45 +16,33 @@ import java.util.regex.Pattern;
 /**
  * This class is the abstract class for the view.
  */
-public abstract class View {
+public interface View  {
 
-    /**
-     * It is the username of the player.
-     */
-    protected String username;
-    /**
-     * It is the number of players in the game chosen by the first player.
-     */
-    protected int playersNumber;
-    /**
-     * It is the coordinates of the tile chosen by the player.
-     */
-    protected String coordinates;
-    /**
-     * It is the column of the library chosen by the player.
-     */
-    protected int column;
-    /**
-     * It is the minimum number of players in the game.
-     */
-    protected int MIN_PLAYERS_NUMBER = 2;
+
+     int MIN_PLAYERS_NUMBER = 2;
     /**
      * It is the maximum number of players in the game.
      */
     protected int MAX_PLAYERS_NUMBER = 4;
+    /**
+     * It is the username of the winner of the game.
+     */
+    protected String winner;
     /**
      * It is the virtual model.
      * Still don't know when and where to initialize it.
      */
     protected VirtualModel virtualModel;
 
-    /**
-     * This constructor initializes the virtual model and the controller.
-     * Maybe.
-     */
-    public View() {
-        this.virtualModel = new VirtualModel();
-    }
+     void setClient(Client client);
+
+     VirtualModel getVirtualModel();
+
+
+    void setUsername(String username);
+
+
+    void setPlayersNumber(int playersNumber);
 
     /**
      * This method checks if the username is valid.
@@ -57,7 +50,7 @@ public abstract class View {
      * @param username is the username of the player
      * @return true if the username is valid, false otherwise
      */
-    protected static boolean isUsernameValid(String username) {
+    default boolean isUsernameValid(String username) {
         Pattern pattern = Pattern.compile(CLIConstants.USERNAME_REGEX);
         Matcher matcher = pattern.matcher(username);
         return matcher.matches();
@@ -69,7 +62,7 @@ public abstract class View {
      * @param coordinates are the coordinates of the tile chosen by the player
      * @return true if the coordinates are valid, false otherwise
      */
-    protected static boolean isCoordinatesValid(String coordinates) {
+    default boolean isCoordinatesValid(String coordinates) {
         Pattern pattern = Pattern.compile(CLIConstants.COORDINATES_REGEX);
         Matcher matcher = pattern.matcher(coordinates);
         return matcher.matches();
@@ -84,24 +77,12 @@ public abstract class View {
      *
      * @param args are the arguments of the main method
      */
-    public abstract void main(String[] args);
-    /**
-     * Asks the user to choose his username.
-     *
-     * @return the username of the player
-     */
-    public abstract String chooseUsername();
-    /**
-     * Asks the user to choose the number of players for the game.
-     *
-     * @return the number of players chosen by the user
-     */
-    public abstract Integer choosePlayersNumber();
-    /**
-     * Asks the user to choose the item tiles to grab from the board.
-     *
-     * @return the list of the item tiles chosen by the user
-     */
+     void main(String[] args);
+
+    public abstract void chooseUsername();
+
+    public abstract void choosePlayersNumber();
+
     public abstract List<Coordinate> chooseTiles();
     /**
      * Asks the user to choose the column of the library where to place the tiles.
@@ -109,10 +90,9 @@ public abstract class View {
      * @return the column chosen by the user
      */
     public abstract Integer chooseColumn();
-    /**
-     * Starts the game and prints the objects of the game.
-     */
-    public abstract void startGame();
+
+    public abstract void startGame() throws IOException;
+
     /**
      * This method is the method that shows the game.
      */
@@ -141,8 +121,6 @@ public abstract class View {
      * Shows a message.
      */
     public abstract void showMessage(String message);
-    /**
-     * Shows a chat message.
-     */
-    public abstract void showChatMessage(String sender, String content);
+
+
 }

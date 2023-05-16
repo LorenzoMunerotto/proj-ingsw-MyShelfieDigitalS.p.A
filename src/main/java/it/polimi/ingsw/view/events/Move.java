@@ -1,5 +1,7 @@
-package it.polimi.ingsw.client.clientMessage;
+package it.polimi.ingsw.view.events;
 
+import it.polimi.ingsw.client.clientMessage.ClientMessage;
+import it.polimi.ingsw.listener.Listener;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 /**
  * This class represents the player's choices about the move.
  */
-public class Move implements ClientMessage {
+public class Move implements ClientMessage, ViewEvent {
 
     /**
      * The list of Board's coordinate selected by the player
@@ -56,4 +58,16 @@ public class Move implements ClientMessage {
     public String getMessage() {
         return null;
     }
+<<<<<<< HEAD:src/main/java/it/polimi/ingsw/client/clientMessage/Move.java
 }
+=======
+
+
+
+    @Override
+    public void accept(ViewChangeEventHandler viewChangeEventHandler) {
+        viewChangeEventHandler.handle(this);
+    }
+}
+
+>>>>>>> LorenzGUI2:src/main/java/it/polimi/ingsw/view/events/Move.java

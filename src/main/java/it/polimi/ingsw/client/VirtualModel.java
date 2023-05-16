@@ -40,6 +40,7 @@ public class VirtualModel {
      */
     private int indexPersonalGoalCard;
     /**
+    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
      * The username of the client.
      */
     private String myUsername;
@@ -47,6 +48,8 @@ public class VirtualModel {
      * The current player username.
      */
     private Pair<String, Integer> currentPlayerUsernameIndex;
+    public int getNumberPersonalCard() {
+    private int numberPersonalCard;
     /**
      * Is the last message received from the server.
      */
@@ -202,6 +205,7 @@ public class VirtualModel {
         return this.personalGoalCard;
     }
 
+
     /**
      * Get the index of the personal goal card.
      *
@@ -216,14 +220,18 @@ public class VirtualModel {
      *
      * @param personalGoalCard the personal goal card
      */
-    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard, int index) {
+    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard, int numberPersonalCard) {
         this.personalGoalCard = personalGoalCard;
-        this.indexPersonalGoalCard = index;
+        this.numberPersonalCard = numberPersonalCard;
     }
 
     /**************************************************************************
      *                                 Common Card                            *
      **************************************************************************/
+
+    public Map<String, ItemTileType[][]> getClientUsernameLibrary() {
+        return clientUsernameLibrary;
+    }
 
     /**
      * Get the common goal cards.
@@ -335,7 +343,14 @@ public class VirtualModel {
     }
 
     /**
-     * Get the points of the player.
+     * Return the map of the username and the points
+     */
+    public Map<String, Integer> getClientUsernamePoints() {
+        return clientUsernamePoints;
+    }
+
+    /**
+     * Get the current leader board of the game.
      *
      * @param username is the username of the player
      * @return the points of the player
@@ -386,4 +401,5 @@ public class VirtualModel {
     public void setServerMessage(String serverMessage) {
         this.serverMessage = serverMessage;
     }
+
 }

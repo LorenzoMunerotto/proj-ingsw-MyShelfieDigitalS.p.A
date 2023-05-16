@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import it.polimi.ingsw.chat.ChatMessage;
+import java.io.IOException;
 
 public interface ServerMessageHandler {
 
@@ -21,7 +21,7 @@ public interface ServerMessageHandler {
     void handle(NumOfPlayerRequest numOfPlayerRequest);
     void handle(PersonalCardSetMessage personalCardSetMessage);
     void handle(PointsUpdateMessage pointsUpdateMessage);
-    void handle(StartGameMessage startGameMessage);
+    void handle(StartGameMessage startGameMessage) throws IOException;
     void handle(StartTurnMessage startTurnMessage);
     void handle(UsernameRequest usernameRequest);
     void handle(LibrarySetMessage librarySetMessage);

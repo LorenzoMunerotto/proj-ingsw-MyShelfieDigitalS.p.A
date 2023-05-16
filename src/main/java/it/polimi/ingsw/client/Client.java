@@ -1,14 +1,14 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.chat.ChatMessage;
-import it.polimi.ingsw.client.clientMessage.Move;
-import it.polimi.ingsw.client.clientMessage.NumberOfPLayerChoice;
-import it.polimi.ingsw.client.clientMessage.UsernameChoice;
+import it.polimi.ingsw.listener.Event;
+import it.polimi.ingsw.listener.Listener;
+import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
+import it.polimi.ingsw.view.gui.GUI;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.concurrent.Executors;
 /**
  * This class represents the client.
  */
-public class Client implements ServerMessageHandler {
+public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * The scanner.
@@ -45,7 +45,7 @@ public class Client implements ServerMessageHandler {
     /**
      * The view.
      */
-    private final View view;
+    private View view;
     /**
      * The virtual model.
      */
@@ -54,14 +54,25 @@ public class Client implements ServerMessageHandler {
     /**
      * Default constructor, initialize the socket listener and the view.
      *
-     * @param view the view
+     *
      */
     public Client(View view) {
-        this.socketListener = new SocketListener(this, serverIp, serverPort);
+        this.view = view;
+        this.virtualModel = view.getVirtualModel();
+        view.setClient(this);
+        this.socketListener= new SocketListener(this);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
-        this.view = view;
-        this.virtualModel = this.view.getVirtualModel();
+    }
+
+
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
+    }
+
+    @Override
+    public void update(ViewEvent viewEvent) {
+        viewEvent.accept(this);
     }
 
     /**
@@ -202,10 +213,13 @@ public class Client implements ServerMessageHandler {
      *
      * @param usernameRequest the username request
      */
-    public void handle(UsernameRequest usernameRequest) {
-        String username = view.chooseUsername();
-        virtualModel.setMyUsername(username);
-        socketListener.send(new UsernameChoice(username));
+    public void handle(UsernameRequest usernameRequest){
+        view.chooseUsername();
+    }
+
+    public void handle(UsernameChoice usernameChoice){
+        virtualModel.setMyUsername(usernameChoice.getUsername());
+        socketListener.send(usernameChoice);
     }
 
     /**
@@ -214,7 +228,13 @@ public class Client implements ServerMessageHandler {
      * @param numOfPlayerRequest the number of player request
      */
     public void handle(NumOfPlayerRequest numOfPlayerRequest) {
-        socketListener.send(new NumberOfPLayerChoice(view.choosePlayersNumber()));
+        view.choosePlayersNumber();
+
+    }
+
+    @Override
+    public void handle(NumOfPlayerChoice numOfPlayerChoice) {
+        socketListener.send(numOfPlayerChoice);
     }
 
     /**
@@ -222,10 +242,20 @@ public class Client implements ServerMessageHandler {
      *
      * @param moveRequest the move request
      */
-    public void handle(MoveRequest moveRequest) {
-        List<Coordinate> coordinates = view.chooseTiles();
-        Integer column = view.chooseColumn();
-        socketListener.send(new Move(coordinates, column));
+    public void handle(MoveRequest moveRequest){
+        if(view instanceof CLI){
+            List<Coordinate> coordinates = view.chooseTiles();
+            Integer column = view.chooseColumn();
+            socketListener.send(new Move(coordinates,column));
+        }
+        if(view instanceof GUI){
+            view.showGame();
+        }
+    }
+
+    @Override
+    public void handle(Move move) {
+        socketListener.send(move);
     }
 
     /**
@@ -243,6 +273,9 @@ public class Client implements ServerMessageHandler {
      *
      * @param librarySetMessage the library set message
      */
+    public void handle(StartGameMessage startGameMessage) throws IOException {
+        System.out.println("view.startGame();");
+        view.startGame();
     @Override
     public void handle(LibrarySetMessage librarySetMessage) {
         virtualModel.setLibrary(librarySetMessage.getLibraryOwnerUsername(), librarySetMessage.getLibraryGrid());
@@ -394,10 +427,8 @@ public class Client implements ServerMessageHandler {
      * @param endGameMessage the end game message
      */
     @Override
-    public void handle(EndGameMessage endGameMessage) {
-        boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getClientUsernamePoints().get(0).getValue0());
-        view.endGame(isWinner);
-        System.exit(0);
+    public void handle(PersonalCardSetMessage personalCardSetMessage) {
+        virtualModel.setPersonalGoalCard(personalCardSetMessage.getLibraryGrid(), personalCardSetMessage.getIndex());
     }
 
     /**
@@ -430,5 +461,18 @@ public class Client implements ServerMessageHandler {
     @Override
     public void handle(ChatMessage chatMessage) {
         view.showChatMessage(chatMessage.getSender(), chatMessage.getContent());
+    }
+
+    public static void main(String[] Args){
+        Client client;
+        String viewType = chooseViewType();
+        if(viewType.equals("c")){
+            System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
+        }
+        else{
+            System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
+        }
+        client = new Client(new CLI());
+        client.view.main(Args);
     }
 }

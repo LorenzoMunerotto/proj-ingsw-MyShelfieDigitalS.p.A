@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.serverMessage;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,6 @@ public interface ServerMessage extends Serializable {
     String getMessage();
 
 
-    void accept( ServerMessageHandler serverMessageHandler);
+    void accept( ServerMessageHandler serverMessageHandler) throws IOException;
 
 }

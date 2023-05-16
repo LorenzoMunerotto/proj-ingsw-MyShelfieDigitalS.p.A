@@ -1,6 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.client.clientMessage.Move;
+import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.personal_cards.*;
@@ -86,6 +86,7 @@ public class GameHandler {
 
         boardManager.refillBoard();
         Collections.shuffle(gameData.getPlayers(), new Random());
+        sendAll( new StartGameMessage());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
     }
