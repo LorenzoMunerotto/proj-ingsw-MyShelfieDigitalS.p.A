@@ -210,7 +210,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void setClient(Client client) {
-        this.client=client;
+        GUI.client =client;
     }
 
     @Override
@@ -284,19 +284,16 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void waitForTurn(String username) {
-        gameViewController.setErrorsTextIDText("Waiting for " + username + " to play the turn...");
-        //gameViewController.notYourTurn();
+    public void waitForTurn() {
+        gameViewController.setErrorsTextIDText("Waiting for " + virtualModel.getCurrentPlayerUsername() + " to play the turn...");
         getGameViewController().setYouTurn(false);
     }
+
 
     @Override
     public void playTurn() {
         getGameViewController().setYouTurn(true);
         getGameViewController().setErrorsTextIDText("It is your turn!");
-        //getGameViewController().yourTurn();
-
-
     }
 
     @Override
@@ -317,7 +314,6 @@ public class GUI extends Application implements View {
 
     @Override
     public void stopWaiting() {
-        //getGameViewController().notYourTurn();
     }
 
     @Override

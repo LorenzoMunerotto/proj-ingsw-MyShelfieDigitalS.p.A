@@ -3,9 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.client.clientMessage.*;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.server.serverMessage.*;
-import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.view.events.Move;
-import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
@@ -42,8 +40,6 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      * The boolean that indicates if the client is active.
      */
     private boolean active;
-
-    private Thread checkConnectionThread;
 
     /**
      * This is the constructor of the class.
@@ -126,27 +122,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
             server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
             setActive(false);
         }
-
-        checkConnectionThread = new Thread(()->{
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    outputStream.reset();
-                    Thread.sleep(1000);
-                    outputStream.writeObject(new CheckConnectionMessage());
-                    outputStream.flush();
-                } catch (IOException e) {
-                    server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
-                    setActive(false);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-
-        });
-        checkConnectionThread.start();
     }
-
-
 
     /**
      * This method handles the username choice.
@@ -176,13 +152,12 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         while (true) {
             try {
                 ClientMessage input = (ClientMessage) inputStream.readObject();
-
                 if (input instanceof NumberOfPLayerChoice) {
                     try {
                         int num = (((NumberOfPLayerChoice) input).getNumOfPlayer());
                         server.getGameHandlerByClientId(clientID).setNumberOfPlayers(num);
                         server.setNumOfPlayers(num);
-                        send(new CustomMessage("Number of players correctly set to: " + CLIConstants.CYAN_BRIGHT + num + CLIConstants.RESET));
+                        send(new CustomMessage("Number of players correctly set to: " + num));
                         break;
                     } catch (IllegalNumOfPlayersException e) {
                         send(new ErrorMessage(GameCreationErrors.ILLEGAL_NUM_OF_PLAYER));

@@ -15,9 +15,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static it.polimi.ingsw.view.cli.CLIConstants.LEADERBOARD_BOTTOM_FRAME_FORMAT;
-import static it.polimi.ingsw.view.cli.CLIConstants.LEADERBOARD_MIDDLE_FRAME_FORMAT;
-
 
 public class FinalPageController implements Controller{
     @FXML

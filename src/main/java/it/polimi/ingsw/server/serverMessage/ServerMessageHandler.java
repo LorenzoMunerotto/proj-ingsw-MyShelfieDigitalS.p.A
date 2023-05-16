@@ -25,5 +25,5 @@ public interface ServerMessageHandler {
     void handle(StartTurnMessage startTurnMessage);
     void handle(UsernameRequest usernameRequest);
     void handle(LibrarySetMessage librarySetMessage);
-    void handle(ChatMessage chatMessage);
+
 }

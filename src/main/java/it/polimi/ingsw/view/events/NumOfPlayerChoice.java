@@ -14,7 +14,6 @@ public class NumOfPlayerChoice implements ClientMessage, ViewEvent {
         return numOfPlayer;
     }
 
-
     @Override
     public String getMessage() {
         return null;

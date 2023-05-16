@@ -2,11 +2,8 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
-import it.polimi.ingsw.listener.AbstractListenable;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.cli.CLIConstants;
-import it.polimi.ingsw.view.events.NumOfPlayerChoice;
-import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,21 +15,12 @@ import java.util.regex.Pattern;
  */
 public interface View  {
 
-
      int MIN_PLAYERS_NUMBER = 2;
     /**
      * It is the maximum number of players in the game.
      */
-    protected int MAX_PLAYERS_NUMBER = 4;
-    /**
-     * It is the username of the winner of the game.
-     */
-    protected String winner;
-    /**
-     * It is the virtual model.
-     * Still don't know when and where to initialize it.
-     */
-    protected VirtualModel virtualModel;
+    int MAX_PLAYERS_NUMBER = 4;
+
 
      void setClient(Client client);
 
@@ -68,10 +56,6 @@ public interface View  {
         return matcher.matches();
     }
 
-    public VirtualModel getVirtualModel() {
-        return virtualModel;
-    }
-
     /**
      * This method is the main method of the view.
      *
@@ -79,48 +63,46 @@ public interface View  {
      */
      void main(String[] args);
 
-    public abstract void chooseUsername();
+     void chooseUsername();
 
-    public abstract void choosePlayersNumber();
+     void choosePlayersNumber();
 
-    public abstract List<Coordinate> chooseTiles();
+    List<Coordinate> chooseTiles();
     /**
      * Asks the user to choose the column of the library where to place the tiles.
      *
      * @return the column chosen by the user
      */
-    public abstract Integer chooseColumn();
+     Integer chooseColumn();
 
-    public abstract void startGame() throws IOException;
+     void startGame() throws IOException;
 
     /**
      * This method is the method that shows the game.
      */
-    public abstract void showGame();
+    void showGame();
     /**
      * This method is the method that waits for the turn of the player.
      */
-    public abstract void waitForTurn();
+    void waitForTurn();
     /**
      * This method is the method that plays the turn of the player.
      */
-    public abstract void playTurn();
+     void playTurn();
     /**
      * This method is the method that ends the game.
      */
-    public abstract void endGame(Boolean isWinner);
+     void endGame(Boolean isWinner);
     /**
      * This method is the method that manages the turn of the player.
      */
-    public abstract void showErrorMessage(String errorMessage);
+     void showErrorMessage(String errorMessage);
     /**
      * Stops the waiting thread.
      */
-    public abstract void stopWaiting();
+     void stopWaiting();
     /**
      * Shows a message.
      */
-    public abstract void showMessage(String message);
-
-
+     void showMessage(String message);
 }

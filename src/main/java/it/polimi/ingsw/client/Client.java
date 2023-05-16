@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.listener.Event;
-import it.polimi.ingsw.listener.Listener;
 import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
@@ -45,7 +43,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     /**
      * The view.
      */
-    private View view;
+    private final View view;
     /**
      * The virtual model.
      */
@@ -53,14 +51,12 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * Default constructor, initialize the socket listener and the view.
-     *
-     *
      */
     public Client(View view) {
         this.view = view;
         this.virtualModel = view.getVirtualModel();
         view.setClient(this);
-        this.socketListener= new SocketListener(this);
+        this.socketListener= new SocketListener(this, serverIp, serverPort);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
     }
@@ -154,52 +150,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     }
 
     /**
-     * This method launches the chat client terminal.
-     *
-     * @throws IOException the io exception
-     */
-    private static void launchChat() throws IOException {
-        String command;
-        String[] array;
-
-        String os = System.getProperty("os.name").toLowerCase();
-        if (os.contains("win")) {
-            command = "cmd.exe";
-            array = new String[]{command, "/c", "start", "java", "-cp", System.getProperty("java.class.path"), "it.polimi.ingsw.chat.Chat"};
-        } else {
-            command = "/bin/bash";
-            array = new String[]{command, "-c", "gnome-terminal", "--", "java", "-cp", System.getProperty("java.class.path"), "it.polimi.ingsw.chat.Chat"};
-        }
-        ProcessBuilder processBuilder = new ProcessBuilder(array);
-        processBuilder.start();
-    }
-
-    /**
-     * Main method.
-     *
-     * @param Args the args
-     * @throws IOException the io exception
-     */
-    public static void main(String[] Args) throws IOException {
-        Client client;
-        chooseServerIP();
-        chooseServerPort();
-        String viewType = chooseViewType();
-        if (viewType.equals("c")) {
-            System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
-            /*try {
-                launchChat();
-            } catch (IOException e) {
-                System.err.println("Error launching chat client terminal: " + e.getMessage());
-            }*/
-        } else {
-            System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
-        }
-        client = new Client(new CLI());
-        client.view.main(Args);
-    }
-
-    /**
      * Get the view.
      *
      * @return the view
@@ -229,7 +179,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      */
     public void handle(NumOfPlayerRequest numOfPlayerRequest) {
         view.choosePlayersNumber();
-
     }
 
     @Override
@@ -268,14 +217,12 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         virtualModel.setBoard(boardSetMessage.getGridBoard());
     }
 
-    /**
-     * This method handles the library set message.
-     *
-     * @param librarySetMessage the library set message
-     */
-    public void handle(StartGameMessage startGameMessage) throws IOException {
-        System.out.println("view.startGame();");
-        view.startGame();
+    @Override
+    public void handle(EndGameMessage endGameMessage){
+        boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getClientUsernamePoints().get(0).getValue0());
+        view.endGame(isWinner);
+    }
+
     @Override
     public void handle(LibrarySetMessage librarySetMessage) {
         virtualModel.setLibrary(librarySetMessage.getLibraryOwnerUsername(), librarySetMessage.getLibraryGrid());
@@ -317,7 +264,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      * @param startGameMessage the start game message
      */
     @Override
-    public void handle(StartGameMessage startGameMessage) {
+    public void handle(StartGameMessage startGameMessage) throws IOException {
         view.startGame();
     }
 
@@ -422,16 +369,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     }
 
     /**
-     * This method handles the end game message.
-     *
-     * @param endGameMessage the end game message
-     */
-    @Override
-    public void handle(PersonalCardSetMessage personalCardSetMessage) {
-        virtualModel.setPersonalGoalCard(personalCardSetMessage.getLibraryGrid(), personalCardSetMessage.getIndex());
-    }
-
-    /**
      * This method handles the disconnection message.
      *
      * @param disconnectionMessage the disconnection message
@@ -453,26 +390,26 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     public void handle(ConnectionMessage connectionMessage) {
     }
 
-    /**
-     * This method handles the chat message.
-     *
-     * @param chatMessage the chat message
-     */
-    @Override
-    public void handle(ChatMessage chatMessage) {
-        view.showChatMessage(chatMessage.getSender(), chatMessage.getContent());
-    }
-
     public static void main(String[] Args){
-        Client client;
-        String viewType = chooseViewType();
-        if(viewType.equals("c")){
-            System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
+        chooseServerIP();
+        chooseServerPort();
+        String viewType = "";
+        while(viewType.isBlank()){
+            viewType = chooseViewType();
+            switch (viewType) {
+                case "c" -> {
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
+                    new Client(new CLI()).view.main(null);
+                }
+                case "g" -> {
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected gui interface%n");
+                    new Client(new GUI()).view.main(null);
+                }
+                default -> {
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "Invalid input%n");
+                    viewType = "";
+                }
+            }
         }
-        else{
-            System.out.println("Sorry, gui is not available yet, i'll let you play with the cli :)");
-        }
-        client = new Client(new CLI());
-        client.view.main(Args);
     }
 }

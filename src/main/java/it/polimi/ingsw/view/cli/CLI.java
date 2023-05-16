@@ -77,19 +77,18 @@ public class CLI implements View {
      * @return the username chosen by the user
      */
     @Override
-    public String chooseUsername() {
-        this.username = "";
+    public void chooseUsername() {
+        String username = "";
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (this.username.isBlank()) {
-            this.username = CLI.scanner.nextLine().strip();
-            if (!isUsernameValid(this.username)) {
-                this.username = "";
+        while (username.isBlank()) {
+            username = CLI.scanner.nextLine().strip();
+            if (!isUsernameValid(username)) {
+                username = "";
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        setUsername(username);
-
+        client.handle(new UsernameChoice(username));
     }
 
     /**
@@ -99,7 +98,7 @@ public class CLI implements View {
      */
     @Override
     public void choosePlayersNumber() {
-        Integer playersNumber = 0;
+        int playersNumber = 0;
         String playersNumberString;
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
@@ -114,7 +113,7 @@ public class CLI implements View {
                         CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             }
         }
-        setPlayersNumber(playersNumber);
+        client.handle(new NumOfPlayerChoice(playersNumber));
     }
 
 
@@ -144,7 +143,7 @@ public class CLI implements View {
      * @return the column chosen by the user
      */
     public Integer chooseColumn() {
-        Integer column = 0;
+        int column = 0;
         String columnString;
         System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
                 CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
@@ -254,18 +253,6 @@ public class CLI implements View {
     }
 
     /**
-     * Shows a chat message.
-     */
-    @Override
-    public void showChatMessage(String sender, String content) {
-        if (sender.equals(virtualModel.getMyUsername())) {
-            System.out.printf("%s%n", content);
-        } else {
-            System.out.printf("%s%s:%s %s%n", CLIConstants.CYAN_BRIGHT, sender, CLIConstants.RESET, content);
-        }
-    }
-
-    /**
      * Main method of the cli.
      *
      * @param args the arguments of the main method
@@ -275,24 +262,15 @@ public class CLI implements View {
     }
 
     @Override
-    public void showMessage(String message) {
-        if (message!=null) {
-            System.out.println(message);
-        }
-    }
-
-    @Override
     public void setClient(Client client) {
         this.client = client;
     }
 
     @Override
     public void setUsername(String username) {
-            client.handle(new UsernameChoice(username));
     }
 
     @Override
     public void setPlayersNumber(int playersNumber) {
-        client.handle(new NumOfPlayerChoice(playersNumber));
     }
 }

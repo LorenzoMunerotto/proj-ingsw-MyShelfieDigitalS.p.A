@@ -58,9 +58,7 @@ public class Move implements ClientMessage, ViewEvent {
     public String getMessage() {
         return null;
     }
-<<<<<<< HEAD:src/main/java/it/polimi/ingsw/client/clientMessage/Move.java
-}
-=======
+
 
 
 
@@ -70,4 +68,3 @@ public class Move implements ClientMessage, ViewEvent {
     }
 }
 
->>>>>>> LorenzGUI2:src/main/java/it/polimi/ingsw/view/events/Move.java

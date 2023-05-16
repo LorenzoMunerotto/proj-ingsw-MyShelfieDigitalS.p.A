@@ -1,15 +1,12 @@
 package it.polimi.ingsw.view.events;
 
-<<<<<<< HEAD:src/main/java/it/polimi/ingsw/client/clientMessage/UsernameChoice.java
+import it.polimi.ingsw.client.clientMessage.ClientMessage;
 /**
  * This class represents the message that the client sends when he chooses his username.
  */
-public class UsernameChoice implements ClientMessage {
-=======
-import it.polimi.ingsw.client.clientMessage.ClientMessage;
 
 public class UsernameChoice implements ClientMessage, ViewEvent {
->>>>>>> LorenzGUI2:src/main/java/it/polimi/ingsw/view/events/UsernameChoice.java
+
 
     /**
      * The username chosen by the client.
@@ -43,13 +40,11 @@ public class UsernameChoice implements ClientMessage, ViewEvent {
     public String getMessage() {
         return null;
     }
-<<<<<<< HEAD:src/main/java/it/polimi/ingsw/client/clientMessage/UsernameChoice.java
-}
-=======
+
+
 
     @Override
     public void accept(ViewChangeEventHandler viewChangeEventHandler) {
         viewChangeEventHandler.handle(this);
     }
 }
->>>>>>> LorenzGUI2:src/main/java/it/polimi/ingsw/view/events/UsernameChoice.java

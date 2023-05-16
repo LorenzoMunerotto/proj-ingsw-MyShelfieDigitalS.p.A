@@ -40,7 +40,7 @@ public class VirtualModel {
      */
     private int indexPersonalGoalCard;
     /**
-    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
+     * private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
      * The username of the client.
      */
     private String myUsername;
@@ -48,8 +48,6 @@ public class VirtualModel {
      * The current player username.
      */
     private Pair<String, Integer> currentPlayerUsernameIndex;
-    public int getNumberPersonalCard() {
-    private int numberPersonalCard;
     /**
      * Is the last message received from the server.
      */
@@ -59,6 +57,11 @@ public class VirtualModel {
      * Default constructor.
      */
     public VirtualModel() {
+
+    }
+
+    public int getNumberPersonalCard() {
+        return this.indexPersonalGoalCard;
     }
 
     /**************************************************************************
@@ -160,7 +163,8 @@ public class VirtualModel {
      * @param column           the column of the library
      * @param checksum         the checksum of the library
      */
-    public void updateLibraryByUsername(String username, List<ItemTileType> itemTileTypeList, int column, long checksum) {
+    public void updateLibraryByUsername(String username, List<ItemTileType> itemTileTypeList, int column,
+                                        long checksum) {
         ItemTileType[][] library = clientUsernameLibrary.get(username);
         for (ItemTileType itemTile : itemTileTypeList) {
             for (int row = library.length - 1; row >= 0; row--) {
@@ -205,16 +209,6 @@ public class VirtualModel {
         return this.personalGoalCard;
     }
 
-
-    /**
-     * Get the index of the personal goal card.
-     *
-     * @return the index of the personal goal card
-     */
-    public int getIndexPersonalGoalCard() {
-        return this.indexPersonalGoalCard;
-    }
-
     /**
      * Set the personal goal card as a new data structure.
      *
@@ -222,7 +216,7 @@ public class VirtualModel {
      */
     public void setPersonalGoalCard(ItemTileType[][] personalGoalCard, int numberPersonalCard) {
         this.personalGoalCard = personalGoalCard;
-        this.numberPersonalCard = numberPersonalCard;
+        this.indexPersonalGoalCard = numberPersonalCard;
     }
 
     /**************************************************************************
@@ -320,14 +314,6 @@ public class VirtualModel {
         this.myUsername = myUsername;
     }
 
-    /**
-     * Get the map that associates the username of the player with his library.
-     *
-     * @return the map that associates the username of the player with his library
-     */
-    public Map<String, ItemTileType[][]> getClientUsernameLibrary() {
-        return this.clientUsernameLibrary;
-    }
 
     /**************************************************************************
      *                                   Points                               *
@@ -340,13 +326,6 @@ public class VirtualModel {
      */
     public List<Pair<String, Integer>> getClientUsernamePoints() {
         return this.clientUsernamePoints;
-    }
-
-    /**
-     * Return the map of the username and the points
-     */
-    public Map<String, Integer> getClientUsernamePoints() {
-        return clientUsernamePoints;
     }
 
     /**
@@ -380,6 +359,16 @@ public class VirtualModel {
         this.clientUsernamePoints.sort((pair1, pair2) -> pair2.getValue1().compareTo(pair1.getValue1()));
     }
 
+    /**
+     * Get the current leader board of the game.
+     *
+     * @return the current leader board of the game.
+     */
+    public List<Pair<String, Integer>> getLeaderBoard() {
+        return this.clientUsernamePoints;
+    }
+
+
     /**************************************************************************
      *                               Server Message                           *
      **************************************************************************/
@@ -401,5 +390,4 @@ public class VirtualModel {
     public void setServerMessage(String serverMessage) {
         this.serverMessage = serverMessage;
     }
-
 }
