@@ -168,7 +168,7 @@ public class Server {
             waiting.clear();
 
         } else {
-            currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + CLIConstants.CYAN_BRIGHT + (numOfPlayers - waiting.size()) + CLIConstants.RESET + " players left"));
+            currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + (numOfPlayers - waiting.size()) + " players left"));
         }
     }
 

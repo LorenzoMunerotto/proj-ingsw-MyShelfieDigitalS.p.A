@@ -31,7 +31,7 @@ public class GUI extends Application implements View {
     private static GameViewController gameViewController;
     private static FinalPageController finalPageController;
     private static Client client;
-    private static VirtualModel virtualModel;
+    private VirtualModel virtualModel;
     private final HashMap<String, Controller> nameMapController = new HashMap<>();
     private static double maxX;
     private static double maxY;

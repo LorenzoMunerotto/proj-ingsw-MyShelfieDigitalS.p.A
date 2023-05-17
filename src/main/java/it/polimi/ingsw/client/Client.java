@@ -255,7 +255,13 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      */
     @Override
     public void handle(CustomMessage customMessage) {
-        virtualModel.setServerMessage(customMessage.getMessage());
+        if(view instanceof CLI){
+            virtualModel.setServerMessage(customMessage.getMessage());
+        }
+        if(view instanceof GUI){
+            view.showMessage(customMessage.getMessage());
+        }
+
     }
 
     /**
