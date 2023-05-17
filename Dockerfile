@@ -1,13 +1,10 @@
-FROM maven:3.9.0-eclipse-temurin-17-focal
 
-# Copy source folder
+FROM maven:latest AS build  
 COPY src src
-
-# Copy maven pom.xml
 COPY pom.xml .
+RUN mvn -e clean package
 
-# Build the package
-RUN mvn clean package
-
-# Run the code
+EXPOSE 1235 
 ENTRYPOINT ["java","-jar","target/proj-ingsw-MyShelfieDigitalS.P.A.-1.0-SNAPSHOT-jar-with-dependencies.jar"]
+
+
