@@ -2,6 +2,10 @@ package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.events.Move;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
@@ -9,10 +13,14 @@ import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.css.Style;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -20,6 +28,8 @@ import javafx.scene.text.TextFlow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static javafx.scene.paint.Color.rgb;
 
 public class GameViewController implements Controller {
     @FXML
@@ -53,8 +63,9 @@ public class GameViewController implements Controller {
     @FXML
     private Circle turnCircleID;
 
-    @FXML
-    private TextFlow errorsTextID;
+   @FXML private VBox vBox_messages;
+   @FXML private ScrollPane sp_main;
+
     private List<Coordinate> coordinates=new ArrayList<>();
     private GUI gui;
     private  VirtualModel virtualModel;
@@ -181,9 +192,23 @@ public class GameViewController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                HBox hBox=new HBox();
+                hBox.setAlignment(Pos.CENTER_LEFT);
+                hBox.setPadding(new Insets(3,3,3,3));
                 Text text = new Text(error);
-                errorsTextID.getChildren().add(text);
-                errorsTextID.setVisible(true);
+                text.setFill(Color.color(0.934,0.945,0.996));
+                TextFlow textFlow =new TextFlow(text);
+                textFlow.setStyle("-fx-text-fill: black;-fx-background-color: blue" +"; -fx-background-radius: 20px ;");
+                /*
+                textFlow.setStyle("-fx-color: rgb(239, 242, 255 )");
+                textFlow.setStyle("-fx-background-color: rgb(15, 125, 242)");
+                textFlow.setStyle("-fx-background-radius: 20px");
+                textFlow.setPadding(new Insets(3,3,3,3));
+
+                 */
+                hBox.getChildren().add(textFlow);
+                vBox_messages.getChildren().add(hBox);
+                vBox_messages.setVisible(true);
             }
         });
     }
@@ -325,7 +350,7 @@ public class GameViewController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                errorsTextID.getChildren().clear();
+                vBox_messages.getChildren().clear();
                 for(int c=0; c<9; c++) {
                     for (int r = 0; r < 9; r++) {
                         boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
@@ -338,11 +363,6 @@ public class GameViewController implements Controller {
                 }
             }
         });
-    }
-    public void printError (String error){
-        //errorsTextID.setText(null);
-        //errorsTextID.setText(error);
-        errorsTextID.setVisible(true);
     }
 
     public void personalCardInizializer(){
@@ -405,10 +425,25 @@ public class GameViewController implements Controller {
 
 
     public void setErrorBox(){
-        errorsTextID.setMaxWidth(gui.getMaxX()*0.14);
-        errorsTextID.setMaxHeight(gui.getMaxY()*0.14);
-        errorsTextID.setLayoutX(gui.getMaxX()*0.43);
-        errorsTextID.setLayoutY(gui.getMaxY()*0.10);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBox_messages.setMaxWidth(gui.getMaxX()*0.14);
+                vBox_messages.setMaxHeight(gui.getMaxY()*0.12);
+                vBox_messages.setMinWidth(gui.getMaxX()*0.14);
+                vBox_messages.setMinHeight(gui.getMaxY()*0.12);
+                sp_main.setMaxWidth(gui.getMaxX()*0.16);
+                sp_main.setMaxHeight(gui.getMaxY()*0.14);
+                sp_main.setMinWidth(gui.getMaxX()*0.16);
+                sp_main.setMinHeight(gui.getMaxY()*0.14);
+                vBox_messages.setLayoutX(gui.getMaxX()*0.45);
+                vBox_messages.setLayoutY(gui.getMaxY()*0.10);
+                sp_main.setMinWidth(gui.getMaxX()*0.14);
+                sp_main.setMinHeight(gui.getMaxY()*0.12);
+                sp_main.setLayoutX(gui.getMaxX()*0.46);
+                sp_main.setLayoutY(gui.getMaxY()*0.11);
+            }
+        });
     }
 
 
@@ -466,6 +501,12 @@ public class GameViewController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                vBox_messages.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                        sp_main.setVvalue((double) newValue);
+                    }
+                });
                 setErrorBox();
                 printAllLibrary();
                 personalCardInizializer();
