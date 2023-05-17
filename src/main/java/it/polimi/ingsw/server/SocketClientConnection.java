@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.clientMessage.*;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.events.Move;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
 
 import java.io.IOException;
@@ -152,9 +153,9 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         while (true) {
             try {
                 ClientMessage input = (ClientMessage) inputStream.readObject();
-                if (input instanceof NumberOfPLayerChoice) {
+                if (input instanceof NumOfPlayerChoice) {
                     try {
-                        int num = (((NumberOfPLayerChoice) input).getNumOfPlayer());
+                        int num = (((NumOfPlayerChoice) input).getNumOfPlayer());
                         server.getGameHandlerByClientId(clientID).setNumberOfPlayers(num);
                         server.setNumOfPlayers(num);
                         send(new CustomMessage("Number of players correctly set to: " + num));
@@ -195,11 +196,11 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     /**
      * This method handles the number of players choice.
      *
-     * @param numberOfPLayerChoice the number of players choice
+     * @param numOfPLayerChoice the number of players choice
      */
     @Override
-    public void handle(NumberOfPLayerChoice numberOfPLayerChoice) {
-        server.setNumOfPlayers(numberOfPLayerChoice.getNumOfPlayer());
+    public void handle(NumOfPlayerChoice numOfPLayerChoice) {
+        server.setNumOfPlayers(numOfPLayerChoice.getNumOfPlayer());
     }
 
     /**

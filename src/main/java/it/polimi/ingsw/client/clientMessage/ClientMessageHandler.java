@@ -18,9 +18,9 @@ public interface ClientMessageHandler {
     /**
      * Handles the message numOfPlayerChoice.
      *
-     * @param numberOfPLayerChoice the message numOfPlayerChoice to handle.
+     * @param numOfPLayerChoice the message numOfPlayerChoice to handle.
      */
-    void handle(NumberOfPLayerChoice numberOfPLayerChoice);
+    void handle(NumOfPlayerChoice numOfPLayerChoice);
 
     /**
      * Handles the message usernameChoice.
