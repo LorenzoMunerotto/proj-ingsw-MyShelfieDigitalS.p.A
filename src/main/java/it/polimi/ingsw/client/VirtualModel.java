@@ -21,7 +21,7 @@ public class VirtualModel {
     /**
      * Map of the username and the points.
      */
-    private final List<Pair<String, Integer>> clientUsernamePoints = new ArrayList<>();
+    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
     /**
      * A new data structure that represents the board.
      */
@@ -40,14 +40,11 @@ public class VirtualModel {
      */
     private int indexPersonalGoalCard;
     /**
-     * private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
      * The username of the client.
      */
     private String myUsername;
-    /**
-     * The current player username.
-     */
-    private Pair<String, Integer> currentPlayerUsernameIndex;
+    private int currentPlayerIndex;
+    private List<String> orderedListOfPlayers;
     /**
      * Is the last message received from the server.
      */
@@ -152,7 +149,7 @@ public class VirtualModel {
      */
     public void setLibrary(String username, ItemTileType[][] library) {
         clientUsernameLibrary.put(username, library);
-        clientUsernamePoints.add(new Pair<>(username, 0));
+        clientUsernamePoints.put(username, 0);
     }
 
     /**
@@ -265,13 +262,33 @@ public class VirtualModel {
      *                               Current Player                           *
      **************************************************************************/
 
+
+    public void setPlayerIndex(List<String> usernames) {
+        this.orderedListOfPlayers = usernames;
+    }
+
+    public String getPlayerUsername(Integer index) {
+        if (index >= 0 && index < orderedListOfPlayers.size()) {
+            return this.orderedListOfPlayers.get(index);
+        } else {
+            throw new IllegalArgumentException("Invalid index");
+        }
+    }
     /**
      * Get the current player username.
      *
      * @return the current player username
      */
+    public Integer getPlayerIndex(String username) {
+        return this.orderedListOfPlayers.indexOf(username);
+    }
+
     public String getCurrentPlayerUsername() {
-        return this.currentPlayerUsernameIndex.getValue0();
+        if (this.currentPlayerIndex >= 0 && this.currentPlayerIndex < orderedListOfPlayers.size()) {
+            return this.orderedListOfPlayers.get(this.currentPlayerIndex);
+        } else {
+            throw new IllegalStateException("Invalid current player index");
+        }
     }
 
     /**
@@ -280,7 +297,7 @@ public class VirtualModel {
      * @return the current player index
      */
     public int getCurrentPlayerIndex() {
-        return this.currentPlayerUsernameIndex.getValue1();
+        return this.currentPlayerIndex;
     }
 
     /**
@@ -289,7 +306,7 @@ public class VirtualModel {
      * @param currentPlayerUsernameIndex the current player username and index
      */
     public void updateCurrentPlayerUsernameIndex(Pair<String, Integer> currentPlayerUsernameIndex) {
-        this.currentPlayerUsernameIndex = currentPlayerUsernameIndex;
+        this.currentPlayerIndex = currentPlayerUsernameIndex.getValue1();
     }
 
     /**************************************************************************
@@ -320,26 +337,18 @@ public class VirtualModel {
      **************************************************************************/
 
     /**
-     * Get a map that associates the username of the player with his points.
-     *
-     * @return the points of the player
-     */
-    public List<Pair<String, Integer>> getClientUsernamePoints() {
-        return this.clientUsernamePoints;
-    }
-
-    /**
      * Get the current leader board of the game.
      *
      * @param username is the username of the player
      * @return the points of the player
      */
-    public Integer getPointsByUsername(String username) {
-        return clientUsernamePoints.stream()
-                .filter(pair -> pair.getValue0().equals(username))
-                .map(Pair::getValue1)
-                .findFirst()
-                .orElse(null);
+    public int getPointsByUsername(String username) {
+        Integer points = this.clientUsernamePoints.get(username);
+        if (points == null) {
+            throw new IllegalArgumentException("Username not found");
+        } else {
+            return points;
+        }
     }
 
     /**
@@ -349,14 +358,11 @@ public class VirtualModel {
      * @param points   are the points of the player
      */
     public void updatePointsByUsername(String username, Integer points) {
-        for (int i = 0; i < clientUsernamePoints.size(); i++) {
-            Pair<String, Integer> currentPair = clientUsernamePoints.get(i);
-            if (currentPair.getValue0().equals(username)) {
-                clientUsernamePoints.set(i, new Pair<>(username, points));
-                break;
-            }
+        if (this.clientUsernamePoints.containsKey(username)) {
+            this.clientUsernamePoints.replace(username, points);
+        } else {
+            throw new IllegalArgumentException("Username not found");
         }
-        this.clientUsernamePoints.sort((pair1, pair2) -> pair2.getValue1().compareTo(pair1.getValue1()));
     }
 
     /**
@@ -365,9 +371,27 @@ public class VirtualModel {
      * @return the current leader board of the game.
      */
     public List<Pair<String, Integer>> getLeaderBoard() {
-        return this.clientUsernamePoints;
-    }
+        List<Pair<String, Integer>> leaderBoard = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : clientUsernamePoints.entrySet()) {
+            leaderBoard.add(new Pair<>(entry.getKey(), entry.getValue()));
+        }
 
+        leaderBoard.sort((o1, o2) -> {
+            int scoreComparison = o2.getValue1().compareTo(o1.getValue1());
+            if (scoreComparison != 0) {
+                return scoreComparison;
+            } else {
+                Integer index1 = getPlayerIndex(o1.getValue0());
+                Integer index2 = getPlayerIndex(o2.getValue0());
+                if (index1 == -1 || index2 == -1) {
+                    throw new IllegalStateException("Usernames in the leaderboard not found in the list of players");
+                } else {
+                    return index1.compareTo(index2);
+                }
+            }
+        });
+        return leaderBoard;
+    }
 
     /**************************************************************************
      *                               Server Message                           *

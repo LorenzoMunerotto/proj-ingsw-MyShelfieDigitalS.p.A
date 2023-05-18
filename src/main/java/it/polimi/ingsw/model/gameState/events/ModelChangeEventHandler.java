@@ -116,4 +116,5 @@ public interface ModelChangeEventHandler extends EventHandler, Listener {
      * @param pointsUpdateEvent the points update event to be handled
      */
     void handle(PointsUpdateEvent pointsUpdateEvent);
+    void handle(PlayerOrderSetEvent playerOrderSetEvent);
 }

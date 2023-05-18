@@ -96,7 +96,6 @@ public class Server {
     public String getUsernameByClientId(Integer clientId) {
         return ClientIdMapUsername.get(clientId);
     }
-
     /**
      * Set the number of players.
      *
@@ -139,7 +138,7 @@ public class Server {
 
         Integer clientId = assignClientId();
         VirtualClient virtualClient = new VirtualClient(socketClientConnection, username, clientId, currentGameHandler);
-
+        currentGameHandler.sendAll(new CustomMessage(username + " joined the game!"));
         currentGameHandler.addVirtualClient(virtualClient);
         currentGameHandler.addPlayer(username, clientId);
         ClientIdMapVirtualClient.put(clientId, virtualClient);
@@ -163,10 +162,9 @@ public class Server {
         if (waiting.size() == 1) {
             socketClientConnection.setUpNumberOfPlayers();
         } else if (waiting.size() == numOfPlayers) {
-            currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached. The game is starting..."));
+            currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached!"));
             currentGameHandler.startGame();
             waiting.clear();
-
         } else {
             currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + (numOfPlayers - waiting.size()) + " players left"));
         }

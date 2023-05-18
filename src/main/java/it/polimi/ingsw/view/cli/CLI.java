@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class CLI implements View {
 
-    private VirtualModel virtualModel;
+    private final VirtualModel virtualModel;
     private Client client;
     /**
      * It is the scanner used to read the user input.
@@ -34,8 +34,6 @@ public class CLI implements View {
      * It is a thread that is used for waiting.
      */
     private Thread waitingThread;
-
-
 
     /**
      * Default constructor, initializes the drawer.
@@ -73,8 +71,6 @@ public class CLI implements View {
 
     /**
      * Asks the user to choose his username.
-     *
-     * @return the username chosen by the user
      */
     @Override
     public void chooseUsername() {
@@ -93,8 +89,6 @@ public class CLI implements View {
 
     /**
      * Asks the user to choose the number of players for the game.
-     *
-     * @return the number of players chosen by the user
      */
     @Override
     public void choosePlayersNumber() {
@@ -199,8 +193,12 @@ public class CLI implements View {
     @Override
     public void startGame() {
         this.stopWaiting();
+        try{
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         CLI.clear();
-        System.out.printf(CLIConstants.GREEN_BRIGHT + "The game has started!%n" + CLIConstants.RESET);
     }
 
     /**
@@ -222,7 +220,6 @@ public class CLI implements View {
      */
     @Override
     public void playTurn() {
-        System.out.println(CLIConstants.CONSOLE_ARROW + "It is your turn!");
     }
 
     /**

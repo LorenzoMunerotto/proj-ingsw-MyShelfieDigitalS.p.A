@@ -214,8 +214,6 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
                 readFromStream();
             }
         } catch (IOException e) {
-            // if it doesn't read, the client has disconnected
-            // we have to kill the entire game
             server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
             setActive(false);
         } catch (ClassNotFoundException e) {

@@ -147,6 +147,11 @@ public class VirtualClient implements ModelChangeEventHandler {
 
     }
 
+    @Override
+    public void handle(PlayerOrderSetEvent playerOrderSetEvent) {
+        socketClientConnection.send(new PlayerOrderSetMessage(playerOrderSetEvent.getPlayerOrder()));
+    }
+
     /**
      * {@inheritDoc}
      */

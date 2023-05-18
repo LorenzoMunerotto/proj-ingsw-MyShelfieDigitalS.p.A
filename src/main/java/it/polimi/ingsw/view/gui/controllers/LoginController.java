@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class LoginController implements Controller  {
+public class LoginController implements Controller {
 
     @FXML
     private Button loginButtonID;
@@ -41,10 +41,10 @@ public class LoginController implements Controller  {
     @FXML
     private ImageView backGroundID;
 
-    private boolean usernamePress=false;
+    private boolean usernamePress = false;
     private GUI gui;
 
-    private Integer[] numbers ={2,3,4};
+    private final Integer[] numbers = {2, 3, 4};
 
     private int numberOfPlayers;
     private String userName;
@@ -55,12 +55,13 @@ public class LoginController implements Controller  {
     private String errorString;
     @FXML
     private Button startGameButtonID;
+
     @Override
     public void setGui(GUI gui) {
         this.gui = gui;
     }
 
-    public void setErrorsLabelIDText(String error){
+    public void setErrorsLabelIDText(String error) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -73,15 +74,14 @@ public class LoginController implements Controller  {
     }
 
     public void userNameSubmit(ActionEvent actionEvent) {
-        if(gui.isUsernameValid(textNameInputID.getText())){
+        if (gui.isUsernameValid(textNameInputID.getText())) {
             errorsTextID.getChildren().clear();
             gui.setUsername(textNameInputID.getText());
             textNameInputID.setVisible(false);
             userNameButtonID.setVisible(false);
             nameLabelID.setVisible(false);
-        }
-        else if(!gui.isUsernameValid(textNameInputID.getText())){
-            usernamePress=false;
+        } else if (!gui.isUsernameValid(textNameInputID.getText())) {
+            usernamePress = false;
             errorsTextID.getChildren().clear();
             Text text = new Text("Invalid username, please try again");
             errorsTextID.getChildren().add(text);
@@ -89,14 +89,15 @@ public class LoginController implements Controller  {
             textNameInputID.clear();
         }
     }
-    public void submitNumberOfPlayer(ActionEvent event)  {
-        if(numberBoxID.getValue()==null){
-            textNameInputID.clear();errorsTextID.getChildren().clear();
+
+    public void submitNumberOfPlayer(ActionEvent event) {
+        if (numberBoxID.getValue() == null) {
+            textNameInputID.clear();
+            errorsTextID.getChildren().clear();
             Text text = new Text("Please, select the exact number of players for the game");
             errorsTextID.getChildren().add(text);
             errorsTextID.setVisible(true);
-        }
-        else if(numberBoxID.getValue()!=null){
+        } else if (numberBoxID.getValue() != null) {
             errorsTextID.getChildren().clear();
             gui.setPlayersNumber(numberBoxID.getValue());
             numberBoxID.setVisible(false);
@@ -106,7 +107,7 @@ public class LoginController implements Controller  {
 
     }
 
-    public void loadGameView(){
+    public void loadGameView() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -131,7 +132,7 @@ public class LoginController implements Controller  {
     }
 
 
-    public void preGame(){
+    public void preGame() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -141,6 +142,7 @@ public class LoginController implements Controller  {
         });
 
     }
+
     public void chooseUsernameView() {
         textNameInputID.setVisible(true);
         nameLabelID.setVisible(true);
@@ -156,7 +158,7 @@ public class LoginController implements Controller  {
         loginButtonID.setVisible(true);
     }
 
-    public void setUp(){
+    public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.gameState.events.PlayerOrderSetEvent;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
@@ -86,9 +87,12 @@ public class GameHandler {
 
         boardManager.refillBoard();
         Collections.shuffle(gameData.getPlayers(), new Random());
-        sendAll( new StartGameMessage());
+        for(VirtualClient client : virtualClients){
+            client.handle(new PlayerOrderSetEvent(gameData.getPlayers()));
+        }
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
+        sendAll( new StartGameMessage());
     }
 
     /**

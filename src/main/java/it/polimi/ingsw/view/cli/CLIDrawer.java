@@ -260,8 +260,8 @@ public class CLIDrawer {
                 " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsername() + RESET,
                 " Points: " + RED_BRIGHT + virtualModel.getPointsByUsername(virtualModel.getMyUsername()) + RESET,
                 " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerIndex()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
+                " Chair: " + ((virtualModel.getMyUsername().equals(virtualModel.getPlayerUsername(0))) ? "true" : "false"),
                 " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET,
-                "",
                 "",
                 ""
         };
@@ -285,7 +285,7 @@ public class CLIDrawer {
      * @return the string representation of the leader board
      */
     protected String getLeaderboardAsString(boolean isWinner) {
-        List<Pair<String, Integer>> leaderboard = virtualModel.getClientUsernamePoints();
+        List<Pair<String, Integer>> leaderboard = virtualModel.getLeaderBoard();
 
         String[] colors = {YELLOW_BRIGHT, RED_BRIGHT, PURPLE_BRIGHT, BLUE_BRIGHT};
 

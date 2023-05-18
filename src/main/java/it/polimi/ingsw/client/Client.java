@@ -219,8 +219,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     @Override
     public void handle(EndGameMessage endGameMessage){
-        boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getClientUsernamePoints().get(0).getValue0());
-        view.endGame(isWinner);
+
     }
 
     @Override
@@ -257,6 +256,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     public void handle(CustomMessage customMessage) {
         if(view instanceof CLI){
             virtualModel.setServerMessage(customMessage.getMessage());
+            view.showMessage(customMessage.getMessage());
         }
         if(view instanceof GUI){
             view.showMessage(customMessage.getMessage());
@@ -394,6 +394,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      */
     @Override
     public void handle(ConnectionMessage connectionMessage) {
+    }
+
+    @Override
+    public void handle(PlayerOrderSetMessage playerOrderSetMessage) {
+        virtualModel.setPlayerIndex(playerOrderSetMessage.getPlayerOrder());
     }
 
     public static void main(String[] Args){

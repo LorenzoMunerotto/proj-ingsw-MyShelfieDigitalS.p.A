@@ -40,9 +40,10 @@ public class SocketListener implements Runnable {
 
         this.client = client;
         try {
-            System.out.println("I'm trying to connect to the server");
+            System.out.println("I'm trying to connect to the server...");
             socketServer = new Socket(serverIp, port);
             System.out.println(CLIConstants.GREEN_BRIGHT + "Connection established" + CLIConstants.RESET);
+            System.out.println("Please wait while we load the resources...");
 
             outputStream = new ObjectOutputStream(socketServer.getOutputStream());
             inputStream = new ObjectInputStream(socketServer.getInputStream());
@@ -60,7 +61,6 @@ public class SocketListener implements Runnable {
      */
     public synchronized void readFromStream() throws IOException, ClassNotFoundException {
         ServerMessage input = (ServerMessage) inputStream.readObject();
-        System.out.println("---> " + input);
         input.accept(client);
     }
 
@@ -74,9 +74,30 @@ public class SocketListener implements Runnable {
                 readFromStream();
             }
         } catch (IOException e) {
+            System.err.println("IOException occurred in run method: " + e.getMessage());
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            System.err.println("ClassNotFoundException occurred in run method: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Close the streams and socket here to make sure they are always closed
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (socketServer != null) {
+                    socketServer.close();
+                }
+            } catch (IOException e) {
+                System.err.println("Failed to close resources in run method: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
+
 
     /**
      * This method use socket to send a message to the server.
