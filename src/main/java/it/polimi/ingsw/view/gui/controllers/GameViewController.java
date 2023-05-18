@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.gui.controllers;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.events.Move;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
@@ -9,10 +11,12 @@ import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -48,13 +52,12 @@ public class GameViewController implements Controller {
     private VBox vBoxCommonOwID;
     @FXML
     private HBox hBoxCommonOwID;
-    @FXML ImageView commonCard1OwID;
-    @FXML ImageView commonCard2OwID;
-    @FXML
-    private Circle turnCircleID;
+    @FXML private ImageView commonCard1OwID;
+    @FXML private ImageView commonCard2OwID;
+    @FXML private Circle turnCircleID;
 
-    @FXML
-    private TextFlow errorsTextID;
+    @FXML private VBox vBox_messages;
+    @FXML private ScrollPane sp_main;
     private List<Coordinate> coordinates=new ArrayList<>();
     private GUI gui;
     private  VirtualModel virtualModel;
@@ -104,6 +107,10 @@ public class GameViewController implements Controller {
         this.aLabelLib.add(labelOwL4ID);
         labelOwL3ID.setVisible(false);
         labelOwL4ID.setVisible(false);
+        vBox_messages.setVisible(false);
+        sp_main.setVisible(false);
+        commonCardLabelID.setVisible(false);
+        personalCardLabelID.setVisible(false);
     }
 
     EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
@@ -169,7 +176,6 @@ public class GameViewController implements Controller {
 
     public void setItemTileHBox(){
         itemTileLabelID.setText("Item Tile selected [Max 3]:");
-
     }
     public void setItemTileClicked(ImageView imageView){
         imageView.setPreserveRatio(true);
@@ -181,9 +187,17 @@ public class GameViewController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                HBox hBox=new HBox();
+                hBox.setAlignment(Pos.CENTER_LEFT);
+                hBox.setPadding(new Insets(3,3,3,3));
                 Text text = new Text(error);
-                errorsTextID.getChildren().add(text);
-                errorsTextID.setVisible(true);
+                text.setFill(Color.color(0,0,0));
+                TextFlow textFlow =new TextFlow(text);
+                textFlow.setStyle("-fx-text-fill: black; -fx-background-color: lime; -fx-background-radius: 10px ;");
+                textFlow.setPadding(new Insets(3,3,3,3));
+                hBox.getChildren().add(textFlow);
+                vBox_messages.getChildren().add(hBox);
+                vBox_messages.setVisible(true);
             }
         });
     }
@@ -303,47 +317,8 @@ public class GameViewController implements Controller {
         labelOwL4ID.setLayoutX(gui.getMaxX()*0.27);
         labelOwL4ID.setLayoutY(gui.getMaxY()*0.50);
     }
-    public void notYourTurn(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                for(int c=0; c<9; c++) {
-                    for (int r = 0; r < 9; r++) {
-                        boardID.getChildren().get(c*9+r).setOnMouseClicked(null);
-                    }
-                }
-                for(int c=0; c<5; c++){
-                    for(int r=0; r<6; r++) {
-                        libraryID.getChildren().get(c*6+r).setOnMouseClicked(null);
-                    }
-                }
-            }
-        });
-    }
 
-    public void yourTurn(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                errorsTextID.getChildren().clear();
-                for(int c=0; c<9; c++) {
-                    for (int r = 0; r < 9; r++) {
-                        boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
-                    }
-                }
-                for(int c=0; c<5; c++){
-                    for(int r=0; r<6; r++) {
-                        libraryID.getChildren().get(c*6+r).setOnMouseClicked(clickItemTileLibraryHandler);
-                    }
-                }
-            }
-        });
-    }
-    public void printError (String error){
-        //errorsTextID.setText(null);
-        //errorsTextID.setText(error);
-        errorsTextID.setVisible(true);
-    }
+
 
     public void personalCardInizializer(){
         personalCardImgID.setImage(new Image(getClass().getResourceAsStream("/images/Personal_Goals"+ virtualModel.getNumberPersonalCard() +".png")));
@@ -356,6 +331,7 @@ public class GameViewController implements Controller {
         personalCardImgID.setPreserveRatio(true);
         personalCardImgID.setFitWidth(gui.getMaxX()*0.10);
         personalCardImgID.setFitHeight(gui.getMaxX()*0.10*(756*1110));
+        personalCardLabelID.setVisible(true);
     }
 
     public void commonCardInizializzer(){
@@ -389,6 +365,7 @@ public class GameViewController implements Controller {
         vBoxCommonOwID.setLayoutX(gui.getMaxX()*0.55);
         vBoxCommonID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
         vBoxCommonOwID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
+        commonCardLabelID.setVisible(true);
     }
     /*
     public void prova(){
@@ -405,10 +382,27 @@ public class GameViewController implements Controller {
 
 
     public void setErrorBox(){
-        errorsTextID.setMaxWidth(gui.getMaxX()*0.14);
-        errorsTextID.setMaxHeight(gui.getMaxY()*0.14);
-        errorsTextID.setLayoutX(gui.getMaxX()*0.43);
-        errorsTextID.setLayoutY(gui.getMaxY()*0.10);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vBox_messages.setMaxWidth(gui.getMaxX()*0.14);
+                vBox_messages.setMaxHeight(gui.getMaxY()*0.12);
+                vBox_messages.setMinWidth(gui.getMaxX()*0.14);
+                vBox_messages.setMinHeight(gui.getMaxY()*0.12);
+                sp_main.setMaxWidth(gui.getMaxX()*0.16);
+                sp_main.setMaxHeight(gui.getMaxY()*0.14);
+                sp_main.setMinWidth(gui.getMaxX()*0.16);
+                sp_main.setMinHeight(gui.getMaxY()*0.14);
+                vBox_messages.setLayoutX(gui.getMaxX()*0.45);
+                vBox_messages.setLayoutY(gui.getMaxY()*0.01);
+                sp_main.setMinWidth(gui.getMaxX()*0.14);
+                sp_main.setMinHeight(gui.getMaxY()*0.12);
+                sp_main.setLayoutX(gui.getMaxX()*0.46);
+                sp_main.setLayoutY(gui.getMaxY()*0.02);
+                vBox_messages.setVisible(true);
+                sp_main.setVisible(true);
+            }
+        });
     }
 
 
