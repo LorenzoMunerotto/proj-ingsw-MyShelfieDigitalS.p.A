@@ -21,7 +21,7 @@ public class PlayerOrderSetMessage implements ServerMessage{
     }
 
     @Override
-    public void accept(ServerMessageHandler serverMessageHandler) throws IOException {
-
+    public void accept(ServerMessageHandler serverMessageHandler)  {
+        serverMessageHandler.handle(this);
     }
 }

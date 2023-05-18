@@ -90,9 +90,10 @@ public class GameHandler {
         for(VirtualClient client : virtualClients){
             client.handle(new PlayerOrderSetEvent(gameData.getPlayers()));
         }
+        sendAll( new StartGameMessage());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
-        sendAll( new StartGameMessage());
+
     }
 
     /**
