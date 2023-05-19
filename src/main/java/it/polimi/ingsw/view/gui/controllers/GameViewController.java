@@ -89,10 +89,7 @@ public class GameViewController implements Controller {
     @FXML private GridPane library3ID;
     @FXML private GridPane library4ID;
     @FXML private HBox itemTileBoxID;
-    /*public GameViewController(GUI gui) {
-        this.gui = gui;
-        this.virtualModel=gui.getClient().getVirtualModel();
-    }*/
+
     @Override
     public void setGui(GUI gui) {
         this.gui = gui;
@@ -111,6 +108,7 @@ public class GameViewController implements Controller {
         sp_main.setVisible(false);
         commonCardLabelID.setVisible(false);
         personalCardLabelID.setVisible(false);
+        itemTileLabelID.setVisible(false);
     }
 
     EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
@@ -174,9 +172,6 @@ public class GameViewController implements Controller {
         }
     };
 
-    public void setItemTileHBox(){
-        itemTileLabelID.setText("Item Tile selected [Max 3]:");
-    }
     public void setItemTileClicked(ImageView imageView){
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(gui.getMaxX()*(0.030));
@@ -216,7 +211,6 @@ public class GameViewController implements Controller {
                         imageView.setFitHeight(gui.getMaxX()*(0.030));
                         imageView.setFitWidth(gui.getMaxX()*(0.030));
                         libraryID.add(imageView,c,r);
-                        //libraryID.getChildren().get(r+6*c).setOnMouseClicked(clickItemTileLibraryHandler);
                     }
                 }
                 libraryID.setLayoutX(gui.getMaxX()*0.05);
@@ -243,8 +237,6 @@ public class GameViewController implements Controller {
                         imageView.setFitHeight(gui.getMaxX()*(0.040));
                         imageView.setFitWidth(gui.getMaxX()*(0.040));
                         boardID.add(imageView,c,r);
-                        //boardID.getChildren().get(c*9+r).setOnMouseClicked(clickItemTileBoardHandler);
-                        //boardOwID.add(aImgViewBoard.get(c*9+r),c,r);
                     }
                 }
                 boardID.setLayoutX(gui.getMaxX()*0.55);
@@ -325,13 +317,16 @@ public class GameViewController implements Controller {
         vBoxPersonalID.setLayoutX(gui.getMaxX()*0.35);
         vBoxPersonalID.setLayoutY(gui.getMaxY()*0.60);
         vBoxPersonalID.setFillWidth(true);
-        //vBoxPersonalID.maxWidth(GUI.getMaxX()*0.17);
-        vBoxPersonalID.setMaxWidth(gui.getMaxX()*0.17);
-        vBoxPersonalID.setMinWidth(gui.getMaxX()*0.17);
         personalCardImgID.setPreserveRatio(true);
         personalCardImgID.setFitWidth(gui.getMaxX()*0.10);
         personalCardImgID.setFitHeight(gui.getMaxX()*0.10*(756*1110));
+        vBoxPersonalID.setMaxWidth(personalCardImgID.getFitWidth()*1.1);
+        vBoxPersonalID.setMinWidth(personalCardImgID.getFitWidth()*1.1);
+        vBoxPersonalID.setBackground(new Background(new BackgroundFill(Color.GREEN,null,null)));
         personalCardLabelID.setVisible(true);
+        itemTileLabelID.setMinWidth(125);
+        itemTileLabelID.setVisible(true);
+
     }
 
     public void commonCardInizializzer(){
@@ -367,18 +362,6 @@ public class GameViewController implements Controller {
         vBoxCommonOwID.setBackground(new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW,null,null)));
         commonCardLabelID.setVisible(true);
     }
-    /*
-    public void prova(){
-        personalCardInizializer();
-        commonCardInizializzer();
-        fullBoard();
-        fullLibrary();
-        fillLibrarySelectionID();
-        ItemTileType[][] board = virtualModel.getBoard();
-        ItemTileType[][] currentLibrary = virtualModel.getLibrary();
-        ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
-    }
-     */
 
 
     public void setErrorBox(){
@@ -434,27 +417,8 @@ public class GameViewController implements Controller {
         for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
             aLibraryGridsOw.get(i).setVisible(false);
             aLibraryGridsOw.get(i).getChildren().clear();
-            //aLibraryGridsOw.get(i).getChildren().remove(r+6*c);
             i++;
         }
-        /*
-        for(int c=0; c<5; c++){
-            for(int r=0; r<6; r++) {
-                //libraryID.getChildren().remove(r+6*c);
-                libraryID.getChildren().clear();
-
-            }
-        }
-
-
-        for(int c=0; c<9; c++) {
-            for (int r = 0; r < 9; r++) {
-                boardID.getChildren().remove(c*9+r);
-                boardOwID.getChildren().remove(c*9+r);
-            }
-        }
-
-         */
     }
     public void setUp() {
         Platform.runLater(new Runnable() {
@@ -470,129 +434,9 @@ public class GameViewController implements Controller {
                 libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
                 itemTileBoxID.setLayoutX(gui.getMaxX()*0.60);
                 itemTileBoxID.setMaxHeight(gui.getMaxY()*0.7);
-                ItemTileType[][] board = virtualModel.getBoard();
-                ItemTileType[][] currentLibrary = virtualModel.getLibrary();
-                ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
             }
         });
 
-
-    /*
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //libraryID dovrebbe numerare verticalmente
-
-        personalCardInizializer();
-        commonCardInizializzer();
-        fullBoard();
-        fullLibrary();
-        fillLibrarySelectionID();
-        /*
-        ItemTileType[][] board = virtualModel.getBoard();
-        ItemTileType[][] currentLibrary = virtualModel.getLibrary();
-        ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
-
-        //boardID.setPadding(new Insets(5,5,5,5));
-
-
-
-        /*
-        for(int c=0; c<9; c++){
-            for(int r=0; r<9; r++){
-                Image image= new Image(getClass().getResourceAsStream("FRAME.png"));
-                aImg.add(image);
-                ImageView imageView = new ImageView(aImg.get(c*9+r));
-                aImgView.add(imageView);
-
-                //aImgView.get(c*9+r).setFitHeight(GUI.getMaxX()*(0.4/9));
-                //aImgView.get(c*9+r).setFitWidth(GUI.getMaxY()*(0.4/9));
-
-                aImgView.get(c*9+r).setFitHeight(GUI.getMaxX()*(0.05));
-                aImgView.get(c*9+r).setFitWidth(GUI.getMaxX()*(0.05));
-                boardID.add(aImgView.get(c*9+r),c,r);
-                //boardID.setPadding(new Insets(5,5,5,5));
-                //boardID.getChildren().add(aImgView.get(c*9+r));
-                //boardID.getChildren().set(c*9+r, aImgView.get(c*9+r));
-                //GridPane.setFillWidth(aImgView.get(c*9+r), true);
-                //GridPane.setFillHeight(aImgView.get(c*9+r), true);
-             //   libraryID.getChildren().set(r+c,aImgView.get(c*9+r));
-            }
-        }
-        //boardID.snapPositionY(GUI.getMaxY()*0.05);
-        //boardID.snapPositionX(GUI.getMaxX()*0.55);
-        //boardID.setMaxWidth(GUI.getMaxX()*0.55);
-        //boardID.setMaxHeight(GUI.getMaxY()*0.05);
-
-        boardID.setLayoutX(GUI.getMaxX()*0.50);
-        boardID.setLayoutY(GUI.getMaxY()*0.10);
-        //boardID.setPadding(new Insets(5,5,5,5));
-        /*
-        boardID.setMaxHeight(GUI.getMaxY()*0.4);
-        boardID.setMaxWidth(GUI.getMaxX()*0.4);
-        boardID.snapPositionY(GUI.getMaxY()*0.05);
-        boardID.snapPositionX(GUI.getMaxX()*0.55);
-        boardID.visibleProperty().set(true);
-        libraryID.setMaxHeight(GUI.getMaxY()*0.4);
-        libraryID.setMaxWidth(GUI.getMaxX()*0.4);
-        libraryID.snapPositionY(GUI.getMaxY()*0.05);
-        libraryID.snapPositionX(GUI.getMaxX()*0.55); /*
-        Image image= new Image(getClass().getResourceAsStream("FRAME.png"));
-        img1.setImage(image);
-        img1.setFitHeight(GUI.getMaxY()*(0.4/9));
-        img1.setFitWidth(GUI.getMaxX()*(0.4/9));
-        img2.setImage(image);
-        img2.setFitHeight(GUI.getMaxY()*(0.4/9));
-        img2.setFitWidth(GUI.getMaxX()*(0.4/9));
-        img3.setImage(image);
-        img3.setFitHeight(GUI.getMaxY()*(0.4/9));
-        img3.setFitWidth(GUI.getMaxX()*(0.4/9));
-        img4.setImage(image);
-        img4.setFitHeight(GUI.getMaxY()*(0.4/9));
-        img4.setFitWidth(GUI.getMaxX()*(0.4/9));
-        img5.setImage(image);
-        img6.setImage(image);
-        libraryID.getChildren().set(0,img1);
-        //img1.fitHeightProperty().bind((ObservableValue<? extends Number>) libraryID.heightProperty());
-        //img1.fitWidthProperty().bind(libraryID.li);
-        libraryID.getChildren().set(1,img2);
-        libraryID.getChildren().set(2,img3);
-        libraryID.getChildren().set(3,img4);
-        libraryID.getChildren().set(4,img5);
-        libraryID.getChildren().set(5,img6);
-        //libraryID.add(img1, 0,0);
-        //getCil
-
-        /*
-        FileInputStream imageStream = null;
-        try {
-            imageStream = new FileInputStream(fileName);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        FileInputStream imageStream1 = imageStream;
-        Image image =new (imageStream);
-        /*for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                ImageView imageView = new ImageView();
-                FileInputStream imageStream = null;
-                try {
-                    imageStream = new FileInputStream(fileName);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                Image image = new Image(imageStream);
-                imageView.setImage(image);
-                //libraryID.getChildren().set(imageView, i, j)
-
-                libraryID.getChildren().add(imageView);
-                libraryID.add(imageView, i, j);
-                libraryID.getChildren().add(imageView);
-                libraryID.visibleProperty().set(true);
-
-                libraryID.getChildren().add(imageView);
-
-            }
-        } */
 
 
     }
@@ -609,7 +453,4 @@ public class GameViewController implements Controller {
         this.youTurn = youTurn;
     }
 
-    public boolean isYouTurn() {
-        return youTurn;
-    }
 }
