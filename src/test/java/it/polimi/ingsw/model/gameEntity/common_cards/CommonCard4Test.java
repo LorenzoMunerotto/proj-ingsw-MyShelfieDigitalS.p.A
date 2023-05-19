@@ -45,4 +45,21 @@ class CommonCard4Test {
         libraryTestHelper.setItemTile(5, 2, ItemTileType.values()[1]);
         assertFalse(card4.checkRules(libraryTestHelper));
     }
+
+    @Test
+    @DisplayName("check rules n.2")
+    void checkRules2() {
+        ItemTileType[][] libraryGrid = {
+                {ItemTileType.EMPTY, ItemTileType.GAME, ItemTileType.BOOK, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.EMPTY, ItemTileType.FRAME, ItemTileType.CAT, ItemTileType.CAT, ItemTileType.CAT},
+                {ItemTileType.EMPTY, ItemTileType.TROPHY, ItemTileType.TROPHY, ItemTileType.CAT, ItemTileType.CAT},
+                {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.BOOK, ItemTileType.GAME, ItemTileType.TROPHY},
+                {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.BOOK, ItemTileType.TROPHY, ItemTileType.PLANT},
+                {ItemTileType.PLANT, ItemTileType.GAME, ItemTileType.BOOK, ItemTileType.CAT, ItemTileType.CAT},
+        };
+        libraryTestHelper.setLibrary(libraryGrid);
+        assertTrue(card4.checkRules(libraryTestHelper));
+
+
+    }
 }
