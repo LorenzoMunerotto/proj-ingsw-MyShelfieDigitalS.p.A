@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.gameState.events.PlayerOrderSetEvent;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
@@ -85,7 +86,12 @@ public class GameHandler {
         assignCommonGoalCards();
         pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
 
-        boardManager.refillBoard();
+        try {
+            boardManager.refillBoard();
+        } catch (EmptyBagException e) {
+            throw new RuntimeException(e);
+        }
+
         Collections.shuffle(gameData.getPlayers(), new Random());
         for(VirtualClient client : virtualClients){
             client.handle(new PlayerOrderSetEvent(gameData.getPlayers()));
@@ -139,14 +145,19 @@ public class GameHandler {
                 gameData.setFirstFullLibraryUsername(getCurrentPlayerUsername());
             }
             pointsManager.updateTotalPoints();
-            if (boardManager.isRefillTime()) {
-                boardManager.refillBoard();
-            }
-            nextPlayer();
         } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
             sendToCurrentPlayer(new MoveRequest());
         }
+        if (boardManager.isRefillTime()) {
+            try {
+                boardManager.refillBoard();
+            } catch (EmptyBagException e) {
+                sendAll(new CustomMessage(e.getMessage()));
+            }
+        }
+
+        nextPlayer();
     }
 
     /**
