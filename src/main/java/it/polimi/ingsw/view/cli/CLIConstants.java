@@ -82,14 +82,15 @@ public class CLIConstants {
     /**
      * It is the string used to print the legend of the tiles associated to the colors.
      */
-    public static final String ITEM_TILES_TYPE_COLOR_LEGEND = CLIConstants.WHITE_UNDERLINED + "Legend:" + CLIConstants.RESET + " \n" +
-            CLIConstants.GREEN_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = CAT\n" +
-            CLIConstants.WHITE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = BOOK\n" +
-            CLIConstants.YELLOW_BACKGROUND + "   " + CLIConstants.RESET + " = GAME\n" +
-            CLIConstants.BLUE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = FRAME\n" +
+    public static final String ITEM_TILES_TYPE_COLOR_LEGEND = CLIConstants.WHITE_UNDERLINED + "Legend:" + CLIConstants.RESET + "      \n" +
+            CLIConstants.GREEN_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = CAT   \n" +
+            CLIConstants.WHITE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = BOOK  \n" +
+            CLIConstants.YELLOW_BACKGROUND + "   " + CLIConstants.RESET + " = GAME  \n" +
+            CLIConstants.BLUE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = FRAME \n" +
             CLIConstants.CYAN_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = TROPHY\n" +
-            CLIConstants.PURPLE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = PLANT\n"+
-            CLIConstants.RED_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = NULL\n";
+            CLIConstants.PURPLE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = PLANT \n" +
+            CLIConstants.RED_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = NULL  \n" +
+            "            \n";
     /**
      * It is a basic string used before each message from the console.
      */

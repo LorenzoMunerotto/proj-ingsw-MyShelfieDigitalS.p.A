@@ -62,14 +62,11 @@ public class LoginController implements Controller {
     }
 
     public void setErrorsLabelIDText(String error) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                errorsTextID.getChildren().clear();
-                Text text = new Text(error);
-                errorsTextID.getChildren().add(text);
-                errorsTextID.setVisible(true);
-            }
+        Platform.runLater(() -> {
+            errorsTextID.getChildren().clear();
+            Text text = new Text(error);
+            errorsTextID.getChildren().add(text);
+            errorsTextID.setVisible(true);
         });
     }
 
@@ -108,13 +105,7 @@ public class LoginController implements Controller {
     }
 
     public void loadGameView() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                gui.changeStage("/fxml/GameView.fxml");
-
-            }
-        });
+        Platform.runLater(() -> gui.changeStage("/fxml/GameView.fxml"));
     }
 
     public void enterTheGame(ActionEvent event) throws IOException {
@@ -133,12 +124,9 @@ public class LoginController implements Controller {
 
 
     public void preGame() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                startGameButtonID.setText("Enter the Game");
-                startGameButtonID.setVisible(true);
-            }
+        Platform.runLater(() -> {
+            startGameButtonID.setText("Enter the Game");
+            startGameButtonID.setVisible(true);
         });
 
     }
@@ -159,24 +147,21 @@ public class LoginController implements Controller {
     }
 
     public void setUp() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("initialize");
-                numberLabelID.setVisible(false);
-                errorsTextID.setVisible(true);
-                numberBoxID.setVisible(false);
-                numberLabelID.setVisible(false);
-                loginButtonID.setVisible(false);
-                textNameInputID.setVisible(false);
-                userNameButtonID.setVisible(false);
-                startGameButtonID.setVisible(false);
-                nameLabelID.setVisible(false);
-            }
+        Platform.runLater(() -> {
+            System.out.println("initialize");
+            numberLabelID.setVisible(false);
+            errorsTextID.setVisible(true);
+            numberBoxID.setVisible(false);
+            numberLabelID.setVisible(false);
+            loginButtonID.setVisible(false);
+            textNameInputID.setVisible(false);
+            userNameButtonID.setVisible(false);
+            startGameButtonID.setVisible(false);
+            nameLabelID.setVisible(false);
         });
     }
-    /*
 
+    /*
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //backGroundID.setImage(new Image(getClass().getResourceAsStream("/images/BackgroundImage.jpg")));
@@ -190,8 +175,5 @@ public class LoginController implements Controller {
         userNameButtonID.setVisible(false);
         startGameButtonID.setVisible(false);
         nameLabelID.setVisible(false);
-    }
-
-     */
-
+    }*/
 }

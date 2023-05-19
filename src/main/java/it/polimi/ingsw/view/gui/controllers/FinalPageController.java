@@ -15,9 +15,9 @@ public class FinalPageController implements Controller{
     @FXML
     private TableView tableResultID;
     @FXML
-    private TableColumn nameColumnID;
+    private TableColumn<Object, Object> nameColumnID;
     @FXML
-    private TableColumn pointsColumnID;
+    private TableColumn<Object, Object> pointsColumnID;
 
     private GUI gui;
     private  VirtualModel virtualModel;
@@ -38,31 +38,22 @@ public class FinalPageController implements Controller{
     }
      */
     public void setUp(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                compilePointsTable();
-            }
-        });
+        Platform.runLater(this::compilePointsTable);
 
     }
 
     public void compilePointsTable(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
-                for (Pair<String, Integer> leaderBoard : leaderBoards) {
-                    nameColumnID.setCellValueFactory(new PropertyValueFactory<>(leaderBoard.getValue0()));
-                    //nameColumnID.getColumns().add(leaderBoards.get(i).getValue0());
-                    pointsColumnID.setCellValueFactory(new PropertyValueFactory<>(String.valueOf(leaderBoard.getValue1())));
-                    //pointsColumnID.getColumns().add(leaderBoards.get(i).getValue1());
-                }
-                tableResultID.setVisible(true);
-                nameColumnID.setVisible(true);
-                pointsColumnID.setVisible(true);
+        Platform.runLater(() -> {
+            List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
+            for (Pair<String, Integer> leaderBoard : leaderBoards) {
+                nameColumnID.setCellValueFactory(new PropertyValueFactory<>(leaderBoard.getValue0()));
+                //nameColumnID.getColumns().add(leaderBoards.get(i).getValue0());
+                pointsColumnID.setCellValueFactory(new PropertyValueFactory<>(String.valueOf(leaderBoard.getValue1())));
+                //pointsColumnID.getColumns().add(leaderBoards.get(i).getValue1());
             }
+            tableResultID.setVisible(true);
+            nameColumnID.setVisible(true);
+            pointsColumnID.setVisible(true);
         });
     }
-
 }

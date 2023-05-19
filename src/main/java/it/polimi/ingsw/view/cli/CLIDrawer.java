@@ -40,15 +40,14 @@ public class CLIDrawer {
         System.out.println(MYSHELFIE_TITLE);
         System.out.println();
         List<String> extraInfosStringList = new ArrayList<>();
-        extraInfosStringList.add(getGameInfoAsString());
-
+        extraInfosStringList.add(ITEM_TILES_TYPE_COLOR_LEGEND);
         for (String username : virtualModel.getClientUsernameLibrary().keySet()) {
             if (!username.equals(virtualModel.getMyUsername())) {
                 extraInfosStringList.add(getOtherPlayerLibraryAsString(username));
             }
         }
+        extraInfosStringList.add(getGameInfoAsString());
 
-        extraInfosStringList.add(ITEM_TILES_TYPE_COLOR_LEGEND);
         System.out.println(concatenateStringsHorizontally(extraInfosStringList));
 
         String boardString = getGridAsString(virtualModel.getBoard(), "Board", 0);
@@ -260,10 +259,8 @@ public class CLIDrawer {
                 " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsername() + RESET,
                 " Points: " + RED_BRIGHT + virtualModel.getPointsByUsername(virtualModel.getMyUsername()) + RESET,
                 " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerIndex()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
-                " Chair: " + ((virtualModel.getMyUsername().equals(virtualModel.getPlayerUsername(0))) ? "true" : "false"),
-                " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET,
-                "",
-                ""
+                " Chair: " + ((virtualModel.getMyUsername().equals(virtualModel.getPlayerUsername(0))) ? GREEN_BRIGHT + "true" + RESET : RED_BRIGHT + "false" + RESET),
+                " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET
         };
 
         int maxLength = 0;

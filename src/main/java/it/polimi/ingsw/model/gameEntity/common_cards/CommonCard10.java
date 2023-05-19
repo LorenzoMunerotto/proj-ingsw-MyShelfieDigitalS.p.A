@@ -16,7 +16,7 @@ public class CommonCard10 extends CommonGoalCard {
      */
     public CommonCard10() {
         super(10, """
-                Two lines, each with 5 different tile types. Lines may have different combinations.""");
+                Two rows, each with 5 different tile types. Rows may have different combinations.""");
     }
 
     /**
