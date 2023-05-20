@@ -22,6 +22,22 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
+                        <VBox fx:id="vBoxLibraryID" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Label fx:id="labelLibraryID" minHeight="27.0" minWidth="130.0" />
+                              <GridPane fx:id="libraryID">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </GridPane>
+                           </children>
+                        </VBox>
                         <GridPane fx:id="boardID">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -29,20 +45,6 @@
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </GridPane>
-                        <GridPane fx:id="libraryID">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
                         </GridPane>
                         <HBox fx:id="itemTileBoxID" layoutX="1280.0" prefHeight="100.0" prefWidth="200.0">
                            <children>
