@@ -63,8 +63,8 @@ public class GameViewController implements Controller {
     private  VirtualModel virtualModel;
     private ArrayList<String> players=  new ArrayList<String>();
     private String personalCardFile =new String("EMPTY.png");
-    private String commonCard1File =new String("CC1.jpg");
-    private String commonCard2File =new String("CC2.jpg");
+    private String commonCard1File =new String("CC4.jpg");
+    private String commonCard2File =new String("CC9.jpg");
     private Integer[] Coordinate= new Integer[2];
     private boolean youTurn=false;
     private ArrayList<ImageView> aImgViewBoard =new ArrayList<ImageView>();
