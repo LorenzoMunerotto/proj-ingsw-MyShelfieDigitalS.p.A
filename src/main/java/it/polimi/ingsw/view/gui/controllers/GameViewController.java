@@ -1,5 +1,4 @@
 package it.polimi.ingsw.view.gui.controllers;
-
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.events.Move;
 import javafx.application.Platform;
@@ -25,18 +24,10 @@ import javafx.scene.text.TextFlow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class GameViewController implements Controller {
-    private final List<Coordinate> coordinates = new ArrayList<>();
-    private final ArrayList<GridPane> aLibraryGridsOw = new ArrayList<GridPane>();
-    private final ArrayList<Label> aLabelLib = new ArrayList<Label>();
     @FXML
     public GridPane libraryID;
-    @FXML
-    public Label commonCardLabelIOwD1;
-    @FXML
-    public Label labelOwBoardID;
     @FXML
     private ImageView commonCard1ID;
     @FXML
@@ -46,7 +37,7 @@ public class GameViewController implements Controller {
     @FXML
     private GridPane boardID;
     @FXML
-    private AnchorPane anchorPaneID;
+    private AnchorPane ancorPaneID;
     @FXML
     private Label personalCardLabelID;
     @FXML
@@ -129,23 +120,25 @@ public class GameViewController implements Controller {
         public void handle(MouseEvent t) {
             System.out.println("pre click board");
             //personal card index needed
-            if (youTurn) {
-                if (coordinates.size() < 3) {
+            if(youTurn==true){
+                if(coordinates.size()<3){
                     Node node = (Node) t.getTarget();
                     int row = GridPane.getRowIndex(node);
                     int column = GridPane.getColumnIndex(node);
-                    System.out.println(row + " " + column);
+                    System.out.println(row +" " +column);
                     coordinates.add(new Coordinate(row, column));
                     if(coordinates.size()==1){
                         itemTile1ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile1ID);
                         System.out.println("Board 1");
-                    } else if (coordinates.size() == 2) {
-                        itemTile2ID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png"))));
+                    }
+                    else if(coordinates.size()==2){
+                        itemTile2ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile2ID);
                         System.out.println("Board 2");
-                    } else if (coordinates.size() == 3) {
-                        itemTile3ID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png"))));
+                    }
+                    else if(coordinates.size()==3){
+                        itemTile3ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile3ID);
                         System.out.println("Board 3");
                     }
@@ -156,18 +149,18 @@ public class GameViewController implements Controller {
             }
         }
     };
-    EventHandler<MouseEvent> clickItemTileLibraryHandler = new EventHandler<>() {
+    EventHandler clickItemTileLibraryHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
             System.out.println("handle Library Clicl Pre E PRE CICLO");
             //personal card index needed
-            if (youTurn && coordinates.size() > 0) {
+            if(youTurn==true&&coordinates.size()>0){
                 Node node = (Node) t.getTarget();
                 int column = GridPane.getColumnIndex(node);
                 labelLibraryID.setText(libraryBaseText+"You selected row number "+ String.valueOf(column));
                 //inviare al server colonna scelta
                 System.out.println("handle Library Clicl Pre");
-                gui.getClient().handle(new Move(coordinates, column));
+                gui.getClient().handle(new Move(coordinates,column));
                 System.out.println("handle Library Clicl Pre");
                 coordinates.clear();
                 itemTile1ID.setImage(null);
@@ -176,31 +169,11 @@ public class GameViewController implements Controller {
             }
         }
     };
-    @FXML
-    private GridPane boardOwID;
-    @FXML
-    private Label labelOwL1ID;
-    @FXML
-    private Label labelOwL2ID;
-    @FXML
-    private Label labelOwL3ID;
-    @FXML
-    private Label labelOwL4ID;
-    @FXML
-    private GridPane library1ID;
-    @FXML
-    private GridPane library2ID;
-    @FXML
-    private GridPane library3ID;
-    @FXML
-    private GridPane library4ID;
-    @FXML
-    private HBox itemTileBoxID;
 
     public void setItemTileClicked(ImageView imageView){
         imageView.setPreserveRatio(true);
-        imageView.setFitHeight(gui.getMaxX() * (0.030));
-        imageView.setFitWidth(gui.getMaxX() * (0.030));
+        imageView.setFitHeight(gui.getMaxX()*(0.030));
+        imageView.setFitWidth(gui.getMaxX()*(0.030));
         imageView.setVisible(true);
     }
     public void setErrorsTextIDText(String error){
@@ -223,7 +196,7 @@ public class GameViewController implements Controller {
     }
 
 
-    public void fullLibrary() {
+    public void fullLibrary(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -256,7 +229,7 @@ public class GameViewController implements Controller {
                                         }
                                 }
                         }}); */
-                    libraryID.add(imageView,c,r);
+                        libraryID.add(imageView,c,r);
                     }
                 }
                 vBoxLibraryID.setLayoutX(gui.getMaxX()*0.05*0.9);
@@ -275,13 +248,13 @@ public class GameViewController implements Controller {
 
     }
 
-    public void fullBoard() {
+    public void fullBoard(){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                for (int column = 0; column < 9; column++) {
-                    for (int row = 0; row < 9; row++) {
-                        ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png"))));
+                for(int c=0; c<9; c++){
+                    for(int r=0; r<9; r++ ){
+                        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
                         imageView.setX(90);
                         imageView.setY(90);
                         imageView.setPreserveRatio(true);
@@ -309,12 +282,14 @@ public class GameViewController implements Controller {
                 boardID.setVisible(true);
             }
         });
+
     }
 
-    public void printBoardOw() {
-        for (int column = 0; column < 9; column++) {
-            for (int row = 0; row < 9; row++) {
-                ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png"))));
+
+    public void printBoardOw(){
+        for(int c=0; c<9; c++){
+            for(int r=0; r<9; r++){
+                ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
                 imageView.setX(90);
                 imageView.setY(90);
                 imageView.setPreserveRatio(true);
@@ -331,13 +306,12 @@ public class GameViewController implements Controller {
         boardOwID.setLayoutY(gui.getMaxY()*0.35);
         boardOwID.setVisible(true);
     }
-
-    public void printAllLibrary() {
-        int i = 0;
-        for (Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()) {
-            for (int column = 0; column < 5; column++) {
-                for (int row = 0; row < 6; row++) {
-                    ImageView imageViewLibOw = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[row][column].toString() + ".png"))));
+    public void printAllLibrary(){
+        int i=0;
+        for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
+            for(int c=0; c<5; c++){
+                for(int r=0; r<6; r++){
+                    ImageView imageViewLibOw = new ImageView(new Image(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[r][c].toString() + ".png")));
                     imageViewLibOw.setX(90);
                     imageViewLibOw.setY(90);
                     imageViewLibOw.setPreserveRatio(true);
@@ -346,8 +320,8 @@ public class GameViewController implements Controller {
                     aLibraryGridsOw.get(i).add(imageViewLibOw,c,r);
                 }
             }
-            aLibraryGridsOw.get(i).setLayoutX(gui.getMaxX() * 0.05);
-            aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY() * 0.55);
+            aLibraryGridsOw.get(i).setLayoutX(gui.getMaxX()*0.05);
+            aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY()*0.55);
             aLibraryGridsOw.get(i).setHgap(2);
             aLibraryGridsOw.get(i).setVgap(2);
             //number of ImageView*pxIW + Padding*(n-1)+1
@@ -358,22 +332,22 @@ public class GameViewController implements Controller {
             aLabelLib.get(i).setVisible(true);
             i++;
         }
-        library1ID.setLayoutX(gui.getMaxX() * 0.01);
-        library1ID.setLayoutY(gui.getMaxY() * 0.10);
-        library2ID.setLayoutX(gui.getMaxX() * 0.27);
-        library2ID.setLayoutY(gui.getMaxY() * 0.10);
-        library3ID.setLayoutX(gui.getMaxX() * 0.01);
-        library3ID.setLayoutY(gui.getMaxY() * 0.60);
-        library4ID.setLayoutX(gui.getMaxX() * 0.27);
-        library4ID.setLayoutY(gui.getMaxY() * 0.6);
-        labelOwL1ID.setLayoutX(gui.getMaxX() * 0.01);
-        labelOwL1ID.setLayoutY(gui.getMaxY() * 0.05);
-        labelOwL2ID.setLayoutX(gui.getMaxX() * 0.27);
-        labelOwL2ID.setLayoutY(gui.getMaxY() * 0.05);
-        labelOwL3ID.setLayoutX(gui.getMaxX() * 0.05);
-        labelOwL3ID.setLayoutY(gui.getMaxY() * 0.50);
-        labelOwL4ID.setLayoutX(gui.getMaxX() * 0.27);
-        labelOwL4ID.setLayoutY(gui.getMaxY() * 0.50);
+        library1ID.setLayoutX(gui.getMaxX()*0.01);
+        library1ID.setLayoutY(gui.getMaxY()*0.10);
+        library2ID.setLayoutX(gui.getMaxX()*0.27);
+        library2ID.setLayoutY(gui.getMaxY()*0.10);
+        library3ID.setLayoutX(gui.getMaxX()*0.01);
+        library3ID.setLayoutY(gui.getMaxY()*0.60);
+        library4ID.setLayoutX(gui.getMaxX()*0.27);
+        library4ID.setLayoutY(gui.getMaxY()*0.6);
+        labelOwL1ID.setLayoutX(gui.getMaxX()*0.01);
+        labelOwL1ID.setLayoutY(gui.getMaxY()*0.05);
+        labelOwL2ID.setLayoutX(gui.getMaxX()*0.27);
+        labelOwL2ID.setLayoutY(gui.getMaxY()*0.05);
+        labelOwL3ID.setLayoutX(gui.getMaxX()*0.05);
+        labelOwL3ID.setLayoutY(gui.getMaxY()*0.50);
+        labelOwL4ID.setLayoutX(gui.getMaxX()*0.27);
+        labelOwL4ID.setLayoutY(gui.getMaxY()*0.50);
     }
 
 
@@ -395,11 +369,11 @@ public class GameViewController implements Controller {
 
     }
 
-    public void commonCardInitializer() {
-        commonCard1ID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg"))));
-        commonCard1OwID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg"))));
-        commonCard2ID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg"))));
-        commonCard2OwID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg"))));
+    public void commonCardInizializzer(){
+        commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
+        commonCard1OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
+        commonCard2ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
+        commonCard2OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
         commonCard1ID.setPreserveRatio(true);
         commonCard1OwID.setPreserveRatio(true);
         commonCard2ID.setPreserveRatio(true);
@@ -457,33 +431,37 @@ public class GameViewController implements Controller {
     }
 
 
-    public void rePrintAll() {
-        Platform.runLater(() -> {
-            resetPrint();
-            fullBoard();
-            printAllLibrary();
-            printBoardOw();
-            fullLibrary();
-            boardID.setOnMouseClicked(clickItemTileBoardHandler);
-            libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
+
+
+    public void rePrintAll(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                resetPrint();
+                fullBoard();
+                printAllLibrary();
+                printBoardOw();
+                fullLibrary();
+                boardID.setOnMouseClicked(clickItemTileBoardHandler);
+                libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
+            }
         });
     }
 
-    public void resetPrint() {
+    public void resetPrint(){
         libraryID.setVisible(false);
         boardOwID.setVisible(false);
         boardID.setVisible(false);
         libraryID.getChildren().clear();
         boardOwID.getChildren().clear();
         boardID.getChildren().clear();
-        int i = 0;
-        for (Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()) {
+        int i=0;
+        for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
             aLibraryGridsOw.get(i).setVisible(false);
             aLibraryGridsOw.get(i).getChildren().clear();
             i++;
         }
     }
-
     public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
@@ -504,12 +482,17 @@ public class GameViewController implements Controller {
 
 
     }
-
-    public void loadFinalPage() {
-        Platform.runLater(() -> gui.changeStage("/fxml/FinalPage.fxml"));
+    public void loadFinalPage(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gui.changeStage("/fxml/FinalPage.fxml");
+            }
+        });
     }
 
     public void setYouTurn(boolean youTurn) {
         this.youTurn = youTurn;
     }
+
 }
