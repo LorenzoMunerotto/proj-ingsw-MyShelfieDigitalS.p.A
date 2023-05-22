@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.events;
 
 import it.polimi.ingsw.client.clientMessage.ClientMessage;
+import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
 import it.polimi.ingsw.listener.Listener;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
@@ -65,6 +66,11 @@ public class Move implements ClientMessage, ViewEvent {
     @Override
     public void accept(ViewChangeEventHandler viewChangeEventHandler) {
         viewChangeEventHandler.handle(this);
+    }
+
+    @Override
+    public void accept(ClientMessageHandler clientMessageHandler) {
+        clientMessageHandler.handle(this);
     }
 }
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.gameState.events.PlayerOrderSetEvent;
 import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
+import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
@@ -28,6 +29,10 @@ import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.NULL;
 public class GameHandler {
 
     /**
+     * It is the next GameHandlerID
+     */
+    private static Integer nextGameHandlerId =1;
+    /**
      * It is the list of the VirtualClients in the game.
      */
     private final List<VirtualClient> virtualClients;
@@ -47,6 +52,10 @@ public class GameHandler {
      * It is the PointsManager of the game.
      */
     private PointsManager pointsManager;
+    /**
+     * It is the GameHandler Identifier
+     */
+    private Integer gameHandlerId;
 
     /**
      * Default constructor, initialize the GameData and the VirtualClients list.
@@ -54,6 +63,8 @@ public class GameHandler {
     public GameHandler() {
         this.gameData = new GameData();
         this.virtualClients = new ArrayList<>();
+        this.gameHandlerId=nextGameHandlerId;
+        nextGameHandlerId++;
     }
 
     /**
@@ -99,6 +110,7 @@ public class GameHandler {
         sendAll( new StartGameMessage());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
+        System.out.printf("%sStarting game %s%s\n", CLIConstants.YELLOW_BRIGHT, CLIConstants.RESET, this);
 
     }
 
@@ -145,10 +157,7 @@ public class GameHandler {
                 gameData.setFirstFullLibraryUsername(getCurrentPlayerUsername());
             }
             pointsManager.updateTotalPoints();
-        } catch (BreakRulesException e) {
-            sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
-            sendToCurrentPlayer(new MoveRequest());
-        }
+
         if (boardManager.isRefillTime()) {
             try {
                 boardManager.refillBoard();
@@ -158,6 +167,10 @@ public class GameHandler {
         }
 
         nextPlayer();
+        } catch (BreakRulesException e) {
+            sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
+            sendToCurrentPlayer(new MoveRequest());
+        }
     }
 
     /**
@@ -286,6 +299,7 @@ public class GameHandler {
         for (VirtualClient virtualClient : virtualClients) {
             virtualClient.getSocketClientConnection().close();
         }
+        System.out.printf("%sGame %s correctly end %s\n", CLIConstants.YELLOW_BRIGHT, this, CLIConstants.RESET);
     }
 
     /**
@@ -295,11 +309,25 @@ public class GameHandler {
      */
     public void stopGameByClientDisconnection(String username) {
 
+        System.out.printf("%sStopping the game%s %s because %s disconnected from the server \n", CLIConstants.YELLOW_BRIGHT, CLIConstants.RESET, this, username);
         for (VirtualClient virtualClient : virtualClients) {
             if (!virtualClient.getUsername().equals(username)) {
                 virtualClient.send(new DisconnectionMessage(username));
-                virtualClient.getSocketClientConnection().close();
             }
+            virtualClient.getSocketClientConnection().close();
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("GameID ");
+        sb.append(gameHandlerId);
+        sb.append(" with { ");
+        for (VirtualClient virtualClient : virtualClients) {
+            sb.append(virtualClient.getUsername()+"@"+ virtualClient.getClientID()+" ");
+        }
+        sb.append("}");
+        return sb.toString();
     }
 }

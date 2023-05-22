@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import java.io.IOException;
 import java.util.List;
 
 public class PlayerOrderSetMessage implements ServerMessage{
@@ -21,7 +20,7 @@ public class PlayerOrderSetMessage implements ServerMessage{
     }
 
     @Override
-    public void accept(ServerMessageHandler serverMessageHandler)  {
+    public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);
     }
 }

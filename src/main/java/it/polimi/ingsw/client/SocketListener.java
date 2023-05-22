@@ -28,6 +28,10 @@ public class SocketListener implements Runnable {
      * It is the output stream of the socket.
      */
     ObjectOutputStream outputStream;
+    /**
+     * Lock for send method
+     */
+    Object lockSend = new Object();
 
     /**
      * Default constructor, initialize the client and the socket.
@@ -59,9 +63,13 @@ public class SocketListener implements Runnable {
      * @throws IOException            if there is a problem with the socket
      * @throws ClassNotFoundException if the class of the object received from the socket cannot be found
      */
-    public synchronized void readFromStream() throws IOException, ClassNotFoundException {
-        ServerMessage input = (ServerMessage) inputStream.readObject();
-        input.accept(client);
+    public void readFromStream() throws ClassNotFoundException {
+        try {
+            ServerMessage input = (ServerMessage) inputStream.readObject();
+            input.accept(client);
+        }catch(IOException e){
+            //
+        }
     }
 
     /**
@@ -73,9 +81,6 @@ public class SocketListener implements Runnable {
             while (true) {
                 readFromStream();
             }
-        } catch (IOException e) {
-            System.err.println("IOException occurred in run method: " + e.getMessage());
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             System.err.println("ClassNotFoundException occurred in run method: " + e.getMessage());
             e.printStackTrace();
@@ -105,14 +110,17 @@ public class SocketListener implements Runnable {
      * @param clientMessage is the message that the client want to send
      */
     public void send(ClientMessage clientMessage) {
-        try {
-            outputStream.reset();
-            outputStream.writeObject(clientMessage);
-            outputStream.flush();
+        synchronized (lockSend) {
+            try {
+                outputStream.reset();
+                outputStream.writeObject(clientMessage);
+                outputStream.flush();
 
-        } catch (IOException e) {
-            System.out.println("Sending message failed " + e.getMessage());
-            e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("Sending message failed " + e.getMessage());
+                e.printStackTrace();
+            }
+            lockSend.notifyAll();
         }
     }
 }

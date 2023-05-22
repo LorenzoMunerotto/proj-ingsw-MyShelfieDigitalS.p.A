@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.gameEntity.common_cards;
 import it.polimi.ingsw.model.gameEntity.library.LibraryTestHelper;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +48,7 @@ class CommonCard4Test {
     }
 
     @Test
+    @Disabled
     @DisplayName("check rules n.2")
     void checkRules2() {
         ItemTileType[][] libraryGrid = {

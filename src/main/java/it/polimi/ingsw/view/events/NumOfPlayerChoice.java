@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.events;
 
 import it.polimi.ingsw.client.clientMessage.ClientMessage;
+import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
 
 public class NumOfPlayerChoice implements ClientMessage, ViewEvent {
 
@@ -22,5 +23,10 @@ public class NumOfPlayerChoice implements ClientMessage, ViewEvent {
     @Override
     public void accept(ViewChangeEventHandler viewChangeEventHandler) {
         viewChangeEventHandler.handle(this);
+    }
+
+    @Override
+    public void accept(ClientMessageHandler clientMessageHandler) {
+        clientMessageHandler.handle(this);
     }
 }

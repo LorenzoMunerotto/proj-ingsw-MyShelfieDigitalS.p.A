@@ -21,9 +21,10 @@ public interface ServerMessageHandler {
     void handle(NumOfPlayerRequest numOfPlayerRequest);
     void handle(PersonalCardSetMessage personalCardSetMessage);
     void handle(PointsUpdateMessage pointsUpdateMessage);
-    void handle(StartGameMessage startGameMessage) throws IOException;
+    void handle(StartGameMessage startGameMessage) ;
     void handle(StartTurnMessage startTurnMessage);
     void handle(UsernameRequest usernameRequest);
     void handle(LibrarySetMessage librarySetMessage);
     void handle(PlayerOrderSetMessage playerOrderSetMessage);
+    void handle(CheckConnectionRequest checkConnectionMessage);
 }
