@@ -6,11 +6,11 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class  Result {
     private final SimpleStringProperty userName;
-    private final SimpleIntegerProperty points;
+    private final SimpleStringProperty points;
 
-    public Result(String userName, Integer points) {
+    public Result(String userName, String points) {
         this.userName = new SimpleStringProperty(userName);
-        this.points = new SimpleIntegerProperty(points);
+        this.points = new SimpleStringProperty(points);
     }
 
     public String getUserName() {
@@ -21,11 +21,19 @@ public class  Result {
         return userName;
     }
 
-    public int getPoints() {
+    public String getPoints() {
         return points.get();
     }
 
-    public SimpleIntegerProperty pointsProperty() {
+    public SimpleStringProperty pointsProperty() {
         return points;
+    }
+
+    public void setUserName(String userName) {
+        this.userName.set(userName);
+    }
+
+    public void setPoints(String points) {
+        this.points.set(points);
     }
 }

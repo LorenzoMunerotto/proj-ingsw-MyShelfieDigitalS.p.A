@@ -115,8 +115,15 @@ public class GUI extends Application implements View {
         currentScene = nameMapScene.get(newScene);
         stage.setScene(currentScene);
         nameMapController.get(newScene).setUp();
+        if (newScene.equals("/fxml/FinalPage.fxml")){
+            stage.setFullScreen(false);
+            stage.setWidth(300);
+            stage.setHeight(300);
+        }
+        else {
+            stage.setFullScreen(true);
+        }
         stage.show();
-        stage.setFullScreen(true);
     }
 
     private void screenInfo(){
@@ -126,26 +133,6 @@ public class GUI extends Application implements View {
         width=screenBounds.getWidth();
         height=screenBounds.getHeight();
     }
-    private void loadLoginView(){
-        /*
-        screenInfo();
-        stage.setTitle("MyShelfieDigitals S.p.A.");
-        //System.out.println("preFXML");
-        loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //System.out.println(loginController);
-        setLoginController(loader.getController());
-        //System.out.println(loginController);
-        loginController.setGui(this);
-        //System.out.println("postController");
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();*/
-    }
     public void setController(){
         loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
         //System.out.println(loginController);
@@ -154,23 +141,6 @@ public class GUI extends Application implements View {
         loginController.setGui(this);
     }
 
-
-    public void loadFinalPage(){
-        /*
-        loader= new FXMLLoader(getClass().getResource("/fxml/FinalPage.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        setFinalPageController(loader.getController());
-        finalPageController.setGui(this);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
-         */
-    }
     public static double getWidth() {
         return width;
     }
@@ -186,36 +156,6 @@ public class GUI extends Application implements View {
     public double getMaxY() {
         return maxY;
     }
-
-    /*
-    @Override
-    public void start(Stage stage)  {
-        //per far partire da un file FXML:
-        //Parent root =FXMLLoader.load(HelloApplication.class.getResource("Main.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
-        Scene scene = new Scene(root);
-        //stage.setFullScreen(true);
-        stage.setScene(scene);
-        //FXMLLoader loader =new FXMLLoader(getClass().getResource("LoginView.fxml"));
-        //AnchorPane loginPane= loader.load();
-        //stage.setFullScreen(true);
-        stage.show();
-        //stage.close per chiudere
-        //HelloController controller= new HelloController();
-        //controller.popola();
-        //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Main.fxml"));
-        //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        //stage.setTitle("Hello!");
-        //stage.setScene(scene);
-
-    } */
-
-    /*
-    @Override
-
-    public void start(Stage primaryStage) {
-        stages = new Views();
-    }*/
 
 
     @Override
@@ -275,11 +215,6 @@ public class GUI extends Application implements View {
         getLoginController().loadGameView();
         System.out.println("StartGAme mesage");
         scene=1;
-        //setController();
-        //getGameViewController().setGui(this);
-        //getLoginController().preGame();
-        //getLoginController().preGame();
-        //getGameViewController().setUp();
     }
 
     public Client getClient() {
@@ -309,7 +244,6 @@ public class GUI extends Application implements View {
     @Override
     public void endGame(Boolean isWinner) {
         getGameViewController().loadFinalPage();
-        getFinalPageController().compilePointsTable();
     }
 
     @Override
