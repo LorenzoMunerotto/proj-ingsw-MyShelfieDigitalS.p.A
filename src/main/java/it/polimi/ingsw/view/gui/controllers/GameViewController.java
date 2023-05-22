@@ -157,7 +157,7 @@ public class GameViewController implements Controller {
             if(youTurn==true&&coordinates.size()>0){
                 Node node = (Node) t.getTarget();
                 int column = GridPane.getColumnIndex(node);
-                labelLibraryID.setText(libraryBaseText+"You selected row number "+ String.valueOf(column));
+                labelLibraryID.setText(libraryBaseText+"You selected row number "+ String.valueOf(column+1));
                 //inviare al server colonna scelta
                 System.out.println("handle Library Clicl Pre");
                 gui.getClient().handle(new Move(coordinates,column));

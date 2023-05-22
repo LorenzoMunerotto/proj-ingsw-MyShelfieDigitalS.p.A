@@ -11,12 +11,15 @@ import it.polimi.ingsw.view.gui.controllers.FinalPageController;
 import it.polimi.ingsw.view.gui.controllers.GameViewController;
 import it.polimi.ingsw.view.gui.controllers.LoginController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.*;
@@ -99,6 +102,13 @@ public class GUI extends Application implements View {
         stage.setTitle("MyShelfieDigitals S.p.A.");
         stage.setScene(currentScene);
         //stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         stage.show();
     }
     public void changeStage(String newScene) {

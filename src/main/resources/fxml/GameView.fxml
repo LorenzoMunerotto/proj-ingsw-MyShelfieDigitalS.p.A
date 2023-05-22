@@ -22,7 +22,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
-                        <VBox fx:id="vBoxLibraryID" prefHeight="200.0" prefWidth="100.0">
+                        <VBox fx:id="vBoxLibraryID" layoutY="540.0">
                            <children>
                               <Label fx:id="labelLibraryID" minHeight="27.0" minWidth="130.0" />
                               <GridPane fx:id="libraryID">
