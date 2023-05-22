@@ -4,13 +4,16 @@ import it.polimi.ingsw.view.gui.GUI;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -38,21 +41,15 @@ public class LoginController implements Controller  {
 
     @FXML
     private TextFlow errorsTextID;
+
     @FXML
-    private ImageView backGroundID;
+    private Pane paneID;
 
     private boolean usernamePress=false;
     private GUI gui;
 
     private Integer[] numbers ={2,3,4};
 
-    private int numberOfPlayers;
-    private String userName;
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-
-    private String errorString;
     @FXML
     private Button startGameButtonID;
     @Override
@@ -118,16 +115,7 @@ public class LoginController implements Controller  {
 
     public void enterTheGame(ActionEvent event) throws IOException {
         gui.changeStage("/fxml/GameView.fxml");
-        /*
-            //System.out.println("preLoadGameView");
-        root = FXMLLoader.load(getClass().getResource("/fxml/GameView.fxml"));
-        scene=new Scene(root);
-        Stage stage =(Stage) ((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
-        System.out.println("stage.show();");
 
-         */
     }
 
 
@@ -143,6 +131,7 @@ public class LoginController implements Controller  {
     }
     public void chooseUsernameView() {
         textNameInputID.setVisible(true);
+        nameLabelID.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000FF;");
         nameLabelID.setVisible(true);
         userNameButtonID.setVisible(true);
         System.out.println("chooseUsernameView");
@@ -151,6 +140,7 @@ public class LoginController implements Controller  {
 
     public void choosePlayersNumberView() {
         numberBoxID.getItems().addAll(numbers);
+        numberLabelID.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000FF;");
         numberBoxID.setVisible(true);
         numberLabelID.setVisible(true);
         loginButtonID.setVisible(true);
@@ -160,6 +150,13 @@ public class LoginController implements Controller  {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                paneID.setBackground(new Background(
+                        new BackgroundImage(
+                        new Image(getClass().getResourceAsStream("/images/Display.jpg")),
+                        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
+                        new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
+                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
+                )));
                 System.out.println("initialize");
                 numberLabelID.setVisible(false);
                 errorsTextID.setVisible(true);
