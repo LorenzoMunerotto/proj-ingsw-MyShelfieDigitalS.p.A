@@ -116,7 +116,65 @@ class CommonCard1Test {
         };
         libraryTestHelper.setLibrary(libraryGrid);
         assertFalse(card1.checkRules(libraryTestHelper));
-
     }
 
+    @Test
+    @DisplayName("Exactly 6 groups of adjacent items of the same type")
+    void checkExactCase() {
+        ItemTileType[][] libraryGrid = {
+                {ItemTileType.CAT, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.TROPHY, ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.PLANT, ItemTileType.PLANT, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.GAME, ItemTileType.GAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.BOOK, ItemTileType.BOOK, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+        };
+        libraryTestHelper.setLibrary(libraryGrid);
+        assertTrue(card1.checkRules(libraryTestHelper));
+    }
+
+    @Test
+    @DisplayName("Less than 6 groups of adjacent items of the same type")
+    void checkLessThanCase() {
+        ItemTileType[][] libraryGrid = {
+                {ItemTileType.CAT, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.TROPHY, ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.PLANT, ItemTileType.PLANT, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.GAME, ItemTileType.GAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+        };
+        libraryTestHelper.setLibrary(libraryGrid);
+        assertFalse(card1.checkRules(libraryTestHelper));
+    }
+
+    @Test
+    @DisplayName("More than 6 groups of adjacent items of the same type")
+    void checkMoreThanCase() {
+        ItemTileType[][] libraryGrid = {
+                {ItemTileType.CAT, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.TROPHY, ItemTileType.TROPHY, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.PLANT, ItemTileType.PLANT, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.GAME, ItemTileType.GAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.FRAME, ItemTileType.FRAME, ItemTileType.EMPTY, ItemTileType.EMPTY, ItemTileType.EMPTY},
+                {ItemTileType.BOOK, ItemTileType.BOOK, ItemTileType.CAT, ItemTileType.CAT, ItemTileType.EMPTY},
+        };
+        libraryTestHelper.setLibrary(libraryGrid);
+        assertTrue(card1.checkRules(libraryTestHelper));
+    }
+
+    @Test
+    @DisplayName("All tiles filled with same type of item, but not adjacent")
+    void checkAllSameButNotAdjacent() {
+        ItemTileType[][] libraryGrid = {
+                {ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT},
+                {ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY},
+                {ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT},
+                {ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY},
+                {ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT},
+                {ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY, ItemTileType.CAT, ItemTileType.EMPTY},
+        };
+        libraryTestHelper.setLibrary(libraryGrid);
+        assertFalse(card1.checkRules(libraryTestHelper));
+    }
 }

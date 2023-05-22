@@ -100,7 +100,7 @@ public class BoardManager extends AbstractListenable {
     public void refillBoard() throws EmptyBagException {
         bag.shuffle();
         int i = emptyCells.size() - 1;
-        try{
+        try {
             for (; i >= 0; i--) {
                 Coordinate coordinate = emptyCells.get(i);
                 int row = coordinate.getRow();
@@ -108,10 +108,10 @@ public class BoardManager extends AbstractListenable {
                 board.setItemTile(row, column, bag.grabItemTile());
                 this.emptyCells.remove(coordinate);
                 this.notEmptyCells.add(coordinate);
-        }
-        long checksum = calculateCRC();
-        notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
-    }catch (EmptyBagException e){
+            }
+            long checksum = calculateCRC();
+            notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
+        } catch (EmptyBagException e) {
             try {
                 for (; i >= 0; i--) {
                     Coordinate coordinate = emptyCells.get(i);
