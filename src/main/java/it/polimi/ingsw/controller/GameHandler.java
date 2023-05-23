@@ -145,10 +145,7 @@ public class GameHandler {
                 gameData.setFirstFullLibraryUsername(getCurrentPlayerUsername());
             }
             pointsManager.updateTotalPoints();
-        } catch (BreakRulesException e) {
-            sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
-            sendToCurrentPlayer(new MoveRequest());
-        }
+
         if (boardManager.isRefillTime()) {
             try {
                 boardManager.refillBoard();
@@ -156,8 +153,11 @@ public class GameHandler {
                 sendAll(new CustomMessage(e.getMessage()));
             }
         }
-
         nextPlayer();
+        } catch (BreakRulesException e) {
+            sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
+            sendToCurrentPlayer(new MoveRequest());
+        }
     }
 
     /**
