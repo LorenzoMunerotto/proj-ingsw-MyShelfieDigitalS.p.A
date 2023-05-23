@@ -34,7 +34,7 @@ public class FinalPageController implements Controller{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                List<Pair<String, Integer>> leaderBoards = virtualModel.getClientUsernamePoints();
+                List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
                 ObservableList<Result> data = FXCollections.observableArrayList();
                 TableColumn userNameColumn = new TableColumn("userName");
                 TableColumn pointsColum = new TableColumn("points");
@@ -49,9 +49,6 @@ public class FinalPageController implements Controller{
                 tableResultID.getItems().addAll(data);
                 tableResultID.setVisible(true);
             }
-            tableResultID.setVisible(true);
-            nameColumnID.setVisible(true);
-            pointsColumnID.setVisible(true);
         });
     }
 }

@@ -58,10 +58,6 @@ public class GUI extends Application implements View {
         this.virtualModel = new VirtualModel();
     }
 
-    public static double getWidth() {
-        return width;
-    }
-
     public static double getHeight() {
         return height;
     }
@@ -185,12 +181,6 @@ public class GUI extends Application implements View {
 
     public double getMaxY() {
         return maxY;
-    }
-
-
-    @Override
-    public void setClient(Client client) {
-        GUI.client =client;
     }
 
     @Override
