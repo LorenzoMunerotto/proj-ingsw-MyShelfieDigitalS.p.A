@@ -3,13 +3,14 @@ package it.polimi.ingsw.view.cli;
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
 import it.polimi.ingsw.view.View;
-import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
-
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class represents the CLI view of the game.
@@ -19,9 +20,10 @@ public class CLI implements View {
     private final VirtualModel virtualModel;
     private Client client;
     /**
-     * It is the scanner used to read the user input.
+     * It is the BufferedReader used to read the user input.
      */
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
     /**
      * It is the drawer used to draw the game.
      */
@@ -33,7 +35,7 @@ public class CLI implements View {
     /**
      * It is a thread that is used for waiting.
      */
-    private Thread waitingThread;
+    private Thread currentViewThread;
 
     /**
      * Default constructor, initializes the drawer.
@@ -70,21 +72,59 @@ public class CLI implements View {
     }
 
     /**
+     * This is a ReadLine that can be interrupted, so the client isn't blocked when waiting for user input
+     * @param reader
+     * @return
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    private String interruptibleReadLine(BufferedReader reader)
+            throws InterruptedException, IOException {
+        Pattern line = Pattern.compile("^(.*)\\R");
+        Matcher matcher;
+        boolean interrupted = false;
+
+        StringBuilder result = new StringBuilder();
+        int chr = -1;
+        do {
+            if (reader.ready()) chr = reader.read();
+            if (chr > -1) result.append((char) chr);
+            matcher = line.matcher(result.toString());
+            interrupted = Thread.interrupted(); // resets flag, call only once
+        } while (!interrupted && !matcher.matches());
+        if (interrupted) throw new InterruptedException();
+        return (matcher.matches() ? matcher.group(1) : "");
+    }
+
+    /**
      * Asks the user to choose his username.
      */
     @Override
     public void chooseUsername() {
-        String username = "";
-        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (username.isBlank()) {
-            username = CLI.scanner.nextLine().strip();
-            if (!isUsernameValid(username)) {
-                username = "";
-                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
-                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+        Runnable chooseUsernameThread = () -> {
+            try{
+            String username = "";
+            System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+            while (username.isBlank()) {
+                username = interruptibleReadLine(CLI.bufferedReader);
+                if (!isUsernameValid(username)) {
+                    username = "";
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
+                            CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                }
             }
-        }
-        client.handle(new UsernameChoice(username));
+            client.handle(new UsernameChoice(username));
+
+            }
+            catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        };
+
+        StopSetStartCurrentViewThread(chooseUsernameThread);
     }
 
     /**
@@ -92,68 +132,81 @@ public class CLI implements View {
      */
     @Override
     public void choosePlayersNumber() {
-        int playersNumber = 0;
-        String playersNumberString;
-        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
-                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER) {
+        Runnable choosePlayersNumberThread = ()->{
             try {
-                playersNumberString = CLI.scanner.nextLine().strip();
-                playersNumber = Integer.parseInt(playersNumberString);
-                if (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER)
-                    throw new NumberFormatException();
-            } catch (NumberFormatException e) {
-                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, insert exact number of players for the game [%s2%s-%s4%s]: ",
-                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                int playersNumber = 0;
+                String playersNumberString;
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert exact number of players for the game [%s2%s-%s4%s]: ",
+                        CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                while (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER) {
+                    try {
+                        playersNumberString = interruptibleReadLine(CLI.bufferedReader);
+                        playersNumber = Integer.parseInt(playersNumberString);
+                        if (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER)
+                            throw new NumberFormatException();
+                    } catch (NumberFormatException e) {
+                        System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, insert exact number of players for the game [%s2%s-%s4%s]: ",
+                                CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                    }
+                }
+                client.handle(new NumOfPlayerChoice(playersNumber));
+            }catch (InterruptedException e){
+                Thread.currentThread().interrupt();
             }
-        }
-        client.handle(new NumOfPlayerChoice(playersNumber));
+            catch (IOException e){
+                throw new RuntimeException(e);
+            }
+        };
+        StopSetStartCurrentViewThread(choosePlayersNumberThread);
     }
 
 
     /**
-     * Asks the user to choose the item tiles to grab from the board.
-     *
-     * @return the list of the item tiles chosen by the user
+     * Asks the user to choose the item tiles to grab from the board and the column.
      */
-    public List<Coordinate> chooseTiles() {
-        String coordinates = "";
-        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
-                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (coordinates.isBlank()) {
-            coordinates = CLI.scanner.nextLine().strip().toUpperCase();
-            if (!isCoordinatesValid(coordinates)) {
-                coordinates = "";
-                System.out.printf(CLIConstants.CONSOLE_ARROW + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
-                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+    public void chooseMove() {
+        Runnable chooseMoveThread = () -> {
+            try {
+                String coordinates = "";
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
+                        CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                while (coordinates.isBlank()) {
+                    coordinates = interruptibleReadLine(CLI.bufferedReader).toUpperCase();
+                    if (!isCoordinatesValid(coordinates)) {
+                        coordinates = "";
+                        System.out.printf(CLIConstants.CONSOLE_ARROW + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
+                                CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                    }
+                }
+
+                int column = 0;
+                String columnString;
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
+                        CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                while (column < 1 || column > 5) {
+                    try {
+                        columnString = interruptibleReadLine(CLI.bufferedReader).strip();
+                        column = Integer.parseInt(columnString);
+                        if (column < 1 || column > 5)
+                            throw new NumberFormatException();
+                    } catch (NumberFormatException e) {
+                        System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
+                                CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                    }
+                }
+                client.handle(new Move(parser.parseCoordinates(coordinates),parser.getColumnKey(column)));
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } catch (IOException e) {
+                throw new RuntimeException();
             }
-        }
-        return parser.parseCoordinates(coordinates);
+        };
+
+        StopSetStartCurrentViewThread(chooseMoveThread);
     }
 
-    /**
-     * Asks the user to choose the column of the library where to place the tiles.
-     *
-     * @return the column chosen by the user
-     */
-    public Integer chooseColumn() {
-        int column = 0;
-        String columnString;
-        System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
-                CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-        while (column < 1 || column > 5) {
-            try {
-                columnString = CLI.scanner.nextLine().strip();
-                column = Integer.parseInt(columnString);
-                if (column < 1 || column > 5)
-                    throw new NumberFormatException();
-            } catch (NumberFormatException e) {
-                System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid input%s, please insert the column of the library where you want to place the tiles [%s1%s-%s5%s]: ",
-                        CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-            }
-        }
-        return parser.getColumnKey(column);
-    }
+
 
     /**
      * Thread that prints a clock while waiting for other players to play their turn.
@@ -161,7 +214,7 @@ public class CLI implements View {
      */
     @Override
     public void waitForTurn() {
-        this.waitingThread = new Thread(() -> {
+        Runnable waitForTurnThread = () -> {
             int index = 0;
 
             while (!Thread.currentThread().isInterrupted()) {
@@ -173,21 +226,35 @@ public class CLI implements View {
                     Thread.currentThread().interrupt();
                 }
             }
-        });
-        waitingThread.start();
+        };
+
+        StopSetStartCurrentViewThread(waitForTurnThread);
     }
 
     /**
      * Stops the waiting thread.
      */
     public void stopWaiting() {
-        if (this.waitingThread != null) {
-            this.waitingThread.interrupt();
-            this.waitingThread = null;
+        if (currentViewThread!=null && currentViewThread.isAlive()) {
+            currentViewThread.interrupt();
+            currentViewThread = null;
         }
         System.out.println();
     }
 
+    /**
+     * This method change the CurrentViewThread
+     * @param runnable
+     */
+    private void StopSetStartCurrentViewThread(Runnable runnable){
+        if (currentViewThread !=null && currentViewThread.isAlive()){
+            currentViewThread.interrupt();
+            currentViewThread = null;
+        }
+        currentViewThread = new Thread(runnable);
+        currentViewThread.start();
+    }
+    
     /**
      * Starts the game and prints the objects of the game.
      */

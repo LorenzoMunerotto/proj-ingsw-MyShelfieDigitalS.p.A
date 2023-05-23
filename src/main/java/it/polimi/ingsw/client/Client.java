@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.clientMessage.CheckConnection;
 import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
@@ -193,9 +194,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      */
     public void handle(MoveRequest moveRequest){
         if(view instanceof CLI){
-            List<Coordinate> coordinates = view.chooseTiles();
-            Integer column = view.chooseColumn();
-            socketListener.send(new Move(coordinates,column));
+           view.chooseMove();
         }
         if(view instanceof GUI){
             view.showGame();
@@ -270,7 +269,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      * @param startGameMessage the start game message
      */
     @Override
-    public void handle(StartGameMessage startGameMessage) throws IOException {
+    public void handle(StartGameMessage startGameMessage)  {
         view.startGame();
     }
 
@@ -398,6 +397,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     @Override
     public void handle(PlayerOrderSetMessage playerOrderSetMessage) {
         virtualModel.setPlayerIndex(playerOrderSetMessage.getPlayerOrder());
+    }
+
+    @Override
+    public void handle(CheckConnectionRequest checkConnectionRequest) {
+            socketListener.send(new CheckConnection());
     }
 
     public static void main(String[] Args){

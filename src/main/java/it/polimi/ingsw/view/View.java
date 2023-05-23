@@ -67,15 +67,11 @@ public interface View  {
 
      void choosePlayersNumber();
 
-    List<Coordinate> chooseTiles();
-    /**
-     * Asks the user to choose the column of the library where to place the tiles.
-     *
-     * @return the column chosen by the user
-     */
-     Integer chooseColumn();
 
-     void startGame() throws IOException;
+
+     void chooseMove();
+
+     void startGame();
 
     /**
      * This method is the method that shows the game.

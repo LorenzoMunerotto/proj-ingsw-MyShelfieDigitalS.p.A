@@ -3,6 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.server.serverMessage.CustomMessage;
 import it.polimi.ingsw.server.serverMessage.ErrorMessage;
+import it.polimi.ingsw.server.serverMessage.NumOfPlayerRequest;
 import it.polimi.ingsw.view.cli.CLIConstants;
 
 import java.util.*;
@@ -50,7 +51,7 @@ public class Server {
     /**
      * The number of players.
      */
-    private Integer numOfPlayers;
+    private Integer numOfPlayers =-1;
 
     /**
      * Default constructor.
@@ -124,6 +125,15 @@ public class Server {
      * @return the clientId of the client
      */
     public synchronized Integer registerConnection(String username, SocketClientConnection socketClientConnection) {
+
+        while ((waiting.size()==1 && numOfPlayers==-1)||waiting.size()==numOfPlayers){
+            try {
+                wait(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         if (waiting.isEmpty()) {
             currentGameHandler = new GameHandler();
         }
@@ -156,15 +166,24 @@ public class Server {
      * @param socketClientConnection is the socketClientConnection of the client
      * @throws InterruptedException if the thread is interrupted
      */
-    public synchronized void lobby(SocketClientConnection socketClientConnection) throws InterruptedException {
+    public synchronized void lobby(SocketClientConnection socketClientConnection) {
 
+        while (waiting.size()==1 && numOfPlayers==-1){
+            try {
+                wait(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         waiting.add(socketClientConnection);
+
         if (waiting.size() == 1) {
-            socketClientConnection.setUpNumberOfPlayers();
+            socketClientConnection.send(new NumOfPlayerRequest());
         } else if (waiting.size() == numOfPlayers) {
             currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached!"));
             currentGameHandler.startGame();
             waiting.clear();
+            numOfPlayers=-1;
         } else {
             currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + (numOfPlayers - waiting.size()) + " players left"));
         }

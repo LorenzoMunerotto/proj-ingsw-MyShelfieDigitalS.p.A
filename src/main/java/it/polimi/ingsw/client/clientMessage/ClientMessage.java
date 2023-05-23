@@ -12,4 +12,10 @@ public interface ClientMessage extends Serializable {
      * @return the message
      */
     String getMessage();
+
+    /**
+     * Implement the Visitor pattern on ClientMessage
+     * @param clientMessageHandler
+     */
+    void accept(ClientMessageHandler clientMessageHandler);
 }

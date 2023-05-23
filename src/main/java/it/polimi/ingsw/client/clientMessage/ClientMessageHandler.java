@@ -28,4 +28,11 @@ public interface ClientMessageHandler {
      * @param usernameChoice the message usernameChoice to handle.
      */
     void handle(UsernameChoice usernameChoice);
+
+    /**
+     * Handles the message checkConnection.
+     *
+     * @param checkConnection the message checkConnection to handle.
+     */
+    void handle(CheckConnection checkConnection);
 }

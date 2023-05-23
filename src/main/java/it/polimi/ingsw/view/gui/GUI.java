@@ -203,13 +203,8 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public List<Coordinate> chooseTiles() {
-        return null;
-    }
+    public void chooseMove(){
 
-    @Override
-    public Integer chooseColumn() {
-        return null;
     }
 
     @Override
