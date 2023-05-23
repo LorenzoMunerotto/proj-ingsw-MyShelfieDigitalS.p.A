@@ -91,7 +91,12 @@ public class CLI implements View {
             if (reader.ready()) chr = reader.read();
             if (chr > -1) {
                 result.append((char) chr);
-                if (os.contains("Windows")) System.out.print(chr);
+                System.out.printf("\r%s",result);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
             matcher = line.matcher(result.toString());
             interrupted = Thread.interrupted(); // resets flag, call only once
