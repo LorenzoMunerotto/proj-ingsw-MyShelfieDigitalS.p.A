@@ -342,9 +342,13 @@ public class VirtualModel {
      * @param username is the username of the player
      * @return the points of the player
      */
-    public int getMyPoints() {
-        return this.clientUsernamePoints.get(myUsername);
-
+    public int getPointsByUsername(String username) {
+        Integer points = this.clientUsernamePoints.get(username);
+        if (points == null) {
+            throw new IllegalArgumentException("Username not found");
+        } else {
+            return points;
+        }
     }
 
     /**
