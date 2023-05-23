@@ -337,18 +337,12 @@ public class VirtualModel {
      **************************************************************************/
 
     /**
-     * Get the current leader board of the game.
+     * Get the points of the client.
      *
-     * @param username is the username of the player
-     * @return the points of the player
+     * @return the points of the client
      */
-    public int getPointsByUsername(String username) {
-        Integer points = this.clientUsernamePoints.get(username);
-        if (points == null) {
-            throw new IllegalArgumentException("Username not found");
-        } else {
-            return points;
-        }
+    public int getMyPoints() {
+        return this.clientUsernamePoints.get(myUsername);
     }
 
     /**

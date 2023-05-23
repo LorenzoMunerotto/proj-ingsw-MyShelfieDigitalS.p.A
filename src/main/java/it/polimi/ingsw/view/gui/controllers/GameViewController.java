@@ -2,7 +2,10 @@ package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.events.Move;
+import it.polimi.ingsw.view.gui.Result;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -12,8 +15,8 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.view.gui.GUI;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -22,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +102,8 @@ public class GameViewController implements Controller {
     private VBox vBoxLibraryID;
     @FXML
     private Label labelLibraryID;
+    @FXML
+    private TableView pointUserNameTableID;
 
 
     private List<Coordinate> coordinates = new ArrayList<>();
@@ -177,6 +183,7 @@ public class GameViewController implements Controller {
         commonCardLabelID.setVisible(false);
         personalCardLabelID.setVisible(false);
         itemTileLabelID.setVisible(false);
+        pointUserNameTableID.setVisible(false);
     }
 
     public void setItemTileClicked(ImageView imageView) {
@@ -360,6 +367,30 @@ public class GameViewController implements Controller {
 
     }
 
+    public void setTablePoints(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                pointUserNameTableID.getItems().clear();
+                pointUserNameTableID.getColumns().clear();
+                ObservableList<Result> data = FXCollections.observableArrayList();
+                TableColumn userNameColumn = new TableColumn("userName");
+                TableColumn pointsColum = new TableColumn("points");
+                pointUserNameTableID.getColumns().addAll(userNameColumn,pointsColum);
+                userNameColumn.setMinWidth(gui.getMaxX()*0.20);
+                pointsColum.setMinWidth(gui.getMaxX()*0.20);
+                data.add(new Result(virtualModel.getMyUsername(),String.valueOf(virtualModel.getMyPoints())));
+                userNameColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("userName"));
+                pointsColum.setCellValueFactory(new PropertyValueFactory<Result, String>("points"));
+                pointUserNameTableID.getItems().addAll(data);
+                pointUserNameTableID.setLayoutY(gui.getMaxY()*0.4);
+                pointUserNameTableID.setLayoutX(gui.getMaxX()*0.01);
+                pointUserNameTableID.setMaxSize(gui.getMaxX()*0.40,gui.getMaxY()*0.10);
+                pointUserNameTableID.setMinSize(gui.getMaxX()*0.40,gui.getMaxY()*0.10);
+                pointUserNameTableID.setVisible(true);
+            }
+        });    }
+
     public void commonCardInizializzer() {
         commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + "w" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue1()) + "t.jpg")));
         commonCard1OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + "w" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue1()) + "t.jpg")));
@@ -441,6 +472,7 @@ public class GameViewController implements Controller {
             printBoardOw();
             fullLibrary();
             commonCardUpdater();
+            setTablePoints();
             boardID.setOnMouseClicked(clickItemTileBoardHandler);
             libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
         });
