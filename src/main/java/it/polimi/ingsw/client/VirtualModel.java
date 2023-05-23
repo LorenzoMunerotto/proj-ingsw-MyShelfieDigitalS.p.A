@@ -337,14 +337,12 @@ public class VirtualModel {
      **************************************************************************/
 
     /**
-     * Get the current leader board of the game.
+     * Get the points of the client.
      *
-     * @param username is the username of the player
-     * @return the points of the player
+     * @return the points of the client
      */
     public int getMyPoints() {
         return this.clientUsernamePoints.get(myUsername);
-
     }
 
     /**

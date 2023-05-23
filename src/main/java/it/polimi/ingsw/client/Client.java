@@ -5,11 +5,9 @@ import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
-import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.gui.GUI;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;

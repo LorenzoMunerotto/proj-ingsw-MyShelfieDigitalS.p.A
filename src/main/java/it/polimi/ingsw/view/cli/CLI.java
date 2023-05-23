@@ -6,6 +6,7 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,13 +18,11 @@ import java.util.regex.Pattern;
  */
 public class CLI implements View {
 
-    private final VirtualModel virtualModel;
-    private Client client;
     /**
      * It is the BufferedReader used to read the user input.
      */
     private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-
+    private final VirtualModel virtualModel;
     /**
      * It is the drawer used to draw the game.
      */
@@ -32,6 +31,7 @@ public class CLI implements View {
      * It is the parser used to parse the user input.
      */
     private final CLIParser parser;
+    private Client client;
     /**
      * It is a thread that is used for waiting.
      */
@@ -44,11 +44,6 @@ public class CLI implements View {
         this.virtualModel = new VirtualModel();
         drawer = new CLIDrawer(virtualModel);
         parser = new CLIParser();
-    }
-
-    @Override
-    public VirtualModel getVirtualModel() {
-        return virtualModel;
     }
 
     /**
@@ -71,8 +66,14 @@ public class CLI implements View {
         }
     }
 
+    @Override
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
+    }
+
     /**
      * This is a ReadLine that can be interrupted, so the client isn't blocked when waiting for user input
+     *
      * @param reader
      * @return
      * @throws InterruptedException
@@ -106,23 +107,22 @@ public class CLI implements View {
     @Override
     public void chooseUsername() {
         Runnable chooseUsernameThread = () -> {
-            try{
-            String username = "";
-            System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
-            while (username.isBlank()) {
-                username = interruptibleReadLine(CLI.bufferedReader);
-                if (!isUsernameValid(username)) {
-                    username = "";
-                    System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
-                            CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+            try {
+                String username = "";
+                System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                while (username.isBlank()) {
+                    username = interruptibleReadLine(CLI.bufferedReader);
+                    if (!isUsernameValid(username)) {
+                        username = "";
+                        System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
+                                CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
+                    }
                 }
-            }
-            client.handle(new UsernameChoice(username));
+                client.handle(new UsernameChoice(username));
 
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -136,7 +136,7 @@ public class CLI implements View {
      */
     @Override
     public void choosePlayersNumber() {
-        Runnable choosePlayersNumberThread = ()->{
+        Runnable choosePlayersNumberThread = () -> {
             try {
                 int playersNumber = 0;
                 String playersNumberString;
@@ -154,10 +154,9 @@ public class CLI implements View {
                     }
                 }
                 client.handle(new NumOfPlayerChoice(playersNumber));
-            }catch (InterruptedException e){
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         };
@@ -198,7 +197,7 @@ public class CLI implements View {
                                 CLIConstants.RED_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
                     }
                 }
-                client.handle(new Move(parser.parseCoordinates(coordinates),parser.getColumnKey(column)));
+                client.handle(new Move(parser.parseCoordinates(coordinates), parser.getColumnKey(column)));
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -209,7 +208,6 @@ public class CLI implements View {
 
         StopSetStartCurrentViewThread(chooseMoveThread);
     }
-
 
 
     /**
@@ -239,7 +237,7 @@ public class CLI implements View {
      * Stops the waiting thread.
      */
     public void stopWaiting() {
-        if (currentViewThread!=null && currentViewThread.isAlive()) {
+        if (currentViewThread != null && currentViewThread.isAlive()) {
             currentViewThread.interrupt();
             currentViewThread = null;
         }
@@ -248,24 +246,25 @@ public class CLI implements View {
 
     /**
      * This method change the CurrentViewThread
+     *
      * @param runnable
      */
-    private void StopSetStartCurrentViewThread(Runnable runnable){
-        if (currentViewThread !=null && currentViewThread.isAlive()){
+    private void StopSetStartCurrentViewThread(Runnable runnable) {
+        if (currentViewThread != null && currentViewThread.isAlive()) {
             currentViewThread.interrupt();
             currentViewThread = null;
         }
         currentViewThread = new Thread(runnable);
         currentViewThread.start();
     }
-    
+
     /**
      * Starts the game and prints the objects of the game.
      */
     @Override
     public void startGame() {
         this.stopWaiting();
-        try{
+        try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
