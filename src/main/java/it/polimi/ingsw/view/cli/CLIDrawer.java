@@ -257,7 +257,7 @@ public class CLIDrawer {
                 " " + WHITE_UNDERLINED + "Game info:" + RESET,
                 " Username: " + CYAN_BRIGHT + virtualModel.getMyUsername() + RESET,
                 " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsername() + RESET,
-                " Points: " + RED_BRIGHT + virtualModel.getPointsByUsername(virtualModel.getMyUsername()) + RESET,
+                " Points: " + RED_BRIGHT + virtualModel.getMyPoints() + RESET,
                 " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerIndex()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
                 " Chair: " + ((virtualModel.getMyUsername().equals(virtualModel.getPlayerUsername(0))) ? GREEN_BRIGHT + "true" + RESET : RED_BRIGHT + "false" + RESET),
                 " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET
