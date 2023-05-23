@@ -84,11 +84,15 @@ public class CLI implements View {
         Matcher matcher;
         boolean interrupted = false;
 
+        String os = System.getProperty("os.name");
         StringBuilder result = new StringBuilder();
         int chr = -1;
         do {
             if (reader.ready()) chr = reader.read();
-            if (chr > -1) result.append((char) chr);
+            if (chr > -1) {
+                result.append((char) chr);
+                if (os.contains("Windows")) System.out.print(chr);
+            }
             matcher = line.matcher(result.toString());
             interrupted = Thread.interrupted(); // resets flag, call only once
         } while (!interrupted && !matcher.matches());
