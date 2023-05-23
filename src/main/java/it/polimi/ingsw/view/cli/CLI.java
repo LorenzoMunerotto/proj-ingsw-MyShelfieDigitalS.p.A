@@ -84,7 +84,6 @@ public class CLI implements View {
         Pattern line = Pattern.compile("^(.*)\\R");
         Matcher matcher;
         boolean interrupted = false;
-
         String os = System.getProperty("os.name");
         StringBuilder result = new StringBuilder();
         PrintWriter printWriter = new PrintWriter(System.out);
@@ -92,9 +91,11 @@ public class CLI implements View {
         do {
             if (reader.ready()) chr = reader.read();
             if (chr > -1) {
-
                 result.append((char) chr);
-                printWriter.printf("\r%s",result);
+                new Thread(()-> {
+                        printWriter.printf("\r%s", result);
+                        printWriter.flush();
+                }).start();
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -118,6 +119,7 @@ public class CLI implements View {
             String username = "";
             System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
             while (username.isBlank()) {
+
                 username = interruptibleReadLine(CLI.bufferedReader);
                 if (!isUsernameValid(username)) {
                     username = "";
