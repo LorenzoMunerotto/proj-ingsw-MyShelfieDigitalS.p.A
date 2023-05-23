@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.events.UsernameChoice;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -86,12 +87,14 @@ public class CLI implements View {
 
         String os = System.getProperty("os.name");
         StringBuilder result = new StringBuilder();
+        PrintWriter printWriter = new PrintWriter(System.out);
         int chr = -1;
         do {
             if (reader.ready()) chr = reader.read();
             if (chr > -1) {
+
                 result.append((char) chr);
-                System.out.printf("\r%s",result);
+                printWriter.printf("\r%s",result);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
