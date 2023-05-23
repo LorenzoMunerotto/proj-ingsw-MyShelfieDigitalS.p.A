@@ -361,10 +361,10 @@ public class GameViewController implements Controller {
     }
 
     public void commonCardInizializzer(){
-        commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
-        commonCard1OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + ".jpg")));
-        commonCard2ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
-        commonCard2OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + ".jpg")));
+        commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + "w"+String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue1())+"t.jpg")));
+        commonCard1OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + "w"+String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue1())+"t.jpg")));
+        commonCard2ID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + "w"+String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue1())+"t.jpg")));
+        commonCard2OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC"+ String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + "w"+String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue1())+"t.jpg")));
         commonCard1ID.setPreserveRatio(true);
         commonCard1OwID.setPreserveRatio(true);
         commonCard2ID.setPreserveRatio(true);
@@ -396,6 +396,17 @@ public class GameViewController implements Controller {
         commonCardLabelID.setVisible(true);
     }
 
+    public void commonCardUpdater() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                commonCard1ID.setImage(new Image(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + "w" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue1()) + "t.jpg")));
+                commonCard1OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue0()) + "w" + String.valueOf(virtualModel.getCommonGoalCards().get(0).getValue1()) + "t.jpg")));
+                commonCard2ID.setImage(new Image(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + "w" + String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue1()) + "t.jpg")));
+                commonCard2OwID.setImage(new Image(getClass().getResourceAsStream("/images/CC" + String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue0()) + "w" + String.valueOf(virtualModel.getCommonGoalCards().get(1).getValue1()) + "t.jpg")));
+            }
+        });
+    }
 
     public void setErrorBox(){
         Platform.runLater(new Runnable() {
@@ -433,6 +444,7 @@ public class GameViewController implements Controller {
                 printAllLibrary();
                 printBoardOw();
                 fullLibrary();
+                commonCardUpdater();
                 boardID.setOnMouseClicked(clickItemTileBoardHandler);
                 libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
             }
