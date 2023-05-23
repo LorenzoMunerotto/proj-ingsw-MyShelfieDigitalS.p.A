@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="ancorPaneID" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.GameViewController">
+<AnchorPane fx:id="anchorPaneID" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.GameViewController">
    <children>
       <TabPane prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
@@ -22,7 +22,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0">
                      <children>
-                        <VBox fx:id="vBoxLibraryID" prefHeight="200.0" prefWidth="100.0">
+                        <VBox fx:id="vBoxLibraryID" layoutY="540.0">
                            <children>
                               <Label fx:id="labelLibraryID" minHeight="27.0" minWidth="130.0" />
                               <GridPane fx:id="libraryID">

@@ -11,12 +11,16 @@ import it.polimi.ingsw.view.gui.controllers.FinalPageController;
 import it.polimi.ingsw.view.gui.controllers.GameViewController;
 import it.polimi.ingsw.view.gui.controllers.LoginController;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.*;
@@ -130,6 +134,14 @@ public class GUI extends Application implements View {
         stage.setTitle("MyShelfieDigitals S.p.A.");
         stage.setScene(currentScene);
         //stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/images/Box.png")));
         stage.show();
     }
 
@@ -137,8 +149,15 @@ public class GUI extends Application implements View {
         currentScene = nameMapScene.get(newScene);
         stage.setScene(currentScene);
         nameMapController.get(newScene).setUp();
+        if (newScene.equals("/fxml/FinalPage.fxml")){
+            stage.setFullScreen(false);
+            stage.setWidth(300);
+            stage.setHeight(300);
+        }
+        else {
+            stage.setFullScreen(true);
+        }
         stage.show();
-        stage.setFullScreen(true);
     }
 
     private void screenInfo() {
@@ -148,81 +167,16 @@ public class GUI extends Application implements View {
         width = screenBounds.getWidth();
         height = screenBounds.getHeight();
     }
-
-    /*
-    @Override
-    public void start(Stage stage)  {
-        //per far partire da un file FXML:
-        //Parent root =FXMLLoader.load(HelloApplication.class.getResource("Main.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("LoginView.fxml"));
-        Scene scene = new Scene(root);
-        //stage.setFullScreen(true);
-        stage.setScene(scene);
-        //FXMLLoader loader =new FXMLLoader(getClass().getResource("LoginView.fxml"));
-        //AnchorPane loginPane= loader.load();
-        //stage.setFullScreen(true);
-        stage.show();
-        //stage.close per chiudere
-        //HelloController controller= new HelloController();
-        //controller.popola();
-        //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Main.fxml"));
-        //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        //stage.setTitle("Hello!");
-        //stage.setScene(scene);
-
-    } */
-
-    /*
-    @Override
-
-    public void start(Stage primaryStage) {
-        stages = new Views();
-    }*/
-
-    private void loadLoginView() {
-        /*
-        screenInfo();
-        stage.setTitle("MyShelfieDigitals S.p.A.");
-        //System.out.println("preFXML");
+    public void setController(){
         loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //System.out.println(loginController);
-        setLoginController(loader.getController());
-        //System.out.println(loginController);
-        loginController.setGui(this);
-        //System.out.println("postController");
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();*/
-    }
-
-    public void setController() {
-        loader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
         //System.out.println(loginController);
         setLoginController(loader.getController());
         //System.out.println(loginController);
         loginController.setGui(this);
     }
 
-    public void loadFinalPage() {
-        /*
-        loader= new FXMLLoader(getClass().getResource("/fxml/FinalPage.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        setFinalPageController(loader.getController());
-        finalPageController.setGui(this);
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-
-         */
+    public static double getWidth() {
+        return width;
     }
 
     public double getMaxX() {
@@ -231,6 +185,12 @@ public class GUI extends Application implements View {
 
     public double getMaxY() {
         return maxY;
+    }
+
+
+    @Override
+    public void setClient(Client client) {
+        GUI.client =client;
     }
 
     @Override
@@ -283,13 +243,8 @@ public class GUI extends Application implements View {
     @Override
     public void startGame() {
         getLoginController().loadGameView();
-        System.out.println("StartGAme message");
-        scene = 1;
-        //setController();
-        //getGameViewController().setGui(this);
-        //getLoginController().preGame();
-        //getLoginController().preGame();
-        //getGameViewController().setUp();
+        System.out.println("StartGAme mesage");
+        scene=1;
     }
 
     public Client getClient() {
@@ -323,7 +278,6 @@ public class GUI extends Application implements View {
     @Override
     public void endGame(Boolean isWinner) {
         getGameViewController().loadFinalPage();
-        getFinalPageController().compilePointsTable();
     }
 
     @Override
