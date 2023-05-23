@@ -384,7 +384,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         view.stopWaiting();
         virtualModel.setServerMessage(disconnectionMessage.getMessage());
         view.showMessage(disconnectionMessage.getMessage());
-        System.exit(0);
     }
 
     /**

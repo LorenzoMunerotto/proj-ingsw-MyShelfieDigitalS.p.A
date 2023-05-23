@@ -262,14 +262,8 @@ public class CLIDrawer {
                 " Chair: " + ((virtualModel.getMyUsername().equals(virtualModel.getPlayerUsername(0))) ? GREEN_BRIGHT + "true" + RESET : RED_BRIGHT + "false" + RESET),
                 " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET
         };
-
-        int maxLength = 0;
-        for (String line : gameInfoLines) {
-            maxLength = Math.max(maxLength, line.replaceAll("\\x1B\\[[;\\d]*m", "").length());
-        }
         for (String line : gameInfoLines) {
             gameInfoAsString.append(line);
-            gameInfoAsString.append(" ".repeat(maxLength - line.replaceAll("\\x1B\\[[;\\d]*m", "").length()));
             gameInfoAsString.append("\n");
         }
         return gameInfoAsString.toString();
