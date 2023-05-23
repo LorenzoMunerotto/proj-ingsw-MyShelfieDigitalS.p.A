@@ -48,7 +48,7 @@ public class LoginController implements Controller {
     private boolean usernamePress = false;
     private GUI gui;
 
-    private final Integer[] numbers = {2, 3, 4};
+    private Integer[] numbers = {2, 3, 4};
 
     @FXML
     private Button startGameButtonID;
@@ -59,11 +59,14 @@ public class LoginController implements Controller {
     }
 
     public void setErrorsLabelIDText(String error) {
-        Platform.runLater(() -> {
-            errorsTextID.getChildren().clear();
-            Text text = new Text(error);
-            errorsTextID.getChildren().add(text);
-            errorsTextID.setVisible(true);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                errorsTextID.getChildren().clear();
+                Text text = new Text(error);
+                errorsTextID.getChildren().add(text);
+                errorsTextID.setVisible(true);
+            }
         });
     }
 
@@ -102,7 +105,13 @@ public class LoginController implements Controller {
     }
 
     public void loadGameView() {
-        Platform.runLater(() -> gui.changeStage("/fxml/GameView.fxml"));
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                gui.changeStage("/fxml/GameView.fxml");
+
+            }
+        });
     }
 
     public void enterTheGame(ActionEvent event) throws IOException {
@@ -112,9 +121,12 @@ public class LoginController implements Controller {
 
 
     public void preGame() {
-        Platform.runLater(() -> {
-            startGameButtonID.setText("Enter the Game");
-            startGameButtonID.setVisible(true);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                startGameButtonID.setText("Enter the Game");
+                startGameButtonID.setVisible(true);
+            }
         });
 
     }
@@ -136,17 +148,17 @@ public class LoginController implements Controller {
         loginButtonID.setVisible(true);
     }
 
-    public void setUp(){
+    public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 paneID.setBackground(new Background(
                         new BackgroundImage(
-                        new Image(getClass().getResourceAsStream("/images/Display.jpg")),
-                        BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
-                        new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
-                        new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
-                )));
+                                new Image(getClass().getResourceAsStream("/images/Display.jpg")),
+                                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
+                                new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
+                                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
+                        )));
                 System.out.println("initialize");
                 numberLabelID.setVisible(false);
                 errorsTextID.setVisible(true);
@@ -160,8 +172,8 @@ public class LoginController implements Controller {
             }
         });
     }
-
     /*
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //backGroundID.setImage(new Image(getClass().getResourceAsStream("/images/BackgroundImage.jpg")));
@@ -175,5 +187,8 @@ public class LoginController implements Controller {
         userNameButtonID.setVisible(false);
         startGameButtonID.setVisible(false);
         nameLabelID.setVisible(false);
-    }*/
+    }
+
+     */
+
 }

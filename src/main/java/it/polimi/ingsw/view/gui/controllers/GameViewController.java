@@ -265,8 +265,8 @@ public class GameViewController implements Controller {
 
                 boardID.setHgap(2);
                 boardID.setVgap(2);
-                boardID.setMinSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
-                boardID.setMaxSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
+                boardID.setMinSize((gui.getMaxX()*(0.035)*9+4*9),(gui.getMaxX()*(0.035)*9+2*9));
+                boardID.setMaxSize((gui.getMaxX()*(0.035)*9+4*9),(gui.getMaxX()*(0.035)*9+2*9));
                 //boardID.setOnMouseClicked(clickItemTileBoardHandler);
                 boardID.setLayoutX(gui.getMaxX()*0.55);
                 //boardID.setLayoutY(gui.getMaxY()*0.30);
@@ -436,18 +436,15 @@ public class GameViewController implements Controller {
 
 
     public void rePrintAll(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                resetPrint();
-                fullBoard();
-                printAllLibrary();
-                printBoardOw();
-                fullLibrary();
-                commonCardUpdater();
-                boardID.setOnMouseClicked(clickItemTileBoardHandler);
-                libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
-            }
+        Platform.runLater(() -> {
+            resetPrint();
+            fullBoard();
+            printAllLibrary();
+            printBoardOw();
+            fullLibrary();
+            commonCardUpdater();
+            boardID.setOnMouseClicked(clickItemTileBoardHandler);
+            libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
         });
     }
 

@@ -185,6 +185,7 @@ public class CLI implements View {
             this.waitingThread.interrupt();
             this.waitingThread = null;
         }
+        System.out.println();
     }
 
     /**
