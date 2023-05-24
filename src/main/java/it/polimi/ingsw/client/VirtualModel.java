@@ -274,6 +274,7 @@ public class VirtualModel {
             throw new IllegalArgumentException("Invalid index");
         }
     }
+
     /**
      * Get the current player username.
      *
@@ -383,11 +384,7 @@ public class VirtualModel {
             } else {
                 Integer index1 = getPlayerIndex(o1.getValue0());
                 Integer index2 = getPlayerIndex(o2.getValue0());
-                if (index1 == -1 || index2 == -1) {
-                    throw new IllegalStateException("Usernames in the leaderboard not found in the list of players");
-                } else {
-                    return index1.compareTo(index2);
-                }
+                return index2.compareTo(index1);
             }
         });
         return leaderBoard;

@@ -5,7 +5,6 @@ import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
-import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.gui.GUI;
 
@@ -404,7 +403,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
             socketListener.send(new CheckConnection());
     }
 
-    public static void main(String[] Args){
+    public static void main(String[] Args) throws IOException {
         chooseServerIP();
         chooseServerPort();
         String viewType = "";
