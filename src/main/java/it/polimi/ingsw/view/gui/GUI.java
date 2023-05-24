@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
-import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
@@ -266,6 +265,11 @@ public class GUI extends Application implements View {
             getGameViewController().setErrorsTextIDText(message);
         }
         System.out.println(message);
+    }
+
+    @Override
+    public void showChatMessage(String sender, String message) {
+        getGameViewController().newChatMessage(sender, message);
     }
 
     public LoginController getLoginController() {

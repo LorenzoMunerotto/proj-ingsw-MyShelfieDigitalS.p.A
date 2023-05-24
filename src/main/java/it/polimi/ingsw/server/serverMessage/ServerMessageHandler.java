@@ -27,4 +27,5 @@ public interface ServerMessageHandler {
     void handle(LibrarySetMessage librarySetMessage);
     void handle(PlayerOrderSetMessage playerOrderSetMessage);
     void handle(CheckConnectionRequest checkConnectionMessage);
+    void handle(ChatServerMessage chatServerMessage);
 }

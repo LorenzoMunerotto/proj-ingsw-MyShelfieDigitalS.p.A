@@ -203,4 +203,7 @@ public class Server {
         VirtualClientMapSocketClientConnection.remove(client);
         System.out.println("Client has been successfully unregistered.");
     }
+
+
+
 }

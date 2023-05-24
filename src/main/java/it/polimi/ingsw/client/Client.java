@@ -409,6 +409,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
             socketListener.send(new CheckConnection());
     }
 
+    @Override
+    public void handle(ChatServerMessage chatServerMessage) {
+        view.showChatMessage(chatServerMessage.getSender(), chatServerMessage.getMessageText());
+    }
+
     public static void main(String[] Args){
         chooseServerIP();
         chooseServerPort();

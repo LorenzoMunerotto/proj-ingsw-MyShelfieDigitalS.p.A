@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.clientMessage;
 
+import it.polimi.ingsw.server.serverMessage.ChatServerMessage;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
@@ -22,6 +23,7 @@ public interface ClientMessageHandler {
      */
     void handle(NumOfPlayerChoice numOfPLayerChoice);
 
+
     /**
      * Handles the message usernameChoice.
      *
@@ -35,4 +37,6 @@ public interface ClientMessageHandler {
      * @param checkConnection the message checkConnection to handle.
      */
     void handle(CheckConnection checkConnection);
+
+    void handle(ChatClientMessage chatClientMessage);
 }

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.client.Client;
+import it.polimi.ingsw.client.clientMessage.ChatClientMessage;
 import it.polimi.ingsw.model.gameState.events.PlayerOrderSetEvent;
 import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 import it.polimi.ingsw.view.cli.CLIConstants;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.EMPTY;
 import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.NULL;
+
 
 /**
  * This class represents the GameHandler of the game.
@@ -328,5 +331,21 @@ public class GameHandler {
         }
         sb.append("}");
         return sb.toString();
+    }
+
+    public void handlerClientChatMessage(ChatClientMessage chatClientMessage) {
+        for (VirtualClient client : virtualClients) {
+            if(chatClientMessage.getReceiver().equals("All")){
+                if(!client.getUsername().equals(chatClientMessage.getSender())){
+                    client.send(new ChatServerMessage(chatClientMessage.getSender(),chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
+                    //client.send((ServerMessage) new ChatClientMessage(chatClientMessage.getSender(),chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
+                }
+                else {
+                    if (client.getUsername().equals(chatClientMessage.getReceiver())) {
+                        client.send((ServerMessage) new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
+                    }
+                }
+            }
+        }
     }
 }

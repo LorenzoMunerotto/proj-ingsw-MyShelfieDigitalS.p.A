@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
 <AnchorPane fx:id="anchorPaneID" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.GameViewController">
    <children>
       <TabPane prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE">
@@ -178,7 +180,17 @@
             </Tab>
             <Tab text="Messenger">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <AnchorPane fx:id="sp_mainID" prefHeight="396" prefWidth="478" xmlns:fx="http://javafx.com/fxml">
+                     <children>
+                        <Button fx:id="buttonSendChatMexID" text="Send"/>
+                        <TextField fx:id="tfMessageChatID" />
+                        <ScrollPane fx:id="sp_mainChatID" fitToWidth="true" >
+                           <content>
+                              <VBox fx:id="vboxMessagesChatID" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </ AnchorPane>
                </content>
             </Tab>
          </tabs>

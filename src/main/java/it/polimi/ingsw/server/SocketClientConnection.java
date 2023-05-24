@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 /**
@@ -110,6 +109,12 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
         connectionChecker.setClientIsConnected(true);
     }
 
+    @Override
+    public void handle(ChatClientMessage chatClientMessage) {
+        server.getGameHandlerByClientId(clientID).handlerClientChatMessage(chatClientMessage);
+    }
+
+
     /**
      * This method returns the boolean that indicates if the server is active.
      *
@@ -133,7 +138,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      *
      * @param serverMessage the server message
      */
-    public  void send(ServerMessage serverMessage) {
+    public void send(ServerMessage serverMessage) {
         synchronized (lockSend) {
             if (isActive()) {
                 try {
@@ -158,7 +163,6 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void handle(UsernameChoice usernameChoice) {
-
             clientID = server.registerConnection(usernameChoice.getUsername(), this);
             if (clientID == null) {
                 send(new UsernameRequest());

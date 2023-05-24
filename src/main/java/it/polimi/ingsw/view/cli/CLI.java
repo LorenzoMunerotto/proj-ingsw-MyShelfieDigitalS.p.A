@@ -320,6 +320,11 @@ public class CLI implements View {
         }
     }
 
+    @Override
+    public void showChatMessage(String sender, String message) {
+
+    }
+
     /**
      * Main method of the cli.
      *

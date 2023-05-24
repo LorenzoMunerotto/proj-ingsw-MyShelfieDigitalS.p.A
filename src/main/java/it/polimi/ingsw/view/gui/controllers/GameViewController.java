@@ -1,11 +1,15 @@
 package it.polimi.ingsw.view.gui.controllers;
 
 import it.polimi.ingsw.model.gameEntity.Coordinate;
+import it.polimi.ingsw.server.serverMessage.ChatServerMessage;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.gui.Result;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -25,7 +29,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +108,16 @@ public class GameViewController implements Controller {
     @FXML
     private TableView pointUserNameTableID;
 
+    @FXML
+    private AnchorPane sp_mainID;
+    @FXML
+    private Button buttonSendChatMexID;
+    @FXML
+    private TextField tfMessageChatID;
+    @FXML
+    private ScrollPane sp_mainChatID;
+    @FXML
+    private VBox vboxMessagesChatID;
 
     private List<Coordinate> coordinates = new ArrayList<>();
     private GUI gui;
@@ -212,6 +225,63 @@ public class GameViewController implements Controller {
         });
     }
 
+    public void setMessageChat(){
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String receiver=new String();
+                vboxMessagesChatID.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                        sp_main.setVvalue((Double) newValue);
+                    }
+                });
+                buttonSendChatMexID.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        String messageToSend = tfMessageChatID.getText();
+                        if (!messageToSend.isEmpty()) {
+                            HBox hBox = new HBox();
+                            hBox.setAlignment(Pos.CENTER_RIGHT);
+                            hBox.setPadding(new Insets(5, 5, 5, 10));
+                            Text text = new Text(messageToSend);
+                            //text.setStyle("-fx-color: rgb(239, 242, 255);");
+                            TextFlow textFlow = new TextFlow(text);
+                            textFlow.setStyle("-fx-color: rgb(239, 242, 255); -fx-background-color: rgb(15, 125, 242); -fx-background-radius: 20px;");
+                            textFlow.setPadding(new Insets(5, 10, 5, 10));
+                            text.setFill(Color.color(0.934, 0.945, 0.996));
+                            hBox.getChildren().add(textFlow);
+                            vboxMessagesChatID.getChildren().add(hBox);
+                            gui.getClient().handle(new ChatServerMessage(gui.getClient().getVirtualModel().getMyUsername(),receiver, messageToSend));
+                            tfMessageChatID.clear();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public static void addLabel (String messageFromClient, VBox vbox) {
+        HBox hBox = new HBox ();
+        hBox.setAlignment (Pos.CENTER_LEFT);
+        hBox.setPadding (new Insets( 5, 5, 5, 10));
+        Text text = new Text (messageFromClient);
+        TextFlow textFlow = new TextFlow(text);
+        textFlow. setStyle("-fx-background-color: rgb(233, 233 ,235); -fx-background-radius: 20px");
+        textFlow. setPadding (new Insets( 5, 10,5,10));
+        hBox.getChildren().add(textFlow);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                vbox.getChildren().add(hBox);
+            }
+        });
+    }
+
+    public void newChatMessage(String sender, String messageText){
+
+    }
+
 
     public void fullLibrary() {
         Platform.runLater(new Runnable() {
@@ -268,8 +338,6 @@ public class GameViewController implements Controller {
                         boardID.add(imageView, c, r);
                     }
                 }
-
-
                 boardID.setHgap(2);
                 boardID.setVgap(2);
                 boardID.setMinSize((gui.getMaxX() * (0.035) * 9 + 4 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
@@ -457,6 +525,12 @@ public class GameViewController implements Controller {
                 sp_main.setMinHeight(gui.getMaxY() * 0.12);
                 sp_main.setLayoutX(gui.getMaxX() * 0.46);
                 sp_main.setLayoutY(gui.getMaxY() * 0.02);
+                vBox_messages.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                        sp_main.setVvalue((Double) newValue);
+                    }
+                });
                 vBox_messages.setVisible(true);
                 sp_main.setVisible(true);
             }
@@ -511,6 +585,7 @@ public class GameViewController implements Controller {
                 fullLibrary();
                 fullBoard();
                 printBoardOw();
+                setMessageChat();
                 libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
                 itemTileBoxID.setLayoutX(gui.getMaxX() * 0.70);
                 itemTileBoxID.setMaxHeight(gui.getMaxY() * 0.7);

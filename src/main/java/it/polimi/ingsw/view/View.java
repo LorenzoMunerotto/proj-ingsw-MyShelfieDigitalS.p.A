@@ -101,4 +101,6 @@ public interface View  {
      * Shows a message.
      */
      void showMessage(String message);
+
+     void showChatMessage(String sender, String messageText);
 }
