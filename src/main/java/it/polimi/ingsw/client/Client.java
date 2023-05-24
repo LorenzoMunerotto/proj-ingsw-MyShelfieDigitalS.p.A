@@ -216,7 +216,14 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     @Override
     public void handle(EndGameMessage endGameMessage){
-
+        view.showGame();
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        boolean isWinner = virtualModel.getMyUsername().equals(virtualModel.getLeaderBoard().get(0).getValue0());
+        view.endGame(isWinner);
     }
 
     @Override

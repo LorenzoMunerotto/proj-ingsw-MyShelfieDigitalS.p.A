@@ -380,7 +380,7 @@ public class VirtualModel {
                 if (index1 == -1 || index2 == -1) {
                     throw new IllegalStateException("Usernames in the leaderboard not found in the list of players");
                 } else {
-                    return index1.compareTo(index2);
+                    return index2.compareTo(index1);
                 }
             }
         });
