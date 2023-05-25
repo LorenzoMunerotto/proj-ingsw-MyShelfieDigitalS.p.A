@@ -338,11 +338,10 @@ public class GameHandler {
             if(chatClientMessage.getReceiver().equals("All")){
                 if(!client.getUsername().equals(chatClientMessage.getSender())){
                     client.send(new ChatServerMessage(chatClientMessage.getSender(),chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
-                    //client.send((ServerMessage) new ChatClientMessage(chatClientMessage.getSender(),chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
                 }
                 else {
                     if (client.getUsername().equals(chatClientMessage.getReceiver())) {
-                        client.send((ServerMessage) new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
+                        client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
                     }
                 }
             }

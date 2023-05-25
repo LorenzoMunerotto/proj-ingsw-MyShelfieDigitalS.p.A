@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.clientMessage.ChatClientMessage;
 import it.polimi.ingsw.client.clientMessage.CheckConnection;
 import it.polimi.ingsw.view.events.*;
 import it.polimi.ingsw.view.View;
@@ -7,6 +8,7 @@ import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.gui.GUI;
+import javafx.scene.layout.VBox;
 
 import java.util.Arrays;
 import java.util.List;
@@ -184,6 +186,16 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     public void handle(NumOfPlayerChoice numOfPlayerChoice) {
         socketListener.send(numOfPlayerChoice);
     }
+
+    @Override
+    public void sendChatMessage(ChatClientMessage chatClientMessage) {
+        socketListener.send(chatClientMessage);
+    }
+    @Override
+    public void handle(ChatServerMessage chatServerMessage) {
+        view.showChatMessage(chatServerMessage.getSender(), chatServerMessage.getMessageText());
+    }
+
 
     /**
      * This method handles the move request.
@@ -409,10 +421,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
             socketListener.send(new CheckConnection());
     }
 
-    @Override
-    public void handle(ChatServerMessage chatServerMessage) {
-        view.showChatMessage(chatServerMessage.getSender(), chatServerMessage.getMessageText());
-    }
+
 
     public static void main(String[] Args){
         chooseServerIP();

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.events;
 
+import it.polimi.ingsw.client.clientMessage.ChatClientMessage;
 import it.polimi.ingsw.listener.Event;
 import it.polimi.ingsw.listener.EventHandler;
 import it.polimi.ingsw.listener.Listener;
@@ -26,6 +27,8 @@ public interface ViewChangeEventHandler extends EventHandler , Listener {
     void handle(Move move);
     void handle(UsernameChoice usernameChoice);
     void handle(NumOfPlayerChoice numOfPlayerChoice);
+
+    void sendChatMessage(ChatClientMessage chatClientMessage);
 
 
 }

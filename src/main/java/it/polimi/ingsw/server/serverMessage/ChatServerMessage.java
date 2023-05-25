@@ -39,11 +39,9 @@ public class ChatServerMessage implements ServerMessage {
         this.receiver = receiver;
     }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
-    }
 
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
+        serverMessageHandler.handle(this);
     }
 }

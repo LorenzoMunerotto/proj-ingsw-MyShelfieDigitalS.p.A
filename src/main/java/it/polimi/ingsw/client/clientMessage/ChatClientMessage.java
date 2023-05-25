@@ -42,6 +42,7 @@ public class ChatClientMessage implements ClientMessage {
 
     @Override
     public void accept(ClientMessageHandler clientMessageHandler) {
+        clientMessageHandler.handle(this);
     }
 
 }

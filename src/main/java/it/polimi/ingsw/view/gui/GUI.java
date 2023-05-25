@@ -17,6 +17,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -269,7 +270,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showChatMessage(String sender, String message) {
-        getGameViewController().newChatMessage(sender, message);
+        getGameViewController().addMessageReceived(sender, message);
     }
 
     public LoginController getLoginController() {
