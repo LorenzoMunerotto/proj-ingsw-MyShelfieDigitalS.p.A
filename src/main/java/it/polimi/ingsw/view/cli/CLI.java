@@ -6,22 +6,16 @@ import it.polimi.ingsw.view.View;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;
+import jline.console.ConsoleReader;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class represents the CLI view of the game.
  */
 public class CLI implements View {
 
-    /**
-     * It is the BufferedReader used to read the user input.
-     */
-    private static final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    private static ConsoleReader consoleReader;
     private final VirtualModel virtualModel;
     /**
      * It is the drawer used to draw the game.
@@ -40,10 +34,11 @@ public class CLI implements View {
     /**
      * Default constructor, initializes the drawer.
      */
-    public CLI() {
+    public CLI() throws IOException {
         this.virtualModel = new VirtualModel();
         drawer = new CLIDrawer(virtualModel);
         parser = new CLIParser();
+        consoleReader = new ConsoleReader();
     }
 
     /**
@@ -74,31 +69,20 @@ public class CLI implements View {
     /**
      * This is a ReadLine that can be interrupted, so the client isn't blocked when waiting for user input
      *
-     * @param reader
-     * @return
-     * @throws InterruptedException
-     * @throws IOException
+     * @return the string inserted by the user
+     * @throws InterruptedException if the thread is interrupted
+     * @throws IOException          if there is an error while reading the input
      */
-    private String interruptibleReadLine(BufferedReader reader)
+    private String interruptionReadLine()
             throws InterruptedException, IOException {
-        Pattern line = Pattern.compile("^(.*)\\R");
-        Matcher matcher;
-        boolean interrupted = false;
-
-        String os = System.getProperty("os.name");
-        StringBuilder result = new StringBuilder();
-        int chr = -1;
-        do {
-            if (reader.ready()) chr = reader.read();
-            if (chr > -1) {
-                result.append((char) chr);
-                if (os.contains("Windows")) System.out.print(chr);
-            }
-            matcher = line.matcher(result.toString());
-            interrupted = Thread.interrupted(); // resets flag, call only once
-        } while (!interrupted && !matcher.matches());
-        if (interrupted) throw new InterruptedException();
-        return (matcher.matches() ? matcher.group(1) : "");
+        consoleReader.setExpandEvents(false);
+        String line;
+        try{
+            line = consoleReader.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return line;
     }
 
     /**
@@ -111,7 +95,8 @@ public class CLI implements View {
                 String username = "";
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert your username [%s4%s-%s20%s alphanumeric characters]: ", CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
                 while (username.isBlank()) {
-                    username = interruptibleReadLine(CLI.bufferedReader);
+
+                    username = interruptionReadLine();
                     if (!isUsernameValid(username)) {
                         username = "";
                         System.out.printf(CLIConstants.CONSOLE_ARROW + "%sInvalid username%s, please try again [%s4%s-%s20%s alphanumeric characters]: ",
@@ -144,7 +129,7 @@ public class CLI implements View {
                         CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
                 while (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER) {
                     try {
-                        playersNumberString = interruptibleReadLine(CLI.bufferedReader);
+                        playersNumberString = interruptionReadLine();
                         playersNumber = Integer.parseInt(playersNumberString);
                         if (playersNumber < MIN_PLAYERS_NUMBER || playersNumber > MAX_PLAYERS_NUMBER)
                             throw new NumberFormatException();
@@ -174,7 +159,7 @@ public class CLI implements View {
                 System.out.printf(CLIConstants.CONSOLE_ARROW + "Please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
                         CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
                 while (coordinates.isBlank()) {
-                    coordinates = interruptibleReadLine(CLI.bufferedReader).toUpperCase();
+                    coordinates = interruptionReadLine().toUpperCase();
                     if (!isCoordinatesValid(coordinates)) {
                         coordinates = "";
                         System.out.printf(CLIConstants.CONSOLE_ARROW + "> %sInvalid input%s, please insert the coordinates of the tile you want to place [%sA1%s-%sI9%s]: ",
@@ -188,7 +173,7 @@ public class CLI implements View {
                         CLIConstants.CYAN_BRIGHT, CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, CLIConstants.RESET);
                 while (column < 1 || column > 5) {
                     try {
-                        columnString = interruptibleReadLine(CLI.bufferedReader).strip();
+                        columnString = interruptionReadLine().strip();
                         column = Integer.parseInt(columnString);
                         if (column < 1 || column > 5)
                             throw new NumberFormatException();
@@ -245,9 +230,9 @@ public class CLI implements View {
     }
 
     /**
-     * This method change the CurrentViewThread
+     * This method change the CurrentViewThread.
      *
-     * @param runnable
+     * @param runnable the runnable to be executed
      */
     private void StopSetStartCurrentViewThread(Runnable runnable) {
         if (currentViewThread != null && currentViewThread.isAlive()) {
