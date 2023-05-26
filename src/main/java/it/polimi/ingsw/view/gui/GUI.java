@@ -270,7 +270,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showChatMessage(String sender, String message) {
-        getGameViewController().addMessageReceived(sender, message);
+        getGameViewController().showChatMessage(sender, message,ChatMessageType.RECEIVER);
     }
 
     public LoginController getLoginController() {
