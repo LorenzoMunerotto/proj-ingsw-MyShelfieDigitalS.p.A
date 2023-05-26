@@ -10,7 +10,7 @@ public interface ServerMessageHandler {
     void handle(BreakRulesMessage breakRulesMessage);
     void handle(CommonCardReachMessage commonCardReachMessage);
     void handle(CommonCardsSetMessage commonCardsSetMessage);
-    void handle(ConnectionMessage connectionMessage);
+
     void handle(CustomMessage customMessage);
     void handle(DisconnectionMessage disconnectionMessage);
     void handle(EndGameMessage endGameMessage);

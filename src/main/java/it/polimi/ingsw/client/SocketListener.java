@@ -7,6 +7,8 @@ import it.polimi.ingsw.server.serverMessage.*;
 import java.io.*;
 import java.net.Socket;
 
+import static java.lang.Thread.sleep;
+
 /**
  * This class is the socket listener of the client.
  */
@@ -15,23 +17,24 @@ public class SocketListener implements Runnable {
     /**
      * It is the client.
      */
-    Client client;
+    private Client client;
     /**
      * It is the socket of the server.
      */
-    Socket socketServer;
+    private Socket socketServer;
     /**
      * It is the input stream of the socket.
      */
-    ObjectInputStream inputStream;
+    private ObjectInputStream inputStream;
     /**
      * It is the output stream of the socket.
      */
-    ObjectOutputStream outputStream;
+    private ObjectOutputStream outputStream;
     /**
      * Lock for send method
      */
-    Object lockSend = new Object();
+    private Object lockSend = new Object();
+    private Boolean active;
 
     /**
      * Default constructor, initialize the client and the socket.
@@ -41,20 +44,19 @@ public class SocketListener implements Runnable {
      * @param port     is the port of the server
      */
     public SocketListener(Client client, String serverIp, int port) {
-
         this.client = client;
         try {
             System.out.println("I'm trying to connect to the server...");
             socketServer = new Socket(serverIp, port);
             System.out.println(CLIConstants.GREEN_BRIGHT + "Connection established" + CLIConstants.RESET);
             System.out.println("Please wait while we load the resources...");
-
             outputStream = new ObjectOutputStream(socketServer.getOutputStream());
             inputStream = new ObjectInputStream(socketServer.getInputStream());
 
         } catch (IOException ex) {
             System.err.println("The server is not running");
         }
+        this.active=true;
     }
 
     /**
@@ -63,13 +65,17 @@ public class SocketListener implements Runnable {
      * @throws IOException            if there is a problem with the socket
      * @throws ClassNotFoundException if the class of the object received from the socket cannot be found
      */
-    public void readFromStream() throws ClassNotFoundException {
-        try {
+    public void readFromStream() throws ClassNotFoundException, IOException {
             ServerMessage input = (ServerMessage) inputStream.readObject();
             input.accept(client);
-        }catch(IOException e){
-            //
-        }
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     /**
@@ -77,14 +83,32 @@ public class SocketListener implements Runnable {
      */
     @Override
     public void run() {
-        try {
-            while (true) {
+        Integer counterEOFExecption =0;
+        while (isActive()) {
+            try {
                 readFromStream();
+                counterEOFExecption =0;
+            } catch (IOException e) {
+                if (!(e instanceof EOFException)) {
+                    System.out.println("Lost connection with the server, IOException");
+                } else{
+                    counterEOFExecption++;
+                    try {
+                        sleep(100);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    if (counterEOFExecption>=25){
+                        setActive(false);
+                        client.lostConnection();
+                    }
+                }
+            } catch (ClassNotFoundException e) {
+                System.out.println("Lost connection with the server, ClassNotFoundException");
+                setActive(false);
             }
-        } catch (ClassNotFoundException e) {
-            System.err.println("ClassNotFoundException occurred in run method: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
+        }
+
             // Close the streams and socket here to make sure they are always closed
             try {
                 if (inputStream != null) {
@@ -100,8 +124,9 @@ public class SocketListener implements Runnable {
                 System.err.println("Failed to close resources in run method: " + e.getMessage());
                 e.printStackTrace();
             }
-        }
+
     }
+
 
 
     /**

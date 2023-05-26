@@ -392,15 +392,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         System.exit(1);
     }
 
-    /**
-     * This method handles the connection message.
-     *
-     * @param connectionMessage the connection message
-     */
-    @Override
-    public void handle(ConnectionMessage connectionMessage) {
-    }
-
     @Override
     public void handle(PlayerOrderSetMessage playerOrderSetMessage) {
         virtualModel.setPlayerIndex(playerOrderSetMessage.getPlayerOrder());
@@ -409,6 +400,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     @Override
     public void handle(CheckConnectionRequest checkConnectionRequest) {
             socketListener.send(new CheckConnection());
+    }
+
+    public void lostConnection(){
+        view.stopWaiting();
+        view.showMessage("Client lost connection with the server, please check your internet connection and if the server is running");
     }
 
     public static void main(String[] Args) throws IOException {
