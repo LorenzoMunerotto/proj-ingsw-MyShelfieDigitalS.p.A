@@ -180,7 +180,7 @@ public class Server {
         if (waiting.size() == 1) {
             socketClientConnection.send(new NumOfPlayerRequest());
         } else if (waiting.size() == numOfPlayers) {
-            currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached!"));
+            currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached!\nThe games is starting..."));
             currentGameHandler.startGame();
             waiting.clear();
             numOfPlayers=-1;

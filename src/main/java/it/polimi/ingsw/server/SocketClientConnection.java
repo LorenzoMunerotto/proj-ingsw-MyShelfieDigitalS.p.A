@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 /**
@@ -48,15 +47,15 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     private boolean active =true;
     /**
-     * Lock for send method
+     * Lock for send method.
      */
     private final Object lockSend = new Object();
     /**
-     * The ExcutorService
+     * The service executor.
      */
     private final ExecutorService executorService;
     /**
-     * The ConnectionChecker
+     * The connection checker.
      */
     private final ConnectionChecker connectionChecker;
     /**
@@ -100,9 +99,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     public void readFromStream() throws ClassNotFoundException, IOException {
             ClientMessage input = (ClientMessage) inputStream.readObject();
-            new Thread(()->{
-                input.accept(this);
-            }).start();
+            new Thread(()-> input.accept(this)).start();
     }
 
     @Override
