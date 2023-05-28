@@ -76,7 +76,7 @@
                         </VBox>
                         <VBox fx:id="vBoxCommonID" prefHeight="257.0" prefWidth="617.0">
                            <children>
-                              <Label fx:id="commonCardLabelID" text="Common Goal Card">
+                              <Label fx:id="commonCardLabelID" text="Common Goal Cards:">
                                  <font>
                                     <Font size="15.0" />
                                  </font></Label>

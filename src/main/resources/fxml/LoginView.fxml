@@ -59,7 +59,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <TextFlow fx:id="errorsTextID" layoutX="95.0" layoutY="177.0" prefHeight="67.0" prefWidth="439.0">
+            <TextFlow fx:id="errorsTextID" layoutX="171.0" layoutY="190.0" prefHeight="47.0" prefWidth="247.0">
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </padding>

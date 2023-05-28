@@ -165,9 +165,7 @@ public class GameViewController implements Controller {
                 Node node = (Node) t.getTarget();
                 int column = GridPane.getColumnIndex(node);
                 labelLibraryID.setText(libraryBaseText + "You selected row number " + String.valueOf(column + 1));
-                //System.out.println("handle Library Clicl Pre");
                 gui.getClient().handle(new Move(coordinates, column));
-                //System.out.println("handle Library Clicl Pre");
                 coordinates.clear();
                 itemTile1ID.setImage(null);
                 itemTile2ID.setImage(null);
@@ -270,7 +268,6 @@ public class GameViewController implements Controller {
                         hBoxR.setAlignment (Pos.CENTER_LEFT);
                         hBoxR.setPadding (new Insets( 5, 5, 5, 10));
                         Text text = new Text (sender+ ": "+messageChatContent);
-                        //TextFlow textFlow = new TextFlow(text);
                         text.setFill(Color.color(0, 0, 0));
                         TextFlow textFlow = new TextFlow(text);
                         textFlow.setStyle("-fx-text-fill: black; -fx-background-color: orange; -fx-background-radius: 10px ;");
@@ -284,11 +281,9 @@ public class GameViewController implements Controller {
                         hBoxS.setAlignment(Pos.CENTER_RIGHT);
                         hBoxS.setPadding(new Insets(5, 5, 5, 10));
                         Text textS = new Text(messageChatContent);
-                        //text.setStyle("-fx-color: rgb(239, 242, 255);");
                         textS.setFill(Color.color(0, 0, 0));
                             TextFlow textFlowS = new TextFlow(textS);
                         textFlowS.setStyle("-fx-text-fill: black; -fx-background-color: lime; -fx-background-radius: 10px ;");
-                            //textFlow.setStyle("-fx-color: rgb(239, 242, 255); -fx-background-color: rgb(15, 125, 242); -fx-background-radius: 20px;");
                         textFlowS.setPadding(new Insets(5, 10, 5, 10));
                         textS.setFill(Color.color(0.934, 0.945, 0.996));
                         hBoxS.getChildren().add(textFlowS);
@@ -298,10 +293,6 @@ public class GameViewController implements Controller {
                 }
             }
         });
-
-    }
-
-    public void newChatMessage(String sender, String messageText){
 
     }
 
@@ -363,11 +354,9 @@ public class GameViewController implements Controller {
                 }
                 boardID.setHgap(2);
                 boardID.setVgap(2);
-                boardID.setMinSize((gui.getMaxX() * (0.035) * 9 + 4 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
-                boardID.setMaxSize((gui.getMaxX() * (0.035) * 9 + 4 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
-                //boardID.setOnMouseClicked(clickItemTileBoardHandler);
+                boardID.setMinSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
+                boardID.setMaxSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
                 boardID.setLayoutX(gui.getMaxX() * 0.55);
-                //boardID.setLayoutY(gui.getMaxY()*0.30);
                 boardID.setLayoutY(gui.getMaxY() * 0.35);
                 boardID.setVisible(true);
             }
@@ -390,8 +379,8 @@ public class GameViewController implements Controller {
         }
         boardOwID.setHgap(2);
         boardOwID.setVgap(2);
-        boardOwID.setMinSize((gui.getMaxX() * (0.035) * 9 + 2 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
-        boardOwID.setMaxSize((gui.getMaxX() * (0.035) * 9 + 2 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
+        boardOwID.setMinSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
+        boardOwID.setMaxSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
         boardOwID.setLayoutX(gui.getMaxX() * 0.55);
         boardOwID.setLayoutY(gui.getMaxY() * 0.35);
         boardOwID.setVisible(true);
@@ -415,10 +404,11 @@ public class GameViewController implements Controller {
             aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY() * 0.55);
             aLibraryGridsOw.get(i).setHgap(2);
             aLibraryGridsOw.get(i).setVgap(2);
-            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX() * (0.030) * 5 + 2 * 5), (gui.getMaxX() * (0.030) * 6 + 2 * 6));
-            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX() * (0.030) * 5 + 2 * 5), (gui.getMaxX() * (0.030) * 6 + 2 * 6));
+            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX() * (0.030) * 5 + 2 * 6), (gui.getMaxX() * (0.030) * 6 + 2 * 7));
+            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX() * (0.030) * 5 + 2 * 6), (gui.getMaxX() * (0.030) * 6 + 2 * 7));
             aLibraryGridsOw.get(i).setVisible(true);
-            aLabelLib.get(i).setText(libraryMap.getKey());
+            aLabelLib.get(i).setText(libraryMap.getKey()+":");
+            aLabelLib.get(i).setStyle("-fx-background-color: #ffffff");
             aLabelLib.get(i).setVisible(true);
             i++;
         }
@@ -427,14 +417,14 @@ public class GameViewController implements Controller {
         library2ID.setLayoutX(gui.getMaxX() * 0.27);
         library2ID.setLayoutY(gui.getMaxY() * 0.10);
         library3ID.setLayoutX(gui.getMaxX() * 0.01);
-        library3ID.setLayoutY(gui.getMaxY() * 0.60);
+        library3ID.setLayoutY(gui.getMaxY() * 0.55);
         library4ID.setLayoutX(gui.getMaxX() * 0.27);
-        library4ID.setLayoutY(gui.getMaxY() * 0.6);
+        library4ID.setLayoutY(gui.getMaxY() * 0.55);
         labelOwL1ID.setLayoutX(gui.getMaxX() * 0.01);
         labelOwL1ID.setLayoutY(gui.getMaxY() * 0.05);
         labelOwL2ID.setLayoutX(gui.getMaxX() * 0.27);
         labelOwL2ID.setLayoutY(gui.getMaxY() * 0.05);
-        labelOwL3ID.setLayoutX(gui.getMaxX() * 0.05);
+        labelOwL3ID.setLayoutX(gui.getMaxX() * 0.01);
         labelOwL3ID.setLayoutY(gui.getMaxY() * 0.50);
         labelOwL4ID.setLayoutX(gui.getMaxX() * 0.27);
         labelOwL4ID.setLayoutY(gui.getMaxY() * 0.50);
@@ -475,8 +465,8 @@ public class GameViewController implements Controller {
                 pointUserNameTableID.getItems().addAll(data);
                 pointUserNameTableID.setLayoutY(gui.getMaxY()*0.4);
                 pointUserNameTableID.setLayoutX(gui.getMaxX()*0.01);
-                pointUserNameTableID.setMaxSize(gui.getMaxX()*0.40,gui.getMaxY()*0.10);
-                pointUserNameTableID.setMinSize(gui.getMaxX()*0.40,gui.getMaxY()*0.10);
+                pointUserNameTableID.setMaxSize(gui.getMaxX()*0.40,75);
+                pointUserNameTableID.setMinSize(gui.getMaxX()*0.40,75);
                 pointUserNameTableID.setVisible(true);
             }
         });    }

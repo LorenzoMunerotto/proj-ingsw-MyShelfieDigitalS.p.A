@@ -62,15 +62,19 @@ public class LoginController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                numberLabelID.setVisible(false);
                 errorsTextID.getChildren().clear();
                 Text text = new Text(error);
+                text.setStyle("-fx-font: 14 arial; ");
                 errorsTextID.getChildren().add(text);
+                errorsTextID.setStyle("-fx-background-color: white");
                 errorsTextID.setVisible(true);
             }
         });
     }
 
     public void userNameSubmit(ActionEvent actionEvent) {
+        numberLabelID.setVisible(false);
         if (gui.isUsernameValid(textNameInputID.getText())) {
             errorsTextID.getChildren().clear();
             gui.setUsername(textNameInputID.getText());
@@ -81,6 +85,7 @@ public class LoginController implements Controller {
             usernamePress = false;
             errorsTextID.getChildren().clear();
             Text text = new Text("Invalid username, please try again");
+            errorsTextID.setStyle("-fx-background-color: white");
             errorsTextID.getChildren().add(text);
             errorsTextID.setVisible(true);
             textNameInputID.clear();
@@ -88,11 +93,13 @@ public class LoginController implements Controller {
     }
 
     public void submitNumberOfPlayer(ActionEvent event) {
+        numberLabelID.setVisible(false);
         if (numberBoxID.getValue() == null) {
             textNameInputID.clear();
             errorsTextID.getChildren().clear();
             Text text = new Text("Please, select the exact number of players for the game");
             errorsTextID.getChildren().add(text);
+            errorsTextID.setStyle("-fx-background-color: white");
             errorsTextID.setVisible(true);
         } else if (numberBoxID.getValue() != null) {
             errorsTextID.getChildren().clear();
@@ -136,7 +143,6 @@ public class LoginController implements Controller {
         nameLabelID.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000FF;");
         nameLabelID.setVisible(true);
         userNameButtonID.setVisible(true);
-        System.out.println("chooseUsernameView");
     }
 
 
@@ -172,23 +178,5 @@ public class LoginController implements Controller {
             }
         });
     }
-    /*
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        //backGroundID.setImage(new Image(getClass().getResourceAsStream("/images/BackgroundImage.jpg")));
-        System.out.println("initialize");
-        numberLabelID.setVisible(false);
-        errorsTextID.setVisible(true);
-        numberBoxID.setVisible(false);
-        numberLabelID.setVisible(false);
-        loginButtonID.setVisible(false);
-        textNameInputID.setVisible(false);
-        userNameButtonID.setVisible(false);
-        startGameButtonID.setVisible(false);
-        nameLabelID.setVisible(false);
-    }
-
-     */
 
 }
