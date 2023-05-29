@@ -6,8 +6,6 @@ import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.gui.ChatMessageType;
 import it.polimi.ingsw.view.gui.Result;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -107,9 +105,7 @@ public class GameViewController implements Controller {
     @FXML
     private Label labelLibraryID;
     @FXML
-    private TableView pointUserNameTableID;
-    @FXML
-    private AnchorPane sp_mainID;
+    private TableView<Result> pointUserNameTableID;
     @FXML
     private Button buttonSendChatMexID;
     @FXML
@@ -121,8 +117,9 @@ public class GameViewController implements Controller {
     private List<Coordinate> coordinates = new ArrayList<>();
     private GUI gui;
     private VirtualModel virtualModel;
+    private int mex;
     private boolean youTurn = false;
-    EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
+    EventHandler<MouseEvent> clickItemTileBoardHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent t) {
             if (youTurn == true) {
@@ -200,7 +197,6 @@ public class GameViewController implements Controller {
         imageView.setFitWidth(gui.getMaxX() * (0.030));
         imageView.setVisible(true);
     }
-
     public void setChatView(){
         Platform.runLater(new Runnable() {
             @Override
@@ -309,8 +305,8 @@ public class GameViewController implements Controller {
                 vBoxLibraryID.setLayoutY(gui.getMaxY() * 0.50);
                 libraryID.setHgap(2);
                 libraryID.setVgap(2);
-                libraryID.setMinSize((gui.getMaxX() * (0.030) * 5 + 4 * 5), (gui.getMaxX() * (0.030) * 6 + 4 * 6));
-                libraryID.setMaxSize((gui.getMaxX() * (0.030) * 5 + 4 * 5), (gui.getMaxX() * (0.030) * 6 + 4 * 6));
+                libraryID.setMinSize((gui.getMaxX()*(0.030)*5+4*5),(gui.getMaxX()*(0.030)*6+4*6));
+                libraryID.setMaxSize((gui.getMaxX()*(0.030)*5+4*5),(gui.getMaxX()*(0.030)*6+4*6));
                 libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
                 vBoxLibraryID.setMinWidth(gui.getMaxX() * 0.40);
                 vBoxLibraryID.setMinHeight(gui.getMaxY() * 0.50);
@@ -325,9 +321,9 @@ public class GameViewController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                for (int c = 0; c < 9; c++) {
-                    for (int r = 0; r < 9; r++) {
-                        ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
+                for (int column = 0; column < 9; column++) {
+                    for (int row = 0; row < 9; row++) {
+                        ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png"))));
                         imageView.setX(90);
                         imageView.setY(90);
                         imageView.setPreserveRatio(true);
@@ -335,7 +331,7 @@ public class GameViewController implements Controller {
                         imageView.setFitWidth(gui.getMaxX() * (0.035));
                         imageView.setOnMouseClicked(mouseEvent -> {
                             if (youTurn && coordinates.size() < 3) {
-                                imageView.setImage(new Image(getClass().getResourceAsStream("/images/Black.png")));
+                                imageView.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Black.png"))));
                                 imageView.setFitHeight(gui.getMaxX() * (0.035));
                                 imageView.setFitWidth(gui.getMaxX() * (0.035));
                             }
@@ -359,7 +355,7 @@ public class GameViewController implements Controller {
     public void printBoardOw() {
         for (int c = 0; c < 9; c++) {
             for (int r = 0; r < 9; r++) {
-                ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png")));
+                ImageView imageView = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[r][c].toString() + ".png"))));
                 imageView.setX(90);
                 imageView.setY(90);
                 imageView.setPreserveRatio(true);
@@ -380,23 +376,23 @@ public class GameViewController implements Controller {
     public void printAllLibrary() {
         int i = 0;
         for (Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()) {
-            for (int c = 0; c < 5; c++) {
-                for (int r = 0; r < 6; r++) {
-                    ImageView imageViewLibOw = new ImageView(new Image(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[r][c].toString() + ".png")));
-                    imageViewLibOw.setX(90);
-                    imageViewLibOw.setY(90);
+            for (int column = 0; column < 5; column++) {
+                for (int row = 0; row < 6; row++) {
+                    ImageView imageViewLibOw = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[row][column].toString() + ".png"))));
+                    //imageViewLibOw.setX(90);
+                    //imageViewLibOw.setY(90);
                     imageViewLibOw.setPreserveRatio(true);
-                    imageViewLibOw.setFitHeight(gui.getMaxX() * (0.030));
-                    imageViewLibOw.setFitWidth(gui.getMaxX() * (0.030));
-                    aLibraryGridsOw.get(i).add(imageViewLibOw, c, r);
+                    imageViewLibOw.setFitHeight(gui.getMaxX() * (0.025));
+                    imageViewLibOw.setFitWidth(gui.getMaxX() * (0.025));
+                    aLibraryGridsOw.get(i).add(imageViewLibOw, column, row);
                 }
             }
             aLibraryGridsOw.get(i).setLayoutX(gui.getMaxX() * 0.05);
             aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY() * 0.55);
             aLibraryGridsOw.get(i).setHgap(2);
             aLibraryGridsOw.get(i).setVgap(2);
-            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX() * (0.030) * 5 + 2 * 6), (gui.getMaxX() * (0.030) * 6 + 2 * 7));
-            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX() * (0.030) * 5 + 2 * 6), (gui.getMaxX() * (0.030) * 6 + 2 * 7));
+            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX()*(0.025)*5+4*5),(gui.getMaxX()*(0.025)*6+4*6));
+            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX()*(0.025)*5+4*5),(gui.getMaxX()*(0.025)*6+4*6));
             aLibraryGridsOw.get(i).setVisible(true);
             aLabelLib.get(i).setText(libraryMap.getKey()+":");
             aLabelLib.get(i).setStyle("-fx-background-color: #ffffff");
@@ -422,8 +418,8 @@ public class GameViewController implements Controller {
     }
 
 
-    public void personalCardInizializer() {
-        personalCardImgID.setImage(new Image(getClass().getResourceAsStream("/images/Personal_Goals" + virtualModel.getNumberPersonalCard() + ".png")));
+    public void personalCardInitializer() {
+        personalCardImgID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Personal_Goals" + virtualModel.getNumberPersonalCard() + ".png"))));
         vBoxPersonalID.setLayoutX(gui.getMaxX() * 0.35);
         vBoxPersonalID.setLayoutY(gui.getMaxY() * 0.60);
         vBoxPersonalID.setFillWidth(true);

@@ -138,9 +138,7 @@ public class GUI extends Application implements View {
     }
     public void setController(){
         loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
-        //System.out.println(loginController);
         setLoginController(loader.getController());
-        //System.out.println(loginController);
         loginController.setGui(this);
     }
 
@@ -208,7 +206,6 @@ public class GUI extends Application implements View {
     @Override
     public void startGame()  {
         getLoginController().loadGameView();
-        System.out.println("StartGAme mesage");
         scene=1;
     }
 

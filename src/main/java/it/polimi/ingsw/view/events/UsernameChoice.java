@@ -9,7 +9,6 @@ import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
 
 public class UsernameChoice implements ClientMessage, ViewEvent {
 
-
     /**
      * The username chosen by the client.
      */
@@ -42,8 +41,6 @@ public class UsernameChoice implements ClientMessage, ViewEvent {
     public String getMessage() {
         return null;
     }
-
-
 
     @Override
     public void accept(ViewChangeEventHandler viewChangeEventHandler) {

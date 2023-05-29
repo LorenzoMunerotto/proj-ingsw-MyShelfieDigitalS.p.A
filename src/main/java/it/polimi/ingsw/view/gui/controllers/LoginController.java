@@ -59,20 +59,15 @@ public class LoginController implements Controller {
     }
 
     public void setErrorsLabelIDText(String error) {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                numberLabelID.setVisible(false);
-                errorsTextID.getChildren().clear();
-                Text text = new Text(error);
-                text.setFill(Color.WHITE);
-                text.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 19));
-                text.setStrokeWidth(1);
-                text.setStroke(Color.BLACK);
-                errorsTextID.getChildren().add(text);
-                errorsTextID.setStyle("-fx-background-color: white");
-                errorsTextID.setVisible(true);
-            }
+        Platform.runLater(() -> {
+            errorsTextID.getChildren().clear();
+            Text text = new Text(error);
+            text.setFill(Color.WHITE);
+            text.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 19));
+            text.setStrokeWidth(1);
+            text.setStroke(Color.BLACK);
+            errorsTextID.getChildren().add(text);
+            errorsTextID.setVisible(true);
         });
     }
 
@@ -92,7 +87,6 @@ public class LoginController implements Controller {
     }
 
     public void submitNumberOfPlayer(ActionEvent event) {
-        numberLabelID.setVisible(false);
         if (numberBoxID.getValue() == null) {
             setErrorsLabelIDText("Please, select the exact number of players for the game");
         } else if (numberBoxID.getValue() != null) {

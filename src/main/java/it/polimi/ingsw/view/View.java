@@ -67,8 +67,6 @@ public interface View  {
 
      void choosePlayersNumber();
 
-
-
      void chooseMove();
 
      void startGame();

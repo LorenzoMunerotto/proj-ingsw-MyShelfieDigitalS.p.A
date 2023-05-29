@@ -12,7 +12,6 @@ public interface ViewChangeEventHandler extends EventHandler , Listener {
         System.out.println("Error in event handling");
     }
 
-
     @Override
     default void update(Event event) {
         if (event instanceof ViewEvent) {
@@ -25,7 +24,9 @@ public interface ViewChangeEventHandler extends EventHandler , Listener {
     void update (ViewEvent viewEvent);
 
     void handle(Move move);
+
     void handle(UsernameChoice usernameChoice);
+
     void handle(NumOfPlayerChoice numOfPlayerChoice);
 
     void sendChatMessage(ChatClientMessage chatClientMessage);

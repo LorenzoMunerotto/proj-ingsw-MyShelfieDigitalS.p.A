@@ -60,9 +60,6 @@ public class Move implements ClientMessage, ViewEvent {
         return null;
     }
 
-
-
-
     @Override
     public void accept(ViewChangeEventHandler viewChangeEventHandler) {
         viewChangeEventHandler.handle(this);

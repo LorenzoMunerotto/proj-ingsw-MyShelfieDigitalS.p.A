@@ -335,7 +335,7 @@ public class GameHandler {
 
     public void handlerClientChatMessage(ChatClientMessage chatClientMessage) {
         for (VirtualClient client : virtualClients) {
-            if(chatClientMessage.getReceiver().equals("All") &&!client.getUsername().equals(chatClientMessage.getSender())) {
+            if(chatClientMessage.getReceiver().equals("Everyone") &&!client.getUsername().equals(chatClientMessage.getSender())) {
                     client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
                 }
             else if (client.getUsername().equals(chatClientMessage.getReceiver())) {
