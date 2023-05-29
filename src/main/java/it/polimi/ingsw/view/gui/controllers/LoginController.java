@@ -165,7 +165,6 @@ public class LoginController implements Controller {
                                 new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
                                 new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
                         )));
-                System.out.println("initialize");
                 numberLabelID.setVisible(false);
                 errorsTextID.setVisible(true);
                 numberBoxID.setVisible(false);

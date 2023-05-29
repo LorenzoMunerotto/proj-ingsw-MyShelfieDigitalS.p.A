@@ -68,8 +68,9 @@ public class GUI extends Application implements View {
         setup();
         this.stage = primaryStage;
         run();
-        //loadLoginView();
     }
+
+
     public void setup() {
         screenInfo();
         List<String> fxmList = new ArrayList<>(Arrays.asList(LOGIN, GAME, FINAL));
@@ -191,10 +192,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void chooseUsername() {
-        System.out.println("chooseUsername");
-        System.out.println(loginController);
         getLoginController().chooseUsernameView();
-        System.out.println(loginController);
     }
 
     @Override
@@ -220,9 +218,7 @@ public class GUI extends Application implements View {
 
     @Override
     public void showGame() {
-        //loadGameView();
         getGameViewController().rePrintAll();
-        System.out.println("showGame");
     }
 
     @Override
@@ -265,7 +261,6 @@ public class GUI extends Application implements View {
         else if(scene==1){
             getGameViewController().setErrorsTextIDText(message);
         }
-        System.out.println(message);
     }
 
     @Override

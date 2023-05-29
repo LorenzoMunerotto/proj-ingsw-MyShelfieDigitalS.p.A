@@ -125,27 +125,21 @@ public class GameViewController implements Controller {
     EventHandler clickItemTileBoardHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
-            System.out.println("pre click board");
-            //personal card index needed
             if (youTurn == true) {
                 if (coordinates.size() < 3) {
                     Node node = (Node) t.getTarget();
                     int row = GridPane.getRowIndex(node);
                     int column = GridPane.getColumnIndex(node);
-                    System.out.println(row + " " + column);
                     coordinates.add(new Coordinate(row, column));
                     if (coordinates.size() == 1) {
                         itemTile1ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile1ID);
-                        System.out.println("Board 1");
                     } else if (coordinates.size() == 2) {
                         itemTile2ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile2ID);
-                        System.out.println("Board 2");
                     } else if (coordinates.size() == 3) {
                         itemTile3ID.setImage(new Image(getClass().getResourceAsStream("/images/" + virtualModel.getBoard()[row][column].toString() + ".png")));
                         setItemTileClicked(itemTile3ID);
-                        System.out.println("Board 3");
                     }
                 } else {
                     setErrorsTextIDText("You can pic Max 3 Item Tiles");
@@ -159,8 +153,6 @@ public class GameViewController implements Controller {
     EventHandler clickItemTileLibraryHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent t) {
-            System.out.println("handle Library Clicl Pre E PRE CICLO");
-            //personal card index needed
             if (youTurn == true && coordinates.size() > 0) {
                 Node node = (Node) t.getTarget();
                 int column = GridPane.getColumnIndex(node);
@@ -271,7 +263,6 @@ public class GameViewController implements Controller {
                         text.setFill(Color.color(0, 0, 0));
                         TextFlow textFlow = new TextFlow(text);
                         textFlow.setStyle("-fx-text-fill: black; -fx-background-color: orange; -fx-background-radius: 10px ;");
-                        //textFlow.setStyle("-fx-background-color: rgb(233, 233 ,235); -fx-background-radius: 20px");
                         textFlow.setPadding (new Insets( 5, 10,5,10));
                         hBoxR.getChildren().add(textFlow);
                         vboxMessagesChatID.getChildren().add(hBoxR);
