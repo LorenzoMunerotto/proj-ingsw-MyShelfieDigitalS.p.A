@@ -9,7 +9,11 @@ ___
 - Graphical user interface for the client
 - Command-line interface for the server
 - Game rules and mechanics implemented according to the original board game
+___
+## Advanced Features
 
+- Multiple matches
+- Chat
 ___
 ### Team Members
 
