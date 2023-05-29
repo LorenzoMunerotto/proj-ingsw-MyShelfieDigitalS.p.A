@@ -348,6 +348,9 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     public void handle(CommonCardReachMessage commonCardReachMessage) {
         virtualModel.updateCommonCardPoints(commonCardReachMessage.getCommonCardIndex(), commonCardReachMessage.getPoint());
         virtualModel.setServerMessage(commonCardReachMessage.getMessage());
+        if(view instanceof GUI){
+            view.showMessage(commonCardReachMessage.getMessage());
+        }
     }
 
     /**

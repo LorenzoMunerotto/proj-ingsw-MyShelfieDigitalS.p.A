@@ -256,7 +256,7 @@ public class GameViewController implements Controller {
                     TextFlow textFlowS = new TextFlow(textS);
                     textFlowS.setStyle("-fx-text-fill: black; -fx-background-color: lime; -fx-background-radius: 10px ;");
                     textFlowS.setPadding(new Insets(5, 10, 5, 10));
-                    textS.setFill(Color.color(0.934, 0.945, 0.996));
+                    textS.setFill(Color.BLACK);
                     hBoxS.getChildren().add(textFlowS);
                     vboxMessagesChatID.getChildren().add(hBoxS);
                     gui.getClient().sendChatMessage(new ChatClientMessage(gui.getClient().getVirtualModel().getMyUsername(), receiverID.getValue(), messageChatContent));
@@ -362,8 +362,6 @@ public class GameViewController implements Controller {
             for (int column = 0; column < 5; column++) {
                 for (int row = 0; row < 6; row++) {
                     ImageView imageViewLibOw = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/" + libraryMap.getValue()[row][column].toString() + ".png"))));
-                    //imageViewLibOw.setX(90);
-                    //imageViewLibOw.setY(90);
                     imageViewLibOw.setPreserveRatio(true);
                     imageViewLibOw.setFitHeight(gui.getMaxX() * (0.025));
                     imageViewLibOw.setFitWidth(gui.getMaxX() * (0.025));
@@ -398,6 +396,7 @@ public class GameViewController implements Controller {
         labelOwL3ID.setLayoutY(gui.getMaxY() * 0.50);
         labelOwL4ID.setLayoutX(gui.getMaxX() * 0.27);
         labelOwL4ID.setLayoutY(gui.getMaxY() * 0.50);
+        library1ID.setMinWidth(150);
     }
 
 
@@ -509,6 +508,7 @@ public class GameViewController implements Controller {
         Platform.runLater(() -> {
             if(mex>3){
                 vBox_messages.getChildren().clear();
+                mex=0;
             }
             HBox hBox = new HBox();
             hBox.setAlignment(Pos.CENTER_LEFT);

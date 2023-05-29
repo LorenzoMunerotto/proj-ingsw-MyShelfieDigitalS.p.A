@@ -91,6 +91,7 @@ public class SocketListener implements Runnable {
             } catch (IOException e) {
                 if (!(e instanceof EOFException)) {
                     System.out.println("Lost connection with the server, IOException");
+                    System.exit(0);
                 } else{
                     counterEOFExeception++;
                     try {
@@ -105,7 +106,7 @@ public class SocketListener implements Runnable {
                 }
             } catch (ClassNotFoundException e) {
                 System.out.println("Lost connection with the server, ClassNotFoundException");
-                setActive(false);
+                System.exit(0);
             }
         }
 
@@ -122,7 +123,6 @@ public class SocketListener implements Runnable {
                 }
             } catch (IOException e) {
                 System.err.println("Failed to close resources in run method: " + e.getMessage());
-                e.printStackTrace();
             }
     }
 

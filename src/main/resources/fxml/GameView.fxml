@@ -18,164 +18,152 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchorPaneID" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.GameViewController">
+<AnchorPane fx:id="anchorPaneID" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.controllers.GameViewController">
    <TabPane prefHeight="1080.0" prefWidth="1920.0" tabClosingPolicy="UNAVAILABLE">
       <Tab text="Game">
          <AnchorPane minHeight="0.0" minWidth="0.0">
             <VBox fx:id="vBoxLibraryID" layoutY="540.0">
-               <Label fx:id="labelLibraryID" minHeight="27.0" minWidth="130.0"/>
+               <Label fx:id="labelLibraryID" minHeight="27.0" minWidth="130.0" />
                <GridPane fx:id="libraryID">
                   <columnConstraints>
-                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   </columnConstraints>
                   <rowConstraints>
-                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                   <padding>
-                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                   </padding>
                </GridPane>
             </VBox>
             <GridPane fx:id="boardID">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
             <HBox fx:id="itemTileBoxID" layoutX="1280.0" prefHeight="100.0" prefWidth="200.0">
                <padding>
-                  <Insets left="10.0" top="5.0"/>
+                  <Insets left="10.0" top="5.0" />
                </padding>
-               <Label fx:id="itemTileLabelID" minWidth="125.0" prefHeight="27.0" prefWidth="137.0"
-                      text="Item Tile Selected: " textAlignment="CENTER">
+               <Label fx:id="itemTileLabelID" minWidth="125.0" prefHeight="27.0" prefWidth="137.0" text="Item Tile Selected: " textAlignment="CENTER">
                   <font>
-                     <Font size="15.0"/>
+                     <Font size="15.0" />
                   </font>
                </Label>
-               <ImageView fx:id="itemTile1ID" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
-                          preserveRatio="true"/>
-               <ImageView fx:id="itemTile2ID" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
-                          preserveRatio="true"/>
-               <ImageView fx:id="itemTile3ID" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
-                          preserveRatio="true"/>
+               <ImageView fx:id="itemTile1ID" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+               <ImageView fx:id="itemTile2ID" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+               <ImageView fx:id="itemTile3ID" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
             </HBox>
             <VBox fx:id="vBoxPersonalID" prefHeight="200.0" prefWidth="100.0">
                <Label fx:id="personalCardLabelID" text="Personal Goal Card:">
                   <font>
-                     <Font size="15.0"/>
+                     <Font size="15.0" />
                   </font>
                </Label>
-               <ImageView fx:id="personalCardImgID" fitHeight="148.0" fitWidth="110.0" pickOnBounds="true"
-                          preserveRatio="true"/>
+               <ImageView fx:id="personalCardImgID" fitHeight="148.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true" />
             </VBox>
             <VBox fx:id="vBoxCommonID" prefHeight="257.0" prefWidth="617.0">
                <Label fx:id="commonCardLabelID" text="Common Goal Cards:">
                   <font>
-                     <Font size="15.0"/>
+                     <Font size="15.0" />
                   </font>
                </Label>
                <HBox fx:id="hBoxCommonID" prefHeight="100.0" prefWidth="200.0">
-                  <ImageView fx:id="commonCard1ID" fitHeight="86.0" fitWidth="130.0" pickOnBounds="true"
-                             preserveRatio="true">
+                  <ImageView fx:id="commonCard1ID" fitHeight="86.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView id="commonCard1ID" fx:id="commonCard2ID" fitHeight="94.0" fitWidth="130.0"
-                             pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="commonCard1ID" fx:id="commonCard2ID" fitHeight="94.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </HBox.margin>
                   </ImageView>
                </HBox>
             </VBox>
             <ScrollPane fx:id="sp_main" fitToHeight="true" fitToWidth="true">
                <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
-               <VBox fx:id="vBox_messages"/>
+               <VBox fx:id="vBox_messages" />
             </ScrollPane>
-            <TableView fx:id="pointUserNameTableID" layoutX="622.0" layoutY="68.0" prefHeight="200.0"
-                       prefWidth="200.0"/>
+            <TableView fx:id="pointUserNameTableID" layoutX="622.0" layoutY="68.0" prefHeight="200.0" prefWidth="200.0" />
          </AnchorPane>
       </Tab>
       <Tab text="Game Overview">
          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <GridPane fx:id="library1ID" layoutX="61.0" layoutY="49.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
             <GridPane fx:id="library2ID" layoutX="453.0" layoutY="64.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
             <GridPane fx:id="library3ID" layoutX="84.0" layoutY="536.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
             <GridPane fx:id="library4ID" layoutX="555.0" layoutY="501.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
             <GridPane fx:id="boardOwID" layoutX="1039.0" layoutY="436.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
             <VBox fx:id="vBoxCommonOwID" layoutX="1185.0" layoutY="47.0" prefHeight="257.0" prefWidth="617.0">
-               <Label fx:id="commonCardLabelIOwD1" text="Common Goal Card"/>
+               <Label fx:id="commonCardLabelIOwD1" text="Common Goal Card" />
                <HBox fx:id="hBoxCommonOwID" prefHeight="100.0" prefWidth="200.0">
-                  <ImageView fx:id="commonCard1OwID" fitHeight="86.0" fitWidth="130.0"
-                             pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="commonCard1OwID" fitHeight="86.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </HBox.margin>
                   </ImageView>
-                  <ImageView id="commonCard1ID" fx:id="commonCard2OwID" fitHeight="94.0" fitWidth="130.0"
-                             pickOnBounds="true" preserveRatio="true">
+                  <ImageView id="commonCard1ID" fx:id="commonCard2OwID" fitHeight="94.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                      </HBox.margin>
                   </ImageView>
                </HBox>
             </VBox>
-            <Label fx:id="labelOwL1ID" layoutX="10.0" layoutY="10.0" text="Label"/>
-            <Label fx:id="labelOwL2ID" layoutX="458.0" layoutY="18.0" text="Label"/>
-            <Label fx:id="labelOwL3ID" layoutX="72.0" layoutY="517.0" prefWidth="30.0" text="Label"/>
-            <Label fx:id="labelOwL4ID" layoutX="473.0" layoutY="507.0" text="Label"/>
+            <Label fx:id="labelOwL1ID" layoutX="10.0" layoutY="10.0" text="Label" />
+            <Label fx:id="labelOwL2ID" layoutX="458.0" layoutY="18.0" text="Label" />
+            <Label fx:id="labelOwL3ID" layoutX="72.0" layoutY="517.0" text="Label" />
+            <Label fx:id="labelOwL4ID" layoutX="473.0" layoutY="507.0" text="Label" />
          </AnchorPane>
       </Tab>
       <Tab text="Messenger">
          <AnchorPane fx:id="sp_mainID" prefHeight="396" prefWidth="478" xmlns:fx="http://javafx.com/fxml">
-            <Button fx:id="buttonSendChatMexID" layoutX="645.0" layoutY="276.0" text="Send"/>
-            <TextField fx:id="tfMessageChatID" layoutX="471.0" layoutY="276.0"/>
-            <ScrollPane fx:id="sp_mainChatID" fitToWidth="true" layoutX="471.0" layoutY="49.0"
-                        prefHeight="223.0" prefWidth="239.0">
-               <VBox fx:id="vboxMessagesChatID"/>
+            <Button fx:id="buttonSendChatMexID" layoutX="645.0" layoutY="276.0" text="Send" />
+            <TextField fx:id="tfMessageChatID" layoutX="471.0" layoutY="276.0" />
+            <ScrollPane fx:id="sp_mainChatID" fitToWidth="true" layoutX="471.0" layoutY="49.0" prefHeight="223.0" prefWidth="239.0">
+               <VBox fx:id="vboxMessagesChatID" />
             </ScrollPane>
-            <ChoiceBox fx:id="receiverID" layoutX="351.0" layoutY="277.0" prefHeight="26.0" prefWidth="102.0"/>
+            <ChoiceBox fx:id="receiverID" layoutX="351.0" layoutY="277.0" prefHeight="26.0" prefWidth="102.0" />
          </AnchorPane>
       </Tab>
    </TabPane>
