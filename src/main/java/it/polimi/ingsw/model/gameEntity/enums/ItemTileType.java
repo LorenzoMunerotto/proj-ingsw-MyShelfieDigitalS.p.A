@@ -19,6 +19,11 @@ public enum ItemTileType {
      */
     NULL;
 
+    /**
+     * Returns the string representation of the item tile type.
+     *
+     * @return the string representation of the item tile type.
+     */
     @Override
     public String toString() {
         return super.toString();

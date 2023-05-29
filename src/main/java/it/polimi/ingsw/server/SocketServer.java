@@ -30,7 +30,7 @@ public class SocketServer implements Runnable {
     /**
      * This is the constructor of the class.
      *
-     * @param port the port of the server
+     * @param port   the port of the server
      * @param server the server
      */
     public SocketServer(Integer port, Server server) {
@@ -41,21 +41,21 @@ public class SocketServer implements Runnable {
     }
 
     /**
-     * This method sets the boolean that indicates if the server is active.
-     *
-     * @param active the boolean that indicates if the server is active
-     */
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    /**
      * This method returns the boolean that indicates if the server is active.
      *
      * @return the boolean that indicates if the server is active
      */
     private boolean isActive() {
         return active;
+    }
+
+    /**
+     * This method sets the boolean that indicates if the server is active.
+     *
+     * @param active the boolean that indicates if the server is active
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     /**
@@ -77,28 +77,15 @@ public class SocketServer implements Runnable {
     }
 
     /**
-     * This method creates a new server socket.
-     *
-     * @return the server socket
-     * @throws IOException if an I/O error occurs when opening the socket
-     */
-    private ServerSocket createServerSocket() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Server socket created");
-        return serverSocket;
-    }
-
-    /**
      * This method runs the server.
      */
     @Override
     public void run() {
         try {
-            ServerSocket serverSocket = createServerSocket();
+            ServerSocket serverSocket = new ServerSocket(port);
             acceptConnection(serverSocket);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 }
-

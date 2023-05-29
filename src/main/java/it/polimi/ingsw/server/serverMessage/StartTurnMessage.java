@@ -1,21 +1,23 @@
 package it.polimi.ingsw.server.serverMessage;
 
+import org.javatuples.Pair;
+
 public class StartTurnMessage implements ServerMessage {
 
     private final String message;
-    private final String username;
+    private final Pair<String, Integer> currentPlayer;
 
-    public StartTurnMessage(String username) {
-        this.message = username+ "'s turn started";
-        this.username = username;
+    public StartTurnMessage(Pair<String, Integer> currentPlayer) {
+        this.message = currentPlayer.getValue0()+ "'s turn started";
+        this.currentPlayer = currentPlayer;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public String getUsername() {
-        return username;
+    public Pair<String, Integer> getCurrentPlayer() {
+        return currentPlayer;
     }
 
     @Override

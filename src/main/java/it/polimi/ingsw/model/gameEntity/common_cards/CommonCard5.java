@@ -16,8 +16,7 @@ public class CommonCard5 extends CommonGoalCard {
      */
     public CommonCard5() {
         super(5, """
-                Three columns each formed by 6 tiles of maximum three different types.
-                One column can show the same or a different combination of another column.""");
+                Three columns with 6 tiles each, max 3 different types. Columns may have different combinations.""");
     }
 
 

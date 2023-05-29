@@ -4,6 +4,7 @@ package it.polimi.ingsw.server;
  * This enum is used to send error messages to the client.
  */
 public enum GameCreationErrors {
+
     DUPLICATE_USERNAME("This username is already taken, choose another one"),
     ILLEGAL_USERNAME("This username is not valid, choose another one"),
     ILLEGAL_NUM_OF_PLAYER("This number of players is not valid, choose another one");
@@ -15,6 +16,7 @@ public enum GameCreationErrors {
 
     /**
      * This constructor initializes the error message.
+     *
      * @param description is the message of the error.
      */
     GameCreationErrors(String description) {

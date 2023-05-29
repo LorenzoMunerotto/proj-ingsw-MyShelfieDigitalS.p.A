@@ -2,6 +2,10 @@ package it.polimi.ingsw.model.gameEntity.common_cards;
 
 import it.polimi.ingsw.model.gameEntity.Library;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameMechanics.LibraryManager;
+import org.javatuples.Pair;
+
+import java.util.List;
 
 /**
  * Class representing the common goal card 1.
@@ -12,9 +16,8 @@ public class CommonCard2 extends CommonGoalCard {
      * Constructor of the class.
      */
     public CommonCard2() {
-        super(2, """
-                Four groups each containing at least 4 tiles of the same type.
-                The tiles of one group can be different from those of another group.""");
+          super(2, """
+                Four groups, each with at least 4 same-type tiles. Groups may have different tiles.""");
     }
 
     /**
@@ -25,11 +28,17 @@ public class CommonCard2 extends CommonGoalCard {
      */
     @Override
     public boolean checkRules(Library library) {
-        ItemTileType itemTile1 = library.getItemTile(0, 0);
-        ItemTileType itemTile2 = library.getItemTile(0, 4);
-        ItemTileType itemTile3 = library.getItemTile(5, 0);
-        ItemTileType itemTile4 = library.getItemTile(5, 4);
-        if(itemTile1 == ItemTileType.EMPTY || itemTile2 == ItemTileType.EMPTY || itemTile3 == ItemTileType.EMPTY || itemTile4 == ItemTileType.EMPTY) return false;
-        return itemTile1 == itemTile2 && itemTile2 == itemTile3 && itemTile3 == itemTile4;
+        LibraryManager libraryManager = new LibraryManager();
+        libraryManager.setLibrary(library);
+        List<Pair<ItemTileType, Integer>> listGroupsAdjacentTiles = libraryManager.getListGroupsAdjacentTiles();
+        int counter = 0;
+
+        for (Pair<ItemTileType, Integer> group : listGroupsAdjacentTiles) {
+            if (group.getValue0() != ItemTileType.EMPTY && group.getValue1() == 4) {
+                counter++;
+            }
+        }
+
+        return counter >= 4;
     }
 }

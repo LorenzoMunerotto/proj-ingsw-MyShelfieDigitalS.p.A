@@ -23,10 +23,13 @@ public abstract class CommonGoalCard implements Serializable {
      * this commonGoalCard, in position 0 the first and then the others in order of achievement.
      */
     private final Map<String, Integer> achievedGoalPlayersMap;
+    /**
+     * The stack of the points of the CommonGoalCard.
+     */
     private Stack<Integer> points;
 
     /**
-     * Constructor for the CommonGoalCard class, initializes the commonGoalCard with the given index and description.
+     * Default constructor, initializes the commonGoalCard with the given index and description.
      *
      * @param index       is the index of the CommonGoalCard
      * @param description is the description of the CommonGoalCard
@@ -64,7 +67,7 @@ public abstract class CommonGoalCard implements Serializable {
      *
      * @param numberOfPlayers is the number of players of the game
      */
-    public void setPoints(int numberOfPlayers){
+    public void setPoints(int numberOfPlayers) {
         switch (numberOfPlayers) {
             case 2 -> {
                 this.points.push(4);
@@ -90,12 +93,25 @@ public abstract class CommonGoalCard implements Serializable {
      *
      * @return the first element of the stack
      */
-    public int popPoint(){
-        if(points.isEmpty()){
+    public int popPoint() {
+        try {
+            return points.pop();
+        } catch (EmptyStackException e) {
             return 0;
         }
-        else {
-            return points.pop();
+    }
+
+    /**
+     * Get the top of the points stack.
+     * The first available points earns by the next player who achieve the Goal
+     *
+     * @return the first element of the stack
+     */
+    public int topPoint() {
+        try {
+            return points.peek();
+        } catch (EmptyStackException e) {
+            return 0;
         }
     }
 

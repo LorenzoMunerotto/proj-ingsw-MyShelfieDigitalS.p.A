@@ -38,21 +38,21 @@ public class LibraryManager extends AbstractListenable {
     }
 
     /**
-     * Get the username.
-     *
-     * @return the username of the current player
-     */
-    public String getUsername() {
-        return this.username;
-    }
-
-    /**
      * Set the library.
      *
      * @param library the library of the game
      */
     public void setLibrary(Library library) {
         this.library = library;
+    }
+
+    /**
+     * Get the username.
+     *
+     * @return the username of the current player
+     */
+    public String getUsername() {
+        return this.username;
     }
 
     /**
@@ -179,7 +179,13 @@ public class LibraryManager extends AbstractListenable {
         return true;
     }
 
-    public long calculateCRC(){
+    /**
+     * This method calculates the checksum of the library.
+     * It is used to check if the library has been modified.
+     *
+     * @return the CRC of the library
+     */
+    public long calculateCRC() {
         CRC32 checksum = new CRC32();
         for (int row = 0; row < library.getLibraryGrid().length; row++) {
             for (int col = 0; col < library.getLibraryGrid()[0].length; col++) {

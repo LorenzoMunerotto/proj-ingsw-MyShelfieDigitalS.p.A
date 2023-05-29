@@ -37,6 +37,9 @@ public class PointsManager extends AbstractListenable {
      */
     private boolean isPresentFirstFullLibraryUsername;
 
+    /**
+     * Default constructor, initialize the firstFullLibraryUsername as empty.
+     */
     public PointsManager() {
         this.firstFullLibraryUsername = Optional.empty();
         this.isPresentFirstFullLibraryUsername = false;
@@ -50,11 +53,12 @@ public class PointsManager extends AbstractListenable {
     public int commonPoints() {
         int commonPoints = 0;
         for (CommonGoalCard commonGoalCard : commonGoalCardList) {
-            if(commonGoalCard.isAchievedGoalPlayer(player.getUsername())) commonPoints += commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername());
-            else if(!commonGoalCard.isAchievedGoalPlayer(player.getUsername()) && commonGoalCard.checkRules(player.getLibrary())){
+            if (commonGoalCard.isAchievedGoalPlayer(player.getUsername()))
+                commonPoints += commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername());
+            else if (!commonGoalCard.isAchievedGoalPlayer(player.getUsername()) && commonGoalCard.checkRules(player.getLibrary())) {
                 commonGoalCard.addAchievedGoalPlayer(player.getUsername());
                 commonPoints += commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername());
-                notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername()), commonGoalCard.getIndex()));
+                notifyAllListeners(new CommonCardReachEvent(player.getUsername(), commonGoalCard.getAchievedGoalPlayersMap().get(player.getUsername()), commonGoalCard.topPoint(), commonGoalCard.getIndex()));
             }
         }
         return commonPoints;
@@ -130,30 +134,53 @@ public class PointsManager extends AbstractListenable {
      * This method updates the Total Points adding Points related to: Common and Personal Card, adjacent Items, (optional) final point
      */
     public void updateTotalPoints() {
-        Integer oldPoints = player.getTotPoints();
-        Integer updatedPoints = commonPoints() + personalPoints() + adjacentPoints() + finalPoint();
-        if (!oldPoints.equals(updatedPoints)) {
+        int oldPoints = player.getTotPoints();
+        int updatedPoints = commonPoints() + personalPoints() + adjacentPoints() + finalPoint();
+        if (oldPoints != updatedPoints) {
             player.setTotPoints(updatedPoints);
             notifyAllListeners(new PointsUpdateEvent(updatedPoints, player.getUsername()));
         }
     }
 
+    /**
+     * Get true if the first player that has completed the library is present, false otherwise.
+     *
+     * @return true if the first player that has completed the library is present, false otherwise
+     */
     public boolean isPresentFirstFullLibraryUsername() {
         return isPresentFirstFullLibraryUsername;
     }
 
+    /**
+     * Set the value of isPresentFirstFullLibraryUsername.
+     */
     public void setPresentFirstFullLibraryUsername(boolean presentFirstFullLibraryUsername) {
         isPresentFirstFullLibraryUsername = presentFirstFullLibraryUsername;
     }
 
+    /**
+     * Set the player of the game.
+     *
+     * @param player the player of the game
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Set the list of the common goal cards of the game.
+     *
+     * @param commonGoalCardList the list of the common goal cards of the game
+     */
     public void setCommonGoalCardList(List<CommonGoalCard> commonGoalCardList) {
         this.commonGoalCardList = commonGoalCardList;
     }
 
+    /**
+     * Set the username of the first player that has completed the library.
+     *
+     * @param firstFullLibraryUsername the username of the first player that has completed the library
+     */
     public void setFirstFullLibraryUsername(Optional<String> firstFullLibraryUsername) {
         this.firstFullLibraryUsername = firstFullLibraryUsername;
         firstFullLibraryUsername.ifPresent(s -> notifyAllListeners(new FirstFullLibraryEvent(s)));

@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import it.polimi.ingsw.model.gameState.events.BoardRefillEvent;
 import it.polimi.ingsw.model.gameState.events.BoardUpdateEvent;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,20 +97,34 @@ public class BoardManager extends AbstractListenable {
     /**
      * Refills the board with new random item tiles from the bag
      */
-    public void refillBoard() {
+    public void refillBoard() throws EmptyBagException {
         bag.shuffle();
-        for (int i = emptyCells.size() - 1; i >= 0; i--) {
-            Coordinate coordinate = emptyCells.get(i);
-            int row = coordinate.getRow();
-            int column = coordinate.getColumn();
-
-            board.setItemTile(row, column, bag.grabItemTile());
-            this.emptyCells.remove(coordinate);
-            this.notEmptyCells.add(coordinate);
+        int i = emptyCells.size() - 1;
+        try {
+            for (; i >= 0; i--) {
+                Coordinate coordinate = emptyCells.get(i);
+                int row = coordinate.getRow();
+                int column = coordinate.getColumn();
+                board.setItemTile(row, column, bag.grabItemTile());
+                this.emptyCells.remove(coordinate);
+                this.notEmptyCells.add(coordinate);
+            }
+            long checksum = calculateCRC();
+            notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
+        } catch (EmptyBagException e) {
+            try {
+                for (; i >= 0; i--) {
+                    Coordinate coordinate = emptyCells.get(i);
+                    emptyCells.remove(i);
+                    notEmptyCells.add(coordinate);
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+            long checksum = calculateCRC();
+            notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
+            throw e;
         }
-        long checksum = calculateCRC();
-        notifyAllListeners(new BoardRefillEvent(board.getBoardGrid(), checksum));
-
     }
 
     /**
@@ -244,6 +259,12 @@ public class BoardManager extends AbstractListenable {
         return column == board.getBoardGrid()[0].length - 1 || isEmptyOrNull(row, column + 1);
     }
 
+    /**
+     * This method calculates the checksum of the board.
+     * It is used to check if the board has been modified.
+     *
+     * @return the checksum of the board
+     */
     public long calculateCRC() {
         CRC32 crc = new CRC32();
         for (int row = 0; row < board.getBoardGrid().length; row++) {

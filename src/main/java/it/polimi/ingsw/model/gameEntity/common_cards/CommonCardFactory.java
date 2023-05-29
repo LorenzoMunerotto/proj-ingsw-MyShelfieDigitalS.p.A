@@ -28,51 +28,27 @@ public class CommonCardFactory {
      *
      * @return a list of 2 random cards
      */
-    public static List<CommonGoalCard> createCards(){
+    public static List<CommonGoalCard> createCards() {
         List<CommonGoalCard> commonCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
         List<Integer> alreadyCreatedCards = new ArrayList<>(CARDS_NUMBER_FOR_GAME);
 
-        for(int i = 0; i < CARDS_NUMBER_FOR_GAME; i++){
+        for (int i = 0; i < CARDS_NUMBER_FOR_GAME; i++) {
             int cardNumber = getRandomCardNumber(alreadyCreatedCards);
             alreadyCreatedCards.add(cardNumber);
 
-            switch (cardNumber){
-                case 1:
-                    commonCards.add(new CommonCard1());
-                    break;
-                case 2:
-                    commonCards.add(new CommonCard2());
-                    break;
-                case 3:
-                    commonCards.add(new CommonCard3());
-                    break;
-                case 4:
-                    commonCards.add(new CommonCard4());
-                    break;
-                case 5:
-                    commonCards.add(new CommonCard5());
-                    break;
-                case 6:
-                    commonCards.add(new CommonCard6());
-                    break;
-                case 7:
-                    commonCards.add(new CommonCard7());
-                    break;
-                case 8:
-                    commonCards.add(new CommonCard8());
-                    break;
-                case 9:
-                    commonCards.add(new CommonCard9());
-                    break;
-                case 10:
-                    commonCards.add(new CommonCard10());
-                    break;
-                case 11:
-                    commonCards.add(new CommonCard11());
-                    break;
-                case 12:
-                    commonCards.add(new CommonCard12());
-                    break;
+            switch (cardNumber) {
+                case 1 -> commonCards.add(new CommonCard1());
+                case 2 -> commonCards.add(new CommonCard2());
+                case 3 -> commonCards.add(new CommonCard3());
+                case 4 -> commonCards.add(new CommonCard4());
+                case 5 -> commonCards.add(new CommonCard5());
+                case 6 -> commonCards.add(new CommonCard6());
+                case 7 -> commonCards.add(new CommonCard7());
+                case 8 -> commonCards.add(new CommonCard8());
+                case 9 -> commonCards.add(new CommonCard9());
+                case 10 -> commonCards.add(new CommonCard10());
+                case 11 -> commonCards.add(new CommonCard11());
+                case 12 -> commonCards.add(new CommonCard12());
             }
         }
         return commonCards;
@@ -98,7 +74,7 @@ public class CommonCardFactory {
      *
      * @return a list of all the common cards
      */
-    public static List<CommonGoalCard> getAllCommonCards(){
+    public static List<CommonGoalCard> getAllCommonCards() {
         List<CommonGoalCard> allCommonCards = new ArrayList<>(CARDS_NUMBER);
         allCommonCards.add(new CommonCard1());
         allCommonCards.add(new CommonCard2());
@@ -114,5 +90,4 @@ public class CommonCardFactory {
         allCommonCards.add(new CommonCard12());
         return allCommonCards;
     }
-
 }

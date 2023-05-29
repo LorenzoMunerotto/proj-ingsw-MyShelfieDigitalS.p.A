@@ -1,11 +1,17 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.client.clientMessage.Move;
+import it.polimi.ingsw.client.clientMessage.ChatClientMessage;
+import it.polimi.ingsw.model.gameState.events.PlayerOrderSetEvent;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
+import it.polimi.ingsw.view.cli.CLIConstants;
+import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.model.gameEntity.*;
 import it.polimi.ingsw.model.gameEntity.common_cards.CommonCardFactory;
 import it.polimi.ingsw.model.gameEntity.personal_cards.*;
 import it.polimi.ingsw.model.gameMechanics.*;
 import it.polimi.ingsw.model.gameState.events.LibrarySetEvent;
+import it.polimi.ingsw.model.gameState.exceptions.BreakRules;
+import it.polimi.ingsw.model.gameState.exceptions.BreakRulesException;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.model.gameState.GameData;
 import it.polimi.ingsw.server.VirtualClient;
@@ -17,20 +23,50 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.EMPTY;
 import static it.polimi.ingsw.model.gameEntity.enums.ItemTileType.NULL;
 
+
+/**
+ * This class represents the GameHandler of the game.
+ * It is the controller of the game, it is responsible for the game logic.
+ */
 public class GameHandler {
 
+    /**
+     * It is the next GameHandlerID
+     */
+    private static Integer nextGameHandlerId =1;
+    /**
+     * It is the list of the VirtualClients in the game.
+     */
     private final List<VirtualClient> virtualClients;
+    /**
+     * It is the GameData of the game.
+     */
     private final GameData gameData;
+    /**
+     * It is the LibraryManager of the game.
+     */
     private LibraryManager libraryManager;
+    /**
+     * It is the BoardManager of the game.
+     */
     private BoardManager boardManager;
+    /**
+     * It is the PointsManager of the game.
+     */
     private PointsManager pointsManager;
+    /**
+     * It is the GameHandler Identifier
+     */
+    private final Integer gameHandlerId;
 
     /**
-     * Constructor of GameHandler
+     * Default constructor, initialize the GameData and the VirtualClients list.
      */
     public GameHandler() {
         this.gameData = new GameData();
         this.virtualClients = new ArrayList<>();
+        this.gameHandlerId=nextGameHandlerId;
+        nextGameHandlerId++;
     }
 
     /**
@@ -62,12 +98,24 @@ public class GameHandler {
         assignPersonalGoalCard();
         assignCommonGoalCards();
         pointsManager.setCommonGoalCardList(gameData.getCommonGoalCardsList());
-        boardManager.refillBoard();
+
+        try {
+            boardManager.refillBoard();
+        } catch (EmptyBagException e) {
+            throw new RuntimeException(e);
+        }
+
         Collections.shuffle(gameData.getPlayers(), new Random());
+        for(VirtualClient client : virtualClients){
+            client.handle(new PlayerOrderSetEvent(gameData.getPlayers()));
+        }
+        sendAll( new StartGameMessage());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
+        System.out.printf("%sStarting game %s%s\n", CLIConstants.YELLOW_BRIGHT, CLIConstants.RESET, this);
+
     }
-    
+
     /**
      * This method set the PersonalGoalCard on each player in gameData
      */
@@ -76,7 +124,6 @@ public class GameHandler {
         List<PersonalGoalCard> personalGoalCards = allPersonalGoalCards.getPersonalGoalCards(gameData.getNumberOfPlayers());
         for (Player player : gameData.getPlayers()) {
             player.setPersonalGoalCard(personalGoalCards.remove(0));
-            // personal card set event
         }
     }
 
@@ -85,6 +132,15 @@ public class GameHandler {
      */
     public void assignCommonGoalCards() {
         gameData.setCommonGoalCardsList(CommonCardFactory.createCards());
+    }
+
+    /**
+     * This method set the managers in order to work on the current Player/library
+     */
+    public void setUpManagers() {
+        libraryManager.setLibrary(gameData.getCurrentPlayer().getLibrary());
+        libraryManager.setUsername(gameData.getCurrentPlayer().getUsername());
+        pointsManager.setPlayer(gameData.getCurrentPlayer());
     }
 
     /**
@@ -103,11 +159,15 @@ public class GameHandler {
                 gameData.setFirstFullLibraryUsername(getCurrentPlayerUsername());
             }
             pointsManager.updateTotalPoints();
-            if (boardManager.isRefillTime()) {
+
+        if (boardManager.isRefillTime()) {
+            try {
                 boardManager.refillBoard();
+            } catch (EmptyBagException e) {
+                sendAll(new CustomMessage(e.getMessage()));
             }
-            sendAll(new EndTurnMessage("The turn is over!"));
-            nextPlayer();
+        }
+        nextPlayer();
         } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
             sendToCurrentPlayer(new MoveRequest());
@@ -146,15 +206,6 @@ public class GameHandler {
             throw new BreakRulesException(BreakRules.COLUMN_OUT_OF_BOUNDS);
         if (size > libraryManager.emptyTilesCounter(move.getColumn()))
             throw new BreakRulesException(BreakRules.COLUMN_OUT_OF_SPACE);
-    }
-
-    /**
-     * This method set the managers in order to work on the current Player/library
-     */
-    public void setUpManagers() {
-        libraryManager.setLibrary(gameData.getCurrentPlayer().getLibrary());
-        libraryManager.setUsername(gameData.getCurrentPlayer().getUsername());
-        pointsManager.setPlayer(gameData.getCurrentPlayer());
     }
 
     /**
@@ -242,26 +293,52 @@ public class GameHandler {
     }
 
     /**
-     * This method manage the game ending
+     * This method manage the game ending.
      */
     private void endGame() {
         sendAll(new EndGameMessage());
         for (VirtualClient virtualClient : virtualClients) {
             virtualClient.getSocketClientConnection().close();
         }
+        System.out.printf("%sGame %s correctly end %s\n", CLIConstants.YELLOW_BRIGHT, this, CLIConstants.RESET);
     }
 
     /**
-     * This method stop the game when a client disconnected from the server
+     * This method stop the game when a client disconnected from the server.
      *
      * @param username username of the player who lost the connection
      */
     public void stopGameByClientDisconnection(String username) {
 
+        System.out.printf("%sStopping the game%s %s because %s disconnected from the server \n", CLIConstants.YELLOW_BRIGHT, CLIConstants.RESET, this, username);
         for (VirtualClient virtualClient : virtualClients) {
             if (!virtualClient.getUsername().equals(username)) {
                 virtualClient.send(new DisconnectionMessage(username));
-                virtualClient.getSocketClientConnection().close();
+            }
+            virtualClient.getSocketClientConnection().close();
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("GameID ");
+        sb.append(gameHandlerId);
+        sb.append(" with { ");
+        for (VirtualClient virtualClient : virtualClients) {
+            sb.append(virtualClient.getUsername()).append("@").append(virtualClient.getClientID()).append(" ");
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    public void handlerClientChatMessage(ChatClientMessage chatClientMessage) {
+        for (VirtualClient client : virtualClients) {
+            if(chatClientMessage.getReceiver().equals("Everyone") &&!client.getUsername().equals(chatClientMessage.getSender())) {
+                    client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
+                }
+            else if (client.getUsername().equals(chatClientMessage.getReceiver())) {
+                client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
             }
         }
     }

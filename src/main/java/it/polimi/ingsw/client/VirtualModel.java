@@ -2,12 +2,10 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
-import it.polimi.ingsw.server.serverMessage.ServerMessage;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.zip.CRC32;
 
 /**
@@ -16,6 +14,14 @@ import java.util.zip.CRC32;
  */
 public class VirtualModel {
 
+    /**
+     * Map of the username and the library.
+     */
+    private final Map<String, ItemTileType[][]> clientUsernameLibrary = new HashMap<>();
+    /**
+     * Map of the username and the points.
+     */
+    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
     /**
      * A new data structure that represents the board.
      */
@@ -29,54 +35,40 @@ public class VirtualModel {
      */
     private ItemTileType[][] personalGoalCard;
     /**
-     * The number of tiles in the bag.
+     * It is index of the personal goal card.
+     * Used for the GUI, to know which personal goal card to show.
      */
-    private int numOfTilesInBag;
-
-    /**
-     * Map of the username and the library.
-     */
-    private final Map<String, ItemTileType[][]> clientUsernameLibrary = new HashMap<>();
-    /**
-     * Map of the username and the points.
-     */
-    private final Map<String, Integer> clientUsernamePoints = new HashMap<>();
+    private int indexPersonalGoalCard;
     /**
      * The username of the client.
      */
     private String myUsername;
-    /**
-     * The current player username.
-     */
-    private String currentPlayerUsername;
-    /**
-     * The index of the first player.
-     */
-    private int firstPlayerIndex;
-    /**
-     * The username of the first player that has the full library.
-     */
-    private String firstFullLibraryUsername;
+    private int currentPlayerIndex;
+    private List<String> orderedListOfPlayers;
     /**
      * Is the last message received from the server.
      */
-    private ServerMessage serverMessage;
+    private String serverMessage;
 
     /**
      * Default constructor.
-     * Maybe it should initialize at least the username and the list of players?
      */
     public VirtualModel() {
+
     }
 
-    /**************************************************************************
+    public int getNumberPersonalCard() {
+        return this.indexPersonalGoalCard;
+    }
+
+    /*
      *                                    Board                               *
-     **************************************************************************/
+     */
 
     /**
      * Get the board.
      *
-     * @return the board.
+     * @return the board
      */
     public ItemTileType[][] getBoard() {
         return this.board;
@@ -85,7 +77,7 @@ public class VirtualModel {
     /**
      * Set the board.
      *
-     * @param gridBoard the board.
+     * @param gridBoard the board
      */
     public void setBoard(ItemTileType[][] gridBoard) {
         this.board = gridBoard;
@@ -94,15 +86,15 @@ public class VirtualModel {
     /**
      * Update the board when some tiles are removed.
      *
-     * @param coordinates the coordinates of the new tiles.
-     * @param checksum the checksum of the board.
+     * @param coordinates the coordinates of the new tiles
+     * @param checksum    the checksum of the board
      */
     public void updateBoard(List<Coordinate> coordinates, long checksum) {
-        for(Coordinate coordinate : coordinates) {
+        for (Coordinate coordinate : coordinates) {
             board[coordinate.getRow()][coordinate.getColumn()] = ItemTileType.EMPTY;
         }
         long newChecksum = calculateCRCBoard();
-        if(newChecksum != checksum) {
+        if (newChecksum != checksum) {
             System.err.println("Error: Checksum mismatch. Board state might be inconsistent.");
         }
     }
@@ -110,13 +102,13 @@ public class VirtualModel {
     /**
      * Update the board after the refill.
      *
-     * @param board the new board.
-     * @param checksum the checksum of the board.
+     * @param board    the new board
+     * @param checksum the checksum of the board
      */
     public void updateBoard(ItemTileType[][] board, long checksum) {
         this.board = board;
         long newChecksum = calculateCRCBoard();
-        if(newChecksum != checksum) {
+        if (newChecksum != checksum) {
             System.err.println("Error: Checksum mismatch. Board state might be inconsistent.");
         }
     }
@@ -124,7 +116,7 @@ public class VirtualModel {
     /**
      * Calculate the checksum of the board.
      *
-     * @return the checksum of the board.
+     * @return the checksum of the board
      */
     public long calculateCRCBoard() {
         CRC32 crc = new CRC32();
@@ -136,14 +128,14 @@ public class VirtualModel {
         return crc.getValue();
     }
 
-    /**************************************************************************
+    /*
      *                                  Library                               *
-     **************************************************************************/
+     */
 
     /**
      * Get the library.
      *
-     * @return the library.
+     * @return the library
      */
     public ItemTileType[][] getLibrary() {
         return clientUsernameLibrary.get(myUsername);
@@ -152,22 +144,24 @@ public class VirtualModel {
     /**
      * Set the library.
      *
-     * @param username the username of the player.
-     * @param library the library.
+     * @param username the username of the player
+     * @param library  the library
      */
     public void setLibrary(String username, ItemTileType[][] library) {
         clientUsernameLibrary.put(username, library);
+        clientUsernamePoints.put(username, 0);
     }
 
     /**
      * Update the library.
      *
-     * @param username the username of the player.
-     * @param itemTileTypeList the list of the tiles.
-     * @param column the column of the library.
-     * @param checksum the checksum of the library.
+     * @param username         the username of the player
+     * @param itemTileTypeList the list of the tiles
+     * @param column           the column of the library
+     * @param checksum         the checksum of the library
      */
-    public void updateLibraryByUsername(String username, List<ItemTileType> itemTileTypeList, int column, long checksum) {
+    public void updateLibraryByUsername(String username, List<ItemTileType> itemTileTypeList, int column,
+                                        long checksum) {
         ItemTileType[][] library = clientUsernameLibrary.get(username);
         for (ItemTileType itemTile : itemTileTypeList) {
             for (int row = library.length - 1; row >= 0; row--) {
@@ -178,7 +172,7 @@ public class VirtualModel {
             }
         }
         long newChecksum = calculateCRCLibrary(username);
-        if(newChecksum != checksum) {
+        if (newChecksum != checksum) {
             System.err.println("Error: Checksum mismatch. Library state might be inconsistent.");
         }
     }
@@ -186,8 +180,8 @@ public class VirtualModel {
     /**
      * Calculate the checksum of the library.
      *
-     * @param username the username of the player.
-     * @return the checksum of the library.
+     * @param username the username of the player
+     * @return the checksum of the library
      */
     public long calculateCRCLibrary(String username) {
         CRC32 crc = new CRC32();
@@ -199,14 +193,14 @@ public class VirtualModel {
         return crc.getValue();
     }
 
-    /**************************************************************************
+    /*
      *                               Personal Card                            *
-     **************************************************************************/
+     */
 
     /**
      * Get the personal goal card.
      *
-     * @return the personal goal card.
+     * @return the personal goal card
      */
     public ItemTileType[][] getPersonalGoalCard() {
         return this.personalGoalCard;
@@ -215,20 +209,25 @@ public class VirtualModel {
     /**
      * Set the personal goal card as a new data structure.
      *
-     * @param personalGoalCard the personal goal card.
+     * @param personalGoalCard the personal goal card
      */
-    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard) {
+    public void setPersonalGoalCard(ItemTileType[][] personalGoalCard, int numberPersonalCard) {
         this.personalGoalCard = personalGoalCard;
+        this.indexPersonalGoalCard = numberPersonalCard;
     }
 
-    /**************************************************************************
+    /*
      *                                 Common Card                            *
-     **************************************************************************/
+     */
+
+    public Map<String, ItemTileType[][]> getClientUsernameLibrary() {
+        return clientUsernameLibrary;
+    }
 
     /**
      * Get the common goal cards.
      *
-     * @return the common goal cards.
+     * @return the common goal cards
      */
     public List<Triplet<Integer, Integer, String>> getCommonGoalCards() {
         return this.commonGoalCards;
@@ -237,12 +236,18 @@ public class VirtualModel {
     /**
      * Update the common goal cards.
      *
-     * @param updatedCommonGoalCards the updated common goal cards.
+     * @param updatedCommonGoalCards the updated common goal cards
      */
     public void setCommonGoalCards(List<Triplet<Integer, Integer, String>> updatedCommonGoalCards) {
         this.commonGoalCards = updatedCommonGoalCards;
     }
 
+    /**
+     * Update the points of the common goal card.
+     *
+     * @param index  is the index of the card
+     * @param points is the new points of the card
+     */
     public void updateCommonCardPoints(int index, int points) {
         for (int i = 0; i < commonGoalCards.size(); i++) {
             Triplet<Integer, Integer, String> card = commonGoalCards.get(i);
@@ -253,57 +258,65 @@ public class VirtualModel {
         }
     }
 
-    /**************************************************************************
-     *                                    Bag                                 *
-     **************************************************************************/
-
-    /**
-     * Get the bag.
-     *
-     * @return the bag.
-     */
-    public int getBag() {
-        return this.numOfTilesInBag;
-    }
-
-    /**
-     * Update the bag.
-     *
-     * @param numOfTilesInBag the number of tiles in the bag.
-     */
-    public void updateBag(int numOfTilesInBag) {
-        this.numOfTilesInBag = numOfTilesInBag;
-    }
-
-    /**************************************************************************
+    /*
      *                               Current Player                           *
-     **************************************************************************/
+     */
+
+
+    public void setPlayerIndex(List<String> usernames) {
+        this.orderedListOfPlayers = usernames;
+    }
+
+    public String getPlayerUsername(Integer index) {
+        if (index >= 0 && index < orderedListOfPlayers.size()) {
+            return this.orderedListOfPlayers.get(index);
+        } else {
+            throw new IllegalArgumentException("Invalid index");
+        }
+    }
+    /**
+     * Get the current player username.
+     *
+     * @return the current player username
+     */
+    public Integer getPlayerIndex(String username) {
+        return this.orderedListOfPlayers.indexOf(username);
+    }
+
+    public String getCurrentPlayerUsername() {
+        if (this.currentPlayerIndex >= 0 && this.currentPlayerIndex < orderedListOfPlayers.size()) {
+            return this.orderedListOfPlayers.get(this.currentPlayerIndex);
+        } else {
+            throw new IllegalStateException("Invalid current player index");
+        }
+    }
 
     /**
-     * Get the current player.
+     * Get the current player index.
      *
-     * @return the current player.
+     * @return the current player index
      */
-    public String getCurrentPlayerUsername() {
-        return this.currentPlayerUsername;
+    public int getCurrentPlayerIndex() {
+        return this.currentPlayerIndex;
     }
 
     /**
      * Update the current player.
      *
-     * @param currentPlayerUsername the current player username.
+     * @param currentPlayerUsernameIndex the current player username and index
      */
-    public void updateCurrentPlayerUsername(String currentPlayerUsername) {
-        this.currentPlayerUsername = currentPlayerUsername;
+    public void updateCurrentPlayerUsernameIndex(Pair<String, Integer> currentPlayerUsernameIndex) {
+        this.currentPlayerIndex = currentPlayerUsernameIndex.getValue1();
     }
 
-    /**************************************************************************
+    /*
      *                               Client username                          *
-     **************************************************************************/
+     */
+
     /**
      * Get the username of the client.
      *
-     * @return the username of the client.
+     * @return the username of the client
      */
     public String getMyUsername() {
         return myUsername;
@@ -312,15 +325,25 @@ public class VirtualModel {
     /**
      * Set the username of the client.
      *
-     * @param myUsername the username of the client.
+     * @param myUsername the username of the client
      */
     public void setMyUsername(String myUsername) {
         this.myUsername = myUsername;
     }
 
-    /**************************************************************************
-     *                                   Others                               *
-     **************************************************************************/
+
+    /*
+     *                                   Points                               *
+     */
+
+    /**
+     * Get the points of the client.
+     *
+     * @return the points of the client
+     */
+    public int getMyPoints() {
+        return this.clientUsernamePoints.get(myUsername);
+    }
 
     /**
      * Updated the points in the ClientUsername-Points Map.
@@ -329,11 +352,10 @@ public class VirtualModel {
      * @param points   are the points of the player
      */
     public void updatePointsByUsername(String username, Integer points) {
-
-        if (clientUsernamePoints.containsKey(username)) {
-            clientUsernamePoints.replace(username, points);
+        if (this.clientUsernamePoints.containsKey(username)) {
+            this.clientUsernamePoints.replace(username, points);
         } else {
-            clientUsernamePoints.put(username, points);
+            throw new IllegalArgumentException("Username not found");
         }
     }
 
@@ -343,35 +365,47 @@ public class VirtualModel {
      * @return the current leader board of the game.
      */
     public List<Pair<String, Integer>> getLeaderBoard() {
-        List<Pair<String, Integer>> leaderBoards = new ArrayList<>();
-        clientUsernamePoints.forEach((username, points) -> leaderBoards.add(new Pair<>(username, points)));
+        List<Pair<String, Integer>> leaderBoard = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : clientUsernamePoints.entrySet()) {
+            leaderBoard.add(new Pair<>(entry.getKey(), entry.getValue()));
+        }
 
-        return leaderBoards.stream().sorted(Comparator.comparingInt(Pair<String, Integer>::getValue1).reversed()).collect(Collectors.toList());
+        leaderBoard.sort((o1, o2) -> {
+            int scoreComparison = o2.getValue1().compareTo(o1.getValue1());
+            if (scoreComparison != 0) {
+                return scoreComparison;
+            } else {
+                Integer index1 = getPlayerIndex(o1.getValue0());
+                Integer index2 = getPlayerIndex(o2.getValue0());
+                if (index1 == -1 || index2 == -1) {
+                    throw new IllegalStateException("Usernames in the leaderboard not found in the list of players");
+                } else {
+                    return index2.compareTo(index1);
+                }
+            }
+        });
+        return leaderBoard;
     }
 
-    public void setFirstFullLibraryUsername(String firstFullLibraryUsername) {
-        this.firstFullLibraryUsername = firstFullLibraryUsername;
-    }
-
-    /**************************************************************************
+    /*
      *                               Server Message                           *
-     **************************************************************************/
+     */
 
     /**
      * Get the server message.
      *
-     * @return the server message.
+     * @return the server message
      */
-    public ServerMessage getServerMessage() {
+    public String getServerMessage() {
         return serverMessage;
     }
 
     /**
      * Set the server message.
      *
-     * @param serverMessage the server message.
+     * @param serverMessage the server message
      */
-    public void setServerMessage(ServerMessage serverMessage) {
+    public void setServerMessage(String serverMessage) {
         this.serverMessage = serverMessage;
     }
 }

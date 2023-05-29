@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
-import java.util.List;
+import java.util.*;
 
 import static it.polimi.ingsw.view.cli.CLIConstants.*;
 
@@ -24,7 +24,7 @@ public class CLIDrawer {
     private final CLIParser parser;
 
     /**
-     * It is the constructor of the class.
+     * Default constructor, initializes the parser and the virtual model.
      *
      * @param virtualModel is the virtual model of the game
      */
@@ -37,309 +37,271 @@ public class CLIDrawer {
      * Prints everything related to the turn of the player.
      */
     public void printGame() {
-        printGameObjects();
-        printCommonGoalCards();
+        System.out.println(MYSHELFIE_TITLE);
+        System.out.println();
+        List<String> extraInfosStringList = new ArrayList<>();
+        extraInfosStringList.add(ITEM_TILES_TYPE_COLOR_LEGEND);
+        for (String username : virtualModel.getClientUsernameLibrary().keySet()) {
+            if (!username.equals(virtualModel.getMyUsername())) {
+                extraInfosStringList.add(getOtherPlayerLibraryAsString(username));
+            }
+        }
+        extraInfosStringList.add(getGameInfoAsString());
+
+        System.out.println(concatenateStringsHorizontally(extraInfosStringList));
+
+        String boardString = getGridAsString(virtualModel.getBoard(), "Board", 0);
+        String libraryString = getGridAsString(virtualModel.getLibrary(), "Library", 1);
+        String personalGoalCardString = getGridAsString(virtualModel.getPersonalGoalCard(), "Personal Card", 2);
+
+        String libraryAndPersonalGoalCardString = concatenateStringsHorizontally(Arrays.asList(libraryString, personalGoalCardString));
+        String libraryPersonalGoalAndCommonCardsString = concatenateStringsVertically(Arrays.asList(libraryAndPersonalGoalCardString, getCommonCardsAsString(virtualModel.getCommonGoalCards())));
+
+        System.out.println(concatenateStringsHorizontally(Arrays.asList(boardString, libraryPersonalGoalAndCommonCardsString)));
         printSeparator();
+    }
+
+    /**
+     * This method is used to concatenate a list of strings horizontally.
+     *
+     * @param strings is the list of objects as string to print
+     */
+    private String concatenateStringsHorizontally(List<String> strings) {
+        StringBuilder result = new StringBuilder();
+        List<String[]> splitStrings = new ArrayList<>();
+        int maxLines = 0;
+
+        for (String string : strings) {
+            String[] lines = string.split("\n");
+            splitStrings.add(lines);
+            maxLines = Math.max(maxLines, lines.length);
+        }
+
+        for (int i = 0; i < maxLines; i++) {
+            for (String[] splitString : splitStrings) {
+                if (i < splitString.length) {
+                    result.append(splitString[i]);
+                } else {
+                    result.append(" ".repeat(splitString[0].length()));
+                }
+                result.append("   ");
+            }
+            result.append("\n");
+        }
+
+        return result.toString();
+    }
+
+    /**
+     * This method is used to concatenate a list of strings vertically.
+     *
+     * @param strings is the list of strings to concatenate
+     * @return the concatenated string
+     */
+    private String concatenateStringsVertically(List<String> strings) {
+        StringBuilder result = new StringBuilder();
+        for (String string : strings) {
+            result.append(string).append("\n");
+        }
+        return result.toString();
     }
 
     /**
      * Prints a basic separator.
      */
     protected void printSeparator() {
-        System.out.printf("%s%s%s%n", CLIConstants.WHITE_BRIGHT, CLIConstants.HORIZONTAL_LINE.repeat(300), CLIConstants.RESET);
+        System.out.printf("%s%s%s%n", WHITE_BRIGHT, HORIZONTAL_LINE.repeat(150), RESET);
     }
 
     /**
-     * Print the board and the two libraries parallel to each other.
-     */
-    public void printGameObjects() {
-        ItemTileType[][] board = virtualModel.getBoard();
-        ItemTileType[][] currentLibrary = virtualModel.getLibrary();
-        ItemTileType[][] personalCardLibrary = virtualModel.getPersonalGoalCard();
-
-        System.out.println(PRINT_OBJECTS_TITLE);
-        printFirstRow(board, currentLibrary, personalCardLibrary);
-        printfTopLine(board, currentLibrary, personalCardLibrary);
-
-        for (int row = 0; row < board.length; row++) {
-            printBoardCells(board, row);
-            printLibraries(currentLibrary, personalCardLibrary, row);
-            printMiddleLine(board, currentLibrary, personalCardLibrary, row);
-        }
-        printBottomLine(board);
-    }
-
-    /**
-     * Print the libraries.
+     * This method converts a library grid into a string.
+     * It is a small representation of the other players' libraries.
      *
-     * @param currentLibrary      is the current library to print
-     * @param personalCardLibrary is the library based on the personal goal card to print
-     * @param row                 is the row of the board
+     * @param username is the username of the player
+     * @return the string representation of the library
      */
-    private void printLibraries(ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary, int row) {
-        if (row < currentLibrary.length && row < personalCardLibrary.length) {
-            System.out.print("     ");
-            printLibraryCells(currentLibrary, row, true);
-            System.out.print("  ");
-            printLibraryCells(personalCardLibrary, row, false);
+    private String getOtherPlayerLibraryAsString(String username) {
+        ItemTileType[][] libraryGrid = virtualModel.getClientUsernameLibrary().get(username);
+        int gridWidth = 3 * libraryGrid[0].length + 2;
+
+        StringBuilder smallLibraryAsString = getTitlePadding(username, gridWidth);
+
+        smallLibraryAsString.append(CORNER_TOP_LEFT).append(HORIZONTAL_LINE.repeat(3 * libraryGrid[0].length)).append(CORNER_TOP_RIGHT).append("\n");
+
+        for (ItemTileType[] itemTileTypes : libraryGrid) {
+            smallLibraryAsString.append(VERTICAL_LINE);
+            for (int column = 0; column < libraryGrid[0].length; column++) {
+                ItemTileType itemTileType = itemTileTypes[column];
+                String itemTileTypeAsString = ITEM_TILES_TYPES_CLI_COLORS_SMALL.get(itemTileType);
+                smallLibraryAsString.append(itemTileTypeAsString);
+            }
+            smallLibraryAsString.append(VERTICAL_LINE).append("\n");
+        }
+        smallLibraryAsString.append(CORNER_BOTTOM_LEFT).append(HORIZONTAL_LINE.repeat(3 * libraryGrid[0].length)).append(CORNER_BOTTOM_RIGHT).append("\n");
+        return smallLibraryAsString.toString();
+    }
+
+    /**
+     * This method converts a board grid into a string.
+     *
+     * @param grid     is the grid to convert
+     * @param title    is the title of the grid
+     * @param position is the position of the grid (not suer to keep it)
+     * @return the string representation of the grid
+     */
+    public String getGridAsString(ItemTileType[][] grid, String title, int position) {
+        int gridWidth = grid[0].length * 6 + 3;
+
+        StringBuilder gridAsString = new StringBuilder();
+        if (position == 0) {
+            gridAsString.append("  ").append(getTitlePadding(title, gridWidth));
         } else {
-            System.out.println();
+            gridAsString.append(" ").append(getTitlePadding(title, gridWidth));
         }
-    }
 
-    /**
-     * Print the first row of the board and the two libraries.
-     *
-     * @param board               is the board to print
-     * @param currentLibrary      is the current library to print
-     * @param personalCardLibrary is the library based on the personal goal card to print
-     */
-    private void printFirstRow(ItemTileType[][] board, ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(" ".repeat(5));
-        for (int col = 0; col < board.length; col++) {
-            sb.append(String.format("  %s   ", parser.getColumnValue(col)));
+        gridAsString.append("    ");
+        for (int column = 0; column < grid[0].length; column++) {
+            gridAsString.append(String.format("  %d   ", parser.getColumnValue(column)));
         }
-        sb.append("          ");
-        for (int col = 0; col < currentLibrary[0].length; col++) {
-            sb.append(String.format("  %s   ", parser.getColumnValue(col)));
-        }
-        sb.append("       ");
-        for (int col = 0; col < personalCardLibrary[0].length; col++) {
-            sb.append(String.format("  %s   ", parser.getColumnValue(col)));
-        }
-        System.out.println(sb);
-    }
+        gridAsString.append("\n");
 
-    /**
-     * Print the top line of the board and the two libraries.
-     *
-     * @param board               is the board to print
-     * @param currentLibrary      is the current library to print
-     * @param personalCardLibrary is the library based on the personal goal card to print
-     */
-    private void printfTopLine(ItemTileType[][] board, ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary) {
-        printDelimiterLine(board.length, " ".repeat(4));
-        printDelimiterLine(currentLibrary[0].length, " ".repeat(9));
-        printDelimiterLine(personalCardLibrary[0].length, " ".repeat(6));
-        System.out.println();
-    }
+        gridStringHelper(grid, gridAsString, CORNER_TOP_LEFT, T_DOWN, CORNER_TOP_RIGHT);
 
-    /**
-     * Print the delimiter line of the board and the two libraries.
-     *
-     * @param numColumns is the number of columns of the board or the library
-     * @param offset     is the offset to apply to the line
-     */
-    private void printDelimiterLine(int numColumns, String offset) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(offset).append(CLIConstants.YELLOW_BOLD).append(CLIConstants.CORNER_TOP_LEFT).append(CLIConstants.RESET);
-
-        for (int col = 0; col < numColumns - 1; col++) {
-            sb.append(CLIConstants.YELLOW_BOLD).append(CLIConstants.HORIZONTAL_LINE.repeat(5)).append(CLIConstants.T_DOWN).append(CLIConstants.RESET);
-        }
-        sb.append(CLIConstants.YELLOW_BOLD).append(CLIConstants.HORIZONTAL_LINE.repeat(5)).append(CLIConstants.CORNER_TOP_RIGHT).append(CLIConstants.RESET);
-
-        System.out.print(sb);
-    }
-
-    /**
-     * Print the middle line of the board and the two libraries.
-     *
-     * @param board               is the board to print
-     * @param currentLibrary      is the current library to print
-     * @param personalCardLibrary is the library based on the personal goal card to print
-     * @param row                 is the current row
-     */
-    private void printMiddleLine(ItemTileType[][] board, ItemTileType[][] currentLibrary, ItemTileType[][] personalCardLibrary, int row) {
-        if (row < currentLibrary.length - 1) {
-            printMiddleLineDuplicate(board, currentLibrary, BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
-            System.out.print(BOARD_SHORT_DISTANCE_SEPARATOR_FRAME_FORMAT);
-            for (int col = 0; col < personalCardLibrary[0].length; col++) {
-                System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
+        for (int row = 0; row < grid.length; row++) {
+            gridAsString.append(String.format(" %s " + VERTICAL_LINE, parser.getRowValue(row)));
+            for (int column = 0; column < grid[row].length; column++) {
+                ItemTileType itemTileType = grid[row][column];
+                String itemTileTypeAsString = ITEM_TILES_TYPES_CLI_COLORS.get(itemTileType);
+                gridAsString.append(itemTileTypeAsString).append(VERTICAL_LINE);
             }
-            System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.T_LEFT + CLIConstants.RESET);
-        } else if (row == currentLibrary.length - 1) {
-            printMiddleLineDuplicate(board, currentLibrary, LIBRARY_BOTTOM_FRAME_FORMAT);
-            System.out.print(CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_RIGHT + " ".repeat(6) + CLIConstants.RESET);
-            for (int col = 0; col < personalCardLibrary[0].length; col++) {
-                System.out.print(LIBRARY_BOTTOM_FRAME_FORMAT);
-            }
-            System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_RIGHT + CLIConstants.RESET);
-        } else if (row < board.length - 1) {
-            System.out.print("    ");
-            for (int col = 0; col < board.length; col++) {
-                System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
-            }
-            System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.T_LEFT + CLIConstants.RESET);
-        }
-    }
+            gridAsString.append("\n");
 
-    /**
-     * Refactor to avoid duplicate code.
-     *
-     * @param board                            is the board to print
-     * @param currentLibrary                   is the current library to print
-     * @param boardAndLibraryMiddleFrameFormat is the format of the middle frame
-     */
-    private void printMiddleLineDuplicate(ItemTileType[][] board, ItemTileType[][] currentLibrary, String boardAndLibraryMiddleFrameFormat) {
-        System.out.print("    ");
-        for (int col = 0; col < board.length; col++) {
-            System.out.print(BOARD_AND_LIBRARY_MIDDLE_FRAME_FORMAT);
-        }
-        System.out.print(BOARD_LONG_DISTANCE_SEPARATOR_FRAME_FORMAT);
-        for (int col = 0; col < currentLibrary[0].length; col++) {
-            System.out.print(boardAndLibraryMiddleFrameFormat);
-        }
-    }
-
-    /**
-     * Print the bottom line of the board.
-     *
-     * @param board is the board to print
-     */
-    private void printBottomLine(ItemTileType[][] board) {
-        System.out.print(" ".repeat(4) + CLIConstants.YELLOW_BOLD + CLIConstants.CORNER_BOTTOM_LEFT + CLIConstants.RESET);
-        for (int col = 0; col < board.length - 1; col++) {
-            System.out.print(CLIConstants.YELLOW_BOLD + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.T_UP + CLIConstants.RESET);
-        }
-        System.out.println(CLIConstants.YELLOW_BOLD + CLIConstants.HORIZONTAL_LINE.repeat(5) + CLIConstants.CORNER_BOTTOM_RIGHT + CLIConstants.RESET);
-    }
-
-    /**
-     * Print the board cells.
-     *
-     * @param board is the board to print
-     * @param row   is the current row
-     */
-    private void printBoardCells(ItemTileType[][] board, int row) {
-        String rowLetter = parser.getRowValue(row);
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(String.format(" %s  %s" + CLIConstants.VERTICAL_LINE + "%s", rowLetter, CLIConstants.YELLOW_BOLD, CLIConstants.RESET));
-        for (int col = 0; col < board.length; col++) {
-            if (board[row][col] != ItemTileType.NULL) {
-                stringBuilder.append(ITEM_TILES_TYPES_CLI_COLORS.get((board[row][col])));
-            } else {
-                stringBuilder.append(CLIConstants.BLUE_BACKGROUND_BRIGHT + "     " + CLIConstants.RESET);
-            }
-            stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET);
-        }
-        System.out.print(stringBuilder);
-    }
-
-    /**
-     * Print the current library cells.
-     *
-     * @param library          is the library to print
-     * @param row              is the current row
-     * @param isCurrentLibrary is true if the library is the current library, false otherwise
-     */
-    private void printLibraryCells(ItemTileType[][] library, int row, boolean isCurrentLibrary) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("  ").append(parser.getRowValue(row)).append(" ");
-        for (int col = 0; col < library[0].length; col++) {
-            stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET).append(ITEM_TILES_TYPES_CLI_COLORS.get(library[row][col]));
-        }
-        stringBuilder.append(CLIConstants.YELLOW_BOLD + CLIConstants.VERTICAL_LINE + CLIConstants.RESET);
-
-        if (isCurrentLibrary) {
-            System.out.print(stringBuilder);
-        } else {
-            System.out.println(stringBuilder);
-        }
-    }
-
-    /**
-     * Print the common goal cards.
-     */
-    private void printCommonGoalCards() {
-        List<Triplet<Integer, Integer, String>> commonGoalCards = virtualModel.getCommonGoalCards();
-
-        int maxLineLength = 0;
-        for (Triplet<Integer, Integer, String> card : commonGoalCards) {
-            String description = card.getValue2();
-            String[] descriptionLines = description.split("\n");
-            for (String line : descriptionLines) {
-                int lineWidth = 1 + line.length();
-                maxLineLength = Math.max(maxLineLength, lineWidth);
+            if (row < grid.length - 1) {
+                gridStringHelper(grid, gridAsString, T_RIGHT, CROSS, T_LEFT);
             }
         }
-
-        for (int i = 0; i < commonGoalCards.size(); i++) {
-            System.out.printf(CLIConstants.SMOOTH_CORNER_TOP_LEFT + CLIConstants.HORIZONTAL_LINE.repeat(maxLineLength) + CLIConstants.SMOOTH_CORNER_TOP_RIGHT);
-        }
-        System.out.println();
-
-        for (Triplet<Integer, Integer, String> card : commonGoalCards) {
-            String commonCard = " Common Card: " + CLIConstants.PURPLE_BRIGHT + card.getValue0() + CLIConstants.RESET;
-            String points = " Points:" + CLIConstants.PURPLE_BRIGHT + card.getValue1() + CLIConstants.RESET;
-            int commonCardLength = commonCard.replaceAll("\\x1B\\[[;\\d]*m", "").length();
-            int pointsLength = points.replaceAll("\\x1B\\[[;\\d]*m", "").length();
-            int padding = Math.max(0, maxLineLength - (commonCardLength + pointsLength));
-            System.out.print(CLIConstants.VERTICAL_LINE + commonCard + " ".repeat(padding) + points + CLIConstants.VERTICAL_LINE);
-        }
-        System.out.println();
-
-        int maxLinesNumber = 2;
-        for (int i = 0; i < maxLinesNumber; i++) {
-            for (Triplet<Integer, Integer, String> card : commonGoalCards) {
-                String description = card.getValue2();
-                String[] descriptionLines = description.split("\n");
-                if (i < descriptionLines.length) {
-                    String line = " " + descriptionLines[i];
-                    int padding = Math.max(0, maxLineLength - line.length());
-                    String newLineWithPadding = line + " ".repeat(padding);
-                    System.out.print(CLIConstants.VERTICAL_LINE + newLineWithPadding + CLIConstants.VERTICAL_LINE);
-                } else {
-                    System.out.print(CLIConstants.VERTICAL_LINE + " ".repeat(maxLineLength) + CLIConstants.VERTICAL_LINE);
-                }
-            }
-            System.out.println();
-        }
-        for (int i = 0; i < commonGoalCards.size(); i++) {
-            System.out.print(CLIConstants.SMOOTH_CORNER_BOTTOM_LEFT + CLIConstants.HORIZONTAL_LINE.repeat(maxLineLength) + CLIConstants.SMOOTH_CORNER_BOTTOM_RIGHT);
-        }
-        System.out.println();
+        gridStringHelper(grid, gridAsString, CORNER_BOTTOM_LEFT, T_UP, CORNER_BOTTOM_RIGHT);
+        return gridAsString.toString();
     }
 
     /**
-     * Prints the remaining item tiles in the bag.
-     * Don't know if it's useful.
+     * This method helps the print of the grid.
+     * It is used to avoid code repetition.
+     *
+     * @param grid         the grid to print
+     * @param gridAsString the string to print
+     * @param leftFrame    the left frame
+     * @param middleFrame  the middle frame
+     * @param rightFrame   the right frame
      */
-    private void printBag() {
-        System.out.println("Remaining item tiles in the bag: " + CLIConstants.PURPLE_BRIGHT + virtualModel.getBag() + CLIConstants.RESET);
+    private void gridStringHelper(ItemTileType[][] grid, StringBuilder gridAsString, String leftFrame, String middleFrame, String rightFrame) {
+        gridAsString.append("   ").append(leftFrame);
+        for (int column = 0; column < grid[0].length; column++) {
+            if (column > 0) {
+                gridAsString.append(middleFrame);
+            }
+            gridAsString.append(HORIZONTAL_LINE.repeat(5));
+        }
+        gridAsString.append(rightFrame).append("\n");
     }
 
     /**
-     * Prints the leader board.
+     * This method returns a string builder with the title centered.
+     *
+     * @param title is the title to center
+     * @param width is the width of the frame
+     * @return the string builder with the title centered
      */
-    protected void printLeaderBoard(boolean isWinner) {
-        List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
+    private StringBuilder getTitlePadding(String title, int width) {
+        StringBuilder titlePadding = new StringBuilder();
+        int titleLength = title.length();
+        int paddingBefore = (width - titleLength) / 2;
+        int paddingAfter = width - (paddingBefore + titleLength);
+        titlePadding.append(" ".repeat(paddingBefore)).append(CYAN_BRIGHT).append(title).append(RESET).append(" ".repeat(paddingAfter)).append("\n");
+        return titlePadding;
+    }
 
-        String[] colors = {CLIConstants.YELLOW_BRIGHT, CLIConstants.RED_BRIGHT, CLIConstants.PURPLE_BRIGHT, CLIConstants.BLUE_BRIGHT};
+    /**
+     * This method returns the string representation of the common cards.
+     *
+     * @param cards is the list of common cards
+     * @return the string representation of the common cards
+     */
+    private String getCommonCardsAsString(List<Triplet<Integer, Integer, String>> cards) {
+        StringBuilder commonCardsString = new StringBuilder();
+        commonCardsString.append("Common Cards:\n");
 
-        System.out.println(LEADERBOARD_TOP_FRAME_FORMAT);
-        System.out.printf(LEADERBOARD_HEADER_FORMAT, "Rank", "Leaderboard", "Points");
-        System.out.println();
-        System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
+        for (Triplet<Integer, Integer, String> card : cards) {
+            String cardIndex = YELLOW + card.getValue0() + CLIConstants.RESET + ")";
+            String cardToken = "Token: " + RED_BRIGHT + card.getValue1() + CLIConstants.RESET;
+            String cardDescription = card.getValue2();
 
-        for (int i = 0; i < leaderBoards.size(); i++) {
-            System.out.printf(CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET + colors[i] + "   %s  " + CLIConstants.RESET + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET + colors[i] + " %-20s " + CLIConstants.RESET + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET + colors[i] + "    %s   " + CLIConstants.RESET + CLIConstants.GREEN + CLIConstants.VERTICAL_LINE_DOUBLE + CLIConstants.RESET, (i + 1), leaderBoards.get(i).getValue0(), leaderBoards.get(i).getValue1());
-            System.out.println();
-            if (i < leaderBoards.size() - 1) {
-                System.out.println(LEADERBOARD_MIDDLE_FRAME_FORMAT);
-            } else {
-                System.out.println(LEADERBOARD_BOTTOM_FRAME_FORMAT);
+            commonCardsString.append(cardIndex)
+                    .append(card.getValue0() > 9 ? " " : "  ")
+                    .append(cardToken)
+                    .append(String.format(" %s ", VERTICAL_LINE))
+                    .append(cardDescription)
+                    .append("\n");
+        }
+        return commonCardsString.toString();
+    }
 
-            }
+    /**
+     * This method returns the string representation of the game info.
+     *
+     * @return the string representation of the game info
+     */
+    private String getGameInfoAsString() {
+        StringBuilder gameInfoAsString = new StringBuilder();
+        String[] gameInfoLines = {
+                " " + WHITE_UNDERLINED + "Game info:" + RESET,
+                " Username: " + CYAN_BRIGHT + virtualModel.getMyUsername() + RESET,
+                " Current player: " + PURPLE_BRIGHT + virtualModel.getCurrentPlayerUsername() + RESET,
+                " Points: " + RED_BRIGHT + virtualModel.getMyPoints() + RESET,
+                " Turn number: " + PURPLE_BRIGHT + parser.getColumnValue(virtualModel.getCurrentPlayerIndex()) + RESET + "/" + CYAN_BRIGHT + virtualModel.getClientUsernameLibrary().size() + RESET,
+                " Chair: " + ((virtualModel.getMyUsername().equals(virtualModel.getPlayerUsername(0))) ? GREEN_BRIGHT + "true" + RESET : RED_BRIGHT + "false" + RESET),
+                " Last message: " + GREEN_BRIGHT + virtualModel.getServerMessage() + RESET
+        };
+        for (String line : gameInfoLines) {
+            gameInfoAsString.append(line);
+            gameInfoAsString.append("\n");
+        }
+        return gameInfoAsString.toString();
+    }
+
+    /**
+     * This method returns the string representation of the leader board.
+     *
+     * @param isWinner is true if the player is the winner
+     * @return the string representation of the leader board
+     */
+    protected String getLeaderboardAsString(boolean isWinner) {
+        List<Pair<String, Integer>> leaderboard = virtualModel.getLeaderBoard();
+
+        String[] colors = {YELLOW_BRIGHT, RED_BRIGHT, PURPLE_BRIGHT, BLUE_BRIGHT};
+
+        int maxNameLength = leaderboard.stream()
+                .map(pair -> pair.getValue0().length())
+                .max(Integer::compare)
+                .orElse(0);
+
+        StringBuilder leaderboardAsString = new StringBuilder();
+        String format = "%s%-4s  %-" + maxNameLength + "s  %7s%s%n";
+        leaderboardAsString.append(String.format(format, RESET, "Rank", "Leaderboard", "Points", ""));
+
+        for (int i = 0; i < leaderboard.size(); i++) {
+            String rank = String.valueOf(i + 1);
+            String playerName = leaderboard.get(i).getValue0();
+            String playerPoints = String.valueOf(leaderboard.get(i).getValue1());
+            String playerColor = colors[i % colors.length];
+
+            leaderboardAsString.append(String.format(format, playerColor, rank, playerName, playerPoints, RESET));
         }
         if (isWinner) {
-            System.out.println(CONSOLE_ARROW + "Congratulations, you won!");
+            leaderboardAsString.append(MYSHELFIE_WINNER);
         } else {
-            System.out.println(CONSOLE_ARROW + "You lost, better luck next time!");
+            leaderboardAsString.append(MYSHELFIE_LOOSER);
         }
+        return leaderboardAsString.toString();
     }
 }

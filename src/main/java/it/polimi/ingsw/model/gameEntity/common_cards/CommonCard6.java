@@ -16,8 +16,7 @@ public class CommonCard6 extends CommonGoalCard {
      */
     public CommonCard6() {
         super(6, """
-                Eight tiles of the same type.
-                There’s no restriction about the position of these tiles.""");
+                Eight same-type tiles, no position restrictions.""");
     }
 
     /**

@@ -3,7 +3,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.server.serverMessage.CustomMessage;
 import it.polimi.ingsw.server.serverMessage.ErrorMessage;
-import it.polimi.ingsw.server.serverMessage.StartGameMessage;
+import it.polimi.ingsw.server.serverMessage.NumOfPlayerRequest;
 import it.polimi.ingsw.view.cli.CLIConstants;
 
 import java.util.*;
@@ -15,6 +15,10 @@ import java.util.concurrent.Executors;
  */
 public class Server {
 
+    /**
+     * The port of the server.
+     */
+    private static final int PORT = 1235;
     /**
      * The socket server.
      */
@@ -31,10 +35,7 @@ public class Server {
      * The map of the clients' id and their username.
      */
     private final Map<Integer, String> ClientIdMapUsername;
-    /**
-     * The map of the clients' username and their id.
-     */
-    private final Map<String, Integer> UsernameMapClientID;
+
     /**
      * The map of the virtual clients and their socket client connection.
      */
@@ -50,32 +51,31 @@ public class Server {
     /**
      * The number of players.
      */
-    private Integer numOfPlayers;
-    /**
-     * The port of the server.
-     */
-    private static final int PORT = 1235;
+    private Integer numOfPlayers =-1;
 
     /**
-     * This is the constructor of the class.
+     * Default constructor.
      */
     public Server() {
         this.socketServer = new SocketServer(PORT, this);
         nextClientId = 1;
         ClientIdMapVirtualClient = new HashMap<>();
         ClientIdMapUsername = new HashMap<>();
-        UsernameMapClientID = new HashMap<>();
         VirtualClientMapSocketClientConnection = new HashMap<>();
         waiting = new ArrayList<>();
     }
 
     /**
-     * Get the socket server.
+     * Main method.
+     * Used to start the server.
      *
-     * @return the socket server
+     * @param args are the arguments of the main method
      */
-    public synchronized SocketServer getSocketServer() {
-        return socketServer;
+    public static void main(String[] args) {
+        Server server = new Server();
+        System.out.println(CLIConstants.GREEN_BRIGHT + "Server started" + CLIConstants.RESET);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(server.socketServer);
     }
 
     /**
@@ -89,16 +89,6 @@ public class Server {
     }
 
     /**
-     * Get the virtual client by client id.
-     *
-     * @param clientId is the client id
-     * @return the virtual client
-     */
-    public VirtualClient getVirtualClientByClientId(int clientId) {
-        return ClientIdMapVirtualClient.get(clientId);
-    }
-
-    /**
      * Get the username by client id.
      *
      * @param clientId is the client id
@@ -106,16 +96,6 @@ public class Server {
      */
     public String getUsernameByClientId(Integer clientId) {
         return ClientIdMapUsername.get(clientId);
-    }
-
-    /**
-     * Get the client id by username.
-     *
-     * @param username is the username
-     * @return the client id
-     */
-    public Integer getClientIdByUsername(String username) {
-        return UsernameMapClientID.get(username);
     }
 
     /**
@@ -141,11 +121,20 @@ public class Server {
     /**
      * This method register the client on the server based on the username.
      *
-     * @param username is the username of the client
+     * @param username               is the username of the client
      * @param socketClientConnection is the socketClientConnection of the client
      * @return the clientId of the client
      */
     public synchronized Integer registerConnection(String username, SocketClientConnection socketClientConnection) {
+
+        while ((waiting.size()==1 && numOfPlayers==-1)||waiting.size()==numOfPlayers){
+            try {
+                wait(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         if (waiting.isEmpty()) {
             currentGameHandler = new GameHandler();
         }
@@ -160,14 +149,14 @@ public class Server {
 
         Integer clientId = assignClientId();
         VirtualClient virtualClient = new VirtualClient(socketClientConnection, username, clientId, currentGameHandler);
-
+        currentGameHandler.sendAll(new CustomMessage(username + " joined the game!"));
         currentGameHandler.addVirtualClient(virtualClient);
         currentGameHandler.addPlayer(username, clientId);
         ClientIdMapVirtualClient.put(clientId, virtualClient);
-        UsernameMapClientID.put(username, clientId);
         ClientIdMapUsername.put(clientId, username);
         VirtualClientMapSocketClientConnection.put(virtualClient, socketClientConnection);
-        System.out.println(virtualClient.getUsername() + " connected with clientId: " + virtualClient.getClientID());
+        System.out.printf("%s%s connected%s with client Id: %s%d%s%n",
+                CLIConstants.GREEN_BRIGHT, virtualClient.getUsername(), CLIConstants.RESET, CLIConstants.CYAN_BRIGHT, virtualClient.getClientID(), CLIConstants.RESET);
 
         return clientId;
     }
@@ -176,21 +165,27 @@ public class Server {
      * This method manage the waiting list in order to start the game when the number of players is reached.
      *
      * @param socketClientConnection is the socketClientConnection of the client
-     * @throws InterruptedException if the thread is interrupted
      */
-    public synchronized void lobby(SocketClientConnection socketClientConnection) throws InterruptedException {
+    public synchronized void lobby(SocketClientConnection socketClientConnection) {
 
+        while (waiting.size()==1 && numOfPlayers==-1){
+            try {
+                wait(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         waiting.add(socketClientConnection);
-        if (waiting.size() == 1) {
-            socketClientConnection.setUpNumOfPlayers();
-        } else if (waiting.size() == numOfPlayers) {
-            currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached. The game is starting..."));
-            currentGameHandler.sendAll( new StartGameMessage());
-            waiting.clear();
-            currentGameHandler.startGame();
 
+        if (waiting.size() == 1) {
+            socketClientConnection.send(new NumOfPlayerRequest());
+        } else if (waiting.size() == numOfPlayers) {
+            currentGameHandler.sendAll(new CustomMessage("The selected number of players has been reached!\nThe games is starting..."));
+            currentGameHandler.startGame();
+            waiting.clear();
+            numOfPlayers=-1;
         } else {
-            currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + CLIConstants.CYAN_BRIGHT + (numOfPlayers - waiting.size()) + CLIConstants.RESET + " players left"));
+            currentGameHandler.sendAll(new CustomMessage("Waiting for other players to join..." + (numOfPlayers - waiting.size()) + " players left"));
         }
     }
 
@@ -203,22 +198,9 @@ public class Server {
         VirtualClient client = ClientIdMapVirtualClient.get(clientID);
         System.out.printf("Unregistering client %s with client id: %d...", client.getUsername(), client.getClientID());
         ClientIdMapVirtualClient.remove(clientID);
-        UsernameMapClientID.remove(client.getUsername());
         waiting.remove(VirtualClientMapSocketClientConnection.get(client));
         ClientIdMapUsername.remove(client.getClientID());
         VirtualClientMapSocketClientConnection.remove(client);
         System.out.println("Client has been successfully unregistered.");
-    }
-
-    /**
-     * This method is used to start the server.
-     *
-     * @param args are the arguments of the main method
-     */
-    public static void main(String[] args) {
-        Server server = new Server();
-        System.out.println(CLIConstants.GREEN_BRIGHT + "Server started" + CLIConstants.RESET);
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.submit(server.socketServer);
     }
 }

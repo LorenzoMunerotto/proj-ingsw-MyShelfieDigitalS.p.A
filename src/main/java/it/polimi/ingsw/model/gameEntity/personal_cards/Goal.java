@@ -23,8 +23,8 @@ public class Goal {
     /**
      * Constructor of the class.
      *
-     * @param row the row of the goal
-     * @param column the column of the goal
+     * @param row          the row of the goal
+     * @param column       the column of the goal
      * @param itemTileType the type of the goal
      */
     public Goal(@JsonProperty("row") int row, @JsonProperty("column") int column, @JsonProperty("itemTileType") ItemTileType itemTileType) {

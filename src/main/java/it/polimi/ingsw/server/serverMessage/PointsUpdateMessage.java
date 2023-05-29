@@ -4,9 +4,9 @@ public class PointsUpdateMessage implements ServerMessage {
 
     private final String message;
     private final String username;
-    private final Integer points;
+    private final int points;
 
-    public PointsUpdateMessage(String message, String username, Integer points) {
+    public PointsUpdateMessage(String message, String username, int points) {
         this.message = message;
         this.username = username;
         this.points = points;
@@ -21,7 +21,7 @@ public class PointsUpdateMessage implements ServerMessage {
         return username;
     }
 
-    public Integer getPoints() {
+    public int getPoints() {
         return points;
     }
 

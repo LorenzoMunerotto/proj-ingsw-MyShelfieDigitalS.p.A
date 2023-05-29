@@ -22,19 +22,19 @@ public class CardsContainer {
      * Constructor of the class.
      * It creates the deck of personal goal cards.
      */
-    public CardsContainer(){
+    public CardsContainer() {
         createDeck();
     }
 
     /**
      * Method that creates the deck of personal goal cards.
      */
-    public void createDeck(){
+    public void createDeck() {
         ObjectMapper objectMapper = new ObjectMapper();
-        try{
+        try {
             InputStream is = CardsContainer.class.getResourceAsStream("/configPersonalGoalsCards.json");
             personalGoalCards = objectMapper.readValue(is, objectMapper.getTypeFactory().constructCollectionType(List.class, PersonalGoalCard.class));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to read JSON file: " + e.getMessage());
         }

@@ -1,16 +1,16 @@
 package it.polimi.ingsw.model.gameEntity;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
+import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Class representing the bag which contains all the itemTiles.
  */
 public class Bag {
 
+    private final static int ITEM_TILE_FOR_TYPE = 22;
     /**
      * List of the item tiles im the bag.
      */
@@ -25,7 +25,7 @@ public class Bag {
             if (type == ItemTileType.EMPTY || type == ItemTileType.NULL) {
                 continue;
             }
-            for (int i = 0; i < 22; i++) {
+            for (int i = 0; i < ITEM_TILE_FOR_TYPE; i++) {
                 itemTiles.add(type);
             }
         }
@@ -45,9 +45,9 @@ public class Bag {
      *
      * @return a random item tile from the bag
      */
-    public ItemTileType grabItemTile() {
+    public ItemTileType grabItemTile() throws EmptyBagException {
         if (itemTiles.size() == 0) {
-            throw new IllegalArgumentException("The bag is empty");
+            throw new EmptyBagException();
         }
         return itemTiles.remove(0);
     }

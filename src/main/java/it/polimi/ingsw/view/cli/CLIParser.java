@@ -36,7 +36,7 @@ public class CLIParser {
      * @return the key of the column
      */
     public int getColumnKey(int value) {
-        return  value - 1;
+        return value - 1;
     }
 
     /**

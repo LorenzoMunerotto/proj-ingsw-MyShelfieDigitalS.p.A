@@ -3,12 +3,19 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.client.clientMessage.*;
 import it.polimi.ingsw.model.gameState.exceptions.IllegalNumOfPlayersException;
 import it.polimi.ingsw.server.serverMessage.*;
-import it.polimi.ingsw.view.cli.CLIConstants;
+import it.polimi.ingsw.view.events.Move;
+import it.polimi.ingsw.view.events.NumOfPlayerChoice;
+import it.polimi.ingsw.view.events.UsernameChoice;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static java.lang.Thread.sleep;
 
 /**
  * This class manage the client socket.
@@ -38,8 +45,19 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     /**
      * The boolean that indicates if the client is active.
      */
-    private boolean active;
-
+    private boolean active =true;
+    /**
+     * Lock for send method.
+     */
+    private final Object lockSend = new Object();
+    /**
+     * The service executor.
+     */
+    private final ExecutorService executorService;
+    /**
+     * The connection checker.
+     */
+    private final ConnectionChecker connectionChecker;
     /**
      * This is the constructor of the class.
      *
@@ -50,43 +68,58 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
         this.socket = socket;
         this.server = server;
+        this.executorService = Executors.newCachedThreadPool();
+        this.connectionChecker = new ConnectionChecker(this, server);
         try {
             outputStream = new ObjectOutputStream(socket.getOutputStream());
             inputStream = new ObjectInputStream(socket.getInputStream());
-
             clientID = -1;
-            active = true;
+            setActive(true);
         } catch (IOException e) {
-            System.err.println( "Error during initialization of the client!");
+            System.err.println("Error during initialization of the client!");
             System.err.println(e.getMessage());
         }
 
         try {
-            outputStream.reset();
-            outputStream.writeObject(new UsernameRequest());
-            outputStream.flush();
-        } catch (IOException e) {
-            System.out.println("Send failed");
+            sleep(4000);
+        }  catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+
+        send(new UsernameRequest());
+
 
     }
 
     /**
      * This method reads the inputStream of the socket according to the type of message handle.
      *
-     * @throws IOException           the io exception
+     * @throws IOException            the io exception
      * @throws ClassNotFoundException the class not found exception
      */
-    public synchronized void readFromStream() throws IOException, ClassNotFoundException {
+    public void readFromStream() throws ClassNotFoundException, IOException {
+            ClientMessage input = (ClientMessage) inputStream.readObject();
+            new Thread(()-> input.accept(this)).start();
+    }
 
-        ClientMessage input = (ClientMessage) inputStream.readObject();
+    @Override
+    public void handle(CheckConnection checkConnection) {
+        connectionChecker.setClientIsConnected(true);
+    }
 
-        if (input instanceof Move){
-            handle((Move) input);
-        }
-        else if (input instanceof UsernameChoice){
-            handle((UsernameChoice) input);
-        }
+    @Override
+    public void handle(ChatClientMessage chatClientMessage) {
+        server.getGameHandlerByClientId(clientID).handlerClientChatMessage(chatClientMessage);
+    }
+
+
+    /**
+     * This method returns the boolean that indicates if the server is active.
+     *
+     * @return the boolean that indicates if the server is active
+     */
+    public boolean isActive() {
+        return active;
     }
 
     /**
@@ -99,26 +132,25 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     }
 
     /**
-     * This method returns the boolean that indicates if the server is active.
-     *
-     * @return the boolean that indicates if the server is active
-     */
-    private boolean isActive() {
-        return active;
-    }
-
-    /**
      * This method send a message to the client writing it on the outputStream of the socket.
      *
      * @param serverMessage the server message
      */
-    public void send(ServerMessage serverMessage){
-        try {
-            outputStream.reset();
-            outputStream.writeObject(serverMessage);
-            outputStream.flush();
-        } catch (IOException e) {
-            System.out.println("Send failed");
+    public void send(ServerMessage serverMessage) {
+        synchronized (lockSend) {
+            if (isActive()) {
+                try {
+                    outputStream.reset();
+                    outputStream.writeObject(serverMessage);
+                    outputStream.flush();
+                } catch (IOException e) {
+                    System.out.println("Send failed on client " + clientID + " socket " + serverMessage);
+                    server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+                }
+            } else {
+                System.out.println("Send failed because socketClientConnection is NOT ACTIVE " + serverMessage);
+            }
+            lockSend.notifyAll();
         }
     }
 
@@ -129,51 +161,22 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void handle(UsernameChoice usernameChoice) {
-
-        try {
             clientID = server.registerConnection(usernameChoice.getUsername(), this);
             if (clientID == null) {
                 send(new UsernameRequest());
-            }else{
+            } else {
                 server.lobby(this);
+                executorService.submit(connectionChecker);
             }
-        } catch (InterruptedException e) {
-            System.err.println(e.getMessage());
-            Thread.currentThread().interrupt();
-        }
+
     }
 
-    /**
-     * This method sets up the number of players.
-     */
-    public void setUpNumOfPlayers(){
-        send(new NumOfPlayerRequest());
-        while(true){
-            try {
-                ClientMessage input = (ClientMessage) inputStream.readObject();
-
-                if (input instanceof NumOfPlayerChoice){
-                    try {
-                        int num = (((NumOfPlayerChoice) input).getNumOfPlayer());
-                        server.getGameHandlerByClientId(clientID).setNumberOfPlayers(num);
-                        server.setNumOfPlayers(num);
-                        send(new CustomMessage("Number of players correctly set to: " + CLIConstants.CYAN_BRIGHT + num + CLIConstants.RESET));
-                        break;
-                    } catch (IllegalNumOfPlayersException e) {
-                        send(new ErrorMessage(GameCreationErrors.ILLEGAL_NUM_OF_PLAYER));
-                        setUpNumOfPlayers();
-                    }
-                }
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     /**
      * This method closes the socket.
      */
     public void close() {
+        setActive(false);
         server.unregisterClient(this.clientID);
         try {
             socket.close();
@@ -199,7 +202,19 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void handle(NumOfPlayerChoice numOfPlayerChoice) {
-        server.setNumOfPlayers(numOfPlayerChoice.getNumOfPlayer());
+        try {
+            int num = numOfPlayerChoice.getNumOfPlayer();
+            server.getGameHandlerByClientId(clientID).setNumberOfPlayers(num);
+            server.setNumOfPlayers(num);
+            send(new CustomMessage("Number of players correctly set to: " + num));
+        } catch (IllegalNumOfPlayersException e) {
+            send(new ErrorMessage(GameCreationErrors.ILLEGAL_NUM_OF_PLAYER));
+            send(new NumOfPlayerRequest());
+        }
+    }
+
+    public Integer getClientID() {
+        return clientID;
     }
 
     /**
@@ -208,19 +223,18 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void run() {
-        try {
-            while (isActive()) {
+        while (isActive()) {
+            try {
                 readFromStream();
+            } catch (IOException e) {
+                if (!(e instanceof EOFException)) {
+                    System.out.println("Read failed on client " + clientID + " socket ");
+                    server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
+                }
+            } catch (ClassNotFoundException e) {
+                System.out.println("ClassNotFoundException");
+                setActive(false);
             }
-        } catch (IOException e) {
-            // if it doesn't read, the client has disconnected
-            // we have to kill the entire game
-            server.getGameHandlerByClientId(clientID).stopGameByClientDisconnection(server.getUsernameByClientId(clientID));
-            setActive(false);
-        } catch (ClassNotFoundException e) {
-            setActive(false);
-        } finally {
-            close();
         }
     }
 }

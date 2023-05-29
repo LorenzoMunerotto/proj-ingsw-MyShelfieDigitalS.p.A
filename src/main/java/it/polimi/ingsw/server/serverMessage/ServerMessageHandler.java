@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.serverMessage;
 
+import java.io.IOException;
+
 public interface ServerMessageHandler {
 
     void handle(BoardSetMessage boardSetMessage);
@@ -8,11 +10,10 @@ public interface ServerMessageHandler {
     void handle(BreakRulesMessage breakRulesMessage);
     void handle(CommonCardReachMessage commonCardReachMessage);
     void handle(CommonCardsSetMessage commonCardsSetMessage);
-    void handle(ConnectionMessage connectionMessage);
+
     void handle(CustomMessage customMessage);
     void handle(DisconnectionMessage disconnectionMessage);
     void handle(EndGameMessage endGameMessage);
-    void handle(EndTurnMessage endTurnMessage);
     void handle(ErrorMessage errorMessage);
     void handle(FirstFullLibraryMessage firstFullLibraryMessage);
     void handle(LibraryUpdateMessage libraryUpdateMessage);
@@ -20,8 +21,11 @@ public interface ServerMessageHandler {
     void handle(NumOfPlayerRequest numOfPlayerRequest);
     void handle(PersonalCardSetMessage personalCardSetMessage);
     void handle(PointsUpdateMessage pointsUpdateMessage);
-    void handle(StartGameMessage startGameMessage);
+    void handle(StartGameMessage startGameMessage) ;
     void handle(StartTurnMessage startTurnMessage);
     void handle(UsernameRequest usernameRequest);
     void handle(LibrarySetMessage librarySetMessage);
+    void handle(PlayerOrderSetMessage playerOrderSetMessage);
+    void handle(CheckConnectionRequest checkConnectionMessage);
+    void handle(ChatServerMessage chatServerMessage);
 }

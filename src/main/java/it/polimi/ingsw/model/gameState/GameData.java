@@ -135,7 +135,7 @@ public class GameData extends AbstractListenable {
      * @param commonGoalCardsList the list of common goal cards
      */
     public void setCommonGoalCardsList(List<CommonGoalCard> commonGoalCardsList) {
-        for(CommonGoalCard commonGoalCard : commonGoalCardsList) {
+        for (CommonGoalCard commonGoalCard : commonGoalCardsList) {
             commonGoalCard.setPoints(numberOfPlayers);
         }
         this.commonGoalCardsList = commonGoalCardsList;
@@ -176,7 +176,7 @@ public class GameData extends AbstractListenable {
      */
     public void setCurrentPlayerIndex(Integer currentPlayerIndex) {
         this.currentPlayerIndex = currentPlayerIndex;
-        notifyAllListeners(new CurrentPlayerUpdateEvent(getCurrentPlayer().getUsername()));
+        notifyAllListeners(new CurrentPlayerUpdateEvent(getCurrentPlayer().getUsername(), currentPlayerIndex));
     }
 
     /**

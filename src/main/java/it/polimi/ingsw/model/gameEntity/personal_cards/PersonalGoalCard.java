@@ -21,7 +21,7 @@ public class PersonalGoalCard {
      * Constructor of the class.
      *
      * @param number the number of the personal goal card
-     * @param goals the list of the goals of the personal goal card
+     * @param goals  the list of the goals of the personal goal card
      */
     public PersonalGoalCard(@JsonProperty("number") int number, @JsonProperty("goals") List<Goal> goals) {
         this.number = number;

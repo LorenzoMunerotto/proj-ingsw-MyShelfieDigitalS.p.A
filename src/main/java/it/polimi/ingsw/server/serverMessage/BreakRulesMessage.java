@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import it.polimi.ingsw.model.gameMechanics.BreakRules;
+import it.polimi.ingsw.model.gameState.exceptions.BreakRules;
 
 public class BreakRulesMessage implements ServerMessage {
 
