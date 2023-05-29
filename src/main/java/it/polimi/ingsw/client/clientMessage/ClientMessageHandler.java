@@ -37,5 +37,11 @@ public interface ClientMessageHandler {
      */
     void handle(CheckConnection checkConnection);
 
+
+    /**
+     * Handles the message chatClientMessage.
+     *
+     * @param chatClientMessage the message chatClientMessage to handle.
+     */
     void handle(ChatClientMessage chatClientMessage);
 }

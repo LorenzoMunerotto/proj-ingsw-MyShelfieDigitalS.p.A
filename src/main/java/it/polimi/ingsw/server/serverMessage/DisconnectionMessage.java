@@ -10,6 +10,9 @@ public class DisconnectionMessage implements ServerMessage{
         this.message = "The game suddenly ended because "+ username + " has lost connection with the server";
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;
@@ -19,6 +22,9 @@ public class DisconnectionMessage implements ServerMessage{
         return username;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

@@ -60,12 +60,24 @@ public interface View  {
      */
      void main(String[] args);
 
+    /**
+     * This method is the method allow the username insertion.
+     */
      void chooseUsername();
 
-     void choosePlayersNumber();
+    /**
+     * This method allows the choice of the number of players
+     */
+    void choosePlayersNumber();
 
-     void chooseMove();
+    /**
+     * Method allows the choice of tiles and column
+     */
+    void chooseMove();
 
+    /**
+     *  When all player are connected correctly, and the game can start
+     */
      void startGame();
 
     /**

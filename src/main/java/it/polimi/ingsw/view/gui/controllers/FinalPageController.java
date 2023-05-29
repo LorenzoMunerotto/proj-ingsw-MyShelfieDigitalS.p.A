@@ -14,22 +14,36 @@ import org.javatuples.Pair;
 
 import java.util.List;
 
+
+/**
+ * Controller for the "FinalPageController.fxml" file.
+ * */
 public class FinalPageController implements Controller{
     @FXML
     private TableView<Result> tableResultID;
     private GUI gui;
     private  VirtualModel virtualModel;
+
+    /**
+     * {@inheritDoc}
+     * @param gui is the main class for the graphics part of the game.
+     */
     @Override
     public void setGui(GUI gui) {
         this.gui = gui;
         this.virtualModel=gui.getClient().getVirtualModel();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setUp(){
         Platform.runLater(this::compilePointsTable);
-
     }
 
+    /**
+     * This method fills in the table with the final classification.
+     */
     public void compilePointsTable(){
         Platform.runLater(() -> {
             List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();

@@ -8,11 +8,17 @@ public class CustomMessage implements ServerMessage {
         this.message = message;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

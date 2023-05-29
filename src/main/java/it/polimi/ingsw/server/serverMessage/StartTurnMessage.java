@@ -12,6 +12,10 @@ public class StartTurnMessage implements ServerMessage {
         this.currentPlayer = currentPlayer;
     }
 
+    /**
+     *{@inheritDoc}
+     */
+    @Override
     public String getMessage() {
         return message;
     }
@@ -20,6 +24,9 @@ public class StartTurnMessage implements ServerMessage {
         return currentPlayer;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

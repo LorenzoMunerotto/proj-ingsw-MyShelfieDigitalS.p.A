@@ -14,11 +14,17 @@ public class ErrorMessage implements ServerMessage {
         return type;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return String.valueOf(type);
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

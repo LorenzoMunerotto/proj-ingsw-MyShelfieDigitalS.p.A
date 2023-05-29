@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
+/**
+ * Controller for the "GameViewController.fxml" file.
+ * */
 public class GameViewController implements Controller {
     @FXML
     private VBox vboxMessagesChatID;
@@ -116,6 +120,13 @@ public class GameViewController implements Controller {
     private VirtualModel virtualModel;
     private int mex;
     private boolean youTurn = false;
+    private final ArrayList<GridPane> aLibraryGridsOw = new ArrayList<>();
+    private final ArrayList<Label> aLabelLib = new ArrayList<>();
+    private final String libraryBaseText = "Your Library: ";
+
+    /**
+     * this method is called when an Item Tile form the board is pressed "
+     */
     EventHandler<MouseEvent> clickItemTileBoardHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent t) {
@@ -141,9 +152,11 @@ public class GameViewController implements Controller {
             }
         }
     };
-    private final ArrayList<GridPane> aLibraryGridsOw = new ArrayList<>();
-    private final ArrayList<Label> aLabelLib = new ArrayList<>();
-    private final String libraryBaseText = "Your Library: ";
+
+
+    /**
+     * this method is called when an Item Tile from the Library is pressed
+     */
     EventHandler<MouseEvent> clickItemTileLibraryHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent t) {
@@ -160,6 +173,11 @@ public class GameViewController implements Controller {
         }
     };
 
+
+    /**
+     * {@inheritDoc}
+     * @param gui is the main class for the graphics part of the game.
+     */
     @Override
     public void setGui(GUI gui) {
         this.gui = gui;
@@ -188,12 +206,21 @@ public class GameViewController implements Controller {
         sp_mainChatID.setVisible(true);
     }
 
+    /**
+     * setting for the box in the upper-right corner of the screen,
+     * where the selected item tiles from the board are displayed.
+     * @param imageView selected from "item tiles selected" box
+     */
     public void setItemTileClicked(ImageView imageView) {
         imageView.setPreserveRatio(true);
         imageView.setFitHeight(gui.getMaxX() * (0.030));
         imageView.setFitWidth(gui.getMaxX() * (0.030));
         imageView.setVisible(true);
     }
+
+    /**
+     * set all the elements related to the chat in the "messenger tab".
+     */
     public void setChatView(){
         Platform.runLater(() -> {
             receiverID.getItems().clear();
@@ -232,6 +259,12 @@ public class GameViewController implements Controller {
         });
     }
 
+    /**
+     * method that manage all new message, both send or received by the client
+     * @param sender client who send the message
+     * @param messageChatContent text message that has been written
+     * @param type allow the method to understand whether it is dealing with a new message written form the client o received by the client.
+     */
     public void showChatMessage(String sender, String messageChatContent, ChatMessageType type) {
         Platform.runLater(() -> {
             switch (type) {
@@ -266,7 +299,9 @@ public class GameViewController implements Controller {
 
     }
 
-
+    /**
+     * print the library on the "Game" tab.
+     */
     public void fullLibrary() {
         Platform.runLater(new Runnable() {
             @Override
@@ -300,6 +335,9 @@ public class GameViewController implements Controller {
 
     }
 
+    /**
+     * print the board on the "Game" tab.
+     */
     public void fullBoard() {
         Platform.runLater(new Runnable() {
             @Override
@@ -334,7 +372,9 @@ public class GameViewController implements Controller {
 
     }
 
-
+    /**
+     * print the board on the "Game Overview" tab.
+     */
     public void printBoardOw() {
         for (int c = 0; c < 9; c++) {
             for (int r = 0; r < 9; r++) {
@@ -356,6 +396,9 @@ public class GameViewController implements Controller {
         boardOwID.setVisible(true);
     }
 
+    /**
+     * print all the library of the Players on this session of the "Game Overview" tab.
+     */
     public void printAllLibrary() {
         int i = 0;
         for (Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()) {
@@ -399,7 +442,9 @@ public class GameViewController implements Controller {
         library1ID.setMinWidth(150);
     }
 
-
+    /**
+     * set all the parameters related to the personal card.
+     */
     public void personalCardInitializer() {
         personalCardImgID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Personal_Goals" + virtualModel.getNumberPersonalCard() + ".png"))));
         vBoxPersonalID.setLayoutX(gui.getMaxX() * 0.35);
@@ -416,6 +461,9 @@ public class GameViewController implements Controller {
         itemTileLabelID.setVisible(true);
     }
 
+    /**
+     * set and keep updated the table where the name and the points of the player are displayed.
+     */
     public void setTablePoints(){
         Platform.runLater(() -> {
             pointUserNameTableID.getItems().clear();
@@ -437,6 +485,9 @@ public class GameViewController implements Controller {
             pointUserNameTableID.setVisible(true);
         });    }
 
+    /**
+     * set all the parameters related to the personal card, both in the "Game Overview" tab and "Game" tab.
+     */
     public void commonCardInitializer() {
         commonCard1ID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/CC" + virtualModel.getCommonGoalCards().get(0).getValue0() + "w" + virtualModel.getCommonGoalCards().get(0).getValue1() + "t.jpg"))));
         commonCard1OwID.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/CC" + virtualModel.getCommonGoalCards().get(0).getValue0() + "w" + virtualModel.getCommonGoalCards().get(0).getValue1() + "t.jpg"))));
@@ -473,6 +524,9 @@ public class GameViewController implements Controller {
         commonCardLabelID.setVisible(true);
     }
 
+    /**
+     * keep updated the token related to the different common cards
+     */
     public void commonCardUpdater() {
         Platform.runLater(new Runnable() {
             @Override
@@ -504,6 +558,11 @@ public class GameViewController implements Controller {
             sp_main.setVisible(true);
         });
     }
+
+    /**
+     * set all the parameters that are called when you need to show a message (not chat) to the player.
+     * @param error text that will be displayed.
+     */
     public void setErrorsTextIDText(String error) {
         Platform.runLater(() -> {
             if(mex>2){
@@ -526,7 +585,9 @@ public class GameViewController implements Controller {
     }
 
 
-
+    /**
+     * This method updates the different elements of the game,
+     */
     public void rePrintAll() {
         Platform.runLater(() -> {
             resetPrint();
@@ -541,6 +602,10 @@ public class GameViewController implements Controller {
         });
     }
 
+
+    /**
+     * This method clear or reset the elements of the game before updating them.
+     */
     public void resetPrint() {
         libraryID.setVisible(false);
         boardOwID.setVisible(false);
@@ -555,6 +620,10 @@ public class GameViewController implements Controller {
             i++;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
@@ -581,10 +650,17 @@ public class GameViewController implements Controller {
         });
     }
 
+    /**
+     * called when the game is ended, and it will display the results
+     */
     public void loadFinalPage() {
         Platform.runLater(() -> gui.changeStage("/fxml/FinalPage.fxml"));
     }
 
+    /**
+     * allow the controller to check if the player can do the different action or not
+     * @param youTurn true when is the Player turn
+     */
     public void setYouTurn(boolean youTurn) {
         this.youTurn = youTurn;
     }

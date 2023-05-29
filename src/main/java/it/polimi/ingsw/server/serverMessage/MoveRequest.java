@@ -8,11 +8,17 @@ public class MoveRequest implements ServerMessage {
         this.message = "Insert move input";
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

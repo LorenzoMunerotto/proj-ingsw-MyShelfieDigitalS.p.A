@@ -332,6 +332,11 @@ public class GameHandler {
         return sb.toString();
     }
 
+
+    /**
+     * This method send a chat message to each receiver
+     * @param chatClientMessage
+     */
     public void handlerClientChatMessage(ChatClientMessage chatClientMessage) {
         for (VirtualClient client : virtualClients) {
             if(chatClientMessage.getReceiver().equals("Everyone") &&!client.getUsername().equals(chatClientMessage.getSender())) {

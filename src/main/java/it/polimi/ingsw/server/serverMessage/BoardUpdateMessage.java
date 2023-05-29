@@ -16,11 +16,6 @@ public class BoardUpdateMessage implements ServerMessage {
         this.checksum = checksum;
     }
 
-    @Override
-    public String getMessage() {
-        return message;
-    }
-
     public List<Coordinate> getCoordinates() {
         return coordinates;
     }
@@ -29,6 +24,17 @@ public class BoardUpdateMessage implements ServerMessage {
         return checksum;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

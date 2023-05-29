@@ -4,19 +4,40 @@ import it.polimi.ingsw.server.serverMessage.CheckConnectionRequest;
 
 public class ConnectionChecker implements Runnable {
 
+    /**
+     * The client's SocketClientConnection
+     */
     private final SocketClientConnection socketClientConnection;
+    /**
+     * The server
+     */
     private final Server server;
+    /**
+     * Indicates whether the client is connected
+     */
     private Boolean clientIsConnected = false;
 
+    /**
+     * Default constructor
+     * @param socketClientConnection the socketClientConnection
+     * @param server the server
+     */
     public ConnectionChecker(SocketClientConnection socketClientConnection, Server server) {
         this.socketClientConnection = socketClientConnection;
         this.server=server;
     }
 
+    /**
+     * This method set the clientIsConnected flag
+     * @param clientIsConnected clientIsConnected
+     */
     public void setClientIsConnected(Boolean clientIsConnected) {
         this.clientIsConnected = clientIsConnected;
     }
 
+    /**
+     * This method run the connection Checker
+     */
     @Override
     public void run() {
 

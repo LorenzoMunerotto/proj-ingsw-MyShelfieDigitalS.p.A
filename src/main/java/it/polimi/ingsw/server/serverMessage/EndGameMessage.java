@@ -10,11 +10,17 @@ public class EndGameMessage implements ServerMessage {
         this.message = "The match is over";
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

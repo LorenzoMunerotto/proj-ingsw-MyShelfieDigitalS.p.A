@@ -9,6 +9,9 @@ public class ChatServerMessage implements ServerMessage {
     private final String receiver;
     private final String messageText;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return null;
@@ -27,6 +30,9 @@ public class ChatServerMessage implements ServerMessage {
         return messageText;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

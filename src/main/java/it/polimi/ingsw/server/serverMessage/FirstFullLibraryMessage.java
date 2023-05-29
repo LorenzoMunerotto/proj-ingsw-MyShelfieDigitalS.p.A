@@ -14,12 +14,18 @@ public class FirstFullLibraryMessage implements ServerMessage{
         return username;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;
     }
 
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

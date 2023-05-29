@@ -43,7 +43,13 @@ public class VirtualModel {
      * The username of the client.
      */
     private String myUsername;
+    /**
+     * The index of the current player
+     */
     private int currentPlayerIndex;
+    /**
+     * The list of players ordered
+     */
     private List<String> orderedListOfPlayers;
     /**
      * Is the last message received from the server.
@@ -57,6 +63,10 @@ public class VirtualModel {
 
     }
 
+    /**
+     * Get the index of the client's Personal Card
+     * @return indexPersonalGoalCard
+     */
     public int getNumberPersonalCard() {
         return this.indexPersonalGoalCard;
     }

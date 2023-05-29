@@ -20,6 +20,9 @@ public class LibraryUpdateMessage implements ServerMessage {
         this.checksum = checksum;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;

@@ -39,16 +39,13 @@ public class GUI extends Application implements View {
     private static final String LOGIN ="/fxml/LoginView.fxml";
     private static final String GAME ="/fxml/GameView.fxml";
     private static final String FINAL ="/fxml/FinalPage.fxml";
-
     private static double width;
     private static double height;
-
-    private static FXMLLoader loader;
-    private static FXMLLoader loaderGame;
     private Scene currentScene;
     private Stage stage;
-    private static Parent root = null;
-    private static Parent rootGame = null;
+    /**
+     * every fxml file with their file name
+     */
     private final HashMap<String, Scene> nameMapScene = new HashMap<>();
     private final Logger logger = Logger.getLogger(getClass().getName());
     private int scene=0;
@@ -61,13 +58,22 @@ public class GUI extends Application implements View {
         return virtualModel;
     }
 
+    /**
+     * star of the javafx view
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
     public void start(Stage primaryStage) {
         setup();
         this.stage = primaryStage;
         run();
     }
 
-
+    /**
+     * Load the different fxml file and their corresponding fxml controller
+     */
     public void setup() {
         screenInfo();
         List<String> fxmList = new ArrayList<>(Arrays.asList(LOGIN, GAME, FINAL));
@@ -99,6 +105,10 @@ public class GUI extends Application implements View {
         nameMapController.get(LOGIN).setUp();
         currentScene = nameMapScene.get(LOGIN);
     }
+
+    /**
+     *  Initial settings of items related to graphics
+     */
     public void run() {
         stage.setTitle("MyShelfieDigitals S.p.A.");
         stage.setScene(currentScene);
@@ -110,6 +120,11 @@ public class GUI extends Application implements View {
         stage.getIcons().add(new Image(Objects.requireNonNull(GUI.class.getResourceAsStream("/images/Box.png"))));
         stage.show();
     }
+
+    /**
+     * Allow to change scene when the game is running
+     * @param newScene next scene
+     */
     public void changeStage(String newScene) {
         currentScene = nameMapScene.get(newScene);
         stage.setScene(currentScene);
@@ -131,11 +146,6 @@ public class GUI extends Application implements View {
         maxY=screenBounds.getMaxY();
         width=screenBounds.getWidth();
         height=screenBounds.getHeight();
-    }
-    public void setController(){
-        loader= new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
-        setLoginController(loader.getController());
-        loginController.setGui(this);
     }
 
     public static double getWidth() {
@@ -196,9 +206,11 @@ public class GUI extends Application implements View {
 
     @Override
     public void chooseMove(){
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startGame()  {
         getLoginController().loadGameView();
@@ -209,29 +221,43 @@ public class GUI extends Application implements View {
         return client;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showGame() {
         getGameViewController().rePrintAll();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void waitForTurn() {
         gameViewController.setErrorsTextIDText("Waiting for " + virtualModel.getCurrentPlayerUsername() + " to play the turn...");
         getGameViewController().setYouTurn(false);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void playTurn() {
         getGameViewController().setYouTurn(true);
         getGameViewController().setErrorsTextIDText("It is your turn!");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void endGame(Boolean isWinner) {
         getGameViewController().loadFinalPage();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showErrorMessage(String errorMessage) {
         if(scene==0){
@@ -242,10 +268,16 @@ public class GUI extends Application implements View {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stopWaiting() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showMessage(String message) {
         if(scene==0){
@@ -256,6 +288,9 @@ public class GUI extends Application implements View {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void showChatMessage(String sender, String message) {
         getGameViewController().showChatMessage(sender, message,ChatMessageType.RECEIVER);
@@ -299,6 +334,5 @@ public class GUI extends Application implements View {
 
     @Override
     public void closeGame(){
-
     }
 }

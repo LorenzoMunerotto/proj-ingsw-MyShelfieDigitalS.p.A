@@ -44,6 +44,10 @@ public class MyShelfie {
         }
     }
 
+
+    /**
+     * This method show the menu
+     */
     public static void showMenu(){
         System.out.println(CLIConstants.CYAN_BRIGHT + "======================" + CLIConstants.RESET);
         System.out.println(CLIConstants.CYAN_BRIGHT + "||       MENU       ||" + CLIConstants.RESET);

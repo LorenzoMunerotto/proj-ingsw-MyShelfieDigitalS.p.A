@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import java.io.IOException;
-
 public interface ServerMessageHandler {
 
     void handle(BoardSetMessage boardSetMessage);
@@ -10,7 +8,6 @@ public interface ServerMessageHandler {
     void handle(BreakRulesMessage breakRulesMessage);
     void handle(CommonCardReachMessage commonCardReachMessage);
     void handle(CommonCardsSetMessage commonCardsSetMessage);
-
     void handle(CustomMessage customMessage);
     void handle(DisconnectionMessage disconnectionMessage);
     void handle(EndGameMessage endGameMessage);

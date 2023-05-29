@@ -34,6 +34,9 @@ public class SocketListener implements Runnable {
      * Lock for send method
      */
     private final Object lockSend = new Object();
+    /**
+     * Flag for run method, if it is false the run method terminates.
+     */
     private Boolean active;
 
     /**

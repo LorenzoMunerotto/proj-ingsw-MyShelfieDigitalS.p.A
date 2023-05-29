@@ -13,6 +13,9 @@ public class LibrarySetMessage implements ServerMessage{
         this.libraryGrid = libraryGrid;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return message;
@@ -26,6 +29,9 @@ public class LibrarySetMessage implements ServerMessage{
         return libraryGrid;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

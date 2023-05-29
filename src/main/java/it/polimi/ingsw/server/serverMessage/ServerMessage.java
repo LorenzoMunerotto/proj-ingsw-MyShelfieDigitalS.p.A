@@ -15,7 +15,7 @@ public interface ServerMessage extends Serializable {
 
     /**
      * This method implements the Visitor Pattern on ServerMessage
-     * @param serverMessageHandler
+     * @param serverMessageHandler a class that implements ServerMessageHandler
      */
     void accept( ServerMessageHandler serverMessageHandler) ;
 

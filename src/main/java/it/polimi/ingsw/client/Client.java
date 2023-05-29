@@ -62,7 +62,10 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         executor.submit(socketListener);
     }
 
-
+    /**
+     * Get the virtual model
+     * @return
+     */
     public VirtualModel getVirtualModel() {
         return virtualModel;
     }
@@ -182,16 +185,28 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         view.choosePlayersNumber();
     }
 
+    /**
+     * This method handles the number of Player in the match
+     * @param numOfPlayerChoice number of Player in the match selected
+     */
     @Override
     public void handle(NumOfPlayerChoice numOfPlayerChoice) {
         socketListener.send(numOfPlayerChoice);
     }
 
+    /**
+     * send the message to the server
+     * @param chatClientMessage element that contains all the information about the chat message
+     */
     @Override
     public void sendChatMessage(ChatClientMessage chatClientMessage) {
         socketListener.send(chatClientMessage);
     }
 
+    /**
+     * This method handles the receiving a new message
+     * @param chatServerMessage element that contains all the information about the chat message
+     */
     @Override
     public void handle(ChatServerMessage chatServerMessage) {
         view.showChatMessage(chatServerMessage.getSender(), chatServerMessage.getMessageText());
@@ -226,6 +241,10 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         virtualModel.setBoard(boardSetMessage.getGridBoard());
     }
 
+    /**
+     * This method handle the end game message
+     * @param endGameMessage
+     */
     @Override
     public void handle(EndGameMessage endGameMessage){
         view.showGame();
@@ -238,6 +257,10 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         view.endGame(isWinner);
     }
 
+    /**
+     * This method handle the endGameMessage
+     * @param librarySetMessage
+     */
     @Override
     public void handle(LibrarySetMessage librarySetMessage) {
         virtualModel.setLibrary(librarySetMessage.getLibraryOwnerUsername(), librarySetMessage.getLibraryGrid());
@@ -245,7 +268,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles the personal card set message.
-     *
      * @param personalCardSetMessage the personal card set message
      */
     @Override
@@ -255,7 +277,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles the common cards set message.
-     *
      * @param commonCardsSetMessage the common cards set message
      */
     @Override
@@ -265,7 +286,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles a custom message.
-     *
      * @param customMessage the custom message
      */
     @Override
@@ -361,6 +381,9 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     @Override
     public void handle(FirstFullLibraryMessage firstFullLibraryMessage) {
         virtualModel.setServerMessage(firstFullLibraryMessage.getMessage());
+        if(view instanceof GUI){
+            view.showMessage(firstFullLibraryMessage.getMessage());
+        }
     }
 
     /**

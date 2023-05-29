@@ -5,6 +5,7 @@ import org.javatuples.Triplet;
 
 import java.util.List;
 
+
 public class CommonCardsSetMessage implements ServerMessage{
 
     private final List<Triplet<Integer, Integer, String>> commonGoalCardList;
@@ -17,11 +18,17 @@ public class CommonCardsSetMessage implements ServerMessage{
         return this.commonGoalCardList;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public String getMessage() {
         return null;
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {
         serverMessageHandler.handle(this);

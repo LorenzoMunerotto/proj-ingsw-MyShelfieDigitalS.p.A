@@ -16,6 +16,9 @@ import javafx.scene.text.*;
 
 import java.util.Objects;
 
+/**
+ * Controller for the "LoginView.fxml" file.
+ * */
 public class LoginController implements Controller {
 
     @FXML
@@ -48,11 +51,19 @@ public class LoginController implements Controller {
     @FXML
     private Button startGameButtonID;
 
+    /**
+     * {@inheritDoc}
+     * @param gui is the main class for the graphics part of the game.
+     */
     @Override
     public void setGui(GUI gui) {
         this.gui = gui;
     }
 
+    /**
+     * set all the parameters that are called when you need to show a message to the player.
+     * @param error error text that will be displayed
+     */
     public void setErrorsLabelIDText(String error) {
         Platform.runLater(() -> {
             errorsTextID.getChildren().clear();
@@ -66,6 +77,10 @@ public class LoginController implements Controller {
         });
     }
 
+    /**
+     * this method is called when you press the button related to the username submission
+     * @param actionEvent Pressing of the button "continue" [userNameButtonID].
+     */
     public void userNameSubmit(ActionEvent actionEvent) {
         numberLabelID.setVisible(false);
         if (gui.isUsernameValid(textNameInputID.getText())) {
@@ -80,6 +95,10 @@ public class LoginController implements Controller {
         }
     }
 
+    /**
+     * deal with the Number of Player insertion.
+     * @param event Pressing of the button for the submission of the number of player.
+     */
     public void submitNumberOfPlayer(ActionEvent event) {
         if (numberBoxID.getValue() == null) {
             setErrorsLabelIDText("Please, select the exact number of players for the game");
@@ -92,14 +111,16 @@ public class LoginController implements Controller {
         }
     }
 
+    /**
+     * Call the method in the Gui class that allow to move to the GameView.
+     */
     public void loadGameView() {
         Platform.runLater(() -> gui.changeStage("/fxml/GameView.fxml"));
     }
 
-    public void enterTheGame(ActionEvent event) {
-        gui.changeStage("/fxml/GameView.fxml");
-    }
-
+    /**
+     * prepare all the element related to the username insertion.
+     */
     public void chooseUsernameView() {
         textNameInputID.setVisible(true);
         nameLabelID.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000FF;");
@@ -107,6 +128,9 @@ public class LoginController implements Controller {
         userNameButtonID.setVisible(true);
     }
 
+    /**
+     * prepare all the element related to the number of Player insertion.
+     */
     public void choosePlayersNumberView() {
         numberBoxID.getItems().addAll(numbers);
         numberLabelID.setStyle("-fx-background-color: #ffffff; -fx-text-fill: #000000FF;");
@@ -115,6 +139,9 @@ public class LoginController implements Controller {
         loginButtonID.setVisible(true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setUp() {
         Platform.runLater(new Runnable() {
             @Override
@@ -133,7 +160,6 @@ public class LoginController implements Controller {
                 loginButtonID.setVisible(false);
                 textNameInputID.setVisible(false);
                 userNameButtonID.setVisible(false);
-                startGameButtonID.setVisible(false);
                 nameLabelID.setVisible(false);
             }
         });

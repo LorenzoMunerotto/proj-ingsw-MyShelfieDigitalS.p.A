@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 import static java.lang.Thread.sleep;
 
 /**
- * This class manage the client socket.
+ * This class manage the client's socket.
  */
 public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
@@ -102,11 +102,19 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
             new Thread(()-> input.accept(this)).start();
     }
 
+    /**
+     * This method handle the checkConnection message
+     * @param checkConnection the message checkConnection to handle.
+     */
     @Override
     public void handle(CheckConnection checkConnection) {
         connectionChecker.setClientIsConnected(true);
     }
 
+    /**
+     * This method handle the chatClientMessage
+     * @param chatClientMessage the message chatClientMessage to handle.
+     */
     @Override
     public void handle(ChatClientMessage chatClientMessage) {
         server.getGameHandlerByClientId(clientID).handlerClientChatMessage(chatClientMessage);
