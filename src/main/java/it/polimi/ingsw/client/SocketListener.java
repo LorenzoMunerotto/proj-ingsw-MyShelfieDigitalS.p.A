@@ -17,7 +17,7 @@ public class SocketListener implements Runnable {
     /**
      * It is the client.
      */
-    private Client client;
+    private final Client client;
     /**
      * It is the socket of the server.
      */
@@ -33,7 +33,7 @@ public class SocketListener implements Runnable {
     /**
      * Lock for send method
      */
-    private Object lockSend = new Object();
+    private final Object lockSend = new Object();
     private Boolean active;
 
     /**
@@ -83,22 +83,22 @@ public class SocketListener implements Runnable {
      */
     @Override
     public void run() {
-        Integer counterEOFExecption =0;
+        int counterEOFExeception =0;
         while (isActive()) {
             try {
                 readFromStream();
-                counterEOFExecption =0;
+                counterEOFExeception =0;
             } catch (IOException e) {
                 if (!(e instanceof EOFException)) {
                     System.out.println("Lost connection with the server, IOException");
                 } else{
-                    counterEOFExecption++;
+                    counterEOFExeception++;
                     try {
                         sleep(100);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
-                    if (counterEOFExecption>=25){
+                    if (counterEOFExeception>=25){
                         setActive(false);
                         client.lostConnection();
                     }
@@ -124,10 +124,7 @@ public class SocketListener implements Runnable {
                 System.err.println("Failed to close resources in run method: " + e.getMessage());
                 e.printStackTrace();
             }
-
     }
-
-
 
     /**
      * This method use socket to send a message to the server.

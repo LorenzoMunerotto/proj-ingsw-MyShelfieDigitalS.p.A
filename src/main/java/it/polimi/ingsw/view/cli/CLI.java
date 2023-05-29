@@ -305,11 +305,6 @@ public class CLI implements View {
         }
     }
 
-    @Override
-    public void showChatMessage(String sender, String message) {
-
-    }
-
     /**
      * Main method of the cli.
      *
@@ -330,5 +325,14 @@ public class CLI implements View {
 
     @Override
     public void setPlayersNumber(int playersNumber) {
+    }
+
+    @Override
+    public void showChatMessage(String sender, String message) {
+    }
+
+    @Override
+    public void closeGame(){
+        System.exit(0);
     }
 }

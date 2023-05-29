@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.clientMessage.ChatClientMessage;
 import it.polimi.ingsw.model.gameState.events.PlayerOrderSetEvent;
 import it.polimi.ingsw.model.gameState.exceptions.EmptyBagException;
@@ -58,7 +57,7 @@ public class GameHandler {
     /**
      * It is the GameHandler Identifier
      */
-    private Integer gameHandlerId;
+    private final Integer gameHandlerId;
 
     /**
      * Default constructor, initialize the GameData and the VirtualClients list.
@@ -327,7 +326,7 @@ public class GameHandler {
         sb.append(gameHandlerId);
         sb.append(" with { ");
         for (VirtualClient virtualClient : virtualClients) {
-            sb.append(virtualClient.getUsername()+"@"+ virtualClient.getClientID()+" ");
+            sb.append(virtualClient.getUsername()).append("@").append(virtualClient.getClientID()).append(" ");
         }
         sb.append("}");
         return sb.toString();

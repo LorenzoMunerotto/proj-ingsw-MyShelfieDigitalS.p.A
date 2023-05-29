@@ -31,24 +31,21 @@ public class FinalPageController implements Controller{
     }
 
     public void compilePointsTable(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
-                ObservableList<Result> data = FXCollections.observableArrayList();
-                TableColumn userNameColumn = new TableColumn("userName");
-                TableColumn pointsColum = new TableColumn("points");
-                tableResultID.getColumns().addAll(userNameColumn,pointsColum);
-                userNameColumn.setMinWidth(150);
-                pointsColum.setMinWidth(150);
-                for (int i = 0; i < leaderBoards.size(); i++) {
-                    data.add(new Result(leaderBoards.get(i).getValue0(),String.valueOf(leaderBoards.get(i).getValue1())));
-                }
-                userNameColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("userName"));
-                pointsColum.setCellValueFactory(new PropertyValueFactory<Result, String>("points"));
-                tableResultID.getItems().addAll(data);
-                tableResultID.setVisible(true);
+        Platform.runLater(() -> {
+            List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
+            ObservableList<Result> data = FXCollections.observableArrayList();
+            TableColumn userNameColumn = new TableColumn("userName");
+            TableColumn pointsColum = new TableColumn("points");
+            tableResultID.getColumns().addAll(userNameColumn,pointsColum);
+            userNameColumn.setMinWidth(150);
+            pointsColum.setMinWidth(150);
+            for (int i = 0; i < leaderBoards.size(); i++) {
+                data.add(new Result(leaderBoards.get(i).getValue0(),String.valueOf(leaderBoards.get(i).getValue1())));
             }
+            userNameColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("userName"));
+            pointsColum.setCellValueFactory(new PropertyValueFactory<Result, String>("points"));
+            tableResultID.getItems().addAll(data);
+            tableResultID.setVisible(true);
         });
     }
 }

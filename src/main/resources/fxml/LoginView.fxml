@@ -18,8 +18,71 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
          </padding>
          <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
          </BorderPane.margin>
+         <ImageView fx:id="backGroundID" fitHeight="400.0" fitWidth="600.0" layoutX="-10.0" layoutY="-10.0"
+                    pickOnBounds="true" preserveRatio="true"/>
+         <Label fx:id="numberLabelID" layoutX="83.0" layoutY="81.0" text="Number of Players:">
+            <font>
+               <Font size="18.0"/>
+            </font>
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+         </Label>
+         <Label fx:id="nameLabelID" layoutX="83.0" layoutY="134.0" prefHeight="43.0" prefWidth="105.0" text="Username:">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Label>
+         <Button fx:id="loginButtonID" layoutX="226.0" layoutY="285.0" mnemonicParsing="false"
+                 onAction="#submitNumberOfPlayer" text="Start Game">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+         <TextField fx:id="textNameInputID" layoutX="279.0" layoutY="134.0">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </TextField>
+         <ChoiceBox fx:id="numberBoxID" layoutX="280.0" layoutY="80.0" prefWidth="150.0">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+         </ChoiceBox>
+         <Button fx:id="userNameButtonID" layoutX="226.0" layoutY="285.0" mnemonicParsing="false"
+                 onAction="#userNameSubmit" text="Continue">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
+         <TextFlow fx:id="errorsTextID" layoutX="171.0" layoutY="190.0" prefHeight="47.0" prefWidth="247.0">
+            <padding>
+               <Insets bottom="2.0" left="2.0" right="2.0" top="2.0"/>
+            </padding>
+         </TextFlow>
+         <Button fx:id="startGameButtonID" layoutX="226.0" layoutY="285.0" mnemonicParsing="false"
+                 onAction="#enterTheGame" text="Enter the Game">
+            <padding>
+               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <font>
+               <Font size="18.0"/>
+            </font>
+         </Button>
       </Pane>
    </center>
 </BorderPane>

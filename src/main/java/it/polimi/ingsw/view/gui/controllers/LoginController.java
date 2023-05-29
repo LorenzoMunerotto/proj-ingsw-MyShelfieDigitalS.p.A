@@ -5,20 +5,16 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
-import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.util.Objects;
 
 public class LoginController implements Controller {
 
@@ -45,10 +41,9 @@ public class LoginController implements Controller {
     @FXML
     private Pane paneID;
 
-    private boolean usernamePress = false;
     private GUI gui;
 
-    private Integer[] numbers = {2, 3, 4};
+    private final Integer[] numbers = {2, 3, 4};
 
     @FXML
     private Button startGameButtonID;
@@ -80,7 +75,6 @@ public class LoginController implements Controller {
             userNameButtonID.setVisible(false);
             nameLabelID.setVisible(false);
         } else if (!gui.isUsernameValid(textNameInputID.getText())) {
-            usernamePress = false;
             setErrorsLabelIDText("Invalid username, please try again");
             textNameInputID.clear();
         }
@@ -96,34 +90,14 @@ public class LoginController implements Controller {
             numberLabelID.setVisible(false);
             loginButtonID.setVisible(false);
         }
-
     }
 
     public void loadGameView() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                gui.changeStage("/fxml/GameView.fxml");
-
-            }
-        });
+        Platform.runLater(() -> gui.changeStage("/fxml/GameView.fxml"));
     }
 
-    public void enterTheGame(ActionEvent event) throws IOException {
+    public void enterTheGame(ActionEvent event) {
         gui.changeStage("/fxml/GameView.fxml");
-
-    }
-
-
-    public void preGame() {
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                startGameButtonID.setText("Enter the Game");
-                startGameButtonID.setVisible(true);
-            }
-        });
-
     }
 
     public void chooseUsernameView() {
@@ -132,7 +106,6 @@ public class LoginController implements Controller {
         nameLabelID.setVisible(true);
         userNameButtonID.setVisible(true);
     }
-
 
     public void choosePlayersNumberView() {
         numberBoxID.getItems().addAll(numbers);
@@ -148,7 +121,7 @@ public class LoginController implements Controller {
             public void run() {
                 paneID.setBackground(new Background(
                         new BackgroundImage(
-                                new Image(getClass().getResourceAsStream("/images/Display.jpg")),
+                                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Display.jpg"))),
                                 BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
                                 new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
                                 new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
@@ -165,5 +138,4 @@ public class LoginController implements Controller {
             }
         });
     }
-
 }

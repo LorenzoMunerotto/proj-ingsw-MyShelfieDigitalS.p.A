@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.clientMessage;
 
-import it.polimi.ingsw.server.serverMessage.ChatServerMessage;
 import it.polimi.ingsw.view.events.Move;
 import it.polimi.ingsw.view.events.NumOfPlayerChoice;
 import it.polimi.ingsw.view.events.UsernameChoice;

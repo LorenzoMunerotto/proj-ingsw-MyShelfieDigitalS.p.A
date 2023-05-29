@@ -126,7 +126,6 @@ public class CLIConstants {
     public static final String PURPLE_BRIGHT = "\033[0;95m";
     public static final String CYAN_BRIGHT = "\033[0;96m";
     public static final String WHITE_BRIGHT = "\033[0;97m";
-    public static final String RED_BACKGROUND_BRIGHT = "\033[0;101m";
     public static final String GREEN_BACKGROUND_BRIGHT = "\033[0;102m";
     public static final String BLUE_BACKGROUND_BRIGHT = "\033[0;104m";
     public static final String PURPLE_BACKGROUND_BRIGHT = "\033[0;105m";

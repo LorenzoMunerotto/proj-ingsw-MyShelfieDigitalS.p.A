@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.client.SocketListener;
 import it.polimi.ingsw.server.serverMessage.CheckConnectionRequest;
 
 public class ConnectionChecker implements Runnable {
@@ -12,10 +11,6 @@ public class ConnectionChecker implements Runnable {
     public ConnectionChecker(SocketClientConnection socketClientConnection, Server server) {
         this.socketClientConnection = socketClientConnection;
         this.server=server;
-    }
-
-    public Boolean getClientIsConnected() {
-        return clientIsConnected;
     }
 
     public void setClientIsConnected(Boolean clientIsConnected) {

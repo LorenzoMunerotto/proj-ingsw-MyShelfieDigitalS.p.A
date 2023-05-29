@@ -15,7 +15,7 @@ public interface ClientMessage extends Serializable {
 
     /**
      * Implement the Visitor pattern on ClientMessage
-     * @param clientMessageHandler
+     * @param clientMessageHandler is the client message handler
      */
     void accept(ClientMessageHandler clientMessageHandler);
 }

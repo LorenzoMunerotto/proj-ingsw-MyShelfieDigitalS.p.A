@@ -97,6 +97,7 @@ public class Server {
     public String getUsernameByClientId(Integer clientId) {
         return ClientIdMapUsername.get(clientId);
     }
+
     /**
      * Set the number of players.
      *
@@ -164,7 +165,6 @@ public class Server {
      * This method manage the waiting list in order to start the game when the number of players is reached.
      *
      * @param socketClientConnection is the socketClientConnection of the client
-     * @throws InterruptedException if the thread is interrupted
      */
     public synchronized void lobby(SocketClientConnection socketClientConnection) {
 
@@ -203,7 +203,4 @@ public class Server {
         VirtualClientMapSocketClientConnection.remove(client);
         System.out.println("Client has been successfully unregistered.");
     }
-
-
-
 }

@@ -61,9 +61,9 @@ public class VirtualModel {
         return this.indexPersonalGoalCard;
     }
 
-    /**************************************************************************
+    /*
      *                                    Board                               *
-     **************************************************************************/
+     */
 
     /**
      * Get the board.
@@ -128,9 +128,9 @@ public class VirtualModel {
         return crc.getValue();
     }
 
-    /**************************************************************************
+    /*
      *                                  Library                               *
-     **************************************************************************/
+     */
 
     /**
      * Get the library.
@@ -193,9 +193,9 @@ public class VirtualModel {
         return crc.getValue();
     }
 
-    /**************************************************************************
+    /*
      *                               Personal Card                            *
-     **************************************************************************/
+     */
 
     /**
      * Get the personal goal card.
@@ -216,9 +216,9 @@ public class VirtualModel {
         this.indexPersonalGoalCard = numberPersonalCard;
     }
 
-    /**************************************************************************
+    /*
      *                                 Common Card                            *
-     **************************************************************************/
+     */
 
     public Map<String, ItemTileType[][]> getClientUsernameLibrary() {
         return clientUsernameLibrary;
@@ -258,9 +258,9 @@ public class VirtualModel {
         }
     }
 
-    /**************************************************************************
+    /*
      *                               Current Player                           *
-     **************************************************************************/
+     */
 
 
     public void setPlayerIndex(List<String> usernames) {
@@ -309,9 +309,9 @@ public class VirtualModel {
         this.currentPlayerIndex = currentPlayerUsernameIndex.getValue1();
     }
 
-    /**************************************************************************
+    /*
      *                               Client username                          *
-     **************************************************************************/
+     */
 
     /**
      * Get the username of the client.
@@ -332,9 +332,9 @@ public class VirtualModel {
     }
 
 
-    /**************************************************************************
+    /*
      *                                   Points                               *
-     **************************************************************************/
+     */
 
     /**
      * Get the points of the client.
@@ -387,9 +387,9 @@ public class VirtualModel {
         return leaderBoard;
     }
 
-    /**************************************************************************
+    /*
      *                               Server Message                           *
-     **************************************************************************/
+     */
 
     /**
      * Get the server message.

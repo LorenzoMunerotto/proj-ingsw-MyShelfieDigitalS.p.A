@@ -5,9 +5,9 @@ import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
 
 public class ChatServerMessage implements ServerMessage {
 
-    private String sender;
-    private String receiver;
-    private String messageText;
+    private final String sender;
+    private final String receiver;
+    private final String messageText;
 
     @Override
     public String getMessage() {
@@ -23,22 +23,9 @@ public class ChatServerMessage implements ServerMessage {
         return sender;
     }
 
-    public String getReceiver() {
-        return receiver;
-    }
-
     public String getMessageText() {
         return messageText;
     }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
-    }
-
 
     @Override
     public void accept(ServerMessageHandler serverMessageHandler) {

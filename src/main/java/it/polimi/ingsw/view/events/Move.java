@@ -2,7 +2,6 @@ package it.polimi.ingsw.view.events;
 
 import it.polimi.ingsw.client.clientMessage.ClientMessage;
 import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
-import it.polimi.ingsw.listener.Listener;
 import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.util.List;
@@ -70,4 +69,3 @@ public class Move implements ClientMessage, ViewEvent {
         clientMessageHandler.handle(this);
     }
 }
-

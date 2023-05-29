@@ -2,11 +2,8 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.client.Client;
 import it.polimi.ingsw.client.VirtualModel;
-import it.polimi.ingsw.model.gameEntity.Coordinate;
 import it.polimi.ingsw.view.cli.CLIConstants;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,5 +97,12 @@ public interface View  {
      */
      void showMessage(String message);
 
+    /** Shows a chat message
+     *
+     * @param sender
+     * @param messageText
+     */
      void showChatMessage(String sender, String messageText);
+
+    void closeGame();
 }

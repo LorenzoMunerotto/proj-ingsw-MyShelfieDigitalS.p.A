@@ -17,7 +17,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -27,15 +26,13 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static javafx.application.Application.launch;
-
 public class GUI extends Application implements View {
     private static LoginController loginController;
     private static Scene sceneGame;
     private static GameViewController gameViewController;
     private static FinalPageController finalPageController;
     private static Client client;
-    private VirtualModel virtualModel;
+    private final VirtualModel virtualModel;
     private final HashMap<String, Controller> nameMapController = new HashMap<>();
     private static double maxX;
     private static double maxY;
@@ -80,17 +77,19 @@ public class GUI extends Application implements View {
                 nameMapScene.put(path, new Scene(loader.load()));
                 Controller controller = loader.getController();
                 controller.setGui(this);
-                if(path==LOGIN){
-                    loginController=loader.getController();
-                    loginController.setGui(this);
-                }
-                else if(path==GAME){
-                    gameViewController=loader.getController();
-                    gameViewController.setGui(this);
-                }
-                else if(path==FINAL){
-                    finalPageController=loader.getController();
-                    finalPageController.setGui(this);
+                switch (path) {
+                    case LOGIN -> {
+                        loginController = loader.getController();
+                        loginController.setGui(this);
+                    }
+                    case GAME -> {
+                        gameViewController = loader.getController();
+                        gameViewController.setGui(this);
+                    }
+                    case FINAL -> {
+                        finalPageController = loader.getController();
+                        finalPageController.setGui(this);
+                    }
                 }
                 nameMapController.put(path, controller);
             }
@@ -104,14 +103,11 @@ public class GUI extends Application implements View {
         stage.setTitle("MyShelfieDigitals S.p.A.");
         stage.setScene(currentScene);
         //stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
-        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                Platform.exit();
-                System.exit(0);
-            }
+        stage.setOnCloseRequest(windowEvent -> {
+            Platform.exit();
+            System.exit(0);
         });
-        stage.getIcons().add(new Image(GUI.class.getResourceAsStream("/images/Box.png")));
+        stage.getIcons().add(new Image(Objects.requireNonNull(GUI.class.getResourceAsStream("/images/Box.png"))));
         stage.show();
     }
     public void changeStage(String newScene) {
@@ -270,7 +266,7 @@ public class GUI extends Application implements View {
     }
 
     public void setLoginController(LoginController loginController) {
-        this.loginController = loginController;
+        GUI.loginController = loginController;
     }
 
     public static GameViewController getGameViewController() {
@@ -299,5 +295,10 @@ public class GUI extends Application implements View {
 
     public HashMap<String, Scene> getNameMapScene() {
         return nameMapScene;
+    }
+
+    @Override
+    public void closeGame(){
+
     }
 }

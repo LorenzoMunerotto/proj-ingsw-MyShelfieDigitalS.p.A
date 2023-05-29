@@ -30,6 +30,4 @@ public interface ViewChangeEventHandler extends EventHandler , Listener {
     void handle(NumOfPlayerChoice numOfPlayerChoice);
 
     void sendChatMessage(ChatClientMessage chatClientMessage);
-
-
 }

@@ -8,7 +8,6 @@ import it.polimi.ingsw.view.cli.CLI;
 import it.polimi.ingsw.view.cli.CLIConstants;
 import it.polimi.ingsw.server.serverMessage.*;
 import it.polimi.ingsw.view.gui.GUI;
-import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -192,11 +191,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     public void sendChatMessage(ChatClientMessage chatClientMessage) {
         socketListener.send(chatClientMessage);
     }
+
     @Override
     public void handle(ChatServerMessage chatServerMessage) {
         view.showChatMessage(chatServerMessage.getSender(), chatServerMessage.getMessageText());
     }
-
 
     /**
      * This method handles the move request.
@@ -401,7 +400,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         view.stopWaiting();
         virtualModel.setServerMessage(disconnectionMessage.getMessage());
         view.showMessage(disconnectionMessage.getMessage());
-        System.exit(1);
+        view.closeGame();
     }
 
     @Override
