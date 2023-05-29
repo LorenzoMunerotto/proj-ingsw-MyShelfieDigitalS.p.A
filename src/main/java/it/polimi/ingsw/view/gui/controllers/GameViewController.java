@@ -374,8 +374,8 @@ public class GameViewController implements Controller {
             aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY() * 0.55);
             aLibraryGridsOw.get(i).setHgap(2);
             aLibraryGridsOw.get(i).setVgap(2);
-            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX()*(0.025)*5+4*5),(gui.getMaxX()*(0.025)*6+4*6));
-            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX()*(0.025)*5+4*5),(gui.getMaxX()*(0.025)*6+4*6));
+            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX()*(0.025)*5+2*5),(gui.getMaxX()*(0.025)*6+2*6));
+            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX()*(0.025)*5+2*5),(gui.getMaxX()*(0.025)*6+2*6));
             aLibraryGridsOw.get(i).setVisible(true);
             aLabelLib.get(i).setText(libraryMap.getKey()+":");
             aLabelLib.get(i).setStyle("-fx-background-color: #ffffff");
