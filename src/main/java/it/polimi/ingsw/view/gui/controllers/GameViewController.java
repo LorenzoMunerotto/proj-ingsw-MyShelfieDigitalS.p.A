@@ -488,13 +488,13 @@ public class GameViewController implements Controller {
     public void setErrorBox() {
         Platform.runLater(() -> {
             vBox_messages.setMaxWidth(gui.getMaxX() * 0.14);
-            vBox_messages.setMaxHeight(gui.getMaxY() * 0.12);
+            vBox_messages.setMaxHeight(gui.getMaxY() * 0.25);
             vBox_messages.setMinWidth(gui.getMaxX() * 0.14);
-            vBox_messages.setMinHeight(gui.getMaxY() * 0.12);
+            vBox_messages.setMinHeight(gui.getMaxY() * 0.25);
             sp_main.setMaxWidth(gui.getMaxX() * 0.18);
             sp_main.setMaxHeight(gui.getMaxY() * 0.14);
             sp_main.setMinWidth(gui.getMaxX() * 0.18);
-            sp_main.setMinHeight(gui.getMaxY() * 0.14);
+            sp_main.setMinHeight(gui.getMaxY() * 0.25);
             vBox_messages.setLayoutX(gui.getMaxX() * 0.45);
             vBox_messages.setLayoutY(gui.getMaxY() * 0.01);
             sp_main.setLayoutX(gui.getMaxX() * 0.46);
@@ -506,7 +506,7 @@ public class GameViewController implements Controller {
     }
     public void setErrorsTextIDText(String error) {
         Platform.runLater(() -> {
-            if(mex>3){
+            if(mex>2){
                 vBox_messages.getChildren().clear();
                 mex=0;
             }
