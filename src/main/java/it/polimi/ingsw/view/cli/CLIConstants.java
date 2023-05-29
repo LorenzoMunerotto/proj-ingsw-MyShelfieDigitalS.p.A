@@ -63,7 +63,7 @@ public class CLIConstants {
             ItemTileType.TROPHY, CLIConstants.BLACK_TEXT_CYAN_BACKGROUND_BRIGHT + " TRO " + CLIConstants.RESET,
             ItemTileType.PLANT, CLIConstants.BLACK_TEXT_PURPLE_BACKGROUND_BRIGHT + " PLA " + CLIConstants.RESET,
             ItemTileType.EMPTY, "     ",
-            ItemTileType.NULL,  CLIConstants.RED_BACKGROUND_BRIGHT + "     " + CLIConstants.RESET
+            ItemTileType.NULL,  "     "
     );
     /**
      * It is a map that contains the association between the item tile type and the color used to print it.
@@ -77,7 +77,7 @@ public class CLIConstants {
             ItemTileType.TROPHY, CLIConstants.BLACK_TEXT_CYAN_BACKGROUND_BRIGHT + " T " + CLIConstants.RESET,
             ItemTileType.PLANT, CLIConstants.BLACK_TEXT_PURPLE_BACKGROUND_BRIGHT + " P " + CLIConstants.RESET,
             ItemTileType.EMPTY, "   ",
-            ItemTileType.NULL,  CLIConstants.RED_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET
+            ItemTileType.NULL,  "   "
     );
     /**
      * It is the string used to print the legend of the tiles associated to the colors.
@@ -89,7 +89,7 @@ public class CLIConstants {
             CLIConstants.BLUE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = FRAME \n" +
             CLIConstants.CYAN_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = TROPHY\n" +
             CLIConstants.PURPLE_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = PLANT \n" +
-            CLIConstants.RED_BACKGROUND_BRIGHT + "   " + CLIConstants.RESET + " = NULL  \n" +
+            "            \n" +
             "            \n";
     /**
      * It is a basic string used before each message from the console.

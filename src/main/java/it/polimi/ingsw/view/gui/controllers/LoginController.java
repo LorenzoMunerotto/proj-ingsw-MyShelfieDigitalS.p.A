@@ -14,8 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.paint.Color;
+import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -65,7 +65,10 @@ public class LoginController implements Controller {
                 numberLabelID.setVisible(false);
                 errorsTextID.getChildren().clear();
                 Text text = new Text(error);
-                text.setStyle("-fx-font: 14 arial; ");
+                text.setFill(Color.WHITE);
+                text.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.REGULAR, 19));
+                text.setStrokeWidth(1);
+                text.setStroke(Color.BLACK);
                 errorsTextID.getChildren().add(text);
                 errorsTextID.setStyle("-fx-background-color: white");
                 errorsTextID.setVisible(true);
@@ -83,11 +86,7 @@ public class LoginController implements Controller {
             nameLabelID.setVisible(false);
         } else if (!gui.isUsernameValid(textNameInputID.getText())) {
             usernamePress = false;
-            errorsTextID.getChildren().clear();
-            Text text = new Text("Invalid username, please try again");
-            errorsTextID.setStyle("-fx-background-color: white");
-            errorsTextID.getChildren().add(text);
-            errorsTextID.setVisible(true);
+            setErrorsLabelIDText("Invalid username, please try again");
             textNameInputID.clear();
         }
     }
@@ -95,12 +94,7 @@ public class LoginController implements Controller {
     public void submitNumberOfPlayer(ActionEvent event) {
         numberLabelID.setVisible(false);
         if (numberBoxID.getValue() == null) {
-            textNameInputID.clear();
-            errorsTextID.getChildren().clear();
-            Text text = new Text("Please, select the exact number of players for the game");
-            errorsTextID.getChildren().add(text);
-            errorsTextID.setStyle("-fx-background-color: white");
-            errorsTextID.setVisible(true);
+            setErrorsLabelIDText("Please, select the exact number of players for the game");
         } else if (numberBoxID.getValue() != null) {
             errorsTextID.getChildren().clear();
             gui.setPlayersNumber(numberBoxID.getValue());
