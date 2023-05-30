@@ -104,8 +104,7 @@ public class CLIConstants {
      */
     public static final String RESET = "\033[0m";
     /**
-     * A list of all the possible colors.
-     * Once we choose which colors to use, we can delete the unused ones.
+     * All the color used for the terminal.
      */
     public static final String BLACK_TEXT_GREEN_BACKGROUND_BRIGHT = "\u001B[30;102m";
     public static final String BLACK_TEXT_WHITE_BACKGROUND_BRIGHT = "\u001B[30;107m";
@@ -132,7 +131,7 @@ public class CLIConstants {
     public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m";
     public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";
     /**
-     * A list of all the used symbols in the drawer.
+     * All the used symbols in the drawer.
      */
     public static final String CORNER_TOP_LEFT = "┌";
     public static final String CORNER_TOP_RIGHT = "┐";

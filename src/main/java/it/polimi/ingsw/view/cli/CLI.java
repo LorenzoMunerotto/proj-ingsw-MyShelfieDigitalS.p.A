@@ -15,7 +15,13 @@ import java.io.IOException;
  */
 public class CLI implements View {
 
+    /**
+     * It is the reader used to read the user input.
+     */
     private static ConsoleReader consoleReader;
+    /**
+     * It is the virtual model of the game.
+     */
     private final VirtualModel virtualModel;
     /**
      * It is the drawer used to draw the game.
@@ -25,6 +31,9 @@ public class CLI implements View {
      * It is the parser used to parse the user input.
      */
     private final CLIParser parser;
+    /**
+     * It is the client that is using this view.
+     */
     private Client client;
     /**
      * It is a thread that is used for waiting.
@@ -61,6 +70,11 @@ public class CLI implements View {
         }
     }
 
+    /**
+     * Get the virtual model of the game.
+     *
+     * @return the virtual model of the game
+     */
     @Override
     public VirtualModel getVirtualModel() {
         return virtualModel;
@@ -77,7 +91,7 @@ public class CLI implements View {
             throws InterruptedException, IOException {
         consoleReader.setExpandEvents(false);
         String line;
-        try{
+        try {
             line = consoleReader.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -314,25 +328,49 @@ public class CLI implements View {
     public void main(String[] args) {
     }
 
+    /**
+     * Sets the client.
+     *
+     * @param client the client
+     */
     @Override
     public void setClient(Client client) {
         this.client = client;
     }
 
+    /**
+     * Sets the username.
+     *
+     * @param username the username
+     */
     @Override
     public void setUsername(String username) {
     }
 
+    /**
+     * Sets the number of players.
+     *
+     * @param playersNumber the number of players
+     */
     @Override
     public void setPlayersNumber(int playersNumber) {
     }
 
+    /**
+     * Shows a chat message.
+     *
+     * @param sender  the sender of the message
+     * @param message the message
+     */
     @Override
     public void showChatMessage(String sender, String message) {
     }
 
+    /**
+     * Close the game.
+     */
     @Override
-    public void closeGame(){
+    public void closeGame() {
         System.exit(0);
     }
 }

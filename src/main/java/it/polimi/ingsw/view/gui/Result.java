@@ -9,7 +9,7 @@ public class  Result {
     /**
      * Player username
      */
-    private final SimpleStringProperty userName;
+    private final SimpleStringProperty username;
     /**
      * Player points
      */
@@ -18,29 +18,21 @@ public class  Result {
     /**
      * Constructor for the object Results, that will be called when a new row in Username+Points table is added
      */
-    public Result(String userName, String points) {
-        this.userName = new SimpleStringProperty(userName);
+    public Result(String username, String points) {
+        this.username = new SimpleStringProperty(username);
         this.points = new SimpleStringProperty(points);
-    }
-
-    public String getUserName() {
-        return userName.get();
-    }
-
-    public SimpleStringProperty userNameProperty() {
-        return userName;
     }
 
     public String getPoints() {
         return points.get();
     }
 
-    public SimpleStringProperty pointsProperty() {
-        return points;
+    public String getUsername() {
+        return username.get();
     }
 
-    public void setUserName(String userName) {
-        this.userName.set(userName);
+    public void setUsername(String username) {
+        this.username.set(username);
     }
 
     public void setPoints(String points) {

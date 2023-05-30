@@ -65,6 +65,7 @@ public class VirtualModel {
 
     /**
      * Get the index of the client's Personal Card
+     *
      * @return indexPersonalGoalCard
      */
     public int getNumberPersonalCard() {
@@ -272,11 +273,21 @@ public class VirtualModel {
      *                               Current Player                           *
      */
 
-
+    /**
+     * Set the list of the players, ordered by the first player to the last.
+     *
+     * @param usernames the list of the players
+     */
     public void setPlayerIndex(List<String> usernames) {
         this.orderedListOfPlayers = usernames;
     }
 
+    /**
+     * Get the username of the player at the given index.
+     *
+     * @param index the index of the player
+     * @return the username of the player
+     */
     public String getPlayerUsername(Integer index) {
         if (index >= 0 && index < orderedListOfPlayers.size()) {
             return this.orderedListOfPlayers.get(index);
@@ -284,15 +295,22 @@ public class VirtualModel {
             throw new IllegalArgumentException("Invalid index");
         }
     }
+
     /**
-     * Get the current player username.
+     * Get the index of the player with the given username.
      *
-     * @return the current player username
+     * @param username the username of the player
+     * @return the index of the player
      */
     public Integer getPlayerIndex(String username) {
         return this.orderedListOfPlayers.indexOf(username);
     }
 
+    /**
+     * Get the current player username.
+     *
+     * @return the current player username
+     */
     public String getCurrentPlayerUsername() {
         if (this.currentPlayerIndex >= 0 && this.currentPlayerIndex < orderedListOfPlayers.size()) {
             return this.orderedListOfPlayers.get(this.currentPlayerIndex);

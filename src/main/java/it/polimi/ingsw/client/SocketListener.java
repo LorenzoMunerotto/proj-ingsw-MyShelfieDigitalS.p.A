@@ -19,6 +19,10 @@ public class SocketListener implements Runnable {
      */
     private final Client client;
     /**
+     * Lock for send method
+     */
+    private final Object lockSend = new Object();
+    /**
      * It is the socket of the server.
      */
     private Socket socketServer;
@@ -30,10 +34,6 @@ public class SocketListener implements Runnable {
      * It is the output stream of the socket.
      */
     private ObjectOutputStream outputStream;
-    /**
-     * Lock for send method
-     */
-    private final Object lockSend = new Object();
     /**
      * Flag for run method, if it is false the run method terminates.
      */
@@ -59,7 +59,7 @@ public class SocketListener implements Runnable {
         } catch (IOException ex) {
             System.err.println("The server is not running");
         }
-        this.active=true;
+        this.active = true;
     }
 
     /**
@@ -69,8 +69,8 @@ public class SocketListener implements Runnable {
      * @throws ClassNotFoundException if the class of the object received from the socket cannot be found
      */
     public void readFromStream() throws ClassNotFoundException, IOException {
-            ServerMessage input = (ServerMessage) inputStream.readObject();
-            input.accept(client);
+        ServerMessage input = (ServerMessage) inputStream.readObject();
+        input.accept(client);
     }
 
     public Boolean isActive() {
@@ -86,23 +86,23 @@ public class SocketListener implements Runnable {
      */
     @Override
     public void run() {
-        int counterEOFExeception =0;
+        int counterEOFExeception = 0;
         while (isActive()) {
             try {
                 readFromStream();
-                counterEOFExeception =0;
+                counterEOFExeception = 0;
             } catch (IOException e) {
                 if (!(e instanceof EOFException)) {
                     System.out.println("Lost connection with the server, IOException");
                     System.exit(0);
-                } else{
+                } else {
                     counterEOFExeception++;
                     try {
                         sleep(100);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
-                    if (counterEOFExeception>=25){
+                    if (counterEOFExeception >= 25) {
                         setActive(false);
                         client.lostConnection();
                     }
@@ -113,20 +113,20 @@ public class SocketListener implements Runnable {
             }
         }
 
-            // Close the streams and socket here to make sure they are always closed
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (socketServer != null) {
-                    socketServer.close();
-                }
-            } catch (IOException e) {
-                System.err.println("Failed to close resources in run method: " + e.getMessage());
+        // Close the streams and socket here to make sure they are always closed
+        try {
+            if (inputStream != null) {
+                inputStream.close();
             }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (socketServer != null) {
+                socketServer.close();
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to close resources in run method: " + e.getMessage());
+        }
     }
 
     /**

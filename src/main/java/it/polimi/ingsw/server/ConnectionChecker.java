@@ -19,16 +19,18 @@ public class ConnectionChecker implements Runnable {
 
     /**
      * Default constructor
+     *
      * @param socketClientConnection the socketClientConnection
-     * @param server the server
+     * @param server                 the server
      */
     public ConnectionChecker(SocketClientConnection socketClientConnection, Server server) {
         this.socketClientConnection = socketClientConnection;
-        this.server=server;
+        this.server = server;
     }
 
     /**
      * This method set the clientIsConnected flag
+     *
      * @param clientIsConnected clientIsConnected
      */
     public void setClientIsConnected(Boolean clientIsConnected) {
@@ -42,17 +44,17 @@ public class ConnectionChecker implements Runnable {
     public void run() {
 
         while (socketClientConnection.isActive()) {
-            clientIsConnected=false;
+            clientIsConnected = false;
             socketClientConnection.send(new CheckConnectionRequest());
             try {
                 Thread.sleep(3000);
-            }catch(InterruptedException e){
+            } catch (InterruptedException e) {
                 System.out.println("sleep connectionChecker interrupted");
                 throw new RuntimeException(e);
             }
 
             if (!clientIsConnected && socketClientConnection.isActive()) {
-                System.out.println("Client " + socketClientConnection.getClientID() +" goes offline" );
+                System.out.println("Client " + socketClientConnection.getClientID() + " goes offline");
                 server.getGameHandlerByClientId(socketClientConnection.getClientID()).stopGameByClientDisconnection(server.getUsernameByClientId(socketClientConnection.getClientID()));
             }
         }

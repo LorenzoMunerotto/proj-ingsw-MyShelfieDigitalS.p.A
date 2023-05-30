@@ -12,16 +12,16 @@ import java.util.List;
 public class Move implements ClientMessage, ViewEvent {
 
     /**
-     * The list of Board's coordinate selected by the player
+     * The list of Board's coordinate selected by the player.
      */
     private final List<Coordinate> coordinateList;
     /**
-     * The column chose by the player
+     * The column chose by the player.
      */
     private final int column;
 
     /**
-     * The constructor of the class
+     * The constructor of the class.
      *
      * @param coordinateList The list of Board's coordinate selected by the player
      * @param column         The column chose by the player

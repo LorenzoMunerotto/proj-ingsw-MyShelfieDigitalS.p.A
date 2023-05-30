@@ -4,7 +4,7 @@ import java.util.List;
 
 public class PlayerOrderSetMessage implements ServerMessage{
 
-    List<String> playerOrder;
+    final List<String> playerOrder;
 
     public PlayerOrderSetMessage(List<String> playerOrder) {
         this.playerOrder = playerOrder;

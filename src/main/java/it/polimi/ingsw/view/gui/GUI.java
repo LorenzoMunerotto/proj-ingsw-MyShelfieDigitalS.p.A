@@ -11,46 +11,46 @@ import it.polimi.ingsw.view.gui.controllers.GameViewController;
 import it.polimi.ingsw.view.gui.controllers.LoginController;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class represents the GUI view of the game.
+ */
 public class GUI extends Application implements View {
+
+    private static final String LOGIN = "/fxml/LoginView.fxml";
+    private static final String GAME = "/fxml/GameView.fxml";
+    private static final String FINAL = "/fxml/FinalPage.fxml";
     private static LoginController loginController;
-    private static Scene sceneGame;
     private static GameViewController gameViewController;
     private static FinalPageController finalPageController;
     private static Client client;
-    private final VirtualModel virtualModel;
-    private final HashMap<String, Controller> nameMapController = new HashMap<>();
     private static double maxX;
     private static double maxY;
-    private static final String LOGIN ="/fxml/LoginView.fxml";
-    private static final String GAME ="/fxml/GameView.fxml";
-    private static final String FINAL ="/fxml/FinalPage.fxml";
-    private static double width;
-    private static double height;
-    private Scene currentScene;
-    private Stage stage;
-    /**
-     * every fxml file with their file name
-     */
+    private final VirtualModel virtualModel;
+    private final HashMap<String, Controller> nameMapController = new HashMap<>();
     private final HashMap<String, Scene> nameMapScene = new HashMap<>();
     private final Logger logger = Logger.getLogger(getClass().getName());
-    private int scene=0;
-    public GUI(){
-        this.virtualModel= new VirtualModel();
+    private Scene currentScene;
+    private Stage stage;
+    private int scene = 0;
+
+    public GUI() {
+        this.virtualModel = new VirtualModel();
+    }
+
+    public static GameViewController getGameViewController() {
+        return gameViewController;
     }
 
     @Override
@@ -59,11 +59,12 @@ public class GUI extends Application implements View {
     }
 
     /**
-     * star of the javafx view
+     * Start of the javafx view.
+     *
      * @param primaryStage the primary stage for this application, onto which
-     * the application scene can be set.
-     * Applications may create other stages, if needed, but they will not be
-     * primary stages.
+     *                     the application scene can be set.
+     *                     Applications may create other stages, if needed, but they will not be
+     *                     primary stages.
      */
     public void start(Stage primaryStage) {
         setup();
@@ -72,7 +73,7 @@ public class GUI extends Application implements View {
     }
 
     /**
-     * Load the different fxml file and their corresponding fxml controller
+     * Load the different fxml file and their corresponding fxml controller.
      */
     public void setup() {
         screenInfo();
@@ -107,7 +108,7 @@ public class GUI extends Application implements View {
     }
 
     /**
-     *  Initial settings of items related to graphics
+     * Initial settings of items related to graphics.
      */
     public void run() {
         stage.setTitle("MyShelfieDigitals S.p.A.");
@@ -122,38 +123,28 @@ public class GUI extends Application implements View {
     }
 
     /**
-     * Allow to change scene when the game is running
+     * Allow to change scene when the game is running.
+     *
      * @param newScene next scene
      */
     public void changeStage(String newScene) {
         currentScene = nameMapScene.get(newScene);
         stage.setScene(currentScene);
         nameMapController.get(newScene).setUp();
-        if (newScene.equals("/fxml/FinalPage.fxml")){
+        if (newScene.equals("/fxml/FinalPage.fxml")) {
             stage.setFullScreen(false);
             stage.setWidth(300);
             stage.setHeight(300);
-        }
-        else {
+        } else {
             stage.setFullScreen(true);
         }
         stage.show();
     }
 
-    private void screenInfo(){
+    private void screenInfo() {
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        maxX=screenBounds.getMaxX();
-        maxY=screenBounds.getMaxY();
-        width=screenBounds.getWidth();
-        height=screenBounds.getHeight();
-    }
-
-    public static double getWidth() {
-        return width;
-    }
-
-    public static double getHeight() {
-        return height;
+        maxX = screenBounds.getMaxX();
+        maxY = screenBounds.getMaxY();
     }
 
     public double getMaxX() {
@@ -162,12 +153,6 @@ public class GUI extends Application implements View {
 
     public double getMaxY() {
         return maxY;
-    }
-
-
-    @Override
-    public void setClient(Client client) {
-        GUI.client =client;
     }
 
     @Override
@@ -205,20 +190,25 @@ public class GUI extends Application implements View {
     }
 
     @Override
-    public void chooseMove(){
+    public void chooseMove() {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void startGame()  {
+    public void startGame() {
         getLoginController().loadGameView();
-        scene=1;
+        scene = 1;
     }
 
     public Client getClient() {
         return client;
+    }
+
+    @Override
+    public void setClient(Client client) {
+        GUI.client = client;
     }
 
     /**
@@ -260,10 +250,9 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showErrorMessage(String errorMessage) {
-        if(scene==0){
+        if (scene == 0) {
             getLoginController().setErrorsLabelIDText(errorMessage);
-        }
-        else if (scene==1){
+        } else if (scene == 1) {
             getGameViewController().setErrorsTextIDText(errorMessage);
         }
     }
@@ -280,10 +269,9 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showMessage(String message) {
-        if(scene==0){
+        if (scene == 0) {
             getLoginController().setErrorsLabelIDText(message);
-        }
-        else if(scene==1){
+        } else if (scene == 1) {
             getGameViewController().setErrorsTextIDText(message);
         }
     }
@@ -293,46 +281,14 @@ public class GUI extends Application implements View {
      */
     @Override
     public void showChatMessage(String sender, String message) {
-        getGameViewController().showChatMessage(sender, message,ChatMessageType.RECEIVER);
+        getGameViewController().showChatMessage(sender, message, ChatMessageType.RECEIVER);
     }
 
     public LoginController getLoginController() {
         return loginController;
     }
 
-    public void setLoginController(LoginController loginController) {
-        GUI.loginController = loginController;
-    }
-
-    public static GameViewController getGameViewController() {
-        return gameViewController;
-    }
-
-    public static void setGameViewController(GameViewController gameViewController) {
-        GUI.gameViewController = gameViewController;
-    }
-
-    public static void setFinalPageController(FinalPageController finalPageController) {
-        GUI.finalPageController = finalPageController;
-    }
-
-    public static FinalPageController getFinalPageController() {
-        return finalPageController;
-    }
-
-    public static Scene getSceneGame() {
-        return sceneGame;
-    }
-
-    public HashMap<String, Controller> getNameMapController() {
-        return nameMapController;
-    }
-
-    public HashMap<String, Scene> getNameMapScene() {
-        return nameMapScene;
-    }
-
     @Override
-    public void closeGame(){
+    public void closeGame() {
     }
 }

@@ -3,8 +3,14 @@ package it.polimi.ingsw.view.events;
 import it.polimi.ingsw.client.clientMessage.ClientMessage;
 import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
 
+/**
+ * This class represents the player's choice about the number of players.
+ */
 public class NumOfPlayerChoice implements ClientMessage, ViewEvent {
 
+    /**
+     * The number of players.
+     */
     private final Integer numOfPlayer;
 
     public NumOfPlayerChoice(Integer numOfPlayer) {

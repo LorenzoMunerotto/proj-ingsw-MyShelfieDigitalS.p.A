@@ -6,7 +6,6 @@ import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
 /**
  * This class represents the message that the client sends when he chooses his username.
  */
-
 public class UsernameChoice implements ClientMessage, ViewEvent {
 
     /**

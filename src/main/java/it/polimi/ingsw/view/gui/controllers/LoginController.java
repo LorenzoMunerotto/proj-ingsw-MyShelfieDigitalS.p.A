@@ -18,41 +18,31 @@ import java.util.Objects;
 
 /**
  * Controller for the "LoginView.fxml" file.
- * */
+ */
 public class LoginController implements Controller {
 
+    private final Integer[] numbers = {2, 3, 4};
     @FXML
     private Button loginButtonID;
     @FXML
     private Button userNameButtonID;
-
     @FXML
     private Label nameLabelID;
-
     @FXML
     private TextField textNameInputID;
-
     @FXML
     private Label numberLabelID;
-
     @FXML
     private ChoiceBox<Integer> numberBoxID;
-
     @FXML
     private TextFlow errorsTextID;
-
     @FXML
     private Pane paneID;
-
     private GUI gui;
-
-    private final Integer[] numbers = {2, 3, 4};
-
-    @FXML
-    private Button startGameButtonID;
 
     /**
      * {@inheritDoc}
+     *
      * @param gui is the main class for the graphics part of the game.
      */
     @Override
@@ -62,6 +52,7 @@ public class LoginController implements Controller {
 
     /**
      * set all the parameters that are called when you need to show a message to the player.
+     *
      * @param error error text that will be displayed
      */
     public void setErrorsLabelIDText(String error) {
@@ -79,6 +70,7 @@ public class LoginController implements Controller {
 
     /**
      * this method is called when you press the button related to the username submission
+     *
      * @param actionEvent Pressing of the button "continue" [userNameButtonID].
      */
     public void userNameSubmit(ActionEvent actionEvent) {
@@ -97,6 +89,7 @@ public class LoginController implements Controller {
 
     /**
      * deal with the Number of Player insertion.
+     *
      * @param event Pressing of the button for the submission of the number of player.
      */
     public void submitNumberOfPlayer(ActionEvent event) {
@@ -146,13 +139,7 @@ public class LoginController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                paneID.setBackground(new Background(
-                        new BackgroundImage(
-                                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Display.jpg"))),
-                                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
-                                new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
-                                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
-                        )));
+                paneID.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Display.jpg"))), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true), new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true))));
                 numberLabelID.setVisible(false);
                 errorsTextID.setVisible(true);
                 numberBoxID.setVisible(false);

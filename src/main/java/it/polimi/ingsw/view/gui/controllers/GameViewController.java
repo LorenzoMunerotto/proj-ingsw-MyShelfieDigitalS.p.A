@@ -35,12 +35,16 @@ import java.util.Objects;
 
 /**
  * Controller for the "GameViewController.fxml" file.
- * */
+ */
 public class GameViewController implements Controller {
-    @FXML
-    private VBox vboxMessagesChatID;
+    private final List<Coordinate> coordinates = new ArrayList<>();
+    private final ArrayList<GridPane> aLibraryGridsOw = new ArrayList<>();
+    private final ArrayList<Label> aLabelLib = new ArrayList<>();
+    private final String libraryBaseText = "Your Library: ";
     @FXML
     public GridPane libraryID;
+    @FXML
+    private VBox vboxMessagesChatID;
     @FXML
     private ImageView commonCard1ID;
     @FXML
@@ -115,19 +119,14 @@ public class GameViewController implements Controller {
     private ScrollPane sp_mainChatID;
     @FXML
     private ChoiceBox<String> receiverID;
-    private final List<Coordinate> coordinates = new ArrayList<>();
     private GUI gui;
     private VirtualModel virtualModel;
     private int mex;
     private boolean youTurn = false;
-    private final ArrayList<GridPane> aLibraryGridsOw = new ArrayList<>();
-    private final ArrayList<Label> aLabelLib = new ArrayList<>();
-    private final String libraryBaseText = "Your Library: ";
-
     /**
      * this method is called when an Item Tile form the board is pressed "
      */
-    EventHandler<MouseEvent> clickItemTileBoardHandler = new EventHandler<>() {
+    final EventHandler<MouseEvent> clickItemTileBoardHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent t) {
             if (youTurn) {
@@ -157,7 +156,7 @@ public class GameViewController implements Controller {
     /**
      * this method is called when an Item Tile from the Library is pressed
      */
-    EventHandler<MouseEvent> clickItemTileLibraryHandler = new EventHandler<>() {
+    final EventHandler<MouseEvent> clickItemTileLibraryHandler = new EventHandler<>() {
         @Override
         public void handle(MouseEvent t) {
             if (youTurn && coordinates.size() > 0) {
@@ -176,6 +175,7 @@ public class GameViewController implements Controller {
 
     /**
      * {@inheritDoc}
+     *
      * @param gui is the main class for the graphics part of the game.
      */
     @Override
@@ -209,6 +209,7 @@ public class GameViewController implements Controller {
     /**
      * setting for the box in the upper-right corner of the screen,
      * where the selected item tiles from the board are displayed.
+     *
      * @param imageView selected from "item tiles selected" box
      */
     public void setItemTileClicked(ImageView imageView) {
@@ -221,34 +222,34 @@ public class GameViewController implements Controller {
     /**
      * set all the elements related to the chat in the "messenger tab".
      */
-    public void setChatView(){
+    public void setChatView() {
         Platform.runLater(() -> {
             receiverID.getItems().clear();
             receiverID.getItems().add("Everyone");
-            for(Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()){
-                if(!libraryMap.getKey().equals(virtualModel.getMyUsername())) {
+            for (Map.Entry<String, ItemTileType[][]> libraryMap : virtualModel.getClientUsernameLibrary().entrySet()) {
+                if (!libraryMap.getKey().equals(virtualModel.getMyUsername())) {
                     receiverID.getItems().add(libraryMap.getKey());
                 }
             }
             vboxMessagesChatID.heightProperty().addListener((observableValue, oldValue, newValue) -> sp_main.setVvalue((Double) newValue));
-            sp_mainChatID.setLayoutX(gui.getMaxX()*0.30);
-            sp_mainChatID.setLayoutY(gui.getMaxY()*0.30);
-            receiverID.setLayoutX(gui.getMaxX()*0.30);
-            receiverID.setLayoutY(gui.getMaxY()*0.70);
-            tfMessageChatID.setLayoutX(gui.getMaxX()*0.50);
-            tfMessageChatID.setLayoutY(gui.getMaxY()*0.70);
-            tfMessageChatID.setMinWidth(gui.getMaxX()*0.20);
-            tfMessageChatID.setMaxWidth(gui.getMaxX()*0.20);
-            sp_mainChatID.setMinSize(gui.getMaxX()*0.4,gui.getMaxY()*0.40);
-            sp_mainChatID.setMaxSize(gui.getMaxX()*0.4,gui.getMaxY()*0.40);
-            buttonSendChatMexID.setLayoutX(gui.getMaxX()*0.70);
-            buttonSendChatMexID.setLayoutY(gui.getMaxY()*0.70);
+            sp_mainChatID.setLayoutX(gui.getMaxX() * 0.30);
+            sp_mainChatID.setLayoutY(gui.getMaxY() * 0.30);
+            receiverID.setLayoutX(gui.getMaxX() * 0.30);
+            receiverID.setLayoutY(gui.getMaxY() * 0.70);
+            tfMessageChatID.setLayoutX(gui.getMaxX() * 0.50);
+            tfMessageChatID.setLayoutY(gui.getMaxY() * 0.70);
+            tfMessageChatID.setMinWidth(gui.getMaxX() * 0.20);
+            tfMessageChatID.setMaxWidth(gui.getMaxX() * 0.20);
+            sp_mainChatID.setMinSize(gui.getMaxX() * 0.4, gui.getMaxY() * 0.40);
+            sp_mainChatID.setMaxSize(gui.getMaxX() * 0.4, gui.getMaxY() * 0.40);
+            buttonSendChatMexID.setLayoutX(gui.getMaxX() * 0.70);
+            buttonSendChatMexID.setLayoutY(gui.getMaxY() * 0.70);
             receiverID.setVisible(true);
             tfMessageChatID.setVisible(true);
             vBox_messages.setVisible(true);
             sp_mainChatID.setVisible(true);
             buttonSendChatMexID.setOnAction(event -> {
-                if(receiverID.getValue()!=null){
+                if (receiverID.getValue() != null) {
                     String messageToSend = tfMessageChatID.getText();
                     if (!messageToSend.isEmpty()) {
                         showChatMessage(null, messageToSend, ChatMessageType.SENDER);
@@ -261,9 +262,10 @@ public class GameViewController implements Controller {
 
     /**
      * method that manage all new message, both send or received by the client
-     * @param sender client who send the message
+     *
+     * @param sender             client who send the message
      * @param messageChatContent text message that has been written
-     * @param type allow the method to understand whether it is dealing with a new message written form the client o received by the client.
+     * @param type               allow the method to understand whether it is dealing with a new message written form the client o received by the client.
      */
     public void showChatMessage(String sender, String messageChatContent, ChatMessageType type) {
         Platform.runLater(() -> {
@@ -323,8 +325,8 @@ public class GameViewController implements Controller {
                 vBoxLibraryID.setLayoutY(gui.getMaxY() * 0.50);
                 libraryID.setHgap(2);
                 libraryID.setVgap(2);
-                libraryID.setMinSize((gui.getMaxX()*(0.030)*5+4*5),(gui.getMaxX()*(0.030)*6+4*6));
-                libraryID.setMaxSize((gui.getMaxX()*(0.030)*5+4*5),(gui.getMaxX()*(0.030)*6+4*6));
+                libraryID.setMinSize((gui.getMaxX() * (0.030) * 5 + 4 * 5), (gui.getMaxX() * (0.030) * 6 + 4 * 6));
+                libraryID.setMaxSize((gui.getMaxX() * (0.030) * 5 + 4 * 5), (gui.getMaxX() * (0.030) * 6 + 4 * 6));
                 libraryID.setOnMouseClicked(clickItemTileLibraryHandler);
                 vBoxLibraryID.setMinWidth(gui.getMaxX() * 0.40);
                 vBoxLibraryID.setMinHeight(gui.getMaxY() * 0.50);
@@ -362,8 +364,8 @@ public class GameViewController implements Controller {
                 }
                 boardID.setHgap(2);
                 boardID.setVgap(2);
-                boardID.setMinSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
-                boardID.setMaxSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
+                boardID.setMinSize((gui.getMaxX() * (0.035) * 9 + 2 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
+                boardID.setMaxSize((gui.getMaxX() * (0.035) * 9 + 2 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
                 boardID.setLayoutX(gui.getMaxX() * 0.55);
                 boardID.setLayoutY(gui.getMaxY() * 0.35);
                 boardID.setVisible(true);
@@ -389,8 +391,8 @@ public class GameViewController implements Controller {
         }
         boardOwID.setHgap(2);
         boardOwID.setVgap(2);
-        boardOwID.setMinSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
-        boardOwID.setMaxSize((gui.getMaxX()*(0.035)*9+2*9),(gui.getMaxX()*(0.035)*9+2*9));
+        boardOwID.setMinSize((gui.getMaxX() * (0.035) * 9 + 2 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
+        boardOwID.setMaxSize((gui.getMaxX() * (0.035) * 9 + 2 * 9), (gui.getMaxX() * (0.035) * 9 + 2 * 9));
         boardOwID.setLayoutX(gui.getMaxX() * 0.55);
         boardOwID.setLayoutY(gui.getMaxY() * 0.35);
         boardOwID.setVisible(true);
@@ -415,10 +417,10 @@ public class GameViewController implements Controller {
             aLibraryGridsOw.get(i).setLayoutY(gui.getMaxY() * 0.55);
             aLibraryGridsOw.get(i).setHgap(2);
             aLibraryGridsOw.get(i).setVgap(2);
-            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX()*(0.025)*5+2*5),(gui.getMaxX()*(0.025)*6+2*6));
-            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX()*(0.025)*5+2*5),(gui.getMaxX()*(0.025)*6+2*6));
+            aLibraryGridsOw.get(i).setMinSize((gui.getMaxX() * (0.025) * 5 + 2 * 5), (gui.getMaxX() * (0.025) * 6 + 2 * 6));
+            aLibraryGridsOw.get(i).setMaxSize((gui.getMaxX() * (0.025) * 5 + 2 * 5), (gui.getMaxX() * (0.025) * 6 + 2 * 6));
             aLibraryGridsOw.get(i).setVisible(true);
-            aLabelLib.get(i).setText(libraryMap.getKey()+":");
+            aLabelLib.get(i).setText(libraryMap.getKey() + ":");
             aLabelLib.get(i).setStyle("-fx-background-color: #ffffff");
             aLabelLib.get(i).setVisible(true);
             i++;
@@ -464,26 +466,27 @@ public class GameViewController implements Controller {
     /**
      * set and keep updated the table where the name and the points of the player are displayed.
      */
-    public void setTablePoints(){
+    public void setTablePoints() {
         Platform.runLater(() -> {
             pointUserNameTableID.getItems().clear();
             pointUserNameTableID.getColumns().clear();
             ObservableList<Result> data = FXCollections.observableArrayList();
-            TableColumn userNameColumn = new TableColumn("Username");
-            TableColumn pointsColum = new TableColumn("Points");
-            pointUserNameTableID.getColumns().addAll(userNameColumn,pointsColum);
-            userNameColumn.setMinWidth(gui.getMaxX()*0.20);
-            pointsColum.setMinWidth(gui.getMaxX()*0.20);
-            data.add(new Result(virtualModel.getMyUsername(),String.valueOf(virtualModel.getMyPoints())));
-            userNameColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("userName"));
-            pointsColum.setCellValueFactory(new PropertyValueFactory<Result, String>("points"));
+            TableColumn<Result, String> userNameColumn = new TableColumn<>("Username");
+            TableColumn<Result, String> pointsColum = new TableColumn<>("Points");
+            pointUserNameTableID.getColumns().addAll(userNameColumn, pointsColum);
+            userNameColumn.setMinWidth(gui.getMaxX() * 0.20);
+            pointsColum.setMinWidth(gui.getMaxX() * 0.20);
+            data.add(new Result(virtualModel.getMyUsername(), String.valueOf(virtualModel.getMyPoints())));
+            userNameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+            pointsColum.setCellValueFactory(new PropertyValueFactory<>("points"));
             pointUserNameTableID.getItems().addAll(data);
-            pointUserNameTableID.setLayoutY(gui.getMaxY()*0.4);
-            pointUserNameTableID.setLayoutX(gui.getMaxX()*0.01);
-            pointUserNameTableID.setMaxSize(gui.getMaxX()*0.40,75);
-            pointUserNameTableID.setMinSize(gui.getMaxX()*0.40,75);
+            pointUserNameTableID.setLayoutY(gui.getMaxY() * 0.4);
+            pointUserNameTableID.setLayoutX(gui.getMaxX() * 0.01);
+            pointUserNameTableID.setMaxSize(gui.getMaxX() * 0.40, 75);
+            pointUserNameTableID.setMinSize(gui.getMaxX() * 0.40, 75);
             pointUserNameTableID.setVisible(true);
-        });    }
+        });
+    }
 
     /**
      * set all the parameters related to the personal card, both in the "Game Overview" tab and "Game" tab.
@@ -561,13 +564,14 @@ public class GameViewController implements Controller {
 
     /**
      * set all the parameters that are called when you need to show a message (not chat) to the player.
+     *
      * @param error text that will be displayed.
      */
     public void setErrorsTextIDText(String error) {
         Platform.runLater(() -> {
-            if(mex>2){
+            if (mex > 2) {
                 vBox_messages.getChildren().clear();
-                mex=0;
+                mex = 0;
             }
             HBox hBox = new HBox();
             hBox.setAlignment(Pos.CENTER_LEFT);
@@ -628,13 +632,7 @@ public class GameViewController implements Controller {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                anchorPaneID.setBackground(new Background(
-                        new BackgroundImage(
-                                new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Parquet.jpg"))),
-                                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT,
-                                new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true),
-                                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true)
-                        )));
+                anchorPaneID.setBackground(new Background(new BackgroundImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/Parquet.jpg"))), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, new BackgroundPosition(Side.LEFT, 0, true, Side.BOTTOM, 0, true), new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, false, true))));
                 setErrorBox();
                 printAllLibrary();
                 personalCardInitializer();
@@ -659,6 +657,7 @@ public class GameViewController implements Controller {
 
     /**
      * allow the controller to check if the player can do the different action or not
+     *
      * @param youTurn true when is the Player turn
      */
     public void setYouTurn(boolean youTurn) {
