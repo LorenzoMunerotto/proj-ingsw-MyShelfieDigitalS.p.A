@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.serverMessage;
 
+/**
+ * This interface is used to correctly handle different message from the server
+ */
 public interface ServerMessageHandler {
 
     void handle(BoardSetMessage boardSetMessage);

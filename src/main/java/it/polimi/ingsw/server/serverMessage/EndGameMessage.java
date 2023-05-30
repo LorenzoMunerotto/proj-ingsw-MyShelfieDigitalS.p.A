@@ -1,6 +1,9 @@
 package it.polimi.ingsw.server.serverMessage;
 
-
+/**
+ * This class represents the message that server sends to
+ * client for communicate the end of the match
+ */
 public class EndGameMessage implements ServerMessage {
 
 

@@ -5,7 +5,10 @@ import org.javatuples.Triplet;
 
 import java.util.List;
 
-
+/**
+ * This class represents the message that server sends to
+ * client for set the commonGoalCard in virtual model
+ */
 public class CommonCardsSetMessage implements ServerMessage{
 
     private final List<Triplet<Integer, Integer, String>> commonGoalCardList;

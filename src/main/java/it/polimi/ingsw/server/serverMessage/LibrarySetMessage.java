@@ -2,6 +2,10 @@ package it.polimi.ingsw.server.serverMessage;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
+/**
+ * This class represents the message that server sends to
+ * client for set a library in virtual model
+ */
 public class LibrarySetMessage implements ServerMessage{
     private final String message;
     private final String libraryOwnerUsername;

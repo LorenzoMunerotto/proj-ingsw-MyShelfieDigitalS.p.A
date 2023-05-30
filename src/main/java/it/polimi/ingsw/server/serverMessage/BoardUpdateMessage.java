@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.gameEntity.Coordinate;
 
 import java.util.List;
 
+/**
+ * This class represents the message that contains the board to update.
+ */
 public class BoardUpdateMessage implements ServerMessage {
 
     private final String message;

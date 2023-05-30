@@ -1,5 +1,9 @@
 package it.polimi.ingsw.server.serverMessage;
 
+/**
+ * This class represents the message that server sends to
+ * client for update player's point in virtual model
+ */
 public class PointsUpdateMessage implements ServerMessage {
 
     /**

@@ -1,5 +1,9 @@
 package it.polimi.ingsw.server.serverMessage;
 
+/**
+ * This class represents the message that server sends to
+ * client for notify the end of the match because one client lost connection
+ */
 public class DisconnectionMessage implements ServerMessage{
 
     private final String username;

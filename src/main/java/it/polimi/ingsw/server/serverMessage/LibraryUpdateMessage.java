@@ -4,6 +4,10 @@ import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
 import java.util.List;
 
+/**
+ * This class represents the message that server sends to
+ * client for update a library in virtual model
+ */
 public class LibraryUpdateMessage implements ServerMessage {
 
     private final String message;
