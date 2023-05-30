@@ -1,5 +1,9 @@
 package it.polimi.ingsw.server.serverMessage;
 
+/**
+ * This class represents the message that server sends to the first
+ * client connected for set the num of players
+ */
 public class NumOfPlayerRequest implements ServerMessage {
 
     private final String message;

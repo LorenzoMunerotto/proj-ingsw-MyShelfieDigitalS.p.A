@@ -2,6 +2,10 @@ package it.polimi.ingsw.server.serverMessage;
 
 import it.polimi.ingsw.model.gameEntity.enums.ItemTileType;
 
+/**
+ * This class represents the message that server sends to
+ * client for set the personal goal card in virtual model
+ */
 public class PersonalCardSetMessage implements ServerMessage{
 
     private final int index;

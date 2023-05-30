@@ -2,6 +2,10 @@ package it.polimi.ingsw.server.serverMessage;
 
 import it.polimi.ingsw.server.GameCreationErrors;
 
+/**
+ * This class represents the message that server sends to
+ * client for communicate an error during the match setup
+ */
 public class ErrorMessage implements ServerMessage {
 
     private final GameCreationErrors type;
