@@ -22,6 +22,10 @@ ___
 * [Lorenzo Munerotto](https://github.com/LorenzoMunerotto)
 * [Simone Girardi](https://github.com/girardisimone)
 ___
+### Brochure
+* For a quick look at several game cases and scenarios, the brochure is [here](deliveries/gameplay_screenshot)
+___
+
 ### License
 
 This project is licensed under the [MIT License](LICENSE).
