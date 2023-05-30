@@ -2,6 +2,10 @@ package it.polimi.ingsw.server.serverMessage;
 
 import org.javatuples.Pair;
 
+/**
+ * This class represents the message that server sends to
+ * client for communicate the beginning of a turn
+ */
 public class StartTurnMessage implements ServerMessage {
 
     private final String message;

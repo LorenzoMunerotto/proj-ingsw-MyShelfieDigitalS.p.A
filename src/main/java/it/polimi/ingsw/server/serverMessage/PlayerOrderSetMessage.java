@@ -2,6 +2,10 @@ package it.polimi.ingsw.server.serverMessage;
 
 import java.util.List;
 
+/**
+ * This class represents the message that server sends to
+ * client for set the player order in virtual model
+ */
 public class PlayerOrderSetMessage implements ServerMessage{
 
     final List<String> playerOrder;
