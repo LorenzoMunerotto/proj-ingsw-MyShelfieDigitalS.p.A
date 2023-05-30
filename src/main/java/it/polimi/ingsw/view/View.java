@@ -111,8 +111,6 @@ public interface View  {
 
     /** Shows a chat message
      *
-     * @param sender
-     * @param messageText
      */
      void showChatMessage(String sender, String messageText);
 

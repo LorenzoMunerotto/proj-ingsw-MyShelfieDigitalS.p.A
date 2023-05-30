@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 /**
  * This class represents the client.
  */
-public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
+public class Client implements ServerMessageHandler, ViewChangeEventHandler {
 
     /**
      * The scanner.
@@ -57,22 +57,9 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         this.view = view;
         this.virtualModel = view.getVirtualModel();
         view.setClient(this);
-        this.socketListener= new SocketListener(this, serverIp, serverPort);
+        this.socketListener = new SocketListener(this, serverIp, serverPort);
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(socketListener);
-    }
-
-    /**
-     * Get the virtual model
-     * @return
-     */
-    public VirtualModel getVirtualModel() {
-        return virtualModel;
-    }
-
-    @Override
-    public void update(ViewEvent viewEvent) {
-        viewEvent.accept(this);
     }
 
     /**
@@ -153,6 +140,41 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
         }
     }
 
+    public static void main(String[] Args) throws IOException {
+        chooseServerIP();
+        chooseServerPort();
+        String viewType = "";
+        while (viewType.isBlank()) {
+            viewType = chooseViewType();
+            switch (viewType) {
+                case "c" -> {
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
+                    new Client(new CLI()).view.main(null);
+                }
+                case "g" -> {
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected gui interface%n");
+                    new Client(new GUI()).view.main(null);
+                }
+                default -> {
+                    System.out.printf(CLIConstants.CONSOLE_ARROW + "Invalid input%n");
+                    viewType = "";
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the virtual model
+     */
+    public VirtualModel getVirtualModel() {
+        return virtualModel;
+    }
+
+    @Override
+    public void update(ViewEvent viewEvent) {
+        viewEvent.accept(this);
+    }
+
     /**
      * Get the view.
      *
@@ -167,11 +189,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      *
      * @param usernameRequest the username request
      */
-    public void handle(UsernameRequest usernameRequest){
+    public void handle(UsernameRequest usernameRequest) {
         view.chooseUsername();
     }
 
-    public void handle(UsernameChoice usernameChoice){
+    public void handle(UsernameChoice usernameChoice) {
         virtualModel.setMyUsername(usernameChoice.getUsername());
         socketListener.send(usernameChoice);
     }
@@ -187,6 +209,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles the number of Player in the match
+     *
      * @param numOfPlayerChoice number of Player in the match selected
      */
     @Override
@@ -196,6 +219,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * send the message to the server
+     *
      * @param chatClientMessage element that contains all the information about the chat message
      */
     @Override
@@ -205,6 +229,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles the receiving a new message
+     *
      * @param chatServerMessage element that contains all the information about the chat message
      */
     @Override
@@ -217,11 +242,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      *
      * @param moveRequest the move request
      */
-    public void handle(MoveRequest moveRequest){
-        if(view instanceof CLI){
-           view.chooseMove();
+    public void handle(MoveRequest moveRequest) {
+        if (view instanceof CLI) {
+            view.chooseMove();
         }
-        if(view instanceof GUI){
+        if (view instanceof GUI) {
             view.showGame();
         }
     }
@@ -243,10 +268,9 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handle the end game message
-     * @param endGameMessage
      */
     @Override
-    public void handle(EndGameMessage endGameMessage){
+    public void handle(EndGameMessage endGameMessage) {
         view.showGame();
         try {
             Thread.sleep(2500);
@@ -259,7 +283,6 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handle the endGameMessage
-     * @param librarySetMessage
      */
     @Override
     public void handle(LibrarySetMessage librarySetMessage) {
@@ -268,6 +291,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles the personal card set message.
+     *
      * @param personalCardSetMessage the personal card set message
      */
     @Override
@@ -277,6 +301,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles the common cards set message.
+     *
      * @param commonCardsSetMessage the common cards set message
      */
     @Override
@@ -286,15 +311,16 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     /**
      * This method handles a custom message.
+     *
      * @param customMessage the custom message
      */
     @Override
     public void handle(CustomMessage customMessage) {
-        if(view instanceof CLI){
+        if (view instanceof CLI) {
             virtualModel.setServerMessage(customMessage.getMessage());
             view.showMessage(customMessage.getMessage());
         }
-        if(view instanceof GUI){
+        if (view instanceof GUI) {
             view.showMessage(customMessage.getMessage());
         }
 
@@ -306,7 +332,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
      * @param startGameMessage the start game message
      */
     @Override
-    public void handle(StartGameMessage startGameMessage)  {
+    public void handle(StartGameMessage startGameMessage) {
         view.startGame();
     }
 
@@ -368,7 +394,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     public void handle(CommonCardReachMessage commonCardReachMessage) {
         virtualModel.updateCommonCardPoints(commonCardReachMessage.getCommonCardIndex(), commonCardReachMessage.getPoint());
         virtualModel.setServerMessage(commonCardReachMessage.getMessage());
-        if(view instanceof GUI){
+        if (view instanceof GUI) {
             view.showMessage(commonCardReachMessage.getMessage());
         }
     }
@@ -381,7 +407,7 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
     @Override
     public void handle(FirstFullLibraryMessage firstFullLibraryMessage) {
         virtualModel.setServerMessage(firstFullLibraryMessage.getMessage());
-        if(view instanceof GUI){
+        if (view instanceof GUI) {
             view.showMessage(firstFullLibraryMessage.getMessage());
         }
     }
@@ -436,34 +462,11 @@ public class Client implements ServerMessageHandler,  ViewChangeEventHandler {
 
     @Override
     public void handle(CheckConnectionRequest checkConnectionRequest) {
-            socketListener.send(new CheckConnection());
+        socketListener.send(new CheckConnection());
     }
 
-    public void lostConnection(){
+    public void lostConnection() {
         view.stopWaiting();
         view.showMessage("Client lost connection with the server, please check your internet connection and if the server is running");
-    }
-
-    public static void main(String[] Args) throws IOException {
-        chooseServerIP();
-        chooseServerPort();
-        String viewType = "";
-        while(viewType.isBlank()){
-            viewType = chooseViewType();
-            switch (viewType) {
-                case "c" -> {
-                    System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected cli interface%n");
-                    new Client(new CLI()).view.main(null);
-                }
-                case "g" -> {
-                    System.out.printf(CLIConstants.CONSOLE_ARROW + "You selected gui interface%n");
-                    new Client(new GUI()).view.main(null);
-                }
-                default -> {
-                    System.out.printf(CLIConstants.CONSOLE_ARROW + "Invalid input%n");
-                    viewType = "";
-                }
-            }
-        }
     }
 }

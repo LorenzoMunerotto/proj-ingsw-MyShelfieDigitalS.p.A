@@ -5,9 +5,7 @@ package it.polimi.ingsw.server;
  */
 public enum GameCreationErrors {
 
-    DUPLICATE_USERNAME("This username is already taken, choose another one"),
-    ILLEGAL_USERNAME("This username is not valid, choose another one"),
-    ILLEGAL_NUM_OF_PLAYER("This number of players is not valid, choose another one");
+    DUPLICATE_USERNAME("This username is already taken, choose another one"), ILLEGAL_USERNAME("This username is not valid, choose another one"), ILLEGAL_NUM_OF_PLAYER("This number of players is not valid, choose another one");
 
     /**
      * The message of the error.

@@ -33,7 +33,7 @@ public class GameHandler {
     /**
      * It is the next GameHandlerID
      */
-    private static Integer nextGameHandlerId =1;
+    private static Integer nextGameHandlerId = 1;
     /**
      * It is the list of the VirtualClients in the game.
      */
@@ -42,6 +42,10 @@ public class GameHandler {
      * It is the GameData of the game.
      */
     private final GameData gameData;
+    /**
+     * It is the GameHandler Identifier
+     */
+    private final Integer gameHandlerId;
     /**
      * It is the LibraryManager of the game.
      */
@@ -54,10 +58,6 @@ public class GameHandler {
      * It is the PointsManager of the game.
      */
     private PointsManager pointsManager;
-    /**
-     * It is the GameHandler Identifier
-     */
-    private final Integer gameHandlerId;
 
     /**
      * Default constructor, initialize the GameData and the VirtualClients list.
@@ -65,7 +65,7 @@ public class GameHandler {
     public GameHandler() {
         this.gameData = new GameData();
         this.virtualClients = new ArrayList<>();
-        this.gameHandlerId=nextGameHandlerId;
+        this.gameHandlerId = nextGameHandlerId;
         nextGameHandlerId++;
     }
 
@@ -106,10 +106,10 @@ public class GameHandler {
         }
 
         Collections.shuffle(gameData.getPlayers(), new Random());
-        for(VirtualClient client : virtualClients){
+        for (VirtualClient client : virtualClients) {
             client.handle(new PlayerOrderSetEvent(gameData.getPlayers()));
         }
-        sendAll( new StartGameMessage());
+        sendAll(new StartGameMessage());
         gameData.setCurrentPlayerIndex(0);
         gameData.getCurrentPlayer().setChair(true);
         System.out.printf("%sStarting game %s%s\n", CLIConstants.YELLOW_BRIGHT, CLIConstants.RESET, this);
@@ -160,14 +160,14 @@ public class GameHandler {
             }
             pointsManager.updateTotalPoints();
 
-        if (boardManager.isRefillTime()) {
-            try {
-                boardManager.refillBoard();
-            } catch (EmptyBagException e) {
-                sendAll(new CustomMessage(e.getMessage()));
+            if (boardManager.isRefillTime()) {
+                try {
+                    boardManager.refillBoard();
+                } catch (EmptyBagException e) {
+                    sendAll(new CustomMessage(e.getMessage()));
+                }
             }
-        }
-        nextPlayer();
+            nextPlayer();
         } catch (BreakRulesException e) {
             sendToCurrentPlayer(new BreakRulesMessage((e.getType())));
             sendToCurrentPlayer(new MoveRequest());
@@ -335,14 +335,12 @@ public class GameHandler {
 
     /**
      * This method send a chat message to each receiver
-     * @param chatClientMessage
      */
     public void handlerClientChatMessage(ChatClientMessage chatClientMessage) {
         for (VirtualClient client : virtualClients) {
-            if(chatClientMessage.getReceiver().equals("Everyone") &&!client.getUsername().equals(chatClientMessage.getSender())) {
-                    client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
-                }
-            else if (client.getUsername().equals(chatClientMessage.getReceiver())) {
+            if (chatClientMessage.getReceiver().equals("Everyone") && !client.getUsername().equals(chatClientMessage.getSender())) {
+                client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
+            } else if (client.getUsername().equals(chatClientMessage.getReceiver())) {
                 client.send(new ChatServerMessage(chatClientMessage.getSender(), chatClientMessage.getReceiver(), chatClientMessage.getMessageText()));
             }
         }

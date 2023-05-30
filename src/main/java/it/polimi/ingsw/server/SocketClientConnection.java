@@ -31,6 +31,18 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     private final Server server;
     /**
+     * Lock for send method.
+     */
+    private final Object lockSend = new Object();
+    /**
+     * The service executor.
+     */
+    private final ExecutorService executorService;
+    /**
+     * The connection checker.
+     */
+    private final ConnectionChecker connectionChecker;
+    /**
      * The client ID.
      */
     private Integer clientID;
@@ -45,19 +57,8 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
     /**
      * The boolean that indicates if the client is active.
      */
-    private boolean active =true;
-    /**
-     * Lock for send method.
-     */
-    private final Object lockSend = new Object();
-    /**
-     * The service executor.
-     */
-    private final ExecutorService executorService;
-    /**
-     * The connection checker.
-     */
-    private final ConnectionChecker connectionChecker;
+    private boolean active = true;
+
     /**
      * This is the constructor of the class.
      *
@@ -82,7 +83,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
         try {
             sleep(4000);
-        }  catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
@@ -98,12 +99,13 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      * @throws ClassNotFoundException the class not found exception
      */
     public void readFromStream() throws ClassNotFoundException, IOException {
-            ClientMessage input = (ClientMessage) inputStream.readObject();
-            new Thread(()-> input.accept(this)).start();
+        ClientMessage input = (ClientMessage) inputStream.readObject();
+        new Thread(() -> input.accept(this)).start();
     }
 
     /**
      * This method handle the checkConnection message
+     *
      * @param checkConnection the message checkConnection to handle.
      */
     @Override
@@ -113,6 +115,7 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
 
     /**
      * This method handle the chatClientMessage
+     *
      * @param chatClientMessage the message chatClientMessage to handle.
      */
     @Override
@@ -169,13 +172,13 @@ public class SocketClientConnection implements ClientMessageHandler, Runnable {
      */
     @Override
     public void handle(UsernameChoice usernameChoice) {
-            clientID = server.registerConnection(usernameChoice.getUsername(), this);
-            if (clientID == null) {
-                send(new UsernameRequest());
-            } else {
-                server.lobby(this);
-                executorService.submit(connectionChecker);
-            }
+        clientID = server.registerConnection(usernameChoice.getUsername(), this);
+        if (clientID == null) {
+            send(new UsernameRequest());
+        } else {
+            server.lobby(this);
+            executorService.submit(connectionChecker);
+        }
 
     }
 

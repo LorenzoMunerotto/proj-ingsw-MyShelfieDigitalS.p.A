@@ -1,12 +1,17 @@
 package it.polimi.ingsw.server.serverMessage;
 
-import it.polimi.ingsw.client.clientMessage.ClientMessage;
-import it.polimi.ingsw.client.clientMessage.ClientMessageHandler;
-
+/**
+ * Message used to send a chat message to the client.
+ */
 public class ChatServerMessage implements ServerMessage {
 
+    /**
+     * The sender of the message.
+     */
     private final String sender;
-    private final String receiver;
+    /**
+     * The content of the message.
+     */
     private final String messageText;
 
     /**
@@ -19,9 +24,9 @@ public class ChatServerMessage implements ServerMessage {
 
     public ChatServerMessage(String sender, String receiver, String messageText) {
         this.sender = sender;
-        this.receiver = receiver;
         this.messageText = messageText;
     }
+
     public String getSender() {
         return sender;
     }

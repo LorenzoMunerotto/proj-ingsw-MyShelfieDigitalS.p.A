@@ -13,8 +13,7 @@ public enum BreakRules {
     DUPLICATE_TILES_SELECTED("A cell can be selected only once"),
     NOT_PLAYABLE_TILE("One of the selected cells does not exist"),
     COLUMN_OUT_OF_BOUNDS("The selected column does not exist"),
-    COLUMN_OUT_OF_SPACE("The selected column does not have enough space to contain all of the selected tiles"),
-    GENERAL_ILLEGAL_MOVE(" ");
+    COLUMN_OUT_OF_SPACE("The selected column does not have enough space to contain all of the selected tiles");
 
     /**
      * The description of the break rule.

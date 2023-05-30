@@ -14,6 +14,7 @@ import static it.polimi.ingsw.view.cli.CLIConstants.*;
  * This class is used to print the game objects on the CLI.
  */
 public class CLIDrawer {
+
     /**
      * It is the virtual model of the game.
      */

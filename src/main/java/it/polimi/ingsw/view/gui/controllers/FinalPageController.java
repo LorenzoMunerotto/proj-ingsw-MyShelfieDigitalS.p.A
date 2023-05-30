@@ -17,47 +17,46 @@ import java.util.List;
 
 /**
  * Controller for the "FinalPageController.fxml" file.
- * */
-public class FinalPageController implements Controller{
+ */
+public class FinalPageController implements Controller {
     @FXML
     private TableView<Result> tableResultID;
-    private GUI gui;
-    private  VirtualModel virtualModel;
+    private VirtualModel virtualModel;
 
     /**
      * {@inheritDoc}
+     *
      * @param gui is the main class for the graphics part of the game.
      */
     @Override
     public void setGui(GUI gui) {
-        this.gui = gui;
-        this.virtualModel=gui.getClient().getVirtualModel();
+        this.virtualModel = gui.getClient().getVirtualModel();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setUp(){
+    public void setUp() {
         Platform.runLater(this::compilePointsTable);
     }
 
     /**
      * This method fills in the table with the final classification.
      */
-    public void compilePointsTable(){
+    public void compilePointsTable() {
         Platform.runLater(() -> {
             List<Pair<String, Integer>> leaderBoards = virtualModel.getLeaderBoard();
             ObservableList<Result> data = FXCollections.observableArrayList();
-            TableColumn userNameColumn = new TableColumn("userName");
-            TableColumn pointsColum = new TableColumn("points");
-            tableResultID.getColumns().addAll(userNameColumn,pointsColum);
+            TableColumn<Result, String> userNameColumn = new TableColumn<>("username");
+            TableColumn<Result, String> pointsColum = new TableColumn<>("points");
+            tableResultID.getColumns().addAll(userNameColumn, pointsColum);
             userNameColumn.setMinWidth(150);
             pointsColum.setMinWidth(150);
-            for (int i = 0; i < leaderBoards.size(); i++) {
-                data.add(new Result(leaderBoards.get(i).getValue0(),String.valueOf(leaderBoards.get(i).getValue1())));
+            for (Pair<String, Integer> leaderBoard : leaderBoards) {
+                data.add(new Result(leaderBoard.getValue0(), String.valueOf(leaderBoard.getValue1())));
             }
-            userNameColumn.setCellValueFactory(new PropertyValueFactory<Result, String>("userName"));
-            pointsColum.setCellValueFactory(new PropertyValueFactory<Result, String>("points"));
+            userNameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+            pointsColum.setCellValueFactory(new PropertyValueFactory<>("points"));
             tableResultID.getItems().addAll(data);
             tableResultID.setVisible(true);
         });
